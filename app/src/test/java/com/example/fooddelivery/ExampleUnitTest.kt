@@ -1,4 +1,4 @@
-package com.fooddelivery
+package com.example.fooddelivery
 
 import org.junit.Test
 

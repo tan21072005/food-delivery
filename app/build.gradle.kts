@@ -3,14 +3,14 @@ plugins {
 }
 
 android {
-    namespace = "com.fooddelivery"
+    namespace = "com.example.fooddelivery"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.fooddelivery"
-        minSdk = 25
+        applicationId = "com.example.fooddelivery"
+        minSdk = 24
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -42,4 +42,18 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.activity)
+    implementation(libs.fragment)
+    implementation(libs.recyclerview)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
+    implementation("com.facebook.android:facebook-login:latest.release")
+    // photo library
+    implementation("com.squareup.picasso:picasso:2.8")
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }

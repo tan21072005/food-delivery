@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Food Delivery"
 include(":app")
+ 
