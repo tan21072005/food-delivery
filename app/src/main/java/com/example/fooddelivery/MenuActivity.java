@@ -103,15 +103,18 @@ public class MenuActivity extends AppCompatActivity {
 
     /** Load banner image from URL or drawable */
     private void loadBanner() {
+
+        // URL ảnh mặc định từ Cloudinary
+        String defaultBanner = "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/banner_food.jpg";
         // Replace with your actual URL from API/intent extras
         String bannerUrl = getIntent().getStringExtra("restaurant_banner_url");
-        if (bannerUrl != null && !bannerUrl.isEmpty()) {
+        String urlToLoad = (bannerUrl == null || bannerUrl.isEmpty()) ? defaultBanner : bannerUrl;
             Glide.with(this)
-                    .load(bannerUrl)
-                    .placeholder(R.drawable.banner_food)
+                    .load(urlToLoad)
+                    .placeholder(R.drawable.placeholder_food) // ảnh chờ load
+                    .error(R.drawable.placeholder_food)// ảnh nếu lỗi
                     .into(imgBanner);
-        }
-        // else the XML default drawable is shown
+
     }
 
     // ---------------------------------------------------------------
@@ -120,31 +123,35 @@ public class MenuActivity extends AppCompatActivity {
     private List<FoodItem> getSampleData() {
         List<FoodItem> list = new ArrayList<>();
         list.add(new FoodItem(1, "Bún thập cẩm",
-                "Sợi bún tươi, tôm sông, gà đôi", 14, 35000, R.drawable.food_bun_thap_cam));
+                "Sợi bún tươi, tôm sông, gà đôi", 14, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_thap_cam_dkoipu.jpg"));
         list.add(new FoodItem(2, "Bún riêu cua",
-                "Sợi bún tươi, tôm sông, gà đôi", 145, 35000, R.drawable.food_bun_rieu_cua));
+                "Sợi bún tươi, tôm sông, gà đôi", 145, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_rieu_cua_tqfob4.jpg"));
         list.add(new FoodItem(3, "Bún bò Huế",
-                "Sợi bún tươi, tôm sông, gà đôi", 144, 40000, R.drawable.food_bun_bo_hue));
+                "Sợi bún tươi, tôm sông, gà đôi", 144, 40000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_bo_hue_mwuawo.jpg"));
         list.add(new FoodItem(4, "Bún giò heo",
-                "Sợi bún tươi, tôm sông, gà đôi", 344, 40000, R.drawable.food_bun_gio_heo));
+                "Sợi bún tươi, tôm sông, gà đôi", 344, 40000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_gio_heo_lcwlap.jpg"));
+
 
         list.add(new FoodItem(1, "Bún thập cẩm",
-                "Sợi bún tươi, tôm sông, gà đôi", 14, 35000, R.drawable.food_bun_thap_cam));
+                "Sợi bún tươi, tôm sông, gà đôi", 14, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_thap_cam_dkoipu.jpg"));
         list.add(new FoodItem(2, "Bún riêu cua",
-                "Sợi bún tươi, tôm sông, gà đôi", 145, 35000, R.drawable.food_bun_rieu_cua));
+                "Sợi bún tươi, tôm sông, gà đôi", 145, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_rieu_cua_tqfob4.jpg"));
         list.add(new FoodItem(3, "Bún bò Huế",
-                "Sợi bún tươi, tôm sông, gà đôi", 144, 40000, R.drawable.food_bun_bo_hue));
+                "Sợi bún tươi, tôm sông, gà đôi", 144, 40000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_bo_hue_mwuawo.jpg"));
         list.add(new FoodItem(4, "Bún giò heo",
-                "Sợi bún tươi, tôm sông, gà đôi", 344, 40000, R.drawable.food_bun_gio_heo));
+                "Sợi bún tươi, tôm sông, gà đôi", 344, 40000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_gio_heo_lcwlap.jpg"));
+
 
         list.add(new FoodItem(1, "Bún thập cẩm",
-                "Sợi bún tươi, tôm sông, gà đôi", 14, 35000, R.drawable.food_bun_thap_cam));
+                "Sợi bún tươi, tôm sông, gà đôi", 14, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_thap_cam_dkoipu.jpg"));
         list.add(new FoodItem(2, "Bún riêu cua",
-                "Sợi bún tươi, tôm sông, gà đôi", 145, 35000, R.drawable.food_bun_rieu_cua));
+                "Sợi bún tươi, tôm sông, gà đôi", 145, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_rieu_cua_tqfob4.jpg"));
         list.add(new FoodItem(3, "Bún bò Huế",
-                "Sợi bún tươi, tôm sông, gà đôi", 144, 40000, R.drawable.food_bun_bo_hue));
+                "Sợi bún tươi, tôm sông, gà đôi", 144, 40000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_bo_hue_mwuawo.jpg"));
         list.add(new FoodItem(4, "Bún giò heo",
-                "Sợi bún tươi, tôm sông, gà đôi", 344, 40000, R.drawable.food_bun_gio_heo));
+                "Sợi bún tươi, tôm sông, gà đôi", 344, 40000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_gio_heo_lcwlap.jpg"));
+
+
         return list;
     }
 }
