@@ -114,7 +114,7 @@ public class Login_Activity extends AppCompatActivity {
                     // //Request - nhan ve Response: id, fullname, email, phone number, avatar, token.
                     Toast.makeText(Login_Activity.this,"Đăng nhập thành công",Toast.LENGTH_SHORT).show();
                     //khai vao intent
-                    Intent intent=new Intent(Login_Activity.this, MenuActivity.class);
+                    Intent intent=new Intent(Login_Activity.this, MainActivity.class);
 //                    intent.putExtra(FULL_NAME,"Đại học xây dựng");
                     startActivity(intent);
                     // đóng activity loginn, khi dăng nhập thành công thì chỉ đăng nhập 1 lần à xong
