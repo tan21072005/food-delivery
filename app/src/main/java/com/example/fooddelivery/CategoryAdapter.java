@@ -60,9 +60,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.VH> {
 
         // Highlight danh mục đang chọn
         h.imgIcon.setAlpha(selectedPosition == position ? 1.0f : 0.6f);
-        h.tvName.setTextColor(selectedPosition == position
-                ? context.getColor(R.color.orange_primary)
-                : context.getColor(R.color.text_secondary));
+//        h.tvName.setTextColor(selectedPosition == position
+//                ? context.getColor(R.color.orange_primary)
+//                : context.getColor(R.color.text_secondary));
 
         h.itemView.setOnClickListener(v -> {
             int prev = selectedPosition;

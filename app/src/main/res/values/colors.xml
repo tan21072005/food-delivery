@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="tim_mong_mo">#CC99FF</color>
-    <color name="blue">#0D51EF</color>
-    <color name="xanh">#0032FF</color>
-    <color name="button">#33E0DE</color>
 
-
-    <color name="orange_primary">#F5A623</color>
+    ------------- Brand --------------
+    <color name="brand_primary">#F5A623</color>
+    <color name="brand_light">#FFD580</color>
+    <color name="brand_surface">#FFF8E1</color>
+    <color name="brand_dark">#C47D0E</color>
+    ------------ Text ---------------
     <color name="text_primary">#1A1A1A</color>
     <color name="text_secondary">#888888</color>
     <color name="text_hint">#AAAAAA</color>
-    <color name="background">#FAFAFA</color>
-    <color name="divider">#EEEEEE</color>
+    <color name="text_on_brand">#FFFFFF</color>
+
+    ------------Background--------------
+    <color name="bg_screen">#FAFAFA</color>
+    <color name="bg_card">#FFFFFF</color>
+    <color name="bg_divider">#EEEEEE</color>
+
+    ----------- Status ----------------
+    <color name="status_success">#4CAF50</color>
+    <color name="status_error">#F44336</color>
+    <color name="status_warning">#FF9800</color>
+    <color name="status_info">#E0E0E0</color>
+
+    ------------Bottom  Nav ----------
+    <color name="nav_selected">#F5A623</color>
+    <color name="nav_unselected">#AAAAAA</color>
+
+    <!-- Alias cho bottom nav (bottom_nav_color.xml đang dùng) -->
+    <color name="orange_primary">#F5A623</color>
+    <color name="bottom_nav_unselected">#AAAAAA</color>
+    <!-- Màu xanh dùng trong login/signup -->
+    <color name="blue">#0D51EF</color>
 
 
-
-<!--        <color name="white">#FFFFFF</color>-->
-<!--        <color name="orange_primary">#F5A623</color>-->
-        <color name="orange_light">#FFF0F4</color>
-        <color name="header_bg">#FFF8E1</color>
-<!--        <color name="text_primary">#1A1A1A</color>-->
-<!--        <color name="text_secondary">#888888</color>-->
-<!--        <color name="text_hint">#BBBBBB</color>-->
-<!--        <color name="background">#FAFAFA</color>-->
-<!--        <color name="divider">#EEEEEE</color>-->
-        <color name="bottom_nav_selected">#F5A623</color>
-        <color name="bottom_nav_unselected">#AAAAAA</color>
+    <!-- ── Giữ lại để values-night không bị lỗi ── -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
 
 </resources>
