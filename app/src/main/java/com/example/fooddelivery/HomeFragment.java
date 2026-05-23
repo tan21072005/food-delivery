@@ -53,9 +53,9 @@ public class HomeFragment extends Fragment {
 
     // 3 ảnh banner (thay bằng URL thật từ API)
     private final List<String> bannerUrls = Arrays.asList(
-            "https://i.imgur.com/banner1.jpg",
-            "https://i.imgur.com/banner2.jpg",
-            "https://i.imgur.com/banner3.jpg"
+            "https://res.cloudinary.com/daakugdmw/image/upload/v1779354970/banner2.png",
+            "https://res.cloudinary.com/daakugdmw/image/upload/v1779354937/banner1.png",
+            "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/banner_food.jpg"
     );
 
     @Override
