@@ -15,7 +15,7 @@ public class Forget_Pass extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forget_password);
+        setContentView(R.layout.fragment_forget_password);
 
 
         btnNext = findViewById(R.id.btnNext);

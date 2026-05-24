@@ -465,8 +465,8 @@
                     android:layout_height="wrap_content"
                     android:text="170.000đ"
                     android:textColor="#AAAAAA"
-                    android:textSize="13sp"
-                    android:paintFlags="16" />
+                    android:textSize="13sp"/>
+<!--                    android:paintFlags="16" />-->
             </LinearLayout>
 
             <!-- Ghi chú đơn -->
