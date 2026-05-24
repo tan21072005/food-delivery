@@ -39,7 +39,7 @@ public class Login_Activity extends AppCompatActivity {
     public static  final String FULL_NAME ="fullname";
     public static final String TAG = Login_Activity.class.getSimpleName();
     private Button btnLogin,btnlogout;
-    private TextView tvSignup,tvchaomuwng,tvname;
+    private TextView tvSignup,tvchaomuwng,tvname, tvForgetpass;
     private EditText edUsername,edPassword;
     private LoginButton fbLoginButton;
 
@@ -127,7 +127,15 @@ public class Login_Activity extends AppCompatActivity {
 
             }
         });
-
+//        Chuyen sang man hinh quen khau
+        tvForgetpass = findViewById(R.id.tvForgetpass);
+        tvForgetpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent3 = new Intent(Login_Activity.this, Forget_Pass.class);
+                startActivity(intent3);
+            }
+        });
 
         tvSignup = findViewById(R.id.tvSignup);
         tvSignup.setOnClickListener(new View.OnClickListener() {

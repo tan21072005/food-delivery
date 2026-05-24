@@ -13,7 +13,6 @@
     <string name="invalid_password">Password must be >5 characters</string>
 
 
-
     <string name="login_failed">"Login failed"</string>
     <string name="btn_login">"LOG IN"</string>
     <string name="btn_dang_ky">Đăng ký</string>
