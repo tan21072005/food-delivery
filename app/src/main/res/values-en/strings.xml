@@ -1,19 +1,293 @@
 <resources>
-    <string name="app_name">Food Delivery</string>
-    <string name="app_tagline">hello</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
-    <string name="btn_login">"LOG IN"</string>
-    <string name="btn_dang_ky">Đăng ký</string>
-    <string name="facebook_app_id"> 1478371224081662</string>
-    <string name="fb_login_protocol_scheme">fb 1478371224081662</string>
-    <string name="facebook_client_token">f152f3c57d7dfc074a0ba9c67764bc62</string>
+<!--    <?xml version="1.0" encoding="utf-8"?>-->
+
+        ---------APP-------------------
+        <string name="app_name">Food Delivery</string>
+        <string name="app_tagline">Order fast – Delivered to you</string>
+
+
+        <!-- ══════════════════════════════════════════
+             BOTTOM NAVIGATION
+        ══════════════════════════════════════════ -->
+        <string name="nav_home">Home</string>
+        <string name="nav_orders">Orders</string>
+        <string name="nav_favorites">Favorites</string>
+        <string name="nav_profile">Account</string>
+
+
+        <!-- ══════════════════════════════════════════
+             HOME SCREEN
+        ══════════════════════════════════════════ -->
+        <string name="hint_search">Search…</string>
+
+        <string name="label_category_bun">Noodles</string>
+        <string name="label_category_fastfood">Fast Food</string>
+        <string name="label_category_drink">Drinks</string>
+        <string name="label_category_banh_my">Sandwich</string>
+        <string name="label_category_lau">Hot Pot</string>
+        <string name="label_category_trang_mieng">Dessert</string>
+        <string name="label_category_com">Rice</string>
+        <string name="label_category_pho">Pho</string>
+
+        <string name="section_top_selling">Top &#8220;Best Sellers&#8221;</string>
+        <string name="section_top_selling_subtitle">Items with highest sales this month</string>
+        <string name="section_menu">Menu</string>
+        <string name="section_all_foods">All Items</string>
+        <string name="label_see_all">See all</string>
+
+        <string name="menu_popup_title">Menu</string>
+        <string name="menu_item_count">%d &gt;</string>
+
+
+        <!-- ══════════════════════════════════════════
+             LOGIN SCREEN
+        ══════════════════════════════════════════ -->
+        <string name="title_login">Login</string>
+        <string name="hint_username">Username</string>
+        <string name="hint_password">Password</string>
+        <string name="btn_login">Log In</string>
+        <string name="btn_signup">Sign Up</string>
+        <string name="label_forgot_password">Forgot Password?</string>
+        <string name="divider_login_with">Or continue with</string>
+<!--        <string name="btn_login_facebook">Continue with Facebook</string>-->
+<!--        <string name="btn_login_google">Continue with Google</string>-->
+<!--        <string name="btn_login_linkedin">Continue with LinkedIn</string>-->
+
+
+        <!-- ══════════════════════════════════════════
+             SIGN UP SCREEN
+        ══════════════════════════════════════════ -->
+        <string name="title_signup">Sign Up</string>
+        <string name="hint_confirm_password">Confirm password</string>
+        <string name="label_already_have_account">Already have an account?</string>
+<!--        <string name="label_go_login">Log In</string>-->
+
+
+        <!-- ══════════════════════════════════════════
+             CHOOSE ACCOUNT / LINKEDIN LOGIN
+        ══════════════════════════════════════════ -->
+        <string name="title_choose_account">Choose account</string>
+        <string name="subtitle_choose_account">to continue</string>
+        <string name="btn_use_another_account">Use another account</string>
+
+        --------- Log in with -----------------------------------
+        <string name="label_login_with_linkedin">Log in with Linkedin</string>
+        <string name="label_login_with_google">Log in with Google</string>
+        <string name="label_login_with_facebook">Log in with Facebook</string>
+
+
+
+        <!-- ══════════════════════════════════════════
+             FORGOT PASSWORD
+        ══════════════════════════════════════════ -->
+        <string name="title_forgot_password">Forgot password</string>
+        <string name="hint_email_or_phone">Enter email / phone number</string>
+        <string name="desc_forgot_password">We\'ll send a verification code to this email or phone number if it matches an existing account.</string>
+        <string name="btn_next">Next</string>
+        <string name="btn_back">Go back</string>
+
+
+        <!-- ══════════════════════════════════════════
+             OTP VERIFICATION
+        ══════════════════════════════════════════ -->
+        <string name="title_enter_otp">Enter 6-digit code</string>
+        <string name="desc_otp_sent">Check %s for the verification code</string>
+        <string name="label_change_email">Change email?</string>
+        <string name="hint_otp">Enter 6-digit code</string>
+        <string name="btn_resend_otp">Resend code</string>
+        <string name="btn_submit">Submit</string>
+        <string name="desc_otp_note">If you don\'t see the email in your inbox, check your spam folder. If it\'s not there, the email address may not be confirmed or may not match an existing account.</string>
+        <string name="label_cant_access_email">Can\'t access this email?</string>
+
+
+        <!-- ══════════════════════════════════════════
+             CREATE PASSWORD
+        ══════════════════════════════════════════ -->
+        <string name="title_create_password">Create password</string>
+        <string name="btn_continue">Continue</string>
+
+
+        <!-- ══════════════════════════════════════════
+             CHANGE PASSWORD
+        ══════════════════════════════════════════ -->
+        <string name="title_change_password">Change password</string>
+        <string name="hint_old_password">Enter current password</string>
+        <string name="hint_new_password">Enter new password</string>
+        <string name="hint_confirm_new_password">Confirm new password</string>
+        <string name="btn_confirm">Confirm</string>
+
+        <string name="password_rule_title">Password must include:</string>
+        <string name="password_rule_length">8 characters (max 20 characters)</string>
+        <string name="password_rule_complexity">1 letter, 1 number, 1 special character</string>
+        <string name="password_rule_strength">Strong password</string>
+
+
+        <!-- ══════════════════════════════════════════
+             CHANGE PASSWORD — SUCCESS
+        ══════════════════════════════════════════ -->
+        <string name="msg_change_password_success">Password changed successfully</string>
+        <string name="msg_password_not_match">Password doesn\'t match</string>
+
+        <!-- ══════════════════════════════════════════
+             FOOD LIST / MENU SCREEN
+        ══════════════════════════════════════════ -->
+        <string name="title_food_list">%s</string>
+        <string name="label_sold_count">%d sold</string>
+        <string name="label_original_price">%s</string>
+        <string name="cart_title">Cart</string>
+        <string name="btn_clear_cart">Clear all</string>
+
+
+
+        <!-- ══════════════════════════════════════════
+             CHECKOUT SCREEN
+        ══════════════════════════════════════════ -->
+        <string name="title_checkout">Checkout</string>
+
+        <string name="label_delivery_address">Table S floor 2</string>
+        <string name="hint_note_for_restaurant">Note for restaurant</string>
+
+        <string name="btn_order_now">Order now</string>
+        <string name="btn_schedule_delivery">Schedule delivery</string>
+
+        <string name="label_restaurant_name">Restaurant %s</string>
+        <string name="btn_add_more_items">Add more items</string>
+
+        <string name="section_payment_method">Payment method</string>
+        <string name="label_change_payment">See more options</string>
+        <string name="payment_direct">Pay directly</string>
+        <string name="payment_qr">QR Code</string>
+
+        <string name="section_payment_detail">Payment details</string>
+        <string name="label_subtotal">Subtotal</string>
+        <string name="label_discount">You saved %s</string>
+        <string name="label_total_price">%s</string>
+
+        <string name="btn_place_order">Place order</string>
+
+
+        <!-- ══════════════════════════════════════════
+             PROFILE SCREEN
+        ══════════════════════════════════════════ -->
+        <string name="label_member_badge">Member</string>
+        <string name="label_edit_profile">Edit</string>
+
+        <string name="profile_section_account">Account</string>
+        <string name="profile_item_account_info">Account</string>
+        <string name="profile_item_privacy">Privacy</string>
+        <string name="profile_item_security">Security &amp; permissions</string>
+        <string name="profile_item_share_profile">Share profile</string>
+
+        <string name="profile_section_promotion">Promotions</string>
+        <string name="profile_item_promotions">Promotions</string>
+        <string name="profile_item_savings_plan">Savings plan</string>
+        <string name="profile_item_payment">Payment</string>
+
+        <string name="profile_section_support">Support</string>
+        <string name="profile_item_support">Help &amp; Support</string>
+        <string name="profile_item_terms">Terms &amp; Policies</string>
+
+
+        <!-- ══════════════════════════════════════════
+             SWITCH ACCOUNT / LOGOUT
+        ══════════════════════════════════════════ -->
+        <string name="title_switch_account">Switch account</string>
+        <string name="btn_add_account">Add account</string>
+        <string name="btn_logout">Log out</string>
+        <string name="btn_cancel">Cancel</string>
+        <string name="dialog_logout_message">Are you sure you want to log out?</string>
+
+
+        <!-- ══════════════════════════════════════════
+             ACCOUNT INFO
+        ══════════════════════════════════════════ -->
+        <string name="title_account_info">Account info</string>
+        <string name="label_field_name">Name</string>
+        <string name="label_field_phone">Phone number</string>
+        <string name="label_field_email">Email</string>
+        <string name="label_field_birthday">Date of birth</string>
+        <string name="label_field_country">Country</string>
+        <string name="value_country_vietnam">Vietnam</string>
+        <string name="date_format_birthday">%d/%d/%d</string>
+
+
+        <!-- ══════════════════════════════════════════
+             ACCOUNT SETTINGS
+        ══════════════════════════════════════════ -->
+        <string name="title_account_settings">Account</string>
+        <string name="settings_item_account_info">Account info</string>
+        <string name="settings_item_password">Password</string>
+        <string name="settings_item_download_data">Download personal data</string>
+        <string name="settings_item_deactivate">Deactivate or delete account</string>
+
+
+        <!-- ══════════════════════════════════════════
+             TOAST / SNACKBAR MESSAGES
+        ══════════════════════════════════════════ -->
+        <string name="msg_login_success">Logged in successfully</string>
+        <string name="msg_login_failed">Login failed. Please try again</string>
+        <string name="msg_signup_success">Account created successfully</string>
+        <string name="msg_logout_success">Logged out</string>
+        <string name="msg_added_to_cart">Added to cart!</string>
+        <string name="msg_removed_from_cart">Removed from cart</string>
+        <string name="msg_cart_cleared">Cart cleared</string>
+        <string name="msg_order_placed">Order placed successfully!</string>
+        <string name="msg_please_login">Please log in to continue</string>
+        <string name="msg_no_internet">No internet connection</string>
+        <string name="msg_error_generic">Something went wrong. Please try again</string>
+        <string name="msg_otp_resent">Verification code resent</string>
+        <string name="msg_otp_invalid">Invalid verification code</string>
+        <string name="msg_password_mismatch">Passwords do not match</string>
+        <string name="msg_password_weak">Password is not strong enough</string>
+        <string name="msg_field_required">This field is required</string>
+        <string name="msg_invalid_email">Invalid email address</string>
+        <string name="msg_invalid_phone">Invalid phone number</string>
+        <string name="msg_loading">Loading…</string>
+        <string name="msg_no_results">No results found</string>
+        <string name="msg_empty_cart">Your cart is empty</string>
+        <string name="msg_food_out_of_stock">This item is currently unavailable</string>
+
+
+        <!-- ══════════════════════════════════════════
+             VALIDATION ERRORS
+        ══════════════════════════════════════════ -->
+        <string name="error_empty_username">Username cannot be empty</string>
+        <string name="error_empty_password">Password cannot be empty</string>
+        <string name="error_empty_email_phone">Please enter your email or phone number</string>
+        <string name="error_empty_otp">Please enter the verification code</string>
+        <string name="error_password_too_short">Password must be at least 8 characters</string>
+        <string name="error_password_too_long">Password cannot exceed 20 characters</string>
+        <string name="error_username_exists">Username already exists</string>
+        <string name="error_account_not_found">Account not found</string>
+        <string name="error_wrong_password">Incorrect password. Please try again</string>
+        <string name="error_session_expired">Session expired. Please log in again</string>
+
+
+        <!-- ══════════════════════════════════════════
+             ACCESSIBILITY
+        ══════════════════════════════════════════ -->
+        <string name="cd_food_image">Food image</string>
+        <string name="cd_avatar">Profile picture</string>
+        <string name="cd_banner">Banner image</string>
+        <string name="cd_category_icon">Category icon</string>
+        <string name="cd_btn_back">Go back</string>
+        <string name="cd_btn_close">Close</string>
+        <string name="cd_btn_favorite">Favorite</string>
+        <string name="cd_btn_search">Search</string>
+        <string name="cd_btn_filter">Filter</string>
+        <string name="cd_btn_add_to_cart">Add to cart</string>
+        <string name="cd_btn_toggle_password">Show / hide password</string>
+        <string name="cd_btn_edit">Edit</string>
+        <string name="cd_icon_facebook">Facebook</string>
+        <string name="cd_icon_google">Google</string>
+        <string name="cd_icon_linkedin">LinkedIn</string>
+
+
+
+        ------------------FACEBOOK / GOOGLE SDK ----------
+        <string name="facebook_app_id">1478371224081662</string>
+        <string name="fb_login_protocol_scheme">fb1478371224081662</string>
+        <string name="facebook_client_token">f152f3c57d7dfc074a0ba9c67764bc62</string>
+
 
 </resources>
