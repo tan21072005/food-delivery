@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@color/white">
+
+    <!-- Tiêu đề -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="Nhập mã gồm 6 số"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <!-- Mô tả email đã gửi -->
+    <TextView
+        android:id="@+id/tvEmailDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Kiểm tra hoc****@gmail.com để lấy mã xác minh"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:lineSpacingExtra="2dp" />
+
+    <!-- Link thay đổi email -->
+    <TextView
+        android:id="@+id/tvChangeEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Thay đổi email ?"
+        android:textColor="@color/blue"
+        android:textSize="14sp" />
+
+    <!-- Ô nhập mã OTP -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilOtp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxStrokeColor="@color/black"
+        app:hintEnabled="false">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edOtp"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Nhập mã gồm 6  chữ số"
+            android:inputType="numberPassword"
+            android:maxLength="6"
+            android:textColor="@color/black"
+            android:textColorHint="#AAAAAA"
+            android:textSize="16sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:letterSpacing="0.3" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Gửi lại mã -->
+    <TextView
+        android:id="@+id/tvResendCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Gửi lại mã"
+        android:textColor="@color/blue"
+        android:textSize="14sp" />
+
+    <!-- Nút Gửi -->
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/btn_black_rounded"
+        android:text="Gửi"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Ghi chú hộp thư rác -->
+    <TextView
+        android:id="@+id/tvSpamNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Nếu bạn không thấy email trong hộp thư đến, hãy kiểm tra thư mục thư rác. Nếu không thấy, địa chỉ email có thể chưa được xác nhận hoặc không khớp với tài khoản  hiện có."
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        android:lineSpacingExtra="3dp" />
+
+    <!-- Không thể truy cập email -->
+    <TextView
+        android:id="@+id/tvCantAccessEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Không thể truy cập được email này ?"
+        android:textColor="@color/blue"
+        android:textSize="14sp" />
+
+</LinearLayout>
