@@ -13,15 +13,14 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scrollView"
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:background="#F3F3F3">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <!-- ===== HEADER / PROFILE SECTION ===== -->
@@ -72,7 +71,7 @@
                             android:id="@+id/tvUserName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Trần Nhật Tân"
+                            android:text="Food Delivery"
                             android:textSize="17sp"
                             android:textStyle="bold" />
 
@@ -113,92 +112,402 @@
                         android:paddingBottom="3dp" />
                 </RelativeLayout>
 
-                <!-- ===== SECTION: TÀI KHOẢN ===== -->
+                <!-- TÀI KHOẢN -->
                 <TextView
-                    style="@style/SectionHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tài khoản"
+                    android:textColor="#888"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"/>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/section_tai_khoan" />
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:layout_margin="16dp"
+                    android:paddingVertical="8dp">
 
-                <!-- Tài khoản menu item -->
-                <include layout="@layout/item_menu_row"
-                    android:id="@+id/menuTaiKhoan" />
+                    <LinearLayout
+                        android:id="@+id/btnAccount"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
 
-                <View android:layout_width="match_parent" android:layout_height="1dp"
-                    android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
-                    android:background="@color/divider"/>
+<!--                        <ImageView-->
+<!--                            android:layout_width="24dp"-->
+<!--                            android:layout_height="24dp"-->
+<!--                            android:src="@drawable/ic_account"/>-->
 
-                <!-- Quyền riêng tư -->
-                <include layout="@layout/item_menu_row"
-                    android:id="@+id/menuQuyenRiengTu" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Tài khoản"
+                            android:textSize="16sp"
+                            android:layout_marginStart="16dp"/>
 
-                <View android:layout_width="match_parent" android:layout_height="1dp"
-                    android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
-                    android:background="@color/divider"/>
+<!--                        <ImageView-->
+<!--                            android:layout_width="18dp"-->
+<!--                            android:layout_height="18dp"-->
+<!--                            android:src="@android:drawable/arrow_forward"/>-->
+                    </LinearLayout>
 
-                <!-- Bảo mật & quyền -->
-                <include layout="@layout/item_menu_row"
-                    android:id="@+id/menuBaoMat" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE"/>
 
-                <View android:layout_width="match_parent" android:layout_height="1dp"
-                    android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
-                    android:background="@color/divider"/>
+                    <LinearLayout
+                        android:id="@+id/btnPrivacy"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
 
-                <!-- Chia sẻ hồ sơ -->
-                <include layout="@layout/item_menu_row"
-                    android:id="@+id/menuChiaSe" />
+<!--                        <ImageView-->
+<!--                            android:layout_width="24dp"-->
+<!--                            android:layout_height="24dp"-->
+<!--                            android:src="@drawable/ic_privacy"/>-->
 
-                <!-- ===== SECTION: KHUYẾN MÃI ===== -->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Quyền riêng tư"
+                            android:textSize="16sp"
+                            android:layout_marginStart="16dp"/>
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="18dp"-->
+<!--                            android:layout_height="18dp"-->
+<!--                            android:src="@android:drawable/arrow_forward"/>-->
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE"/>
+
+                    <LinearLayout
+                        android:id="@+id/btnSecurity"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="24dp"-->
+<!--                            android:layout_height="24dp"-->
+<!--                            android:src="@drawable/ic_security"/>-->
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Bảo mật &amp; quyền"
+                            android:textSize="16sp"
+                            android:layout_marginStart="16dp"/>
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="18dp"-->
+<!--                            android:layout_height="18dp"-->
+<!--                            android:src="@android:drawable/arrow_forward"/>-->
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE"/>
+                    <LinearLayout
+                        android:id="@+id/btnShareprofile"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="24dp"-->
+<!--                            android:layout_height="24dp"-->
+<!--                            android:src="@drawable/ic_account"/>-->
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Chia sẻ hồ sơ"
+                            android:textSize="16sp"
+                            android:layout_marginStart="16dp"/>
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="18dp"-->
+<!--                            android:layout_height="18dp"-->
+<!--                            android:src="@android:drawable/arrow_forward"/>-->
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                <!-- KHUYẾN MÃI -->
                 <TextView
-                    style="@style/SectionHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Khuyến mãi"
+                    android:textColor="#888"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp"/>
+
+                <LinearLayout
+                    android:id="@+id/btnPromotion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/section_khuyen_mai" />
+                    android:background="@drawable/bg_card"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:orientation="vertical"
+                    android:layout_margin="16dp">
 
-                <!-- Khuyến mãi -->
-                <include layout="@layout/item_menu_row"
-                    android:id="@+id/menuKhuyenMai" />
+                    <LinearLayout
 
-                <View android:layout_width="match_parent" android:layout_height="1dp"
-                    android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
-                    android:background="@color/divider"/>
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
 
-                <!-- Gói tiết kiệm (no arrow) -->
-                <include layout="@layout/item_menu_row"
-                    android:id="@+id/menuGoiTietKiem" />
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/add_24dp"/>
 
-                <View android:layout_width="match_parent" android:layout_height="1dp"
-                    android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
-                    android:background="@color/divider"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Gói tiết kiệm"
+                            android:textSize="16sp"
+                            android:layout_marginStart="16dp"/>
 
-                <!-- Thanh toán (no arrow) -->
-                <include layout="@layout/item_menu_row"
-                    android:id="@+id/menuThanhToan" />
+<!--                        <ImageView-->
+<!--                            android:layout_width="18dp"-->
+<!--                            android:layout_height="18dp"-->
+<!--                            android:src="@android:drawable/ic_arrow_forward"/>-->
+                    </LinearLayout
+                        >
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE"/>
+                    <LinearLayout
 
-                <!-- ===== SECTION: HỖ TRỢ ===== -->
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
 
-                <!-- Hỗ trợ -->
-                <TextView
-                    style="@style/SectionHeader"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/section_ho_tro" />
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/add_24dp"/>
 
-                <include layout="@layout/item_menu_row"
-                    android:id="@+id/menuHoTro" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Tài khoản"
+                            android:textSize="16sp"
+                            android:layout_marginStart="16dp"/>
 
-                <View android:layout_width="match_parent" android:layout_height="1dp"
-                    android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
-                    android:background="@color/divider"/>
+<!--                        <ImageView-->
+<!--                            android:layout_width="18dp"-->
+<!--                            android:layout_height="18dp"-->
+<!--                            android:src="@android:drawable/ic_arrow_forward"/>-->
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE"/>
+                    <LinearLayout
 
-                <!-- Điều khoản (no arrow) -->
-                <include layout="@layout/item_menu_row"
-                    android:id="@+id/menuDieuKhoan" />
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
 
-                <View android:layout_width="match_parent" android:layout_height="32dp"/>
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/add_24dp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Tài khoản"
+                            android:textSize="16sp"
+                            android:layout_marginStart="16dp"/>
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="18dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:src="@android:drawable/ic_arrow_forward" />-->
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE"/>
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/add_24dp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Tài khoản"
+                            android:textSize="16sp"
+                            android:layout_marginStart="16dp"/>
+
+                        <!--                        <ImageView-->
+                        <!--                            android:layout_width="18dp"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:src="@android:drawable/ic_arrow_forward" />-->
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE"/>
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/add_24dp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Tài khoản"
+                            android:textSize="16sp"
+                            android:layout_marginStart="16dp"/>
+
+                        <!--                        <ImageView-->
+                        <!--                            android:layout_width="18dp"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:src="@android:drawable/ic_arrow_forward" />-->
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE"/>
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/add_24dp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Tài khoản"
+                            android:textSize="16sp"
+                            android:layout_marginStart="16dp"/>
+
+                        <!--                        <ImageView-->
+                        <!--                            android:layout_width="18dp"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:src="@android:drawable/ic_arrow_forward" />-->
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE"/>
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/add_24dp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Tài khoản"
+                            android:textSize="16sp"
+                            android:layout_marginStart="16dp"/>
+
+                        <!--                        <ImageView-->
+                        <!--                            android:layout_width="18dp"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:src="@android:drawable/ic_arrow_forward" />-->
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE"/>
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/add_24dp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Tài khoản"
+                            android:textSize="16sp"
+                            android:layout_marginStart="16dp"/>
+
+                        <!--                        <ImageView-->
+                        <!--                            android:layout_width="18dp"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:src="@android:drawable/ic_arrow_forward" />-->
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE"/>
+                </LinearLayout>
+                <!--chia sẻ hồ sơ-->
+
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-
+        </ScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 </FrameLayout>
