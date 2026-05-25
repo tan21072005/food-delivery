@@ -1,14 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- fragment_profile.xml -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:background="@color/white">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- ===== HEADER / PROFILE SECTION ===== -->
+                <RelativeLayout
+                    android:id="@+id/headerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/bg_profile"
+                    android:paddingBottom="24dp">
+
+                    <!-- Arrow / more button top right -->
+                    <ImageView
+                        android:id="@+id/btnMore"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="16dp"
+                        android:padding="4dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:contentDescription="More" />
+
+                    <!-- Avatar image -->
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/imgAvatar"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="32dp"
+                        app:civ_border_width="3dp"
+                        app:civ_border_color="@color/white"
+                        android:src="@drawable/ic_launcher_foreground"
+                        android:contentDescription="Avatar" />
+
+                    <!-- Name + chevron + edit -->
+                    <LinearLayout
+                        android:id="@+id/nameRow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/imgAvatar"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tvUserName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Trần Nhật Tân"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                        <!-- Chevron down (switch account trigger) -->
+                        <ImageView
+                            android:id="@+id/btnSwitchAccount"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginStart="4dp"
+                            android:src="@drawable/ic_chevron_down"
+                            android:contentDescription="Switch account" />
+
+                        <!-- Edit icon -->
+                        <ImageView
+                            android:id="@+id/btnEditProfile"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/ic_edit"
+                            android:contentDescription="Edit profile" />
+                    </LinearLayout>
+
+                    <!-- Member badge -->
+                    <TextView
+                        android:id="@+id/tvMemberBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/nameRow"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/bg_badge_member"
+                        android:text="● Thành viên"
+                        android:textColor="@color/white"
+                        android:textSize="11sp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp" />
+                </RelativeLayout>
+
+                <!-- ===== SECTION: TÀI KHOẢN ===== -->
+                <TextView
+                    style="@style/SectionHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/section_tai_khoan" />
+
+                <!-- Tài khoản menu item -->
+                <include layout="@layout/item_menu_row"
+                    android:id="@+id/menuTaiKhoan" />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
+                    android:background="@color/divider"/>
+
+                <!-- Quyền riêng tư -->
+                <include layout="@layout/item_menu_row"
+                    android:id="@+id/menuQuyenRiengTu" />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
+                    android:background="@color/divider"/>
+
+                <!-- Bảo mật & quyền -->
+                <include layout="@layout/item_menu_row"
+                    android:id="@+id/menuBaoMat" />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
+                    android:background="@color/divider"/>
+
+                <!-- Chia sẻ hồ sơ -->
+                <include layout="@layout/item_menu_row"
+                    android:id="@+id/menuChiaSe" />
+
+                <!-- ===== SECTION: KHUYẾN MÃI ===== -->
+                <TextView
+                    style="@style/SectionHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/section_khuyen_mai" />
+
+                <!-- Khuyến mãi -->
+                <include layout="@layout/item_menu_row"
+                    android:id="@+id/menuKhuyenMai" />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
+                    android:background="@color/divider"/>
+
+                <!-- Gói tiết kiệm (no arrow) -->
+                <include layout="@layout/item_menu_row"
+                    android:id="@+id/menuGoiTietKiem" />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
+                    android:background="@color/divider"/>
+
+                <!-- Thanh toán (no arrow) -->
+                <include layout="@layout/item_menu_row"
+                    android:id="@+id/menuThanhToan" />
+
+                <!-- ===== SECTION: HỖ TRỢ ===== -->
+
+                <!-- Hỗ trợ -->
+                <TextView
+                    style="@style/SectionHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/section_ho_tro" />
+
+                <include layout="@layout/item_menu_row"
+                    android:id="@+id/menuHoTro" />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
+                    android:background="@color/divider"/>
+
+                <!-- Điều khoản (no arrow) -->
+                <include layout="@layout/item_menu_row"
+                    android:id="@+id/menuDieuKhoan" />
+
+                <View android:layout_width="match_parent" android:layout_height="32dp"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </FrameLayout>
