@@ -1,32 +1,36 @@
 package com.example.fooddelivery;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Forget_Pass extends AppCompatActivity {
 
-    private Button btnNext;
-    private TextView tvBack;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_forget_password);
 
-
-        btnNext = findViewById(R.id.btnNext);
-        tvBack = findViewById(R.id.tvBack);
+        EditText edEmailPhone = findViewById(R.id.edEmailPhone);
+        Button btnNext = findViewById(R.id.btnNext);
+        TextView tvBack = findViewById(R.id.tvBack);
 
         btnNext.setOnClickListener(v -> {
-            // TODO: xử lý tiếp theo (chuyển sang màn nhập OTP)
+            String email = edEmailPhone.getText().toString().trim();
+            if (email.isEmpty()) {
+                edEmailPhone.setError("Vui lòng nhập email hoặc số điện thoại");
+                edEmailPhone.requestFocus();
+            } else {
+                // Chuyển sang màn nhập OTP
+                Intent intent = new Intent(Forget_Pass.this, Verify_Otp.class);
+                startActivity(intent);
+            }
         });
 
-        tvBack.setOnClickListener(v -> {
-            finish(); // quay lại màn trước
-        });
+        tvBack.setOnClickListener(v -> finish());
     }
 }

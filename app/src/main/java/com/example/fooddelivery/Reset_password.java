@@ -11,9 +11,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.fooddelivery.Login_Activity;
-import com.example.fooddelivery.R;
-
 public class Reset_password extends AppCompatActivity {
 
     boolean isNewPasswordVisible = false;

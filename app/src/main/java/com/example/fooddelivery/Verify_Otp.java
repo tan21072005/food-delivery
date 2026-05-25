@@ -35,10 +35,10 @@ public class Verify_Otp extends AppCompatActivity {
                 edOtp.requestFocus();
             } else if (otp.equals(CORRECT_OTP)) {
                 Toast.makeText(this, "Mã chính xác", Toast.LENGTH_SHORT).show();
-                // TODO: chuyển sang màn đặt lại mật khẩu
-                // Intent intent = new Intent(this, ResetPassword_Activity.class);
-                // startActivity(intent);
-                // finish();
+                // Chuyển sang màn đặt lại mật khẩu
+                Intent intent = new Intent(Verify_Otp.this, Reset_password.class);
+                startActivity(intent);
+                finish();
             } else {
                 Toast.makeText(this, "Mã không đúng, vui lòng thử lại", Toast.LENGTH_SHORT).show();
                 edOtp.setText("");
