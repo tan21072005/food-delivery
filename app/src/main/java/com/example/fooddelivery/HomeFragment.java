@@ -259,17 +259,20 @@ public class HomeFragment extends Fragment {
         Navigation.findNavController(requireView())
                 .navigate(R.id.action_home_to_foodDetail, args);
     }
-
+//    addTooCart
     private void addToCart(FoodItem item) {
-        if (!session.isLoggedIn()) {
-            Toast.makeText(requireContext(),
-                    "Vui lòng đăng nhập để thêm vào giỏ", Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(requireView())
-                    .navigate(R.id.action_home_to_login);
-            return;
-        }
+//        if (!session.isLoggedIn()) {
+//            Toast.makeText(requireContext(),
+//                    "Vui lòng đăng nhập để thêm vào giỏ",
+//                    Toast.LENGTH_SHORT).show();
+//            Navigation.findNavController(requireView())
+//                    .navigate(R.id.action_home_to_login);
+//            return;
+//        }
         viewModel.addToCart(session.getBearerToken(), item.getId(), 1);
     }
+
+
 
     // ─────────────────────────────────────────────────────────
     // Lifecycle — dừng/tiếp tục auto-slide
