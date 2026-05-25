@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    ------Spacing -----------
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_sm">8dp</dimen>
+    <dimen name="space_md">16dp</dimen>
+    <dimen name="space_lg">24dp</dimen>
+    <dimen name="space_xl">32dp</dimen>
+    <dimen name="space_xxl">48dp</dimen>
+    
+    ------- Border Radius -----------
+    <dimen name="radius_xs">4dp</dimen>
+    <dimen name="radius_sm">8dp</dimen>
+    <dimen name="radius_md">12dp</dimen>
+    <dimen name="radius_lg">20dp</dimen>
+    <dimen name="radius_full">100dp</dimen>
+
+    -------- Text ----------------
+    <dimen name="text_xs">11sp</dimen>
+    <dimen name="text_sm">12sp</dimen>
+    <dimen name="text_body">14sp</dimen>
+    <dimen name="text_md">15sp</dimen>
+    <dimen name="text_lg">18sp</dimen>
+    <dimen name="text_xl">22sp</dimen>
+
+    -------- Component Size ---------
+    <dimen name="icon_sm"> 16dp</dimen>
+    <dimen name="icon_md">24dp</dimen>
+    <dimen name="icon_lg">32dp</dimen>
+    <dimen name="avatar_sm">40dp</dimen>
+    <dimen name="avatar_md">56dp</dimen>
+    <dimen name="avatar_lg">72dp</dimen>"
+    <dimen name="btn_height">48dp</dimen>
+    <dimen name="bottom_nav_height">60dp</dimen>
+<!--    <dimen name="banner_height">180dp</dimen>-->
+<!--    <dimen name="food_image_size">90dp</dimen>-->
+<!--    <dimen name="top_selling_width">155dp</dimen>-->
+<!--    <dimen name="top_selling_height">210dp</dimen>-->
+
+    -------- Elevation ---------------
+
+
+
+
+</resources>

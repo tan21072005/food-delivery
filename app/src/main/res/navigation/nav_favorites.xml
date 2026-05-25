@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_favorites"
+    app:startDestination="@id/favoritesFragment">
+
+    <!-- ── Danh sách yêu thích ── -->
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.example.fooddelivery.FavoritesFragment"
+        android:label="Yêu thích">
+
+        <!-- Favorites → Chi tiết món -->
+        <action
+            android:id="@+id/action_favorites_to_foodDetail"
+            app:destination="@id/favFoodDetailFragment"/>
+<!--            app:enterAnim="@anim/slide_in_right"-->
+<!--            app:exitAnim="@anim/slide_out_left"-->
+<!--            app:popEnterAnim="@anim/slide_in_left"-->
+<!--            app:popExitAnim="@anim/slide_out_right" />-->
+
+        <!-- Favorites → Login -->
+        <action
+            android:id="@+id/action_favorites_to_login"
+            app:destination="@id/nav_auth" />
+
+    </fragment>
+
+    <!--
+        Dùng fragment riêng (favFoodDetailFragment) thay vì
+        navigate sang nav_home để tránh conflict back stack
+        giữa các tab
+    -->
+    <fragment
+        android:id="@+id/favFoodDetailFragment"
+        android:name="com.example.fooddelivery.FoodDetailFragment"
+        android:label="Chi tiết món">
+
+        <argument
+            android:name="food_id"
+            app:argType="long" />
+
+    </fragment>
+</navigation>
