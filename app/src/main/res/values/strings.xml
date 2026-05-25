@@ -84,7 +84,6 @@
     <string name="label_cant_access_email">Không thể truy cập được email này ?</string>
 
 
-
     ---------- Tạo mật khẩu -----------
     <string name="title_create_password">Tạo mật khẩu</string>
     <string name="btn_continue">Tiếp tục</string>
@@ -112,7 +111,7 @@
     <string name="label_sold_count">%d đã bán</string>
     <string name="label_original_price">%s</string>
 
-    ------------ Poupup  giỏ hàng---------
+    ------------ Poupup giỏ hàng---------
     <string name="cart_title">Giỏ hàng</string>
     <string name="btn_clear_cart">Xoá hết</string>
 
@@ -123,7 +122,7 @@
     <string name="label_delivery_address">Bàn số S tầng 2</string>
     <string name="hint_note_for_restaurant">Ghi chú cho nhà hàng</string>
 
-     ------------Thời gian ---------------------------
+    ------------Thời gian ---------------------------
     <string name="btn_order_now">Gọi món ngay</string>
     <string name="btn_schedule_delivery">Hẹn giờ giao</string>
 
@@ -172,7 +171,6 @@
     <string name="profile_item_terms">Điều khoản và chính sách</string>
 
 
-
     -----------CHUYỂN ĐỔI TÀI KHOẢN ----------------
 
     <string name="title_switch_account">Chuyển đổi tài khoản</string>
@@ -182,7 +180,6 @@
 
     <!-- Confirm logout dialog (Image 14) -->
     <string name="dialog_logout_message">Bạn có chắc chắn muốn đăng xuất ?</string>
-
 
 
     -----------------THÔNG TIN TÀI KHOẢN -----------------
@@ -233,7 +230,6 @@
     <string name="msg_food_out_of_stock">Món ăn này hiện đã hết</string>
 
 
-
     --------------------LỖI VALIDATE -----------------------
 
     <string name="error_empty_username">Tên đăng nhập không được để trống</string>
@@ -246,7 +242,6 @@
     <string name="error_account_not_found">Không tìm thấy tài khoản</string>
     <string name="error_wrong_password">Sai mật khẩu. Vui lòng thử lại</string>
     <string name="error_session_expired">Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại</string>
-
 
 
     -------------------ACCESSIBILITY (content description cho ImageView / icon)---------------

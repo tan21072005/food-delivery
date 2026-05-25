@@ -37,8 +37,9 @@
 
 <!--        &lt;!&ndash; Home → Chi tiết món &ndash;&gt;-->
         <action
-            android:id="@+id/action_home_to_foodDetail"/>
-<!--            app:destination="@id/foodDetailFragment"-->
+            android:id="@+id/action_home_to_foodDetail"
+            app:destination="@+id/foodDetailFragment"/>
+
 <!--            app:enterAnim="@anim/slide_in_right"-->
 <!--            app:exitAnim="@anim/slide_out_left"-->
 <!--            app:popEnterAnim="@anim/slide_in_left"-->
@@ -107,20 +108,20 @@
 <!--&lt;!&ndash;        &ndash;&gt;-->
 <!--    </fragment>-->
 
-<!--&lt;!&ndash;    Giỏ hàng&ndash;&gt;-->
-<!--    <fragment-->
-<!--        android:id="@+id/cartFragment"-->
-<!--        android:name="com.example.fooddelivery.CartFragment"-->
-<!--        android:label="Giỏ hàng">-->
+<!--    Giỏ hàng-->
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.fooddelivery.OrdersFragment"
+        android:label="Giỏ hàng"/>
 
 <!--        &lt;!&ndash; Giỏ hàng → Thanh toán &ndash;&gt;-->
 <!--        <action-->
 <!--            android:id="@+id/action_cart_to_checkout"-->
 <!--            app:destination="@id/checkoutFragment"/>-->
-<!--&lt;!&ndash;            app:enterAnim="@anim/slide_in_right"&ndash;&gt;-->
-<!--&lt;!&ndash;            app:exitAnim="@anim/slide_out_left"&ndash;&gt;-->
-<!--&lt;!&ndash;            app:popEnterAnim="@anim/slide_in_left"&ndash;&gt;-->
-<!--&lt;!&ndash;            app:popExitAnim="@anim/slide_out_right" />&ndash;&gt;-->
+<!--            app:enterAnim="@anim/slide_in_right"-->
+<!--            app:exitAnim="@anim/slide_out_left"-->
+<!--            app:popEnterAnim="@anim/slide_in_left"-->
+<!--            app:popExitAnim="@anim/slide_out_right" />-->
 
 <!--    </fragment>-->
 

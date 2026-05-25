@@ -18,10 +18,10 @@
 
 
 
-<!--&lt;!&ndash;        login -> đang ký&ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@+id/action_login_to_signup"-->
-<!--            app:destination="@id/signupFragment" />-->
+<!--        login -> đang ký-->
+        <action
+            android:id="@+id/action_login_to_signup"
+            app:destination="@id/signupFragment" />
 
 
 <!--&lt;!&ndash;        login -> quên mật khẩu&ndash;&gt;-->
@@ -34,10 +34,10 @@
 
 <!--     Đăng ký -->
 
-<!--    <fragment-->
-<!--        android:id="@+id/signupFragment"-->
-<!--        android:name="com.example.fooddelivery.SignupFragment"-->
-<!--        android:label="@string/title_signup">-->
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.example.fooddelivery.SignUpFragment"
+        android:label="@string/title_signup">
 
 <!--&lt;!&ndash;        Đăng ký đến otp xác minh email&ndash;&gt;-->
 <!--        <action-->
@@ -56,7 +56,7 @@
 <!--&lt;!&ndash;            android:name="email"&ndash;&gt;-->
 <!--&lt;!&ndash;            android:defaultValue=""&ndash;&gt;-->
 <!--&lt;!&ndash;            app:argType="string" />&ndash;&gt;-->
-<!--    </fragment>-->
+    </fragment>
 
 <!--&lt;!&ndash;    Quên mật khẩu&ndash;&gt;-->
 <!--    <fragment-->
