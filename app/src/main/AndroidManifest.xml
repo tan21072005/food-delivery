@@ -22,7 +22,8 @@
         android:label="Learn Mobile App"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        android:theme="@style/Theme.FoodDelivery">
+<!--        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">-->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
