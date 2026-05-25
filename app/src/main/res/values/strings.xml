@@ -3,19 +3,273 @@
     <string name="app_tagline">Đặt đồ ăn - Giao tận nơi</string>
 
 
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
+    ----------- Bottom Nav ------------
+
+    <string name="nav_home">Trang Chủ</string>
+    <string name="nav_orders">Đơn hàng</string>
+    <string name="nav_favorites">Quán yêu thích</string>
+    <string name="nav_profile">Tài khoản</string>
+
+    ---------- Màn hình Home -------------
+
+    ------ Search -----------------------
+    <string name="hint_search">Tìm kiếm</string>
+
+    ------ Category -----------------------
+    <string name="label_category_bun">Bún</string>
+    <string name="label_category_com">Cơm</string>
+    <string name="label_category_drink">Đồ uống</string>
+    <string name="label_category_fastfood">Đồ ăn nhanh</string>
+    <string name="label_category_banh_my">Bánh Mỳ</string>
+    <string name="label_category_lau">Lẩu</string>
+    <string name="label_category_trang_mieng">Tráng miệng</string>
+    <string name="label_category_pho">Phở</string>
+
 
 
     <string name="login_failed">"Login failed"</string>
     <string name="btn_login">"LOG IN"</string>
     <string name="btn_dang_ky">Đăng ký</string>
+
+    ---------------- Section titles ----------------\
+    <string name="section_top_selling">Top &#8220;bán chạy&#8221;</string>
+    <string name="section_top_selling_subtitle">Những món có lượt bán cao nhất tháng</string>
+    <string name="section_menu">Menu</string>
+    <string name="section_all_foods">Tất cả món ăn</string>
+    <string name="label_see_all">Xem tất cả</string>
+
+
+    --------------- Menu popup -----------------
+    <string name="menu_popup_title">Menu</string>
+    <string name="menu_item_count">%d &gt;</string>
+
+
+    --------------- Màn hình đăng nhập ----------
+    <string name="title_login">Đăng nhập</string>
+    <string name="hint_username">Tên đăng nhập</string>
+    <string name="hint_password">Mật khẩu</string>
+    <string name="btn_login">Đăng nhập</string>
+    <string name="label_forgot_password">Quên mật khẩu</string>
+    <string name="divider_login_with">Đăng nhập với</string>
+
+    --------------- Màn hình đăng ký -----------
+    <string name="title_signup">Đăng ký</string>
+    <string name="btn_signup">Đăng ký</string>
+    <string name="hint_confirm_password">Nhập lại mật khẩu</string>
+    <string name="label_already_have_account">Đã có tài khoản ?</string>
+
+
+    --------- CHỌN TÀI KHOẢN / ĐĂNG NHẬP LINKEDIN ------------
+    <string name="title_choose_account">Chọn tài khoản</string>
+    <string name="subtitle_choose_account">để tiếp tục sử dụng</string>
+    <string name="btn_use_another_account">Sử dụng tài khoản khác</string>
+
+    --------- Đăng nhập với -----------------------------------
+    <string name="label_login_with_linkedin">Đăng nhập với Linkedin</string>
+    <string name="label_login_with_google">Đăng nhập với Google</string>
+    <string name="label_login_with_facebook">Đăng nhập với Facebook</string>
+
+    ---------- Quên mật khẩu ---------------------------------
+    <string name="title_forgot_password">Quên mật khẩu</string>
+    <string name="hint_email_or_phone">Nhập email/sdt</string>
+    <string name="desc_forgot_password">Chúng tôi sẽ gửi mã xác minh đến email hoặc số điện thoại này nếu nó khớp với tài khoản hiện có.</string>
+    <string name="btn_next">Tiếp theo</string>
+    <string name="btn_back">Quay lại</string>
+
+
+    --------- Nhạp mã OTP ----------------------------
+    <string name="title_enter_otp">Nhập mã gồm 6 số</string>
+    <!-- %s sẽ được thay bằng email đã che, ví dụ: hoc****@gmail.com -->
+    <string name="desc_otp_sent">Kiểm tra %s để lấy mã xác minh</string>
+    <string name="label_change_email">Thay đổi email ?</string>
+    <string name="hint_otp">Nhập mã gồm 6 chữ số</string>
+    <string name="btn_resend_otp">Gửi lại mã</string>
+    <string name="btn_submit">Gửi</string>
+    <string name="desc_otp_note">Nếu bạn không thấy email trong hộp thư đến, hãy kiểm tra thư mục thư rác. Nếu không thấy, địa chỉ email có thể chưa được xác nhận hoặc không khớp với tài khoản hiện có.</string>
+    <string name="label_cant_access_email">Không thể truy cập được email này ?</string>
+
+
+    ---------- Tạo mật khẩu -----------
+    <string name="title_create_password">Tạo mật khẩu</string>
+    <string name="btn_continue">Tiếp tục</string>
+
+    ----------- Thay đổi mật khẩu---------
+    <string name="title_change_password">Thay đổi mật khẩu</string>
+    <string name="hint_old_password">Nhập mật khẩu cũ</string>
+    <string name="hint_new_password">Nhập mật khẩu mới</string>
+    <string name="hint_confirm_new_password">Nhập lại mật khẩu</string>
+    <string name="btn_confirm">Xác nhận</string>
+
+
+    ------------ Diều kiện cho mật khẩu -----------------
+    <string name="password_rule_title">Mật khẩu phải đáp ứng:</string>
+    <string name="password_rule_length">8 ký tự ( tối đa 20 ký tự)</string>
+    <string name="password_rule_complexity">1 chữ cái, 1 chữ số, 1 ký tự đặc biệt</string>
+    <string name="password_rule_strength">Mật khẩu mạnh</string>
+
+    -------------- MSG -----------------
+    <string name="msg_password_not_match">Mật khẩu không khớp</string>
+    <string name="msg_change_password_success">Đổi mật khẩu thành công</string>
+
+    -------------- Màn hình danh sách món ăn -----------------
+    <string name="title_food_list">Các loại %s</string>
+    <string name="label_sold_count">%d đã bán</string>
+    <string name="label_original_price">%s</string>
+
+    ------------ Poupup giỏ hàng---------
+    <string name="cart_title">Giỏ hàng</string>
+    <string name="btn_clear_cart">Xoá hết</string>
+
+    ------------ Màn hình thanh toán ---------------
+    <string name="title_checkout">Thanh toán</string>
+
+    -------------Địa chỉ ---------------------------
+    <string name="label_delivery_address">Bàn số S tầng 2</string>
+    <string name="hint_note_for_restaurant">Ghi chú cho nhà hàng</string>
+
+    ------------Thời gian ---------------------------
+    <string name="btn_order_now">Gọi món ngay</string>
+    <string name="btn_schedule_delivery">Hẹn giờ giao</string>
+
+    <!-- Nhà hàng -->
+    <!-- %s = tên nhà hàng -->
+    <string name="label_restaurant_name">Nhà hàng %s</string>
+    <string name="btn_add_more_items">Thêm món</string>
+
+    <!-- Phương thức thanh toán -->
+    <string name="section_payment_method">Phương thức thanh toán</string>
+    <string name="label_change_payment">Xem tất ca</string>
+    <string name="payment_direct">Thanh toán trực tiếp</string>
+    <string name="payment_qr">Mã QR</string>
+
+    <!-- Chi tiết thanh toán -->
+    <string name="section_payment_detail">Chi tiết thanả toán</string>
+    <string name="label_subtotal">Tổng tiền</string>
+    <string name="label_discount">Đã tiết kiệm được %s</string>
+    <string name="label_total_price">%s</string>
+
+    <!-- Nút đặt món -->
+    <string name="btn_place_order">Đặt món</string>
+
+
+    ----------------MÀN HÌNH PROFILE ----------------
+
+    <string name="label_member_badge">Thành viên</string>
+    <string name="label_edit_profile">Chỉnh sửa</string>
+
+    <!-- Nhóm Tài khoản -->
+    <string name="profile_section_account">Tài khoản</string>
+    <string name="profile_item_account_info">Tài khoản</string>
+    <string name="profile_item_privacy">Quyền riêng tư</string>
+    <string name="profile_item_security">Bảo mật &amp; quyền</string>
+    <string name="profile_item_share_profile">Chia sẻ hồ sơ</string>
+
+    <!-- Nhóm Khuyến mãi -->
+    <string name="profile_section_promotion">Khuyến mãi</string>
+    <string name="profile_item_promotions">Khuyến mãi</string>
+    <string name="profile_item_savings_plan">Gói tiết kiệm</string>
+    <string name="profile_item_payment">Thanh toán</string>
+
+    <!-- Nhóm Hỗ trợ -->
+    <string name="profile_section_support">Hỗ trợ</string>
+    <string name="profile_item_support">Hỗ trợ</string>
+    <string name="profile_item_terms">Điều khoản và chính sách</string>
+
+
+    -----------CHUYỂN ĐỔI TÀI KHOẢN ----------------
+
+    <string name="title_switch_account">Chuyển đổi tài khoản</string>
+    <string name="btn_add_account">Thêm tài khoản</string>
+    <string name="btn_logout">Đăng xuất</string>
+    <string name="btn_cancel">Huỷ</string>
+
+    <!-- Confirm logout dialog (Image 14) -->
+    <string name="dialog_logout_message">Bạn có chắc chắn muốn đăng xuất ?</string>
+
+
+    -----------------THÔNG TIN TÀI KHOẢN -----------------
+
+    <string name="title_account_info">Thông tin tài khoản</string>
+    <string name="label_field_name">Tên</string>
+    <string name="label_field_phone">Số điện thoại</string>
+    <string name="label_field_email">Email</string>
+    <string name="label_field_birthday">Ngày sinh</string>
+    <string name="label_field_country">Quốc gia</string>
+    <string name="value_country_vietnam">Việt Nam</string>
+    <!-- Định dạng ngày -->
+    <string name="date_format_birthday">%d tháng %d, %d</string>
+
+
+    ---------------CÀI ĐẶT TÀI KHOẢN --------------------
+
+    <string name="title_account_settings">Tài khoản</string>
+    <string name="settings_item_account_info">Thông tin tài khoản</string>
+    <string name="settings_item_password">Mật khẩu</string>
+    <string name="settings_item_download_data">Tải về dữ liệu cá nhân</string>
+    <string name="settings_item_deactivate">Hủy kích hoạt hoặc xóa tài khoản</string>
+
+
+    --------------THÔNG BÁO CHUNG (Toast / Snackbar)-------------
+
+    <string name="msg_login_success">Đăng nhập thành công</string>
+    <string name="msg_login_failed">Đăng nhập thất bại. Vui lòng thử lại</string>
+    <string name="msg_signup_success">Đăng ký thành công</string>
+    <string name="msg_logout_success">Đã đăng xuất</string>
+    <string name="msg_added_to_cart">Đã thêm vào giỏ hàng!</string>
+    <string name="msg_removed_from_cart">Đã xoá khỏi giỏ hàng</string>
+    <string name="msg_cart_cleared">Đã xoá giỏ hàng</string>
+    <string name="msg_order_placed">Đặt món thành công!</string>
+    <string name="msg_please_login">Vui lòng đăng nhập để tiếp tục</string>
+    <string name="msg_no_internet">Không có kết nối internet</string>
+    <string name="msg_error_generic">Đã có lỗi xảy ra. Vui lòng thử lại</string>
+    <string name="msg_otp_resent">Đã gửi lại mã xác minh</string>
+    <string name="msg_otp_invalid">Mã xác minh không đúng</string>
+    <string name="msg_password_mismatch">Mật khẩu nhập lại không khớp</string>
+    <string name="msg_password_weak">Mật khẩu chưa đủ mạnh</string>
+    <string name="msg_field_required">Vui lòng không để trống trường này</string>
+    <string name="msg_invalid_email">Email không hợp lệ</string>
+    <string name="msg_invalid_phone">Số điện thoại không hợp lệ</string>
+    <string name="msg_loading">Đang tải…</string>
+    <string name="msg_no_results">Không tìm thấy kết quả</string>
+    <string name="msg_empty_cart">Giỏ hàng trống</string>
+    <string name="msg_food_out_of_stock">Món ăn này hiện đã hết</string>
+
+
+    --------------------LỖI VALIDATE -----------------------
+
+    <string name="error_empty_username">Tên đăng nhập không được để trống</string>
+    <string name="error_empty_password">Mật khẩu không được để trống</string>
+    <string name="error_empty_email_phone">Vui lòng nhập email hoặc số điện thoại</string>
+    <string name="error_empty_otp">Vui lòng nhập mã xác minh</string>
+    <string name="error_password_too_short">Mật khẩu phải có ít nhất 8 ký tự</string>
+    <string name="error_password_too_long">Mật khẩu không được quá 20 ký tự</string>
+    <string name="error_username_exists">Tên đăng nhập đã tồn tại</string>
+    <string name="error_account_not_found">Không tìm thấy tài khoản</string>
+    <string name="error_wrong_password">Sai mật khẩu. Vui lòng thử lại</string>
+    <string name="error_session_expired">Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại</string>
+
+
+    -------------------ACCESSIBILITY (content description cho ImageView / icon)---------------
+
+    <string name="cd_food_image">Ảnh món ăn</string>
+    <string name="cd_avatar">Ảnh đại diện</string>
+    <string name="cd_banner">Ảnh banner</string>
+    <string name="cd_category_icon">Icon danh mục</string>
+    <string name="cd_btn_back">Quay lại</string>
+    <string name="cd_btn_close">Đóng</string>
+    <string name="cd_btn_favorite">Yêu thích</string>
+    <string name="cd_btn_search">Tìm kiếm</string>
+    <string name="cd_btn_filter">Lọc</string>
+    <string name="cd_btn_add_to_cart">Thêm vào giỏ</string>
+    <string name="cd_btn_toggle_password">Hiện / ẩn mật khẩu</string>
+    <string name="cd_btn_edit">Chỉnh sửa</string>
+    <string name="cd_icon_facebook">Facebook</string>
+    <string name="cd_icon_google">Google</string>
+    <string name="cd_icon_linkedin">LinkedIn</string>
+
+    <!-- Thêm dòng này vào strings.xml -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+
     <string name="facebook_app_id"> 1478371224081662</string>
     <string name="fb_login_protocol_scheme">fb 1478371224081662</string>
     <string name="facebook_client_token">f152f3c57d7dfc074a0ba9c67764bc62</string>

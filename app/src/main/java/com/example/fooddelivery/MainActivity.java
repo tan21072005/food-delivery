@@ -14,7 +14,7 @@ import com.example.fooddelivery.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private NavController       navController;
+    private NavController    navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
