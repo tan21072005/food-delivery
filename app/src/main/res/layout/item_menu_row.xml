@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- item_menu_row.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_menu_item_ripple"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="14dp"
+    android:paddingBottom="14dp">
+
+    <!-- Left Icon -->
+    <ImageView
+        android:id="@+id/ivMenuIcon"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:src="@android:drawable/ic_menu_preferences"
+        android:tint="@color/icon_tint"
+        android:contentDescription="Menu icon" />
+
+    <!-- Label -->
+    <TextView
+        android:id="@+id/tvMenuLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="14dp"
+        android:text="Menu Item"
+        style="@style/MenuItemText" />
+
+    <!-- Arrow right -->
+    <ImageView
+        android:id="@+id/ivMenuArrow"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:src="@drawable/ic_arrow_right"
+        android:contentDescription="Navigate" />
+</LinearLayout>

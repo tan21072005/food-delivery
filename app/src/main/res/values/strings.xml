@@ -273,4 +273,54 @@
     <string name="fb_login_protocol_scheme">fb 1478371224081662</string>
     <string name="facebook_client_token">f152f3c57d7dfc074a0ba9c67764bc62</string>
 
+    <!--profile string-->
+
+    <!-- Profile Screen -->
+    <string name="label_thanh_vien">Thành viên</string>
+    <string name="section_tai_khoan">Tài khoản</string>
+    <string name="menu_tai_khoan">Tài khoản</string>
+    <string name="menu_quyen_rieng_tu">Quyền riêng tư</string>
+    <string name="menu_bao_mat">Bảo mật &amp; quyền</string>
+    <string name="menu_chia_se">Chia sẻ hồ sơ</string>
+    <string name="section_khuyen_mai">Khuyến mãi</string>
+    <string name="menu_khuyen_mai">Khuyến mãi</string>
+    <string name="menu_goi_tiet_kiem">Gói tiết kiệm</string>
+    <string name="menu_thanh_toan">Thanh toán</string>
+    <string name="section_ho_tro">Hỗ trợ</string>
+    <string name="menu_ho_tro">Hỗ trợ</string>
+    <string name="menu_dieu_khoan">Điều khoản và chính sách</string>
+    <!-- Bottom Nav -->
+    <string name="nav_trang_chu">Trang chủ</string>
+    <string name="nav_don_hang">Đơn hàng</string>
+    <string name="nav_yeu_thich">Quản yêu thích</string>
+    <string name="nav_tai_khoan">Tài khoản</string>
+    <!-- Switch Account Sheet -->
+    <string name="chuyen_doi_tai_khoan">Chuyển đổi tài khoản</string>
+    <string name="them_tai_khoan">Thêm tài khoản</string>
+    <string name="dang_xuat">Đăng xuất</string>
+    <string name="huy">Hủy</string>
+    <string name="ban_co_chac">Bạn có chắc chắn muốn đăng xuất ?</string>
+    <!-- Account Screen -->
+    <string name="thong_tin_tai_khoan">Thông tin tài khoản</string>
+    <string name="mat_khau">Mật khẩu</string>
+    <string name="tai_ve_du_lieu">Tải về dữ liệu cá nhân</string>
+    <string name="huy_kich_hoat">Hủy kích hoạt hoặc xóa tài khoản</string>
+    <string name="mat_khau_da_duoc_thay_doi">Mật khẩu đã được thay đổi</string>
+    <!-- Account Info -->
+    <string name="ten">Tên</string>
+    <string name="so_dien_thoai">Số điện thoại</string>
+    <string name="email">Email</string>
+    <string name="ngay_sinh">Ngày sinh</string>
+    <string name="quoc_gia">Quốc gia</string>
+    <!-- Password -->
+    <string name="tao_mat_khau">Tạo mật khẩu</string>
+    <string name="thay_doi_mat_khau">Thay đổi mật khẩu</string>
+    <string name="tiep_tuc">Tiếp tục</string>
+    <string name="hint_mat_khau_moi">Nhập mật khẩu mới</string>
+    <string name="hint_mat_khau_cu">Nhập mật khẩu cũ</string>
+    <string name="hint_nhap_lai">Nhập lại mật khẩu</string>
+    <string name="hint_ban_that_dep_trai">Bạn thật đẹp trai</string>
+    <string name="rule_8_ky_tu">8 ký tự ( tối đa 20 ký tự)</string>
+    <string name="rule_1_chu_cai">1 chữ cái, 1 chữ số, 1 ký tự đặc biệt</string>
+    <string name="rule_mat_khau_manh">Mật khẩu mạnh</string>
 </resources>
