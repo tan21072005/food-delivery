@@ -8,9 +8,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
 
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="Login" 
-        android:paddingBottom="20dp"/>
+        android:paddingBottom="20dp">
         
         <ImageView
             android:id="@+id/imageView"
@@ -196,7 +196,5 @@
                 android:layout_margin="30dp"
                 android:src="@drawable/facebook" />
         </LinearLayout>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    </ScrollView>

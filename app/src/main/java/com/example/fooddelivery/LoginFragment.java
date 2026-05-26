@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.facebook.AccessToken;
@@ -38,12 +39,12 @@ public class LoginFragment extends Fragment {
 
     private Button btnLogin;
     private EditText edUsername, edPassword;
-    private TextView tvSignup;
+    private TextView tvSignup, tvForgetpass;
     private LoginButton fbLoginButton;
     private CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
+    private NavController navController;
 
-    // ─── KHÁC Activity: inflate layout ───
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -52,28 +53,34 @@ public class LoginFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
-    // ─── KHÁC Activity: ánh xạ view trong onViewCreated ───
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // KHÁC Activity: phải có "view." ở trước
+        navController = Navigation.findNavController(view);
+
         btnLogin      = view.findViewById(R.id.btnLogin);
         edUsername    = view.findViewById(R.id.edUsername);
         edPassword    = view.findViewById(R.id.edPassword);
         tvSignup      = view.findViewById(R.id.tvSignup);
         fbLoginButton = view.findViewById(R.id.login_button);
+        tvForgetpass  = view.findViewById(R.id.tvForgetpass);
 
         setupGoogle(view);
         setupFacebook();
         setupLogin();
         setupSignup();
+        setupForgotPassword();
         checkAlreadyLoggedIn();
     }
 
-    // ─────────────────────────────────────────────────────────
-    // Google Sign-In
-    // ─────────────────────────────────────────────────────────
+    // ── Chuyển sang MainActivity sau khi login thành công ──
+    private void goToMain() {
+        Intent intent = new Intent(requireActivity(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
     private void setupGoogle(View view) {
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -81,7 +88,6 @@ public class LoginFragment extends Fragment {
                 .requestIdToken("536215355416-7nod5emba775megcu5bk7vmmp9b20f1v.apps.googleusercontent.com")
                 .build();
 
-        // KHÁC Activity: dùng requireActivity() thay vì this
         mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
 
         view.findViewById(R.id.btn_google_login).setOnClickListener(v -> {
@@ -89,7 +95,6 @@ public class LoginFragment extends Fragment {
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
 
-        // lấy mã key hash (giữ nguyên logic)
         try {
             android.content.pm.PackageInfo info = requireActivity()
                     .getPackageManager()
@@ -107,9 +112,6 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    // ─────────────────────────────────────────────────────────
-    // Facebook Login
-    // ─────────────────────────────────────────────────────────
     private void setupFacebook() {
         callbackManager = CallbackManager.Factory.create();
 
@@ -118,12 +120,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "FB access token: " + loginResult.getAccessToken().getToken());
-                // KHÁC Activity: dùng requireContext() thay vì Login_Activity.this
                 Toast.makeText(requireContext(), "Đăng nhập FB thành công", Toast.LENGTH_SHORT).show();
-
-                // KHÁC Activity: dùng Navigation thay vì startActivity + Intent
-                Navigation.findNavController(requireView())
-                        .navigate(R.id.action_login_to_home);
+                goToMain(); // ← Intent thay vì navController
             }
 
             @Override
@@ -141,9 +139,6 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    // ─────────────────────────────────────────────────────────
-    // Đăng nhập thường
-    // ─────────────────────────────────────────────────────────
     private void setupLogin() {
         btnLogin.setOnClickListener(v -> {
             String username = edUsername.getText().toString().trim();
@@ -157,59 +152,43 @@ public class LoginFragment extends Fragment {
                 edPassword.requestFocus();
             } else if (username.equals("nhattan") && password.equals("123")) {
                 Toast.makeText(requireContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-
-                // KHÁC Activity: Navigation thay vì Intent
-                Navigation.findNavController(requireView())
-                        .navigate(R.id.action_login_to_home);
+                goToMain(); // ← Intent thay vì navController
             } else {
                 Toast.makeText(requireContext(), "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // ─────────────────────────────────────────────────────────
-    // Chuyển sang màn hình Đăng ký
-    // ─────────────────────────────────────────────────────────
     private void setupSignup() {
         tvSignup.setOnClickListener(v ->
-                // KHÁC Activity: Navigation thay vì Intent
-                Navigation.findNavController(v)
-                        .navigate(R.id.action_login_to_signup)
-        );
+                navController.navigate(R.id.action_login_to_signup));
     }
 
-    // ─────────────────────────────────────────────────────────
-    // Nếu đã đăng nhập Facebook rồi → vào thẳng trang chủ
-    // ─────────────────────────────────────────────────────────
+    private void setupForgotPassword() {
+        tvForgetpass.setOnClickListener(v ->
+                navController.navigate(R.id.action_login_to_reset_password));
+    }
+
     private void checkAlreadyLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-
         if (isLoggedIn) {
-            Navigation.findNavController(requireView())
-                    .navigate(R.id.action_login_to_home);
+            goToMain(); // ← Intent thay vì navController
         }
     }
 
-    // ─────────────────────────────────────────────────────────
-    // Bắt buộc để Facebook và Google SDK hoạt động
-    // ─────────────────────────────────────────────────────────
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        // Facebook
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Google
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 String name = account.getDisplayName();
                 Toast.makeText(requireContext(), "Chào mừng " + name, Toast.LENGTH_SHORT).show();
-
-                Navigation.findNavController(requireView())
-                        .navigate(R.id.action_login_to_home);
+                goToMain(); // ← Intent thay vì navController
             } catch (ApiException e) {
                 Log.e(TAG, "Lỗi Google: " + e.getStatusCode());
                 Toast.makeText(requireContext(), "Đăng nhập Google thất bại", Toast.LENGTH_SHORT).show();

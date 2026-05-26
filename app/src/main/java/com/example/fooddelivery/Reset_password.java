@@ -1,31 +1,49 @@
 package com.example.fooddelivery;
 
-import android.content.Intent;
+import static androidx.navigation.Navigation.findNavController;
+
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavAction;
+import androidx.navigation.Navigation;
 
-public class Reset_password extends AppCompatActivity {
+import com.google.android.material.snackbar.Snackbar;
+
+public class Reset_password extends Fragment {
 
     boolean isNewPasswordVisible = false;
     boolean isConfirmPasswordVisible = false;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_reset_password);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_reset_password, container, false);
+    }
 
-        EditText edNewPassword = findViewById(R.id.edNewPassword);
-        EditText edConfirmPassword = findViewById(R.id.edConfirmPassword);
-        ImageView ivToggleNew = findViewById(R.id.ivToggleNew);
-        ImageView ivToggleConfirm = findViewById(R.id.ivToggleConfirm);
-        Button btnConfirmReset = findViewById(R.id.btnConfirmReset);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        EditText edNewPassword = view.findViewById(R.id.edNewPassword);
+        EditText edConfirmPassword = view.findViewById(R.id.edConfirmPassword);
+        ImageView ivToggleNew = view.findViewById(R.id.ivToggleNew);
+        ImageView ivToggleConfirm = view.findViewById(R.id.ivToggleConfirm);
+        Button btnConfirmReset = view.findViewById(R.id.btnConfirmReset);
 
         // Toggle hiện/ẩn mật khẩu mới
         ivToggleNew.setOnClickListener(v -> {
@@ -72,15 +90,20 @@ public class Reset_password extends AppCompatActivity {
                 edConfirmPassword.setError("Mật khẩu không khớp");
                 edConfirmPassword.requestFocus();
             } else {
-                // Thành công
-                Toast.makeText(this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
-                // Quay về màn Login
-                Intent intent = new Intent(Reset_password.this, Login_Activity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+                // taoj dialog moi
+                AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                        .setView(R.layout.dialog_success)
+                        .setCancelable(false)
+                        .create();
+                // hien thi
+                dialog.show();
+
+                //dialog bị xoá sau 2s
+                view.postDelayed(() -> {
+                    dialog.dismiss();
+                    Navigation.findNavController(view).navigate(R.id.action_reset_to_login);
+                }, 2000);
             }
         });
     }
 }
-

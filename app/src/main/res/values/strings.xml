@@ -26,10 +26,9 @@
     <string name="label_category_pho">Phở</string>
 
 
-
-    <string name="login_failed">"Login failed"</string>
-    <string name="btn_login">"LOG IN"</string>
-    <string name="btn_dang_ky">Đăng ký</string>
+    <string name="login_failed" translatable="false">"Login failed"</string>
+    <!--    <string name="btn_login">"LOG IN"</string>-->
+    <string name="btn_dang_ky" translatable="false">Đăng ký</string>
 
     ---------------- Section titles ----------------\
     <string name="section_top_selling">Top &#8220;bán chạy&#8221;</string>
