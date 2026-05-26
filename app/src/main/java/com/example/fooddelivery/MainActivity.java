@@ -29,9 +29,6 @@ public class MainActivity extends AppCompatActivity {
         navController = navHost.getNavController();
         NavigationUI.setupWithNavController(binding.bottomNav, navController);
 
-//        // 3. Gắn BottomNav với NavController — tự xử lý hết
-//        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
-//        NavigationUI.setupWithNavController(bottomNav, navController);
 
         // Ẩn bottom nav ở màn hình login/register
         navController.addOnDestinationChangedListener((controller, destination, args) -> {
