@@ -11,17 +11,17 @@ public class FoodItem {
     private int imageResId;   // for local drawable
     private String imageUrl;  // for remote image via Glide
 
-    public FoodItem() {}
-
-    public FoodItem(int id, String name, String description,
-                    int soldCount, double price, int imageResId) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.soldCount = soldCount;
-        this.price = price;
-        this.imageResId = imageResId;
-    }
+//    public FoodItem() {}
+//
+//    public FoodItem(int id, String name, String description,
+//                    int soldCount, double price, int imageResId) {
+//        this.id = id;
+//        this.name = name;
+//        this.description = description;
+//        this.soldCount = soldCount;
+//        this.price = price;
+//        this.imageResId = imageResId;
+//    }
 
     public FoodItem(int id, String name, String description,
                     int soldCount, double price, String imageUrl) {

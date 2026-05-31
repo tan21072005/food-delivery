@@ -71,6 +71,7 @@
     ---------- Quên mật khẩu ---------------------------------
     <string name="title_forgot_password">Quên mật khẩu</string>
     <string name="hint_email_or_phone">Nhập email/sdt</string>
+    <string name="hint_email">Nhập email</string>
     <string name="desc_forgot_password">Chúng tôi sẽ gửi mã xác minh đến email hoặc số điện thoại này nếu nó khớp với tài khoản hiện có.</string>
     <string name="btn_next">Tiếp theo</string>
     <string name="btn_back">Quay lại</string>

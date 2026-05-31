@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.example.fooddelivery.R;
-import com.example.fooddelivery.FoodItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +42,7 @@ public class FoodVerticalAdapter extends RecyclerView.Adapter<FoodVerticalAdapte
     @NonNull @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context)
-                .inflate(R.layout.item_food_vertical, parent, false);
+                .inflate(R.layout.item_food_list, parent, false);
         return new VH(v);
     }
 
@@ -54,7 +52,7 @@ public class FoodVerticalAdapter extends RecyclerView.Adapter<FoodVerticalAdapte
 
         h.tvName.setText(item.getName());
         h.tvDesc.setText(item.getDescription());
-          h.tvPrice.setText(item.getFormattedPrice());
+        h.tvPrice.setText(item.getFormattedPrice());
         h.tvSold.setText(item.getSoldCountLabel());
 
         Glide.with(context)

@@ -1,5 +1,6 @@
 package com.example.fooddelivery;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -31,6 +32,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class LoginFragment extends Fragment {
 
@@ -143,22 +149,67 @@ public class LoginFragment extends Fragment {
         btnLogin.setOnClickListener(v -> {
             String username = edUsername.getText().toString().trim();
             String password = edPassword.getText().toString().trim();
+//
+//            if (TextUtils.isEmpty(username)) {
+//                edUsername.setError("Tên đăng nhập còn trống");
+//                edUsername.requestFocus();
+//            } else if (TextUtils.isEmpty(password)) {
+//                edPassword.setError("Mật khẩu còn trống");
+//                edPassword.requestFocus();
+//            } else if (username.equals("nhattan") && password.equals("123")) {
+//                Toast.makeText(requireContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+//                goToMain(); // ← Intent thay vì navController
+//            } else {
+//                Toast.makeText(requireContext(), "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+//            }
 
-            if (TextUtils.isEmpty(username)) {
-                edUsername.setError("Tên đăng nhập còn trống");
+            // tại sao ko dùng if .... else mà lại dùng return
+            // phương pháp Early Return giúp code dễ đọc không bị lồng sau so với if.. else
+            if(TextUtils.isEmpty(username)){
+                edUsername.setError("Email còn trống");
                 edUsername.requestFocus();
-            } else if (TextUtils.isEmpty(password)) {
-                edPassword.setError("Mật khẩu còn trống");
-                edPassword.requestFocus();
-            } else if (username.equals("nhattan") && password.equals("123")) {
-                Toast.makeText(requireContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                goToMain(); // ← Intent thay vì navController
-            } else {
-                Toast.makeText(requireContext(), "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+                return;
             }
+            if (TextUtils.isEmpty(password)){
+                edPassword.setError("Mật khảu còn trống");
+                edPassword.requestFocus();
+                return;
+            }
+            // tắt nút login tránh request nhiều lần trong kkhi đang gọi API
+            btnLogin.setEnabled(false);
+            doLogin(username,password);
         });
     }
 
+    // hàm xác thức của superbase
+    private void doLogin(String email, String password) {
+        AuthApiService api = SupabaseClient.getInstance().create(AuthApiService.class);
+        api.signIn(new AuthRequest(email, password)).enqueue(new Callback<AuthResponse>() {
+            @Override
+            public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                btnLogin.setEnabled(true);
+                if (response.isSuccessful() && response.body() != null) {
+                    // Lưu token
+                    requireActivity()
+                            .getSharedPreferences("auth", Context.MODE_PRIVATE)
+                            .edit()
+                            .putString("access_token", response.body().accessToken)
+                            .apply();
+
+                    Toast.makeText(requireContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                    goToMain();
+                } else {
+                    Toast.makeText(requireContext(), "Sai email hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AuthResponse> call, Throwable t) {
+                btnLogin.setEnabled(true);
+                Toast.makeText(requireContext(), "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private void setupSignup() {
         tvSignup.setOnClickListener(v ->
                 navController.navigate(R.id.action_login_to_signup));
