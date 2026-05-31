@@ -82,6 +82,7 @@
         ══════════════════════════════════════════ -->
         <string name="title_forgot_password">Forgot password</string>
         <string name="hint_email_or_phone">Enter email / phone number</string>
+        <string name="hint_email">Enter email</string>
         <string name="desc_forgot_password">We\'ll send a verification code to this email or phone number if it matches an existing account.</string>
         <string name="btn_next">Next</string>
         <string name="btn_back">Go back</string>
