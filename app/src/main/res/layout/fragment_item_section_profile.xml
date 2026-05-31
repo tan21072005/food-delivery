@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- item_section_header.xml — ViewType: SECTION -->
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvSectionTitle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="#999999"
+    android:textSize="12sp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="8dp" />

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- bottom_sheet_switch_account.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    android:orientation="vertical"
+    android:paddingBottom="32dp">
+
+    <!-- Drag Handle -->
+    <View
+        android:layout_width="36dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="4dp"
+        android:background="#E0E0E0"/>
+
+    <!-- Header row: Title + X -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Chuyển đổi tài khoản"
+            android:textColor="#1A1A2E"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/btnClose"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:tint="#AAAAAA"
+            android:padding="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Close" />
+    </RelativeLayout>
+
+    <!-- Divider -->
+    <View android:layout_width="match_parent" android:layout_height="1dp"
+        android:background="#F0F0F0"/>
+
+    <!-- Account 1: Trần Nhật Tân -->
+    <LinearLayout
+        android:id="@+id/accountItem1"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_launcher_foreground"
+            app:civ_border_width="0dp" />
+
+        <TextView
+            android:id="@+id/tvAccount1Name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="14dp"
+            android:text="Trần Nhật Tân"
+            android:textColor="#1A1A2E"
+            android:textSize="15sp" />
+
+        <!-- Check mark (hiển thị khi đang active) -->
+        <ImageView
+            android:id="@+id/ivCheck1"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@android:drawable/checkbox_on_background"
+            android:tint="#2ECC71"
+            android:contentDescription="active"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Account 2: Ông trùm bom hàng -->
+    <LinearLayout
+        android:id="@+id/accountItem2"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_launcher_foreground"
+            app:civ_border_width="0dp" />
+
+        <TextView
+            android:id="@+id/tvAccount2Name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="14dp"
+            android:text="Ông trùm bom hàng"
+            android:textColor="#1A1A2E"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/ivCheck2"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@android:drawable/checkbox_on_background"
+            android:tint="#2ECC71"
+            android:contentDescription="active"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Thêm tài khoản -->
+    <LinearLayout
+        android:id="@+id/btnAddAccount"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <!-- Vòng tròn + icon -->
+        <FrameLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_add_account">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="+"
+                android:textColor="#888888"
+                android:textSize="22sp" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="14dp"
+            android:text="Thêm tài khoản"
+            android:textColor="#1A1A2E"
+            android:textSize="15sp" />
+    </LinearLayout>
+</LinearLayout>
