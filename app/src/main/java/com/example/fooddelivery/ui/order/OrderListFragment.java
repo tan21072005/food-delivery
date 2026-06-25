@@ -52,7 +52,7 @@ public class OrderListFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.order_fragment_order_list, container, false);
+        View view = inflater.inflate(R.layout.order_fragment_list, container, false);
         recyclerView = view.findViewById(R.id.recyclerViewOrders);
         layoutEmpty  = view.findViewById(R.id.layoutEmpty);
         setupRecyclerView();
@@ -78,29 +78,29 @@ public class OrderListFragment extends Fragment
         }
     }
 
-    // ── Mock data — thay bằng API call thực ────────────────────────────────
+    // â”€â”€ Mock data â€” thay báº±ng API call thá»±c â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     private List<Order> getMockOrders(String status) {
         List<Order> list = new ArrayList<>();
         switch (status) {
             case "pending":
-                list.add(new Order(1, "Bún thập cẩm", "Bàn 3, tầng 2", 4, 125000, 7, "pending", R.drawable.food_bun_thap_cam));
-                list.add(new Order(2, "Bún riêu cua",  "Bàn 1, tầng 2", 2,  70000, 7, "pending", R.drawable.food_bun_rieu_cua));
-                list.add(new Order(3, "Bún bò Huế",    "Bàn 2, tầng 3", 3, 105000, 7, "pending", R.drawable.food_bun_bo_hue));
-//                list.add(new Order(4, "Bún mắm",        "Bàn 2, tầng 2", 1,  35000, 7, "pending", R.drawable.food_bun_mam));
-//                list.add(new Order(5, "Bún ốc",         "Bàn 1, tầng 2", 4, 125000, 7, "pending", R.drawable.food_bun_oc));
+                list.add(new Order(1, "BÃºn tháº­p cáº©m", "BÃ n 3, táº§ng 2", 4, 125000, 7, "pending", R.drawable.food_bun_thap_cam));
+                list.add(new Order(2, "BÃºn riÃªu cua",  "BÃ n 1, táº§ng 2", 2,  70000, 7, "pending", R.drawable.food_bun_rieu_cua));
+                list.add(new Order(3, "BÃºn bÃ² Huáº¿",    "BÃ n 2, táº§ng 3", 3, 105000, 7, "pending", R.drawable.food_bun_bo_hue));
+//                list.add(new Order(4, "BÃºn máº¯m",        "BÃ n 2, táº§ng 2", 1,  35000, 7, "pending", R.drawable.food_bun_mam));
+//                list.add(new Order(5, "BÃºn á»‘c",         "BÃ n 1, táº§ng 2", 4, 125000, 7, "pending", R.drawable.food_bun_oc));
                 break;
             case "completed":
-                list.add(new Order(1, "Bún thập cẩm", "Bàn 3, tầng 2", 4, 125000, 7, "completed", R.drawable.food_bun_thap_cam));
-                list.add(new Order(2, "Bún riêu cua",  "Bàn 1, tầng 2", 2,  70000, 7, "completed", R.drawable.food_bun_rieu_cua));
-                list.add(new Order(3, "Bún bò Huế",    "Bàn 2, tầng 3", 3, 105000, 7, "completed", R.drawable.food_bun_bo_hue));
-//                list.add(new Order(4, "Bún mắm",        "Bàn 2, tầng 2", 1,  35000, 7, "completed", R.drawable.food_bun_mam));
-//                list.add(new Order(5, "Bún ốc",         "Bàn 1, tầng 2", 4, 125000, 7, "completed", R.drawable.food_bun_oc));
-                list.add(new Order(6, "Bún thập cẩm", "Bàn 3, tầng 2", 4, 125000, 7, "completed", R.drawable.food_bun_thap_cam));
+                list.add(new Order(1, "BÃºn tháº­p cáº©m", "BÃ n 3, táº§ng 2", 4, 125000, 7, "completed", R.drawable.food_bun_thap_cam));
+                list.add(new Order(2, "BÃºn riÃªu cua",  "BÃ n 1, táº§ng 2", 2,  70000, 7, "completed", R.drawable.food_bun_rieu_cua));
+                list.add(new Order(3, "BÃºn bÃ² Huáº¿",    "BÃ n 2, táº§ng 3", 3, 105000, 7, "completed", R.drawable.food_bun_bo_hue));
+//                list.add(new Order(4, "BÃºn máº¯m",        "BÃ n 2, táº§ng 2", 1,  35000, 7, "completed", R.drawable.food_bun_mam));
+//                list.add(new Order(5, "BÃºn á»‘c",         "BÃ n 1, táº§ng 2", 4, 125000, 7, "completed", R.drawable.food_bun_oc));
+                list.add(new Order(6, "BÃºn tháº­p cáº©m", "BÃ n 3, táº§ng 2", 4, 125000, 7, "completed", R.drawable.food_bun_thap_cam));
                 break;
             case "cancelled":
-                list.add(new Order(7, "Bún thập cẩm", "Bàn 4, tầng 2", 4, 125000, 7, "cancelled", R.drawable.food_bun_thap_cam));
-                list.add(new Order(8, "Bún riêu cua",  "Bàn 8, tầng 2", 2,  70000, 7, "cancelled", R.drawable.food_bun_rieu_cua));
+                list.add(new Order(7, "BÃºn tháº­p cáº©m", "BÃ n 4, táº§ng 2", 4, 125000, 7, "cancelled", R.drawable.food_bun_thap_cam));
+                list.add(new Order(8, "BÃºn riÃªu cua",  "BÃ n 8, táº§ng 2", 2,  70000, 7, "cancelled", R.drawable.food_bun_rieu_cua));
                 break;
         }
         return list;
@@ -108,16 +108,17 @@ public class OrderListFragment extends Fragment
 
     @Override
     public void onViewDetailClick(Order order) {
-        Toast.makeText(getContext(), "Chi tiết: " + order.getFoodName(), Toast.LENGTH_SHORT).show();
-        // TODO: navigate tới OrderDetailFragment
+        Toast.makeText(getContext(), "Chi tiáº¿t: " + order.getFoodName(), Toast.LENGTH_SHORT).show();
+        // TODO: navigate tá»›i OrderDetailFragment
         // Bundle b = new Bundle(); b.putInt("orderId", order.getId());
         // Navigation.findNavController(requireView()).navigate(R.id.action_orderManagement_to_orderDetail, b);
     }
 
     @Override
     public void onReorderClick(Order order) {
-        Toast.makeText(getContext(), "Đặt lại: " + order.getFoodName(), Toast.LENGTH_SHORT).show();
-        // TODO: xử lý thêm vào giỏ hàng
+        Toast.makeText(getContext(), "Äáº·t láº¡i: " + order.getFoodName(), Toast.LENGTH_SHORT).show();
+        // TODO: xá»­ lÃ½ thÃªm vÃ o giá» hÃ ng
     }
 }
+
 

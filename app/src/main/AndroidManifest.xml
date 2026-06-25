@@ -43,13 +43,10 @@
             android:name=".ui.menu.MenuActivity"
             android:exported="false" />
 
-<<<<<<< HEAD
-=======
         <activity
             android:name=".ui.cart.Checkout"
             android:exported="false" />
 
->>>>>>> main
         <activity
             android:name=".ui.auth.AuthActivity"
             android:exported="true">

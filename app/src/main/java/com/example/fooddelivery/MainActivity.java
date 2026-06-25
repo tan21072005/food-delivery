@@ -9,28 +9,28 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.databinding.ActivityMainBinding;
+import com.example.fooddelivery.databinding.MainActivityBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
+    private MainActivityBinding binding;
     private NavController    navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = MainActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Kết nối NavController với BottomNavigationView
+        // Káº¿t ná»‘i NavController vá»›i BottomNavigationView
         NavHostFragment navHost = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.navHostFragment);
-        // 2. Lấy NavController từ NavHostFragment
+        // 2. Láº¥y NavController tá»« NavHostFragment
         navController = navHost.getNavController();
         NavigationUI.setupWithNavController(binding.bottomNav, navController);
 
             
-        // Ẩn bottom nav ở màn hình login/register
+        // áº¨n bottom nav á»Ÿ mÃ n hÃ¬nh login/register
         navController.addOnDestinationChangedListener((controller, destination, args) -> {
             int id = destination.getId();
 //            if (id == R.id.loginFragment || id == R.id.registerFragment) {
@@ -42,3 +42,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 }
+
