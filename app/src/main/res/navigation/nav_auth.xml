@@ -7,7 +7,7 @@
     <!-- ─── Login ─── -->
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.fooddelivery.LoginFragment">
+        android:name="com.example.fooddelivery.ui.auth.LoginFragment">
 
         <action
             android:id="@+id/action_login_to_signup"
@@ -22,13 +22,13 @@
     <!-- ─── Đăng ký ─── -->
     <fragment
         android:id="@+id/signupFragment"
-        android:name="com.example.fooddelivery.SignUpFragment"
+        android:name="com.example.fooddelivery.ui.auth.SignUpFragment"
         android:label="@string/title_signup" />
 
     <!-- ─── Quên mật khẩu ─── -->
     <fragment
         android:id="@+id/forgetPassFragment"
-        android:name="com.example.fooddelivery.ForgetPassFragment"
+        android:name="com.example.fooddelivery.ui.auth.ForgetPassFragment"
         android:label="Quên mật khẩu">
 
         <action
@@ -40,7 +40,7 @@
     <!-- ─── Xác minh OTP ─── -->
     <fragment
         android:id="@+id/verifyOtpFragment"
-        android:name="com.example.fooddelivery.VerifyOtpFragment"
+        android:name="com.example.fooddelivery.ui.auth.VerifyOtpFragment"
         android:label="Xác minh OTP">
 
         <action
@@ -52,7 +52,7 @@
     <!-- ─── Đặt lại mật khẩu ─── -->
     <fragment
         android:id="@+id/resetPasswordFragment"
-        android:name="com.example.fooddelivery.Reset_password"
+        android:name="com.example.fooddelivery.ui.auth.Reset_password"
         android:label="Đặt lại mật khẩu">
 
         <action

@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.fooddelivery"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
     // bật chế độ view binding
     buildFeatures{
         viewBinding = true
@@ -83,6 +81,7 @@ dependencies {
 
     //retrofit và okhttp
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    // convert object sang Json
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 

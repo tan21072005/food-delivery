@@ -7,7 +7,7 @@
     <!-- ── Danh sách yêu thích ── -->
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.example.fooddelivery.FavoritesFragment"
+        android:name="com.example.fooddelivery.ui.favorites.FavoritesFragment"
         android:label="Yêu thích">
 
         <!-- Favorites → Chi tiết món -->
@@ -33,7 +33,7 @@
     -->
     <fragment
         android:id="@+id/favFoodDetailFragment"
-        android:name="com.example.fooddelivery.FoodDetailFragment"
+        android:name="com.example.fooddelivery.ui.detail.FoodDetailFragment"
         android:label="Chi tiết món">
 
         <argument
