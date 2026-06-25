@@ -2,8 +2,8 @@
 <resources>
 
     <!-- Dark mode — vẫn dùng màu cam, chỉ điều chỉnh nền -->
-    <style name="Theme.FoodDelivery"
-        parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!-- ✅ THÀNH -->
+    <style name="Theme.FoodDelivery" parent="Theme.MaterialComponents.Light.NoActionBar">
 
         <item name="colorPrimary">@color/brand_primary</item>
         <item name="colorPrimaryVariant">@color/brand_dark</item>

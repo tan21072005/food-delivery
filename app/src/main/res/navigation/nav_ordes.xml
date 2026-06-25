@@ -10,7 +10,7 @@
     <!-- ── Danh sách đơn hàng ── -->
     <fragment
         android:id="@+id/ordersFragment"
-        android:name="com.example.fooddelivery.OrdersFragment"
+        android:name="com.example.fooddelivery.ui.order.OrderManagementFragment"
         android:label="Đơn hàng">
 
 <!--        &lt;!&ndash; Orders đến Chi tiết đơn hàng &ndash;&gt;-->
