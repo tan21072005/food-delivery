@@ -40,13 +40,15 @@
 
 
         <activity
-            android:name=".MenuActivity"
+            android:name=".ui.menu.MenuActivity"
             android:exported="false" />
+
         <activity
-            android:name=".SignUp_Activity"
+            android:name=".ui.cart.Checkout"
             android:exported="false" />
+
         <activity
-            android:name=".AuthActivity"
+            android:name=".ui.auth.AuthActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
