@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.fooddelivery"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
     // bật chế độ view binding
     buildFeatures{
         viewBinding = true
@@ -65,4 +63,29 @@ dependencies {
 
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    // Material Design — cần cho TabLayout, BottomNavigationView
+    implementation("com.google.android.material:material:1.11.0")
+// ViewPager2
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+
+
+    // Supabase Android SDK
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.1.0")
+    implementation("io.github.jan-tennert.supabase:gotrue-kt:2.1.0")
+    implementation("io.github.jan-tennert.supabase:realtime-kt:2.1.0")
+    // Ktor engine (bắt buộc)
+    implementation("io.ktor:ktor-client-android:2.3.7")
+    // Coroutines (Supabase SDK dùng Kotlin coroutines)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    //retrofit và okhttp
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    // convert object sang Json
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+// Avatar
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+
 }

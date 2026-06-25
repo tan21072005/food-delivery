@@ -1,121 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--    Graph Auth — Login → Signup → ForgotPassword → OTP → CreatePassword-->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_auth"
     app:startDestination="@id/loginFragment">
 
+    <!-- ─── Login ─── -->
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.fooddelivery.LoginFragment">
+        android:name="com.example.fooddelivery.ui.auth.LoginFragment">
 
-        <!-- Login thành công → Home (xóa toàn bộ back stack auth) -->
         <action
-            android:id="@+id/action_login_to_home"
-            app:destination="@id/nav_home"
-            app:popUpTo="@id/nav_auth"
-            app:popUpToInclusive="true"/>
+            android:id="@+id/action_login_to_signup"
+            app:destination="@id/signupFragment" />
 
-
-
-<!--&lt;!&ndash;        login -> đang ký&ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@+id/action_login_to_signup"-->
-<!--            app:destination="@id/signupFragment" />-->
-
-
-<!--&lt;!&ndash;        login -> quên mật khẩu&ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@+id/action_login_to_forgot_password"-->
-<!--            app:destination="@id/forgotPasswordFragment" />-->
-
+        <action
+            android:id="@+id/action_login_to_reset_password"
+            app:destination="@id/forgetPassFragment" />
 
     </fragment>
 
-<!--     Đăng ký -->
+    <!-- ─── Đăng ký ─── -->
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.example.fooddelivery.ui.auth.SignUpFragment"
+        android:label="@string/title_signup" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/signupFragment"-->
-<!--        android:name="com.example.fooddelivery.SignupFragment"-->
-<!--        android:label="@string/title_signup">-->
+    <!-- ─── Quên mật khẩu ─── -->
+    <fragment
+        android:id="@+id/forgetPassFragment"
+        android:name="com.example.fooddelivery.ui.auth.ForgetPassFragment"
+        android:label="Quên mật khẩu">
 
-<!--&lt;!&ndash;        Đăng ký đến otp xác minh email&ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@+id/action_signup_to_otp"-->
-<!--            app:destination="@id/otpFragment" />-->
+        <action
+            android:id="@+id/action_forget_to_otp"
+            app:destination="@id/verifyOtpFragment" />
 
-<!--&lt;!&ndash;        Đăng ký thành công thì quay lại login&ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@id/action_signup_to_login"-->
-<!--            app:destination="@id/loginFragment"-->
-<!--            app:popUpTo="@id/loginFragment"-->
-<!--            app:popUpToInclusive="false"/>"-->
+    </fragment>
 
-<!--&lt;!&ndash;        &lt;!&ndash; Truyền email để hiện trong OTP screen &ndash;&gt;-->
-<!--&lt;!&ndash;        <argument&ndash;&gt;-->
-<!--&lt;!&ndash;            android:name="email"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:defaultValue=""&ndash;&gt;-->
-<!--&lt;!&ndash;            app:argType="string" />&ndash;&gt;-->
-<!--    </fragment>-->
+    <!-- ─── Xác minh OTP ─── -->
+    <fragment
+        android:id="@+id/verifyOtpFragment"
+        android:name="com.example.fooddelivery.ui.auth.VerifyOtpFragment"
+        android:label="Xác minh OTP">
 
-<!--&lt;!&ndash;    Quên mật khẩu&ndash;&gt;-->
-<!--    <fragment-->
-<!--        android:id="@+id/forgotPasswordFragment"-->
-<!--        android:name="com.example.fooddelivery.FOrgotPasswordFragment"-->
-<!--        android:label="@string/title_forgot_password">-->
+        <action
+            android:id="@+id/action_otp_to_reset"
+            app:destination="@id/resetPasswordFragment" />
 
-<!--&lt;!&ndash;        nhập email đến gửi OTP&ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@+id/action_forgot_password_to_otp"-->
-<!--            app:destination="@id/otpFragment" />-->
+    </fragment>
 
+    <!-- ─── Đặt lại mật khẩu ─── -->
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.example.fooddelivery.ui.auth.Reset_password"
+        android:label="Đặt lại mật khẩu">
 
-<!--&lt;!&ndash;        <argument&ndash;&gt;-->
-<!--&lt;!&ndash;            android:name="email"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:defaultValue=""&ndash;&gt;-->
-<!--&lt;!&ndash;            app:argType="string" />&ndash;&gt;-->
+        <action
+            android:id="@+id/action_reset_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
 
-<!--    </fragment>-->
-
-<!--&lt;!&ndash;    nhập otp&ndash;&gt;-->
-<!--    <fragment-->
-<!--        android:id="@id/otpFragment"-->
-<!--        android:name="com.example.fooddelivery.OtpFragment"-->
-<!--        android:label="Xác minh OTP">-->
-
-<!--&lt;!&ndash;        Otp đúng thi tạo mật khẩu mới&ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@+id/action_otp_to_create_password"-->
-<!--            app:destination=""-->
-
-<!--&lt;!&ndash;        &lt;!&ndash; Email đã che: hoc****@gmail.com &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;        <argument&ndash;&gt;-->
-<!--&lt;!&ndash;            android:name="masked_email"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:defaultValue=""&ndash;&gt;-->
-<!--&lt;!&ndash;            app:argType="string" />&ndash;&gt;-->
-
-<!--&lt;!&ndash;        &lt;!&ndash; "signup" hoặc "forgot" — để biết sau OTP đi đâu &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;        <argument&ndash;&gt;-->
-<!--&lt;!&ndash;            android:name="flow_type"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:defaultValue="signup"&ndash;&gt;-->
-<!--&lt;!&ndash;            app:argType="string" />&ndash;&gt;-->
-
-<!--    </fragment>-->
-
-<!--&lt;!&ndash;    đặt lại mật khẩu&ndash;&gt;-->
-<!--    <fragment-->
-<!--        android:id="@id/createPasswordFragment"-->
-<!--        android:name="com.example.fooddelivery.CreatePasswordFragment">-->
-
-<!--&lt;!&ndash;        đổi mật khẩu thành công thì quay về trang login (xoá hết back stackk)&ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@+id/action_create_password_to_login"-->
-<!--            app:destination="@id/loginFragment"-->
-<!--            app:popUpTo="@id/loginFragment"-->
-<!--            app:popUpToInclusive="true" />-->
-
-<!--    </fragment>-->
-
-
+    </fragment>
 
 </navigation>

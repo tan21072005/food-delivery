@@ -1,142 +1,71 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--    Graph Home — Home → Search → Menu → FoodDetail → Cart → Checkout-->
-
+﻿<?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_home"
     app:startDestination="@id/homeFragment">
 
-<!--    Trang chủ-->
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.fooddelivery.HomeFragment">
+        android:name="com.example.fooddelivery.ui.home.HomeFragment">
 
-<!--&lt;!&ndash;        từ home đến tìm kiếm&ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@+id/action_home_to_search"-->
-<!--            app:destination="@id/searchFragment">-->
-
-<!--&lt;!&ndash;            animation cho đẹp&ndash;&gt;-->
-<!--&lt;!&ndash;            app:enterAnim="@anim/slide_in_right"&ndash;&gt;-->
-<!--&lt;!&ndash;            app:exitAnim="@anim/slide_out_left"&ndash;&gt;-->
-<!--&lt;!&ndash;            app:popEnterAnim="@anim/slide_in_left"&ndash;&gt;-->
-<!--&lt;!&ndash;            app:popExitAnim="@anim/slide_out_right" />&ndash;&gt;-->
-<!--        </action>-->
-
-
-<!--&lt;!&ndash;        từ home đến menu theo danh mục &ndash;&gt;-->
         <action
-            android:id="@+id/action_home_to_menu"/>
-<!--            app:destination="@id/menuFragment" />"-->
+            android:id="@+id/action_home_to_search"
+            app:destination="@id/searchFragment" />
 
-<!--        app:enterAnim="@anim/slide_in_right"-->
-<!--        app:exitAnim="@anim/slide_out_left"-->
-<!--        app:popEnterAnim="@anim/slide_in_left"-->
-<!--        app:popExitAnim="@anim/slide_out_right" />-->
-
-
-<!--        &lt;!&ndash; Home → Chi tiết món &ndash;&gt;-->
         <action
-            android:id="@+id/action_home_to_foodDetail"/>
-<!--            app:destination="@id/foodDetailFragment"-->
-<!--            app:enterAnim="@anim/slide_in_right"-->
-<!--            app:exitAnim="@anim/slide_out_left"-->
-<!--            app:popEnterAnim="@anim/slide_in_left"-->
-<!--            app:popExitAnim="@anim/slide_out_right" />-->
+            android:id="@+id/action_home_to_menu" />
+
+        <action
+            android:id="@+id/action_home_to_foodDetail"
+            app:destination="@+id/foodDetailFragment"/>
 
     </fragment>
 
-<!--    Tìm kiếm-->
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.fooddelivery.ui.search.SearchFragment">
 
-<!--    <fragment-->
-<!--        android:id="@+id/searchFragment"-->
-<!--        android:name="com.example.fooddelivery.SearchFragment">-->
+        <action
+            android:id="@+id/action_search_to_foodDetail"
+            app:destination="@id/foodDetailFragment" />
+    </fragment>
 
-<!--&lt;!&ndash;        từ search đến chi tiết món&ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@+id/action_search_to_foodDetail"-->
-<!--            app:destination="@id/foodDetailFragment" />"-->
-<!--&lt;!&ndash;        app:enterAnim="@anim/slide_in_right"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:exitAnim="@anim/slide_out_left"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:popEnterAnim="@anim/slide_in_left"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:popExitAnim="@anim/slide_out_right" />&ndash;&gt;-->
-<!--&lt;!&ndash;      &ndash;&gt;-->
-<!--    </fragment>-->
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.example.fooddelivery.ui.menu.MenuFragment">
 
-<!--&lt;!&ndash;    Danh sách món theo danh mục&ndash;&gt;-->
+        <action
+            android:id="@+id/action_menu_to_foodDetail"
+            app:destination="@id/foodDetailFragment" />
 
-<!--    <fragment-->
-<!--        android:id="@id/menuFragment"-->
-<!--        android:name="com.example.fooddelivery.MenuFragment">-->
+        <argument
+            android:name="category_slug"
+            android:defaultValue=""
+            app:argType="string" />
 
-<!--&lt;!&ndash;        từ menu đến chi tiết món&ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@id/action_menu_to_foodDetail"-->
-<!--            app:destination="@id/foodDetailFragment" />"-->
-<!--&lt;!&ndash;        app:enterAnim="@anim/slide_in_right"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:exitAnim="@anim/slide_out_left"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:popEnterAnim="@anim/slide_in_left"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:popExitAnim="@anim/slide_out_right" />&ndash;&gt;-->
+        <argument
+            android:name="category_name"
+            android:defaultValue="Tat ca"
+            app:argType="string" />
+    </fragment>
 
-<!--&lt;!&ndash;        <argument&ndash;&gt;-->
-<!--&lt;!&ndash;            android:name="category_slug"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:defaultValue=""&ndash;&gt;-->
-<!--&lt;!&ndash;            app:argType="string" />&ndash;&gt;-->
+    <fragment
+        android:id="@+id/foodDetailFragment"
+        android:name="com.example.fooddelivery.ui.detail.FoodDetailFragment">
 
-<!--&lt;!&ndash;        <argument&ndash;&gt;-->
-<!--&lt;!&ndash;            android:name="category_name"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:defaultValue="Tất cả"&ndash;&gt;-->
-<!--&lt;!&ndash;            app:argType="string" />&ndash;&gt;-->
-<!--    </fragment>-->
+        <action
+            android:id="@+id/action_foodDetail_to_cart"
+            app:destination="@id/cartFragment"/>
+        
+        <argument
+            android:name="food_id"
+            app:argType="long" />
+        
+    </fragment>
 
-<!--&lt;!&ndash;    chi tiết món ăn &ndash;&gt;-->
-<!--    <fragment-->
-<!--        android:id="@id/foodDetailFragment"-->
-<!--        android:name="com.example.fooddelivery.FoodDetailFragment">-->
-
-<!--        &lt;!&ndash; Chi tiết → Giỏ hàng &ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@+id/action_foodDetail_to_cart"-->
-<!--            app:destination="@id/cartFragment"/>-->
-<!--&lt;!&ndash;            app:enterAnim="@anim/slide_in_up"&ndash;&gt;-->
-<!--&lt;!&ndash;            app:exitAnim="@anim/fade_out" />&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <argument&ndash;&gt;-->
-<!--&lt;!&ndash;            android:name="food_id"&ndash;&gt;-->
-<!--&lt;!&ndash;            app:argType="long" />&ndash;&gt;-->
-<!--&lt;!&ndash;        &ndash;&gt;-->
-<!--    </fragment>-->
-
-<!--&lt;!&ndash;    Giỏ hàng&ndash;&gt;-->
-<!--    <fragment-->
-<!--        android:id="@+id/cartFragment"-->
-<!--        android:name="com.example.fooddelivery.CartFragment"-->
-<!--        android:label="Giỏ hàng">-->
-
-<!--        &lt;!&ndash; Giỏ hàng → Thanh toán &ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@+id/action_cart_to_checkout"-->
-<!--            app:destination="@id/checkoutFragment"/>-->
-<!--&lt;!&ndash;            app:enterAnim="@anim/slide_in_right"&ndash;&gt;-->
-<!--&lt;!&ndash;            app:exitAnim="@anim/slide_out_left"&ndash;&gt;-->
-<!--&lt;!&ndash;            app:popEnterAnim="@anim/slide_in_left"&ndash;&gt;-->
-<!--&lt;!&ndash;            app:popExitAnim="@anim/slide_out_right" />&ndash;&gt;-->
-
-<!--    </fragment>-->
-
-<!--&lt;!&ndash;    Thanh toán &ndash;&gt;-->
-<!--    <fragment-->
-<!--        android:id="@+id/checkoutFragment"-->
-<!--        android:name="com.example.fooddelivery.CheckoutFragment"-->
-<!--        android:label="Thanh toán">-->
-
-<!--        &lt;!&ndash; Đặt hàng thành công → Orders tab &ndash;&gt;-->
-<!--        <action-->
-<!--            android:id="@+id/action_checkout_to_orders"-->
-<!--            app:destination="@id/nav_orders"-->
-<!--            app:popUpTo="@id/homeFragment"-->
-<!--            app:popUpToInclusive="false" />-->
-
-<!--    </fragment>-->
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.fooddelivery.OrdersFragment"
+        android:label="Gio hang" />
 
 </navigation>
