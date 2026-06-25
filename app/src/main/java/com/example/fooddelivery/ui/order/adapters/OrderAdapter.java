@@ -17,11 +17,11 @@ import com.example.fooddelivery.data.model.Order;
 import java.util.List;
 
 /**
- * Adapter dùng chung cho cả 3 tab.
- * Tự động chọn layout đúng theo status của từng tab:
- *   "pending"   → item_order_pending.xml   (badge xám, không có Đặt lại)
- *   "completed" → item_order_completed.xml (badge xanh + nút Đặt lại vàng)
- *   "cancelled" → item_order_cancelled.xml (badge xám + nút Đặt lại vàng)
+ * Adapter dÃ¹ng chung cho cáº£ 3 tab.
+ * Tá»± Ä‘á»™ng chá»n layout Ä‘Ãºng theo status cá»§a tá»«ng tab:
+ *   "pending"   â†’ item_order_pending.xml   (badge xÃ¡m, khÃ´ng cÃ³ Äáº·t láº¡i)
+ *   "completed" â†’ item_order_completed.xml (badge xanh + nÃºt Äáº·t láº¡i vÃ ng)
+ *   "cancelled" â†’ item_order_cancelled.xml (badge xÃ¡m + nÃºt Äáº·t láº¡i vÃ ng)
  */
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
 
@@ -32,7 +32,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     public interface OnOrderActionListener {
         void onViewDetailClick(Order order);
-        void onReorderClick(Order order);   // chỉ gọi với completed & cancelled
+        void onReorderClick(Order order);   // chá»‰ gá»i vá»›i completed & cancelled
     }
 
     private final Context context;
@@ -48,7 +48,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         this.listener  = listener;
     }
 
-    // ─── ViewType ────────────────────────────────────────────────────────────
+    // â”€â”€â”€ ViewType â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     @Override
     public int getItemViewType(int position) {
@@ -59,28 +59,28 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
     }
 
-    // ─── onCreateViewHolder ───────────────────────────────────────────────────
+    // â”€â”€â”€ onCreateViewHolder â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     @NonNull
     @Override
     public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         int layoutRes;
         switch (viewType) {
-            case TYPE_COMPLETED: layoutRes = R.layout.order_item_order_completed; break;
-            case TYPE_CANCELLED: layoutRes = R.layout.order_item_order_cancelled; break;
-            default:             layoutRes = R.layout.order_item_order_pending;   break;
+            case TYPE_COMPLETED: layoutRes = R.layout.order_item_completed; break;
+            case TYPE_CANCELLED: layoutRes = R.layout.order_item_cancelled; break;
+            default:             layoutRes = R.layout.order_item_pending;   break;
         }
         View view = LayoutInflater.from(context).inflate(layoutRes, parent, false);
         return new OrderViewHolder(view, viewType);
     }
 
-    // ─── onBindViewHolder ─────────────────────────────────────────────────────
+    // â”€â”€â”€ onBindViewHolder â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orderList.get(position);
 
-        // Ảnh món
+        // áº¢nh mÃ³n
         if (order.getFoodImageResId() != 0)
             holder.imgFood.setImageResource(order.getFoodImageResId());
         else
@@ -92,12 +92,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         holder.tvQuantityPrice.setText(order.getQuantityAndPrice());
         holder.tvTime.setText(order.getTimeLabel());
 
-        // Xem chi tiết
+        // Xem chi tiáº¿t
         holder.btnViewDetail.setOnClickListener(v -> {
             if (listener != null) listener.onViewDetailClick(order);
         });
 
-        // Đặt lại (chỉ có ở completed & cancelled)
+        // Äáº·t láº¡i (chá»‰ cÃ³ á»Ÿ completed & cancelled)
         if (holder.btnReorder != null) {
             holder.btnReorder.setOnClickListener(v -> {
                 if (listener != null) listener.onReorderClick(order);
@@ -113,7 +113,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         notifyDataSetChanged();
     }
 
-    // ─── ViewHolder ───────────────────────────────────────────────────────────
+    // â”€â”€â”€ ViewHolder â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     static class OrderViewHolder extends RecyclerView.ViewHolder {
         ImageView     imgFood;
@@ -130,7 +130,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             tvTime          = itemView.findViewById(R.id.tvTime);
             btnViewDetail   = itemView.findViewById(R.id.btnViewDetail);
 
-            // btnReorder chỉ tồn tại trong layout completed & cancelled
+            // btnReorder chá»‰ tá»“n táº¡i trong layout completed & cancelled
             if (viewType == TYPE_COMPLETED || viewType == TYPE_CANCELLED) {
                 btnReorder = itemView.findViewById(R.id.btnReorder);
             }

@@ -20,9 +20,9 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.fooddelivery.R;
 
-// tsao thêm mỗi .databinding là ko có lỗi nhỉ ???
-//.databinding → sub-package do Android tự tạo
-import com.example.fooddelivery.databinding.HomeFragmentHomeBinding;
+// tsao thÃªm má»—i .databinding lÃ  ko cÃ³ lá»—i nhá»‰ ???
+//.databinding â†’ sub-package do Android tá»± táº¡o
+import com.example.fooddelivery.databinding.HomeFragmentBinding;
 
 
 import com.example.fooddelivery.data.model.FoodItem;
@@ -38,7 +38,7 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    private HomeFragmentHomeBinding binding;
+    private HomeFragmentBinding binding;
     private HomeViewModel       viewModel;
     private SessionManager      session;
 
@@ -50,12 +50,12 @@ public class HomeFragment extends Fragment {
 
     // Banner auto-slide
     private final Handler  bannerHandler  = new Handler(Looper.getMainLooper());
-    private final int      SLIDE_DELAY_MS = 3000; // 3 giây
+    private final int      SLIDE_DELAY_MS = 3000; // 3 giÃ¢y
     private Runnable       bannerRunnable;
     private ImageView[]    dots;
     private int            currentBannerPage = 0;
 
-    // 3 ảnh banner (thay bằng URL thật từ API)
+    // 3 áº£nh banner (thay báº±ng URL tháº­t tá»« API)
     private final List<String> bannerUrls = Arrays.asList(
             "https://res.cloudinary.com/daakugdmw/image/upload/v1779354970/banner2.png",
             "https://res.cloudinary.com/daakugdmw/image/upload/v1779354937/banner1.png",
@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        binding = HomeFragmentHomeBinding.inflate(inflater, container, false);
+        binding = HomeFragmentBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -86,23 +86,23 @@ public class HomeFragment extends Fragment {
         viewModel.loadHome();
     }
 
-    // ─────────────────────────────────────────────────────────
-    // Banner Slider + Auto-slide mỗi 3 giây + Dot indicator
-    // ─────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Banner Slider + Auto-slide má»—i 3 giÃ¢y + Dot indicator
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     private void setupBannerSlider() {
         bannerAdapter = new BannerAdapter(requireContext(), bannerUrls);
         binding.viewPagerBanner.setAdapter(bannerAdapter);
 
-        // Bắt đầu từ giữa để scroll được cả 2 hướng
+        // Báº¯t Ä‘áº§u tá»« giá»¯a Ä‘á»ƒ scroll Ä‘Æ°á»£c cáº£ 2 hÆ°á»›ng
         int startPos = bannerAdapter.getStartPosition();
         binding.viewPagerBanner.setCurrentItem(startPos, false);
         currentBannerPage = startPos;
 
-        // Tạo dot indicators
+        // Táº¡o dot indicators
         setupDots(bannerUrls.size());
         updateDots(0);
 
-        // Lắng nghe thay đổi trang
+        // Láº¯ng nghe thay Ä‘á»•i trang
         binding.viewPagerBanner.registerOnPageChangeCallback(
                 new ViewPager2.OnPageChangeCallback() {
                     @Override
@@ -113,7 +113,7 @@ public class HomeFragment extends Fragment {
                 }
         );
 
-        // Auto-slide mỗi 3 giây
+        // Auto-slide má»—i 3 giÃ¢y
         bannerRunnable = () -> {
             currentBannerPage++;
             binding.viewPagerBanner.setCurrentItem(currentBannerPage, true);
@@ -148,12 +148,12 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    // ─────────────────────────────────────────────────────────
-    // Category RecyclerView (ngang, trượt được)
-    // ─────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Category RecyclerView (ngang, trÆ°á»£t Ä‘Æ°á»£c)
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     private void setupCategories() {
         categoryAdapter = new CategoryAdapter(requireContext(), category -> {
-            // Click danh mục → navigate sang màn hình Menu lọc theo category
+            // Click danh má»¥c â†’ navigate sang mÃ n hÃ¬nh Menu lá»c theo category
             Bundle args = new Bundle();
             args.putString("category_slug", category.getSlug());
             args.putString("category_name", category.getName());
@@ -167,14 +167,14 @@ public class HomeFragment extends Fragment {
         );
     }
 
-    // ─────────────────────────────────────────────────────────
-    // Top Selling (nằm ngang)
-    // ─────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Top Selling (náº±m ngang)
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     private void setupTopSelling() {
         topSellingAdapter = new TopSellingAdapter(
                 requireContext(),
                 item -> navigateToDetail(item),   // click item
-                item -> addToCart(item)            // click nút +
+                item -> addToCart(item)            // click nÃºt +
         );
 
         binding.rvTopSelling.setAdapter(topSellingAdapter);
@@ -183,9 +183,9 @@ public class HomeFragment extends Fragment {
         );
     }
 
-    // ─────────────────────────────────────────────────────────
-    // All Foods (dọc)
-    // ─────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // All Foods (dá»c)
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     private void setupAllFoods() {
         foodVerticalAdapter = new FoodVerticalAdapter(
                 requireContext(),
@@ -198,9 +198,9 @@ public class HomeFragment extends Fragment {
         binding.rvAllFoods.setNestedScrollingEnabled(false);
     }
 
-    // ─────────────────────────────────────────────────────────
-    // Observe LiveData từ ViewModel
-    // ─────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Observe LiveData tá»« ViewModel
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     private void observeViewModel() {
         viewModel.isLoading().observe(getViewLifecycleOwner(), loading ->
                 binding.swipeRefresh.setRefreshing(loading)
@@ -229,17 +229,17 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    // ─────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Listeners
-    // ─────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 //    private void setupListeners() {
-//        // Search → navigate sang màn hình tìm kiếm
+//        // Search â†’ navigate sang mÃ n hÃ¬nh tÃ¬m kiáº¿m
 //        binding.etSearch.setOnClickListener(v ->
 //                Navigation.findNavController(requireView())
 //                        .navigate(R.id.action_home_to_search)
 //        );
 //
-//        // Xem tất cả top bán chạy
+//        // Xem táº¥t cáº£ top bÃ¡n cháº¡y
 //        binding.tvSeeAll.setOnClickListener(v ->
 //                Navigation.findNavController(requireView())
 //                        .navigate(R.id.action_home_to_menu)
@@ -248,15 +248,15 @@ public class HomeFragment extends Fragment {
 //        // Pull-to-refresh
 //        binding.swipeRefresh.setOnRefreshListener(() -> viewModel.loadHome());
 //
-//        // Địa chỉ giao → mở màn hình chọn địa chỉ
+//        // Äá»‹a chá»‰ giao â†’ má»Ÿ mÃ n hÃ¬nh chá»n Ä‘á»‹a chá»‰
 //        binding.layoutAddress.setOnClickListener(v ->
-//                Toast.makeText(requireContext(), "Chọn địa chỉ giao hàng", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(requireContext(), "Chá»n Ä‘á»‹a chá»‰ giao hÃ ng", Toast.LENGTH_SHORT).show()
 //        );
 //    }
 
-    // ─────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Navigation helpers
-    // ─────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     private void navigateToDetail(FoodItem item) {
         Bundle args = new Bundle();
         args.putLong("food_id", item.getId());
@@ -267,7 +267,7 @@ public class HomeFragment extends Fragment {
     private void addToCart(FoodItem item) {
 //        if (!session.isLoggedIn()) {
 //            Toast.makeText(requireContext(),
-//                    "Vui lòng đăng nhập để thêm vào giỏ",
+//                    "Vui lÃ²ng Ä‘Äƒng nháº­p Ä‘á»ƒ thÃªm vÃ o giá»",
 //                    Toast.LENGTH_SHORT).show();
 //            Navigation.findNavController(requireView())
 //                    .navigate(R.id.action_home_to_login);
@@ -278,19 +278,19 @@ public class HomeFragment extends Fragment {
 
 
 
-    // ─────────────────────────────────────────────────────────
-    // Lifecycle — dừng/tiếp tục auto-slide
-    // ─────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Lifecycle â€” dá»«ng/tiáº¿p tá»¥c auto-slide
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     @Override
     public void onPause() {
         super.onPause();
-        bannerHandler.removeCallbacks(bannerRunnable); // dừng khi rời khỏi màn hình
+        bannerHandler.removeCallbacks(bannerRunnable); // dá»«ng khi rá»i khá»i mÃ n hÃ¬nh
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        bannerHandler.postDelayed(bannerRunnable, SLIDE_DELAY_MS); // tiếp tục khi quay lại
+        bannerHandler.postDelayed(bannerRunnable, SLIDE_DELAY_MS); // tiáº¿p tá»¥c khi quay láº¡i
     }
 
     @Override

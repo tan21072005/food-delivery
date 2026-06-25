@@ -47,7 +47,7 @@ public class Reset_password extends Fragment {
         ImageView ivToggleConfirm = view.findViewById(R.id.ivToggleConfirm);
         Button btnConfirmReset = view.findViewById(R.id.btnConfirmReset);
 
-        // Toggle hiện/ẩn mật khẩu mới
+        // Toggle hiá»‡n/áº©n máº­t kháº©u má»›i
         ivToggleNew.setOnClickListener(v -> {
             if (isNewPasswordVisible) {
                 edNewPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -59,7 +59,7 @@ public class Reset_password extends Fragment {
             edNewPassword.setSelection(edNewPassword.getText().length());
         });
 
-        // Toggle hiện/ẩn nhập lại mật khẩu
+        // Toggle hiá»‡n/áº©n nháº­p láº¡i máº­t kháº©u
         ivToggleConfirm.setOnClickListener(v -> {
             if (isConfirmPasswordVisible) {
                 edConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -71,36 +71,36 @@ public class Reset_password extends Fragment {
             edConfirmPassword.setSelection(edConfirmPassword.getText().length());
         });
 
-        // Xác nhận đổi mật khẩu
+        // XÃ¡c nháº­n Ä‘á»•i máº­t kháº©u
         btnConfirmReset.setOnClickListener(v -> {
             String newPass = edNewPassword.getText().toString().trim();
             String confirmPass = edConfirmPassword.getText().toString().trim();
 
             if (TextUtils.isEmpty(newPass)) {
-                edNewPassword.setError("Vui lòng nhập mật khẩu mới");
+                edNewPassword.setError("Vui lÃ²ng nháº­p máº­t kháº©u má»›i");
                 edNewPassword.requestFocus();
             } else if (newPass.length() < 8) {
-                edNewPassword.setError("Mật khẩu phải có ít nhất 8 ký tự");
+                edNewPassword.setError("Máº­t kháº©u pháº£i cÃ³ Ã­t nháº¥t 8 kÃ½ tá»±");
                 edNewPassword.requestFocus();
             } else if (!newPass.matches(".*[A-Za-z].*") || !newPass.matches(".*[0-9].*") || !newPass.matches(".*[!@#$%^&*()].*")) {
-                edNewPassword.setError("Mật khẩu cần có chữ cái, số và ký tự đặc biệt");
+                edNewPassword.setError("Máº­t kháº©u cáº§n cÃ³ chá»¯ cÃ¡i, sá»‘ vÃ  kÃ½ tá»± Ä‘áº·c biá»‡t");
                 edNewPassword.requestFocus();
             } else if (TextUtils.isEmpty(confirmPass)) {
-                edConfirmPassword.setError("Vui lòng nhập lại mật khẩu");
+                edConfirmPassword.setError("Vui lÃ²ng nháº­p láº¡i máº­t kháº©u");
                 edConfirmPassword.requestFocus();
             } else if (!newPass.equals(confirmPass)) {
-                edConfirmPassword.setError("Mật khẩu không khớp");
+                edConfirmPassword.setError("Máº­t kháº©u khÃ´ng khá»›p");
                 edConfirmPassword.requestFocus();
             } else {
                 // taoj dialog moi
                 AlertDialog dialog = new AlertDialog.Builder(requireContext())
-                        .setView(R.layout.dialog_success)
+                        .setView(R.layout.common_dialog_success)
                         .setCancelable(false)
                         .create();
                 // hien thi
                 dialog.show();
 
-                //dialog bị xoá sau 2s
+                //dialog bá»‹ xoÃ¡ sau 2s
                 view.postDelayed(() -> {
                     dialog.dismiss();
                     Navigation.findNavController(view).navigate(R.id.action_reset_to_login);
@@ -109,3 +109,4 @@ public class Reset_password extends Fragment {
         });
     }
 }
+

@@ -9,6 +9,6 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.fragment_profile);
+        setContentView(R.layout.profile_fragment);
     }
 }
