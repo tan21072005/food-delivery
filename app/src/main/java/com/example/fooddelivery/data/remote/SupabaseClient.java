@@ -24,12 +24,16 @@ public class SupabaseClient {
                 // If the user is logged in, use their JWT token. Otherwise, fallback to the API Key for anonymous access.
                 String authorizationHeader = (authToken != null) ? authToken : "Bearer " + Constants.SUPABASE_ANON_KEY;
 
-                Request request = chain.request().newBuilder()
-                        .addHeader("apikey" , Constants.SUPABASE_ANON_KEY)
-                        .addHeader("Authorization", authorizationHeader)
-                        .addHeader("Content-Type", "application/json")
-                        .build();
-                return chain.proceed(request);
+                Request.Builder requestBuilder = chain.request().newBuilder()
+                        .addHeader("apikey", Constants.SUPABASE_ANON_KEY)
+                        .addHeader("Authorization", authorizationHeader);
+
+                // Không override Content-Type nếu request đã có (ví dụ: Multipart upload)
+                if (chain.request().header("Content-Type") == null && !chain.request().url().encodedPath().contains("/storage/v1/object/")) {
+                    requestBuilder.addHeader("Content-Type", "application/json");
+                }
+                
+                return chain.proceed(requestBuilder.build());
             }).build();
             
             retrofit = new Retrofit.Builder()

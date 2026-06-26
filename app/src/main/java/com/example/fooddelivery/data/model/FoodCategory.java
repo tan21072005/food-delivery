@@ -12,6 +12,8 @@ public class FoodCategory {
     private String name;
 
     private String slug;
+
+    @SerializedName("icon_url")
     private String iconUrl;
 
     public FoodCategory() {}

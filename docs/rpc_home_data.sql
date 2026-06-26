@@ -7,7 +7,7 @@ BEGIN
   SELECT json_build_object(
     'categories', COALESCE((
         SELECT json_agg(c) FROM (
-            SELECT id, cat_name, status 
+            SELECT id, cat_name, icon_url, status 
             FROM categories 
             WHERE status = 'active'
         ) c

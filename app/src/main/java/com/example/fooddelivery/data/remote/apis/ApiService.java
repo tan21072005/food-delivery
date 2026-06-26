@@ -86,4 +86,17 @@ public interface ApiService {
 
     @DELETE("rest/v1/carts")
     Call<Void> removeFromCart(@Query("id") String eqId);
+
+    // --------------------------------------------------------
+    // SUPABASE STORAGE ENDPOINTS
+    // --------------------------------------------------------
+
+    // Upload file lên Supabase Storage
+    // Cách gọi: bucket = "avatars", fileName = "user123.jpg"
+    @POST("storage/v1/object/{bucket}/{fileName}")
+    Call<Void> uploadFile(
+            @retrofit2.http.Path("bucket") String bucket,
+            @retrofit2.http.Path("fileName") String fileName,
+            @Body okhttp3.RequestBody file
+    );
 }

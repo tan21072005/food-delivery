@@ -1,43 +1,35 @@
-# Kế hoạch Giỏ hàng & Đặt món (Bằng RPC 1 API)
+# Kế hoạch triển khai Dữ liệu mẫu (Seed Data) & Quản lý File (Supabase Storage)
 
-Bạn phát hiện rất chuẩn xác! 👍 Thực tế, sử dụng **PostgreSQL Function (RPC)** cho Giỏ hàng và Đặt món không chỉ giúp gom 1 API để chạy nhanh hơn, mà còn là **tiêu chuẩn bắt buộc về bảo mật và an toàn dữ liệu** (tránh việc thao tác tính tiền bị lỗi do điện thoại người dùng bị sập mạng giữa chừng hoặc cố tình can thiệp sửa giá).
+Dưới đây là kế hoạch để bơm dữ liệu vào hệ thống và xây dựng tính năng upload ảnh đại diện cho người dùng (một tính năng cực tốt để show cho thầy cô).
 
-Chúng ta sẽ dùng RPC cho 2 việc quan trọng nhất:
+## 1. Bơm dữ liệu mẫu (Seed Data)
+Hiện tại code gọi API đã chuẩn bị xong, nhưng Database trống. Mình sẽ tạo một file SQL tên `docs/seed_data.sql` chứa các lệnh `INSERT` để tạo nhanh dữ liệu:
+- **Bảng `categories`**: Tạo khoảng 4-5 danh mục (Burger, Pizza, Đồ uống, ...).
+- **Bảng `menus`**: Tạo khoảng 10 món ăn, thuộc các danh mục trên. Các món ăn này sẽ dùng các URL ảnh giả lập tạm thời hoặc ảnh thật (trên mạng) để test giao diện.
 
-## Bước 1: Viết 2 Hàm SQL (RPC) trên Supabase
+## 2. Triển khai Supabase Storage (Upload Ảnh đại diện)
 
-1. **Hàm `get_cart_summary(user_id)`**:
-   - Chỉ gọi 1 API, Supabase sẽ tự động quét bảng `carts`, tự "join" với bảng `menus` để lấy giá tiền, tính toán sẵn `tổng tiền (subtotal)`, tính phí ship giả định, và trả về cho Android 1 file JSON chứa sẵn mọi thứ.
-   - Android không cần phải cộng trừ nhân chia tính tổng tiền nữa.
+Thay vì chỉ làm file SQL, mình sẽ làm trọn vẹn luồng **"Người dùng chọn ảnh từ thư viện -> Upload lên Supabase Storage -> Lưu URL vào bảng users -> Hiển thị lên Profile"**.
 
-2. **Hàm `checkout_cart(user_id, delivery_address, note)` (Transaction Đặt món)**:
-   - Android chỉ cần bấm "Đặt món" và gọi API này.
-   - Supabase sẽ tự động lấy toàn bộ đồ trong giỏ hàng (bảng `carts`), tự động tạo 1 mã hóa đơn trong bảng `orders`, chuyển các món sang `order_items`, và **tự động xóa** giỏ hàng.
-   - Tất cả diễn ra trong 1 giao dịch (transaction) 1 chiều duy nhất, đảm bảo không bao giờ có chuyện "tiền đã trừ mà đơn chưa tạo".
+### Cấu hình Database & Storage (SQL)
+- Tạo Bucket mới tên `avatars` (Công khai).
+- Thiết lập RLS Policy cho Storage: Bất kỳ ai cũng đọc được ảnh (Public Read), nhưng chỉ User đã đăng nhập mới được upload ảnh của chính họ.
 
-## Bước 2: Cập nhật App Android
+### Cập nhật Retrofit (ApiService.java)
+- Bổ sung hàm `@Multipart @POST` vào Retrofit để upload file nhị phân (byte array/File) lên Endpoint của Supabase Storage: `/storage/v1/object/avatars/{filename}`.
+- Bổ sung hàm cập nhật URL ảnh vào bảng `users`.
 
-1. **`CartSummaryResponse.java`**: Tạo Model để hứng dữ liệu trả về từ hàm `get_cart_summary`.
-2. **`ApiService.java`**: 
-   - Thêm `@POST("rest/v1/rpc/get_cart_summary")`
-   - Thêm `@POST("rest/v1/rpc/checkout_cart")`
-   - Vẫn giữ các API nhỏ `@POST` và `@PATCH` vào thẳng bảng `carts` để làm thao tác dấu `(+)` và `(-)` khi người dùng bấm tăng giảm số lượng.
+### Xây dựng Giao diện Profile (ProfileFragment)
+- Bổ sung `ImageView` hiển thị Avatar và nút `Sửa ảnh`.
+- Sử dụng `ActivityResultLauncher` của Android để cho phép người dùng chọn ảnh từ Gallery.
+- Khi chọn xong, gọi API để Upload ảnh lên Supabase.
+- Trả về URL của ảnh và dùng thư viện `Glide` để load ảnh vừa cập nhật lên màn hình.
 
-## Bước 3: Đấu nối vào Giao diện (UI)
+> [!IMPORTANT]
+> **Quyết định thiết kế:** Tính năng upload file lên Supabase thông qua Retrofit đòi hỏi phải xử lý File cẩn thận (vì chúng ta không dùng thư viện Supabase-kt mà dùng RESTful API thuần). Bù lại, làm theo cách REST thuần giúp bạn rất hiểu bản chất API, cực kỳ có lợi khi bị hỏi xoáy đáp xoay lúc bảo vệ đồ án!
 
-1. Tích hợp API nhỏ `Thêm vào giỏ` vào các nút (+) ở các màn hình Home, Menu.
-2. Tại màn hình `Checkout.java`: Gọi API `get_cart_summary` để tải danh sách món ăn và hiển thị lên màn hình.
-3. Khi bấm nút "Order": Gọi API `checkout_cart` và hiển thị thông báo thành công.
-
----
-
-> [!TIP]
-> **Tóm lại:**
-> - Các hành động nhỏ (Tăng 1 món, giảm 1 món) thì dùng trực tiếp API chuẩn của Supabase.
-> - Các hành động cần tính toán phức tạp (Tải danh sách giỏ hàng kèm tính tổng tiền) hoặc cần tính toàn vẹn (Tạo Đơn hàng + Xóa Giỏ) sẽ dùng **1 API duy nhất (RPC)**.
-
-> [!WARNING]
-> **Câu hỏi nhỏ cho bạn:**
-> Màn hình Checkout hiện tại mình thấy chỉ có vài nút trống. Bạn đã có file giao diện XML riêng (ví dụ `item_cart.xml`) để vẽ ra từng món ăn trong giỏ hàng chưa, hay bạn muốn mình code luôn 1 cái cơ bản cho bạn?
-
-Nếu bạn ưng ý với chiến thuật này, hãy bấm **Proceed (Tiếp tục)** để mình viết Code SQL trước nhé!
+## Các bước thực hiện
+1. Viết file `docs/seed_data.sql` và `docs/storage_setup.sql`.
+2. Tạo endpoint upload file trong `ApiService.java`.
+3. Sửa layout của `ProfileFragment` (`profile_fragment.xml`) để chứa Avatar và thông tin User.
+4. Cập nhật logic trong `ProfileFragment.java` để xử lý việc chọn ảnh, upload và lưu URL.

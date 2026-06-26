@@ -1,17 +1,13 @@
-# Cart & Order Integration Tasks
+# Bơm Dữ liệu (Seed Data) & Supabase Storage
 
-- `[x]` **Bước 1: Viết mã SQL (RPC) trên Supabase**
-  - `[x]` Tạo hàm `get_cart_summary(user_id)`.
-  - `[x]` Tạo hàm `checkout_cart(user_id, delivery_address, note)`.
-- `[x]` **Bước 2: Tạo Giao diện (UI) cơ bản**
-  - `[x]` Code giao diện `item_cart.xml` cho từng món trong giỏ.
-- `[x]` **Bước 3: Code Models và API Service**
-  - `[x]` Tạo Model `CartSummaryResponse.java`.
-  - `[x]` Tạo Model `CartItem.java`.
-  - `[x]` Cập nhật `ApiService.java` với các endpoint GET, POST (add to cart), PATCH (update quantity), và DELETE.
-- `[x]` **Bước 4: Nâng cấp "Thêm vào giỏ" ở Home / Menu**
-  - `[x]` Đấu nối hàm `addToCart` trong `HomeViewModel` (hoặc tạo `CartRepository`) vào API thật.
-- `[x]` **Bước 5: Hoàn thiện `Checkout.java`**
-  - `[x]` Viết `CartAdapter` để load dữ liệu `item_cart.xml`.
-  - `[x]` Gọi API `get_cart_summary` hiển thị danh sách và tổng tiền.
-  - `[x]` Bấm nút Order -> Gọi API `checkout_cart`.
+- `[x]` **Bước 1: Cơ sở dữ liệu & Storage (SQL)**
+  - `[x]` Tạo file `docs/seed_data.sql` chứa dữ liệu mẫu cho `categories` và `menus`.
+  - `[x]` Tạo file `docs/storage_setup.sql` để tạo bucket `avatars` và thiết lập Policies.
+- `[x]` **Bước 2: Cập nhật Mạng (Retrofit)**
+  - `[x]` Thêm API Endpoint để upload file vào `ApiService.java`.
+- `[x]` **Bước 3: Giao diện Profile**
+  - `[x]` Cập nhật `profile_fragment.xml` thêm ImageView Avatar và nút chọn ảnh.
+- `[x]` **Bước 4: Logic Profile (ProfileFragment.java)**
+  - `[x]` Đăng ký `ActivityResultLauncher` để lấy ảnh từ Gallery.
+  - `[x]` Viết logic đọc file ảnh và đẩy lên Supabase thông qua Retrofit.
+  - `[x]` Lấy URL trả về, cập nhật vào bảng `users` và render bằng Glide.

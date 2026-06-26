@@ -273,7 +273,7 @@ public class HomeFragment extends Fragment {
 //                    .navigate(R.id.action_home_to_login);
 //            return;
 //        }
-        viewModel.addToCart(session.getBearerToken(), item.getId(), 1);
+        viewModel.addToCart(session.getUserId(), item.getId(), 1);
     }
 
 
