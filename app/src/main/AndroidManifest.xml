@@ -8,6 +8,8 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <queries>
         <package android:name="com.facebook.katana" />
@@ -40,11 +42,15 @@
 
 
         <activity
-            android:name=".MenuActivity"
+            android:name=".ui.menu.MenuActivity"
             android:exported="false" />
 
         <activity
-            android:name=".AuthActivity"
+            android:name=".ui.cart.Checkout"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.auth.AuthActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

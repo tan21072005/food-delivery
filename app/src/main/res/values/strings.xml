@@ -197,7 +197,7 @@
     <string name="label_field_country">Quốc gia</string>
     <string name="value_country_vietnam">Việt Nam</string>
     <!-- Định dạng ngày -->
-    <string name="date_format_birthday">%d tháng %d, %d</string>
+    <string name="date_format_birthday" formatted="false">%d tháng %d, %d</string>
 
 
     ---------------CÀI ĐẶT TÀI KHOẢN --------------------
