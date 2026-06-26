@@ -51,7 +51,7 @@
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
-            android:text="Đang chờ"
+            android:text="Đơn của bạn"
             android:textColor="#FF6B35"
             android:textSize="13sp"
             android:textStyle="bold" />

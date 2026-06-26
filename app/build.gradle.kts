@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -8,6 +11,7 @@ android {
     // bật chế độ view binding
     buildFeatures{
         viewBinding = true
+        buildConfig = true
     }
 
     defaultConfig {
@@ -18,6 +22,19 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Load từ local.properties
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localProperties.load(FileInputStream(localPropertiesFile))
+        }
+
+        val supabaseUrl = localProperties.getProperty("SUPABASE_URL") ?: "\"\""
+        val supabaseAnonKey = localProperties.getProperty("SUPABASE_ANON_KEY") ?: "\"\""
+
+        buildConfigField("String", "SUPABASE_URL", supabaseUrl)
+        buildConfigField("String", "SUPABASE_ANON_KEY", supabaseAnonKey)
     }
 
     buildTypes {
@@ -57,6 +74,7 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("com.google.android.gms:play-services-auth:21.0.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.facebook.android:facebook-login:latest.release")
     // photo library
     implementation("com.squareup.picasso:picasso:2.8")
@@ -84,6 +102,9 @@ dependencies {
     // convert object sang Json
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // EncryptedSharedPreferences
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
 // Avatar
     implementation("de.hdodenhof:circleimageview:3.1.0")

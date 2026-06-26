@@ -1,91 +1,133 @@
 package com.example.fooddelivery.ui.menu;
 
-import com.example.fooddelivery.data.model.FoodItem;
+import android.app.Application;
 
-
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+
+import com.example.fooddelivery.data.model.FoodItem;
+import com.example.fooddelivery.data.repository.OrderRepository;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MenuViewModel extends ViewModel {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-    private final MutableLiveData<List<FoodItem>> _foodItems  = new MutableLiveData<>();
-    private final MutableLiveData<Boolean>         _isLoading  = new MutableLiveData<>(false);
-    private final MutableLiveData<String>          _errorMsg   = new MutableLiveData<>();
-    private final MutableLiveData<String>          _cartMessage= new MutableLiveData<>();
+public class MenuViewModel extends AndroidViewModel {
 
-    // Cache toàn bộ danh sách để search/filter local
+    private final MutableLiveData<List<FoodItem>> foodItems = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
+    private final MutableLiveData<String> errorMsg = new MutableLiveData<>();
+    private final MutableLiveData<String> cartMessage = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> cartAddedEvent = new MutableLiveData<>(false);
+    private final OrderRepository orderRepository;
+
     private final List<FoodItem> allFoods = Arrays.asList(
-            new FoodItem(1, "Bún thập cẩm",  "Sợi bún tươi, tôm sông, gà đôi",  14,  35000,
+            new FoodItem(1, "Bun thap cam", "Bun tuoi, tom song, ga doi", 14, 35000,
                     "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_thap_cam.jpg"),
-            new FoodItem(2, "Bún riêu cua",   "Sợi bún tươi, cua đồng, cà chua", 145, 35000,
+            new FoodItem(2, "Bun rieu cua", "Bun tuoi, cua dong, ca chua", 145, 35000,
                     "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_rieu_cua.jpg"),
-            new FoodItem(3, "Bún bò Huế",     "Bún tươi, bò, chả, sả thơm",      144, 40000,
+            new FoodItem(3, "Bun bo Hue", "Bun tuoi, bo, cha, sa thom", 144, 40000,
                     "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_bo_hue.jpg"),
-            new FoodItem(4, "Burger bò",      "Beef patty, phô mai, rau tươi",    88,  59000,
+            new FoodItem(4, "Burger bo", "Beef patty, pho mai, rau tuoi", 88, 59000,
                     "https://res.cloudinary.com/daakugdmw/image/upload/food_burger.jpg"),
-            new FoodItem(5, "Gà rán giòn",    "Gà rán giòn tan, ướp 24 tiếng",   210, 49000,
+            new FoodItem(5, "Ga ran gion", "Ga ran gion tan, uop 24 tieng", 210, 49000,
                     "https://res.cloudinary.com/daakugdmw/image/upload/food_ga_ran.jpg")
     );
 
-    // ── Expose LiveData (read-only) ──
-    public LiveData<List<FoodItem>> getFoodItems()    { return _foodItems; }  // ← đúng tên SearchFragment gọi
-    public LiveData<Boolean>         isLoading()      { return _isLoading; }
-    public LiveData<String>          getErrorMsg()    { return _errorMsg; }
-    public LiveData<String>          getCartMessage() { return _cartMessage; }
+    public MenuViewModel(@NonNull Application application) {
+        super(application);
+        orderRepository = new OrderRepository(application);
+    }
 
-    /**
-     * Load danh sách món — dùng cho cả MenuFragment và SearchFragment
-     * @param categorySlug  "" = tất cả, "bun" = lọc theo danh mục
-     * @param keyword       "" = không tìm kiếm, "phở" = tìm theo tên
-     * @param sortBy        "sold_count" | "price" | "name"
-     */
+    public LiveData<List<FoodItem>> getFoodItems() {
+        return foodItems;
+    }
+
+    public LiveData<Boolean> isLoading() {
+        return isLoading;
+    }
+
+    public LiveData<String> getErrorMsg() {
+        return errorMsg;
+    }
+
+    public LiveData<String> getCartMessage() {
+        return cartMessage;
+    }
+
+    public LiveData<Boolean> getCartAddedEvent() {
+        return cartAddedEvent;
+    }
+
+    public void consumeCartAddedEvent() {
+        cartAddedEvent.setValue(false);
+    }
+
     public void loadMenu(String categorySlug, String keyword, String sortBy) {
-        _isLoading.setValue(true);
+        isLoading.setValue(true);
 
         new Thread(() -> {
             try {
-                Thread.sleep(300); // giả lập network delay
+                Thread.sleep(300);
 
                 List<FoodItem> result = allFoods.stream()
-                        // Lọc theo category (nếu có)
-                        .filter(f -> categorySlug == null || categorySlug.isEmpty()
-                                || f.getName().toLowerCase().contains(categorySlug.toLowerCase()))
-                        // Lọc theo keyword (nếu có)
-                        .filter(f -> keyword == null || keyword.isEmpty()
-                                || f.getName().toLowerCase().contains(keyword.toLowerCase())
-                                || f.getDescription().toLowerCase().contains(keyword.toLowerCase()))
-                        // Sắp xếp
-                        .sorted((a, b) -> {
-                            if ("price".equals(sortBy))
-                                return Double.compare(a.getPrice(), b.getPrice());
-                            if ("name".equals(sortBy))
-                                return a.getName().compareTo(b.getName());
-                            return Integer.compare(b.getSoldCount(), a.getSoldCount()); // sold_count
+                        .filter(food -> categorySlug == null || categorySlug.isEmpty()
+                                || food.getName().toLowerCase().contains(categorySlug.toLowerCase()))
+                        .filter(food -> keyword == null || keyword.isEmpty()
+                                || food.getName().toLowerCase().contains(keyword.toLowerCase())
+                                || food.getDescription().toLowerCase().contains(keyword.toLowerCase()))
+                        .sorted((left, right) -> {
+                            if ("price".equals(sortBy)) {
+                                return Double.compare(left.getPrice(), right.getPrice());
+                            }
+                            if ("name".equals(sortBy)) {
+                                return left.getName().compareTo(right.getName());
+                            }
+                            return Integer.compare(right.getSoldCount(), left.getSoldCount());
                         })
                         .collect(Collectors.toList());
 
-                _foodItems.postValue(result);
-                _isLoading.postValue(false);
-
+                foodItems.postValue(result);
+                isLoading.postValue(false);
             } catch (InterruptedException e) {
-                _errorMsg.postValue("Lỗi tải dữ liệu");
-                _isLoading.postValue(false);
+                Thread.currentThread().interrupt();
+                errorMsg.postValue("Loi tai du lieu");
+                isLoading.postValue(false);
             }
         }).start();
     }
 
-    /** Shortcut load không cần keyword */
     public void loadFoods(String categorySlug) {
         loadMenu(categorySlug, "", "sold_count");
     }
 
-    /** Thêm vào giỏ */
-    public void addToCart(String bearerToken, long foodId, int quantity) {
-        _cartMessage.postValue("Đã thêm vào giỏ hàng!");
+    public void addToCart(long userId, long foodId, int quantity) {
+        if (userId <= 0) {
+            cartMessage.setValue("Vui long dang nhap lai de them vao gio");
+            return;
+        }
+
+        orderRepository.addToCart(userId, foodId, quantity).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    cartMessage.setValue("Da them vao gio hang!");
+                    cartAddedEvent.setValue(true);
+                } else {
+                    cartMessage.setValue("Loi khi them gio hang: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                cartMessage.setValue("Loi ket noi: " + t.getMessage());
+            }
+        });
     }
 }

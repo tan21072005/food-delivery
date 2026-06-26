@@ -1,10 +1,7 @@
 package com.example.fooddelivery.ui.auth;
 
 import com.example.fooddelivery.MainActivity;
-import com.example.fooddelivery.data.remote.SupabaseClient;
-import com.example.fooddelivery.data.remote.apis.AuthApiService;
-import com.example.fooddelivery.data.remote.response.AuthRequest;
-import com.example.fooddelivery.data.remote.response.AuthResponse;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.fooddelivery.R;
 
@@ -23,15 +20,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 public class SignUpFragment extends Fragment {
 
     private EditText edEmail, edPassword, edAgainPassword;
     private Button btnSignUp;
     private TextView tvSignIn;
+    private AuthViewModel authViewModel;
 
     @Nullable
     @Override
@@ -50,6 +46,25 @@ public class SignUpFragment extends Fragment {
         edAgainPassword = view.findViewById(R.id.edAgianPassword); // lưu ý typo "Agian"
         btnSignUp      = view.findViewById(R.id.btnSignUp);
         tvSignIn       = view.findViewById(R.id.tvSignIn);
+
+        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+
+        authViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            btnSignUp.setEnabled(isLoading == null || !isLoading);
+        });
+
+        authViewModel.getError().observe(getViewLifecycleOwner(), errorMsg -> {
+            if (errorMsg != null) {
+                Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        authViewModel.getSignupSuccess().observe(getViewLifecycleOwner(), success -> {
+            if (success != null && success) {
+                Toast.makeText(getContext(), "Đăng ký thành công! Hãy đăng nhập.", Toast.LENGTH_LONG).show();
+                Navigation.findNavController(requireView()).popBackStack();
+            }
+        });
 
         btnSignUp.setOnClickListener(v -> {
             String email    = edEmail.getText().toString().trim();
@@ -78,41 +93,13 @@ public class SignUpFragment extends Fragment {
                 return;
             }
 
-            doSignUp(email, password);
+            authViewModel.signUp(email, password);
         });
 
         // Bấm "Đăng nhập" → quay lại Login
         tvSignIn.setOnClickListener(v ->
                 Navigation.findNavController(v).popBackStack()
         );
-    }
-
-    private void doSignUp(String email, String password) {
-        btnSignUp.setEnabled(false);
-
-        AuthApiService api = SupabaseClient.getInstance(requireContext()).create(AuthApiService.class);
-        api.signUp(new AuthRequest(email, password)).enqueue(new Callback<AuthResponse>() {
-            @Override
-            public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
-                btnSignUp.setEnabled(true);
-                if (response.isSuccessful()) {
-                    Toast.makeText(getContext(),
-                            "Đăng ký thành công! Hãy đăng nhập.", Toast.LENGTH_LONG).show();
-                    // Quay lại màn Login
-                    Navigation.findNavController(requireView()).popBackStack();
-                } else {
-                    Toast.makeText(getContext(),
-                            "Email đã tồn tại hoặc không hợp lệ", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AuthResponse> call, Throwable t) {
-                btnSignUp.setEnabled(true);
-                Toast.makeText(getContext(),
-                        "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }
 

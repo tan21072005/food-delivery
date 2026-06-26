@@ -1,6 +1,7 @@
 package com.example.fooddelivery.ui.detail;
 
 import android.os.Bundle;
+import android.content.Intent;
 import android.view.*;
 import android.widget.Toast;
 
@@ -13,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.databinding.FoodFragmentDetailBinding;
 import com.example.fooddelivery.data.local.prefs.SessionManager;
-import com.example.fooddelivery.ui.detail.FoodDetailViewModel;
+import com.example.fooddelivery.ui.cart.Checkout;
 
 public class FoodDetailFragment extends Fragment {
 
@@ -49,12 +50,12 @@ public class FoodDetailFragment extends Fragment {
     }
 
     private void setupListeners() {
-        // NÃºt back
-        binding.btnBack.setOnClickListener(v ->
+        // Nút back
+        binding.toolbar.setNavigationOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigateUp()
         );
 
-        // TÄƒng sá»‘ lÆ°á»£ng
+        // Tăng số lượng
         binding.btnPlus.setOnClickListener(v -> {
             quantity++;
             binding.tvQuantity.setText(String.valueOf(quantity));
@@ -81,12 +82,21 @@ public class FoodDetailFragment extends Fragment {
 //            }
 //            viewModel.addToCart(session.getBearerToken(), foodId, quantity);
 //        });
+        binding.btnAddToCart.setOnClickListener(v -> {
+            if (!session.isLoggedIn()) {
+                Toast.makeText(requireContext(),
+                        "Vui lòng đăng nhập để thêm vào giỏ", Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(requireView()).navigate(R.id.nav_auth);
+                return;
+            }
+            viewModel.addToCart(session.getUserId(), foodId, quantity);
+        });
     }
 
     private void observeViewModel() {
-        viewModel.isLoading().observe(getViewLifecycleOwner(), loading ->
-                binding.progressBar.setVisibility(loading ? View.VISIBLE : View.GONE)
-        );
+        viewModel.isLoading().observe(getViewLifecycleOwner(), loading -> {
+            // binding.progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+        });
 
         viewModel.getFoodItem().observe(getViewLifecycleOwner(), item -> {
             if (item == null) return;
@@ -106,6 +116,13 @@ public class FoodDetailFragment extends Fragment {
         viewModel.getCartMessage().observe(getViewLifecycleOwner(), msg -> {
             if (msg != null)
                 Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+        });
+
+        viewModel.getCartAddedEvent().observe(getViewLifecycleOwner(), added -> {
+            if (Boolean.TRUE.equals(added)) {
+                startActivity(new Intent(requireContext(), Checkout.class));
+                viewModel.consumeCartAddedEvent();
+            }
         });
 
         viewModel.getErrorMsg().observe(getViewLifecycleOwner(), msg -> {

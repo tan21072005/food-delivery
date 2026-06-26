@@ -2,6 +2,12 @@ package com.example.fooddelivery.data.local.prefs;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 public class SessionManager {
 
     private static final String PREF_NAME   = "FoodDeliverySession";
@@ -15,7 +21,25 @@ public class SessionManager {
     private final SharedPreferences.Editor editor;
 
     public SessionManager(Context context) {
-        prefs  = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences tempPrefs = null;
+        try {
+            MasterKey masterKey = new MasterKey.Builder(context)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            tempPrefs = EncryptedSharedPreferences.create(
+                    context,
+                    PREF_NAME,
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            // Fallback to normal shared preferences in case of failure, or throw exception
+            tempPrefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        }
+        prefs = tempPrefs;
         editor = prefs.edit();
     }
 

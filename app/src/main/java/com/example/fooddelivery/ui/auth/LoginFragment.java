@@ -2,10 +2,7 @@ package com.example.fooddelivery.ui.auth;
 
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.MainActivity;
-import com.example.fooddelivery.data.remote.SupabaseClient;
-import com.example.fooddelivery.data.remote.apis.AuthApiService;
-import com.example.fooddelivery.data.remote.response.AuthRequest;
-import com.example.fooddelivery.data.remote.response.AuthResponse;
+import androidx.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,9 +37,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.google.android.gms.tasks.Task;
 
 
 public class LoginFragment extends Fragment {
@@ -57,6 +52,7 @@ public class LoginFragment extends Fragment {
     private CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
     private NavController navController;
+    private AuthViewModel authViewModel;
 
     @Nullable
     @Override
@@ -71,6 +67,24 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(view);
+        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+
+        authViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            btnLogin.setEnabled(isLoading == null || !isLoading);
+        });
+
+        authViewModel.getError().observe(getViewLifecycleOwner(), errorMsg -> {
+            if (errorMsg != null) {
+                Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        authViewModel.getLoginSuccess().observe(getViewLifecycleOwner(), success -> {
+            if (success != null && success) {
+                Toast.makeText(requireContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                goToMain();
+            }
+        });
 
         btnLogin      = view.findViewById(R.id.btnLogin);
         edUsername    = view.findViewById(R.id.edUsername);
@@ -183,40 +197,11 @@ public class LoginFragment extends Fragment {
                 return;
             }
             // tắt nút login tránh request nhiều lần trong kkhi đang gọi API
-            btnLogin.setEnabled(false);
-            doLogin(username,password);
+            authViewModel.signIn(username, password);
         });
     }
 
-    // hàm xác thức của superbase
-    private void doLogin(String email, String password) {
-        AuthApiService api = SupabaseClient.getInstance(requireContext()).create(AuthApiService.class);
-        api.signIn(new AuthRequest(email, password)).enqueue(new Callback<AuthResponse>() {
-            @Override
-            public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
-                btnLogin.setEnabled(true);
-                if (response.isSuccessful() && response.body() != null) {
-                    // Lưu token
-                    requireActivity()
-                            .getSharedPreferences("auth", Context.MODE_PRIVATE)
-                            .edit()
-                            .putString("access_token", response.body().accessToken)
-                            .apply();
 
-                    Toast.makeText(requireContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                    goToMain();
-                } else {
-                    Toast.makeText(requireContext(), "Sai email hoặc mật khẩu", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AuthResponse> call, Throwable t) {
-                btnLogin.setEnabled(true);
-                Toast.makeText(requireContext(), "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
     private void setupSignup() {
         tvSignup.setOnClickListener(v ->
                 navController.navigate(R.id.action_login_to_signup));

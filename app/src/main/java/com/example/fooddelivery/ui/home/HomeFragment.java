@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -83,7 +84,24 @@ public class HomeFragment extends Fragment {
         observeViewModel();
 //        setupListeners();
 
+        View menuRow = binding.getRoot().findViewById(R.id.layoutMenuRow);
+        if (menuRow != null) {
+            menuRow.setOnClickListener(v -> {
+                MenuBottomSheet sheet = new MenuBottomSheet();
+                sheet.setOnCategorySelectListener((slug, name) -> {
+                    Bundle args = new Bundle();
+                    args.putString("category_slug", slug);
+                    args.putString("category_name", name);
+                    Navigation.findNavController(requireView())
+                            .navigate(R.id.action_home_to_menu, args);
+                });
+                sheet.show(getParentFragmentManager(), MenuBottomSheet.TAG);
+            });
+        }
+
         viewModel.loadHome();
+        
+        updateStickyCart();
     }
 
     // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -263,17 +281,41 @@ public class HomeFragment extends Fragment {
         Navigation.findNavController(requireView())
                 .navigate(R.id.action_home_to_foodDetail, args);
     }
-//    addTooCart
+    // addToCart — dùng LocalCart (không cần Supabase) và hiện ToppingBottomSheet
     private void addToCart(FoodItem item) {
-//        if (!session.isLoggedIn()) {
-//            Toast.makeText(requireContext(),
-//                    "Vui lÃ²ng Ä‘Äƒng nháº­p Ä‘á»ƒ thÃªm vÃ o giá»",
-//                    Toast.LENGTH_SHORT).show();
-//            Navigation.findNavController(requireView())
-//                    .navigate(R.id.action_home_to_login);
-//            return;
-//        }
-        viewModel.addToCart(session.getUserId(), item.getId(), 1);
+        ToppingBottomSheet toppingSheet = new ToppingBottomSheet(item, selectedItem -> {
+            com.example.fooddelivery.data.local.LocalCart.getInstance().addItem(selectedItem);
+            updateStickyCart();
+        });
+        toppingSheet.show(getParentFragmentManager(), ToppingBottomSheet.TAG);
+    }
+
+    public void updateStickyCart() {
+        View stickyCart = binding.getRoot().findViewById(R.id.layoutStickyCart);
+        if (stickyCart != null) {
+            int count = com.example.fooddelivery.data.local.LocalCart.getInstance().getTotalCount();
+            if (count > 0) {
+                stickyCart.setVisibility(View.VISIBLE);
+                TextView tvCount = stickyCart.findViewById(R.id.tvStickyCartCount);
+                TextView tvTotal = stickyCart.findViewById(R.id.tvStickyCartTotal);
+                
+                if (tvCount != null) tvCount.setText(String.valueOf(count));
+                if (tvTotal != null) {
+                    double total = com.example.fooddelivery.data.local.LocalCart.getInstance().getTotalPrice();
+                    java.text.NumberFormat formatter = new java.text.DecimalFormat("#,###");
+                    tvTotal.setText(formatter.format(total) + "đ");
+                }
+                
+                stickyCart.setOnClickListener(v -> {
+                    com.example.fooddelivery.ui.cart.CartBottomSheet sheet =
+                            new com.example.fooddelivery.ui.cart.CartBottomSheet();
+                    sheet.show(getParentFragmentManager(),
+                            com.example.fooddelivery.ui.cart.CartBottomSheet.TAG);
+                });
+            } else {
+                stickyCart.setVisibility(View.GONE);
+            }
+        }
     }
 
 

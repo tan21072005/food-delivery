@@ -1,41 +1,93 @@
 package com.example.fooddelivery.ui.detail;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.fooddelivery.data.model.FoodItem;
+import com.example.fooddelivery.data.repository.OrderRepository;
 
-public class FoodDetailViewModel extends ViewModel {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-    private final MutableLiveData<FoodItem> _foodItem    = new MutableLiveData<>();
-    private final MutableLiveData<Boolean>  _isLoading   = new MutableLiveData<>(false);
-    private final MutableLiveData<String>   _errorMsg    = new MutableLiveData<>();
-    private final MutableLiveData<String>   _cartMessage = new MutableLiveData<>();
+public class FoodDetailViewModel extends AndroidViewModel {
 
-    public LiveData<FoodItem> getFoodItem()    { return _foodItem; }
-    public LiveData<Boolean>  isLoading()      { return _isLoading; }
-    public LiveData<String>   getErrorMsg()    { return _errorMsg; }
-    public LiveData<String>   getCartMessage() { return _cartMessage; }
+    private final MutableLiveData<FoodItem> foodItem = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
+    private final MutableLiveData<String> errorMsg = new MutableLiveData<>();
+    private final MutableLiveData<String> cartMessage = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> cartAddedEvent = new MutableLiveData<>(false);
+    private final OrderRepository orderRepository;
 
-    /** Load chi tiết món ăn theo id — TODO: thay bằng API thật */
-    public void loadFoodDetail(long foodId) {
-        _isLoading.setValue(true);
-
-        // Mock data — thay bằng repository.getFoodDetail(foodId)
-        FoodItem item = new FoodItem(
-                (int) foodId,
-                "Bún thập cẩm",
-                "Sợi bún tươi, tôm sông, gà đôi, nước dùng đậm đà",
-                14, 35000,
-                "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_thap_cam.jpg"
-        );
-        _foodItem.setValue(item);
-        _isLoading.setValue(false);
+    public FoodDetailViewModel(@NonNull Application application) {
+        super(application);
+        orderRepository = new OrderRepository(application);
     }
 
-    /** Thêm vào giỏ hàng — TODO: gọi CartRepository */
-    public void addToCart(String bearerToken, long foodId, int quantity) {
-        _cartMessage.setValue("Đã thêm " + quantity + " món vào giỏ hàng!");
+    public LiveData<FoodItem> getFoodItem() {
+        return foodItem;
+    }
+
+    public LiveData<Boolean> isLoading() {
+        return isLoading;
+    }
+
+    public LiveData<String> getErrorMsg() {
+        return errorMsg;
+    }
+
+    public LiveData<String> getCartMessage() {
+        return cartMessage;
+    }
+
+    public LiveData<Boolean> getCartAddedEvent() {
+        return cartAddedEvent;
+    }
+
+    public void consumeCartAddedEvent() {
+        cartAddedEvent.setValue(false);
+    }
+
+    public void loadFoodDetail(long foodId) {
+        isLoading.setValue(true);
+
+        FoodItem item = new FoodItem(
+                foodId,
+                "Bun thap cam",
+                "Bun tuoi, tom song, ga doi, nuoc dung dam da",
+                14,
+                35000,
+                "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_thap_cam.jpg"
+        );
+        foodItem.setValue(item);
+        isLoading.setValue(false);
+    }
+
+    public void addToCart(long userId, long foodId, int quantity) {
+        if (userId <= 0) {
+            cartMessage.setValue("Vui long dang nhap lai de them vao gio");
+            return;
+        }
+
+        orderRepository.addToCart(userId, foodId, quantity).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    cartMessage.setValue("Da them vao gio hang!");
+                    cartAddedEvent.setValue(true);
+                } else {
+                    cartMessage.setValue("Loi khi them gio hang: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                cartMessage.setValue("Loi ket noi: " + t.getMessage());
+            }
+        });
     }
 }

@@ -37,6 +37,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
 
     public void setCartItems(List<CartItem> items) {
+        if (items != null) {
+            // Gom nhóm món ăn theo restaurant_id
+            items.sort((i1, i2) -> Long.compare(i1.getRestaurantId(), i2.getRestaurantId()));
+        }
         this.cartItems = items;
         notifyDataSetChanged();
     }

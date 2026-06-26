@@ -13,12 +13,30 @@
             app:destination="@id/searchFragment" />
 
         <action
-            android:id="@+id/action_home_to_menu" />
+            android:id="@+id/action_home_to_menu"
+            app:destination="@id/menuFragment" />
 
         <action
             android:id="@+id/action_home_to_foodDetail"
             app:destination="@+id/foodDetailFragment"/>
+            
+        <action
+            android:id="@+id/action_home_to_restaurantDetail"
+            app:destination="@+id/restaurantDetailFragment"/>
 
+    </fragment>
+    
+    <fragment
+        android:id="@+id/restaurantDetailFragment"
+        android:name="com.example.fooddelivery.ui.detail.RestaurantDetailFragment">
+        
+        <action
+            android:id="@+id/action_restaurantDetail_to_foodDetail"
+            app:destination="@id/foodDetailFragment" />
+            
+        <argument
+            android:name="restaurant_id"
+            app:argType="long" />
     </fragment>
 
     <fragment

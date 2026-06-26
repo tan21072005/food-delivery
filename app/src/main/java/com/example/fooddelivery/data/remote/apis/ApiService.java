@@ -2,6 +2,7 @@ package com.example.fooddelivery.data.remote.apis;
 
 import com.example.fooddelivery.data.model.FoodCategory;
 import com.example.fooddelivery.data.model.FoodItem;
+import com.example.fooddelivery.data.model.CartRequest;
 import com.example.fooddelivery.data.model.User;
 
 import java.util.List;
@@ -27,6 +28,18 @@ public interface ApiService {
     @GET("rest/v1/users")
     Call<List<User>> getUserById(
             @Query("id") String idFilter    // vd: "eq.5"
+    );
+
+    // GET user theo auth_uid
+    @GET("rest/v1/users")
+    Call<List<User>> getUserByAuthUid(
+            @Query("auth_uid") String authUidFilter    // vd: "eq.uuid"
+    );
+
+    // GET user theo email
+    @GET("rest/v1/users")
+    Call<List<User>> getUserByEmail(
+            @Query("email") String emailFilter
     );
 
     // POST tạo user mới
@@ -75,11 +88,11 @@ public interface ApiService {
     Call<com.example.fooddelivery.data.model.CartSummaryResponse> getCartSummary();
 
     @POST("rest/v1/rpc/checkout_cart")
-    Call<Long> checkoutCart(@Body com.example.fooddelivery.data.model.CheckoutRequest request);
+    Call<List<Long>> checkoutCart(@Body com.example.fooddelivery.data.model.CheckoutRequest request);
 
-    @retrofit2.http.Headers("Prefer: resolution=merge-duplicates")
+    @retrofit2.http.Headers("Prefer: resolution=merge-duplicates,return=minimal")
     @POST("rest/v1/carts?on_conflict=user_id,menu_id")
-    Call<Void> addToCart(@Body com.example.fooddelivery.data.model.CartRequest request);
+    Call<Void> addToCart(@Body CartRequest request);
 
     @PATCH("rest/v1/carts")
     Call<Void> updateCartQuantity(@Query("id") String eqId, @Body com.example.fooddelivery.data.model.CartRequest request);

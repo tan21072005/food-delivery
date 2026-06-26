@@ -1,6 +1,7 @@
 package com.example.fooddelivery.ui.search;
 
 import android.os.Bundle;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.*;
@@ -16,6 +17,7 @@ import com.example.fooddelivery.R;
 import com.example.fooddelivery.databinding.SearchFragmentBinding;
 import com.example.fooddelivery.data.local.prefs.SessionManager;
 import com.example.fooddelivery.ui.home.adapters.FoodVerticalAdapter;
+import com.example.fooddelivery.ui.cart.Checkout;
 import com.example.fooddelivery.ui.menu.MenuViewModel;
 
 public class SearchFragment extends Fragment {
@@ -62,7 +64,7 @@ public class SearchFragment extends Fragment {
                                 "Vui lÃ²ng Ä‘Äƒng nháº­p", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    viewModel.addToCart(session.getBearerToken(), item.getId(), 1);
+                    viewModel.addToCart(session.getUserId(), item.getId(), 1);
                 }
         );
         binding.rvSearchResults.setAdapter(adapter);
@@ -113,6 +115,13 @@ public class SearchFragment extends Fragment {
         viewModel.getCartMessage().observe(getViewLifecycleOwner(), msg -> {
             if (msg != null)
                 Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+        });
+
+        viewModel.getCartAddedEvent().observe(getViewLifecycleOwner(), added -> {
+            if (Boolean.TRUE.equals(added)) {
+                startActivity(new Intent(requireContext(), Checkout.class));
+                viewModel.consumeCartAddedEvent();
+            }
         });
     }
 

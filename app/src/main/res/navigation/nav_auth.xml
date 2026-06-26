@@ -52,8 +52,12 @@
     <!-- ─── Đặt lại mật khẩu ─── -->
     <fragment
         android:id="@+id/resetPasswordFragment"
-        android:name="com.example.fooddelivery.ui.auth.Reset_password"
+        android:name="com.example.fooddelivery.ui.auth.PasswordFormFragment"
         android:label="Đặt lại mật khẩu">
+        <argument
+            android:name="MODE"
+            app:argType="string"
+            android:defaultValue="RESET" />
 
         <action
             android:id="@+id/action_reset_to_login"
