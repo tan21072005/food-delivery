@@ -38,6 +38,11 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerVH> 
         int realIndex = position % imageUrls.size();
         String url = imageUrls.get(realIndex);
 
+        // Nếu url là dạng relative path (vd: banner1.png) từ Database, nối thêm Base URL
+        if (url != null && !url.startsWith("http")) {
+            url = com.example.fooddelivery.utils.Constants.STORAGE_BASE_URL + "banners/" + url;
+        }
+
         Glide.with(context)
                 .load(url)
                 .transform(new RoundedCorners(24))

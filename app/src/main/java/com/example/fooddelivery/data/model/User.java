@@ -5,7 +5,13 @@ import com.google.gson.annotations.SerializedName;
 // User.java
 public class User {
     @SerializedName("id")
-    private int id;
+    private long id;
+
+    @SerializedName("auth_uid")
+    private String authUid;
+
+    @SerializedName("role")
+    private String role;
 
     @SerializedName("username")
     private String username;
@@ -15,9 +21,6 @@ public class User {
 
     @SerializedName("full_name")
     private String fullName;
-
-    @SerializedName("address")
-    private String address;
 
     @SerializedName("phone_number")
     private String phoneNumber;
@@ -29,16 +32,32 @@ public class User {
     private String status;
 
     @SerializedName("created_at")
-    private  String createdAt;
+    private String createdAt;
 
 
     // getters & setters...
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public String getAuthUid() {
+        return authUid;
+    }
+
+    public void setAuthUid(String authUid) {
+        this.authUid = authUid;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getUsername() {
@@ -63,15 +82,6 @@ public class User {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getPhoneNumber() {

@@ -90,7 +90,7 @@ public class SignUpFragment extends Fragment {
     private void doSignUp(String email, String password) {
         btnSignUp.setEnabled(false);
 
-        AuthApiService api = SupabaseClient.getInstance().create(AuthApiService.class);
+        AuthApiService api = SupabaseClient.getInstance(requireContext()).create(AuthApiService.class);
         api.signUp(new AuthRequest(email, password)).enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
