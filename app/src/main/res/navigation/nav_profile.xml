@@ -8,7 +8,7 @@
         <!-- ── Trang tài khoản chính ── -->
         <fragment
             android:id="@+id/profileFragment"
-            android:name="com.example.fooddelivery.ProfileFragment" >
+            android:name="com.example.fooddelivery.ui.profile.ProfileFragment" >
 
             <!-- Profile → Thông tin tài khoản -->
             <action
@@ -35,18 +35,27 @@
                 app:popUpTo="@id/nav_main"
                 app:popUpToInclusive="true" />
 
+            <action
+                android:id="@+id/action_profile_to_addressList"
+                app:destination="@id/addressListFragment"/>
+
         </fragment>
+
+        <fragment
+            android:id="@+id/addressListFragment"
+            android:name="com.example.fooddelivery.ui.profile.AddressListFragment"
+            android:label="Quản lý địa chỉ" />
 
         <!-- ── Thông tin tài khoản (tên, sdt, email, ngày sinh) ── -->
         <fragment
             android:id="@+id/accountInfoFragment"
-            android:name="com.example.fooddelivery.ProfileFragment"
+            android:name="com.example.fooddelivery.ui.profile.ProfileFragment"
             android:label="Thông tin tài khoản">
 
             <!-- AccountInfo → Đổi mật khẩu -->
-<!--            <action-->
-<!--                android:id="@+id/action_accountInfo_to_changePassword"-->
-<!--                app:destination="@id/changePasswordFragment"/>-->
+            <action
+                android:id="@+id/action_accountInfo_to_changePassword"
+                app:destination="@id/changePasswordFragment"/>
 <!--                app:enterAnim="@anim/slide_in_right"-->
 <!--                app:exitAnim="@anim/slide_out_left"-->
 <!--                app:popEnterAnim="@anim/slide_in_left"-->
@@ -80,10 +89,16 @@
 
 <!--        </fragment>-->
 
-<!--        &lt;!&ndash; ── Đổi mật khẩu ── &ndash;&gt;-->
-<!--        <fragment-->
-<!--            android:id="@+id/changePasswordFragment"-->
-<!--            android:name="com.example.fooddelivery.ChangePasswordFragment" />-->
+        <!-- ── Đổi mật khẩu ── -->
+        <fragment
+            android:id="@+id/changePasswordFragment"
+            android:name="com.example.fooddelivery.ui.auth.PasswordFormFragment"
+            android:label="Đổi mật khẩu">
+            <argument
+                android:name="MODE"
+                app:argType="string"
+                android:defaultValue="CHANGE" />
+        </fragment>
 
 
 </navigation>

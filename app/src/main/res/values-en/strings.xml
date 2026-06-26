@@ -3,22 +3,22 @@
 
         ---------APP-------------------
 
-        <string name="app_tagline">Order fast – Delivered to you</string>
+        <string name="app_tagline">Order fast â€“ Delivered to you</string>
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              BOTTOM NAVIGATION
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="nav_home">Home</string>
         <string name="nav_orders">Orders</string>
         <string name="nav_favorites">Favorites</string>
         <string name="nav_profile">Account</string>
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              HOME SCREEN
-        ══════════════════════════════════════════ -->
-        <string name="hint_search">Search…</string>
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+        <string name="hint_search">Searchâ€¦</string>
 
         <string name="label_category_bun">Noodles</string>
         <string name="label_category_fastfood">Fast Food</string>
@@ -39,9 +39,9 @@
         <string name="menu_item_count">%d &gt;</string>
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              LOGIN SCREEN
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="title_login">Login</string>
         <string name="hint_username">Username</string>
         <string name="hint_password">Password</string>
@@ -54,18 +54,18 @@
 <!--        <string name="btn_login_linkedin">Continue with LinkedIn</string>-->
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              SIGN UP SCREEN
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="title_signup">Sign Up</string>
         <string name="hint_confirm_password">Confirm password</string>
         <string name="label_already_have_account">Already have an account?</string>
 <!--        <string name="label_go_login">Log In</string>-->
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              CHOOSE ACCOUNT / LINKEDIN LOGIN
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="title_choose_account">Choose account</string>
         <string name="subtitle_choose_account">to continue</string>
         <string name="btn_use_another_account">Use another account</string>
@@ -77,19 +77,20 @@
 
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              FORGOT PASSWORD
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="title_forgot_password">Forgot password</string>
         <string name="hint_email_or_phone">Enter email / phone number</string>
+        <string name="hint_email">Enter email</string>
         <string name="desc_forgot_password">We\'ll send a verification code to this email or phone number if it matches an existing account.</string>
         <string name="btn_next">Next</string>
         <string name="btn_back">Go back</string>
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              OTP VERIFICATION
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="title_enter_otp">Enter 6-digit code</string>
         <string name="desc_otp_sent">Check %s for the verification code</string>
         <string name="label_change_email">Change email?</string>
@@ -100,16 +101,16 @@
         <string name="label_cant_access_email">Can\'t access this email?</string>
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              CREATE PASSWORD
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="title_create_password">Create password</string>
         <string name="btn_continue">Continue</string>
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              CHANGE PASSWORD
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="title_change_password">Change password</string>
         <string name="hint_old_password">Enter current password</string>
         <string name="hint_new_password">Enter new password</string>
@@ -122,15 +123,15 @@
         <string name="password_rule_strength">Strong password</string>
 
 
-        <!-- ══════════════════════════════════════════
-             CHANGE PASSWORD — SUCCESS
-        ══════════════════════════════════════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+             CHANGE PASSWORD â€” SUCCESS
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="msg_change_password_success">Password changed successfully</string>
         <string name="msg_password_not_match">Password doesn\'t match</string>
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              FOOD LIST / MENU SCREEN
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="title_food_list">%s</string>
         <string name="label_sold_count">%d sold</string>
         <string name="label_original_price">%s</string>
@@ -139,9 +140,9 @@
 
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              CHECKOUT SCREEN
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="title_checkout">Checkout</string>
 
         <string name="label_delivery_address">Table S floor 2</string>
@@ -166,9 +167,9 @@
         <string name="btn_place_order">Place order</string>
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              PROFILE SCREEN
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="label_member_badge">Member</string>
         <string name="label_edit_profile">Edit</string>
 
@@ -188,9 +189,9 @@
         <string name="profile_item_terms">Terms &amp; Policies</string>
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              SWITCH ACCOUNT / LOGOUT
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="title_switch_account">Switch account</string>
         <string name="btn_add_account">Add account</string>
         <string name="btn_logout">Log out</string>
@@ -198,9 +199,9 @@
         <string name="dialog_logout_message">Are you sure you want to log out?</string>
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              ACCOUNT INFO
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="title_account_info">Account info</string>
         <string name="label_field_name">Name</string>
         <string name="label_field_phone">Phone number</string>
@@ -208,12 +209,12 @@
         <string name="label_field_birthday">Date of birth</string>
         <string name="label_field_country">Country</string>
         <string name="value_country_vietnam">Vietnam</string>
-        <string name="date_format_birthday">%d/%d/%d</string>
+        <string name="date_format_birthday" formatted="false">%d/%d/%d</string>
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              ACCOUNT SETTINGS
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="title_account_settings">Account</string>
         <string name="settings_item_account_info">Account info</string>
         <string name="settings_item_password">Password</string>
@@ -221,9 +222,9 @@
         <string name="settings_item_deactivate">Deactivate or delete account</string>
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              TOAST / SNACKBAR MESSAGES
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="msg_login_success">Logged in successfully</string>
         <string name="msg_login_failed">Login failed. Please try again</string>
         <string name="msg_signup_success">Account created successfully</string>
@@ -242,15 +243,15 @@
         <string name="msg_field_required">This field is required</string>
         <string name="msg_invalid_email">Invalid email address</string>
         <string name="msg_invalid_phone">Invalid phone number</string>
-        <string name="msg_loading">Loading…</string>
+        <string name="msg_loading">Loadingâ€¦</string>
         <string name="msg_no_results">No results found</string>
         <string name="msg_empty_cart">Your cart is empty</string>
         <string name="msg_food_out_of_stock">This item is currently unavailable</string>
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              VALIDATION ERRORS
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="error_empty_username">Username cannot be empty</string>
         <string name="error_empty_password">Password cannot be empty</string>
         <string name="error_empty_email_phone">Please enter your email or phone number</string>
@@ -263,9 +264,9 @@
         <string name="error_session_expired">Session expired. Please log in again</string>
 
 
-        <!-- ══════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              ACCESSIBILITY
-        ══════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <string name="cd_food_image">Food image</string>
         <string name="cd_avatar">Profile picture</string>
         <string name="cd_banner">Banner image</string>
