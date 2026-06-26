@@ -80,6 +80,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.FoodViewHolder
     }
 
     @Override
+    // It's responsible for binding data from your data set to the views within a view holder for a specific
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
         FoodItem item = foodList.get(position);
 
@@ -122,15 +123,15 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.FoodViewHolder
 
     @Override
     public int getItemCount() {
+        // returns the total number  of items in yours dataset
         return foodList.size();
     }
-
-    static class FoodViewHolder extends RecyclerView.ViewHolder {
+    // the Viewholder is a class that holds references to the views within the item layout.​‌
+    public static class FoodViewHolder extends RecyclerView.ViewHolder {
         ImageView imgFood;
         TextView tvFoodName, tvFoodDescription, tvSoldCount, tvPrice;
         FloatingActionButton btnAddToCart;
-
-        FoodViewHolder(@NonNull View itemView) {
+        public FoodViewHolder(@NonNull View itemView) {
             super(itemView);
             imgFood = itemView.findViewById(R.id.imgFood);
             tvFoodName = itemView.findViewById(R.id.tvFoodName);
@@ -140,4 +141,5 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.FoodViewHolder
             btnAddToCart = itemView.findViewById(R.id.btnAddToCart);
         }
     }
+
 }
