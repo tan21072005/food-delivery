@@ -263,8 +263,9 @@ public class HomeFragment extends Fragment {
         Navigation.findNavController(requireView())
                 .navigate(R.id.action_home_to_foodDetail, args);
     }
-//    addTooCart
+
     private void addToCart(FoodItem item) {
+<<<<<<< Updated upstream
 //        if (!session.isLoggedIn()) {
 //            Toast.makeText(requireContext(),
 //                    "Vui lòng đăng nhập để thêm vào giỏ",
@@ -281,6 +282,14 @@ public class HomeFragment extends Fragment {
     // ─────────────────────────────────────────────────────────
     // Lifecycle — dừng/tiếp tục auto-slide
     // ─────────────────────────────────────────────────────────
+=======
+        if (!session.isLoggedIn()) {
+            Toast.makeText(requireContext(), "Vui lòng đăng nhập để thêm vào giỏ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        viewModel.addToCart(session.getUserId(), item.getId(), 1);
+    }// ————————————————————————————————————————————————————————
+>>>>>>> Stashed changes
     @Override
     public void onPause() {
         super.onPause();

@@ -1,16 +1,26 @@
 package com.example.fooddelivery.ui.home;
 
+import android.app.Application;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.fooddelivery.data.model.FoodCategory;
 import com.example.fooddelivery.data.model.FoodItem;
+import com.example.fooddelivery.data.model.HomeDataResponse;
+import com.example.fooddelivery.data.remote.SupabaseClient;
+import com.example.fooddelivery.data.remote.apis.ApiService;
 
-import java.util.Arrays;
 import java.util.List;
 
-public class HomeViewModel extends ViewModel {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class HomeViewModel extends AndroidViewModel {
 
     // ── LiveData ──
     private final MutableLiveData<Boolean>          _isLoading    = new MutableLiveData<>(false);
@@ -19,6 +29,13 @@ public class HomeViewModel extends ViewModel {
     private final MutableLiveData<List<FoodItem>>   _allFoods     = new MutableLiveData<>();
     private final MutableLiveData<String>            _errorMsg     = new MutableLiveData<>();
     private final MutableLiveData<String>            _cartMessage  = new MutableLiveData<>();
+
+    private final ApiService apiService;
+
+    public HomeViewModel(@NonNull Application application) {
+        super(application);
+        apiService = SupabaseClient.getInstance(application).create(ApiService.class);
+    }
 
     // ── Expose as immutable LiveData ──
     public LiveData<Boolean>            isLoading()     { return _isLoading; }
@@ -30,84 +47,50 @@ public class HomeViewModel extends ViewModel {
 
     /**
      * Gọi khi Fragment khởi tạo hoặc pull-to-refresh.
-     * TODO: Thay bằng gọi Repository -> API thật.
      */
     public void loadHome() {
         _isLoading.setValue(true);
 
-        // ── Dữ liệu mẫu — thay bằng API call ──
-        loadSampleCategories();
-        loadSampleFoods();
+        apiService.getHomeData().enqueue(new Callback<HomeDataResponse>() {
+            @Override
+            public void onResponse(Call<HomeDataResponse> call, Response<HomeDataResponse> response) {
+                _isLoading.setValue(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    HomeDataResponse data = response.body();
+                    _categories.setValue(data.getCategories());
+                    _topSelling.setValue(data.getTopSelling());
+                    _allFoods.setValue(data.getAllFoods());
+                } else {
+                    _errorMsg.setValue("Lỗi tải dữ liệu: " + response.message());
+                }
+            }
 
-        _isLoading.setValue(false);
+            @Override
+            public void onFailure(Call<HomeDataResponse> call, Throwable t) {
+                _isLoading.setValue(false);
+                _errorMsg.setValue("Lỗi kết nối: " + t.getMessage());
+                Log.e("HomeViewModel", "Error fetching home data", t);
+            }
+        });
     }
 
-    /** Thêm vào giỏ hàng. TODO: gọi CartRepository */
-    public void addToCart(String bearerToken, long foodId, int quantity) {
-        // TODO: cartRepository.addToCart(bearerToken, foodId, quantity)
-        //       .observe(owner, result -> _cartMessage.setValue(...))
-        _cartMessage.setValue("Đã thêm vào giỏ hàng!");
+    /** Thêm vào giỏ hàng */
+    public void addToCart(long userId, long foodId, int quantity) {
+        com.example.fooddelivery.data.model.CartRequest request = new com.example.fooddelivery.data.model.CartRequest(userId, foodId, quantity);
+        apiService.addToCart(request).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    _cartMessage.setValue("Đã thêm vào giỏ hàng!");
+                } else {
+                    _cartMessage.setValue("Lỗi khi thêm giỏ hàng: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                _cartMessage.setValue("Lỗi kết nối: " + t.getMessage());
+            }
+        });
     }
-
-    // ─────────────────────────────────────────────────────────
-    // Sample data (xoá khi có API thật)
-    // ─────────────────────────────────────────────────────────
-    private void loadSampleCategories() {
-        List<FoodCategory> cats = Arrays.asList(
-                new FoodCategory("1", "Bún",          "bun",
-                        "https://res.cloudinary.com/daakugdmw/image/upload/ic_bun.png"),
-                new FoodCategory("2", "Đồ ăn nhanh",  "do-an-nhanh",
-                        "https://res.cloudinary.com/daakugdmw/image/upload/ic_fastfood.png"),
-                new FoodCategory("3", "Nước uống",    "nuoc-uong",
-                        "https://res.cloudinary.com/daakugdmw/image/upload/ic_drink.png"),
-                new FoodCategory("4", "Cơm",          "com",
-                        "https://res.cloudinary.com/daakugdmw/image/upload/ic_rice.png"),
-                new FoodCategory("5", "Phở",          "pho",
-                        "https://res.cloudinary.com/daakugdmw/image/upload/ic_pho.png")
-        );
-        _categories.setValue(cats);
-    }
-
-    //  đang gọi 7 tham số  nên sai
-//    private void loadSampleFoods() {
-//        List<FoodItem> foods = Arrays.asList(
-//                new FoodItem(1, "Bún thập cẩm",
-//                        "Sợi bún tươi, tôm sông, gà đôi", 35000, 14,
-//                        "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_thap_cam.jpg", "bun"),
-//                new FoodItem(2, "Bún riêu cua",
-//                        "Sợi bún tươi, cua đồng, cà chua", 35000, 145,
-//                        "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_rieu_cua.jpg", "bun"),
-//                new FoodItem(3, "Bún bò Huế",
-//                        "Bún tươi, bò, chả, sả thơm", 40000, 144,
-//                        "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_bo_hue.jpg", "bun"),
-//                new FoodItem(4, "Bún giò heo",
-//                        "Bún tươi, giò heo hầm mềm", 40000, 344,
-//                        "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_gio_heo.jpg", "bun")
-//        );
-//        _topSelling.setValue(foods);
-//        _allFoods.setValue(foods);
-//    }
-
-    private void loadSampleFoods() {
-        List<FoodItem> foods = Arrays.asList(
-                new FoodItem(1, "Bún thập cẩm",
-                        "Sợi bún tươi, tôm sông, gà đôi", 14, 35000,
-                        "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_thap_cam.jpg"),
-
-                new FoodItem(2, "Bún riêu cua",
-                        "Sợi bún tươi, cua đồng, cà chua", 145, 35000,
-                        "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_rieu_cua.jpg"),
-
-                new FoodItem(3, "Bún bò Huế",
-                        "Bún tươi, bò, chả, sả thơm", 144, 40000,
-                        "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_bo_hue.jpg"),
-
-                new FoodItem(4, "Bún giò heo",
-                        "Bún tươi, giò heo hầm mềm", 344, 40000,
-                        "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_gio_heo.jpg")
-        );
-        _topSelling.setValue(foods);
-        _allFoods.setValue(foods);
-    }
-
 }

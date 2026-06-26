@@ -190,7 +190,7 @@ public class LoginFragment extends Fragment {
 
     // hàm xác thức của superbase
     private void doLogin(String email, String password) {
-        AuthApiService api = SupabaseClient.getInstance().create(AuthApiService.class);
+        AuthApiService api = SupabaseClient.getInstance(requireContext()).create(AuthApiService.class);
         api.signIn(new AuthRequest(email, password)).enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {

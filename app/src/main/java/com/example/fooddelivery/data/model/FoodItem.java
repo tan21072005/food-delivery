@@ -1,29 +1,40 @@
 package com.example.fooddelivery.data.model;
 
-
+import com.google.gson.annotations.SerializedName;
 
 public class FoodItem {
-    private int id;
+    @SerializedName("id")
+    private long id;
+
+    @SerializedName("restaurant_id")
+    private long restaurantId;
+
+    @SerializedName("category_id")
+    private long categoryId;
+
+    @SerializedName("item_name")
     private String name;
+
+    @SerializedName("description")
     private String description;
-    private int soldCount;
+
+    @SerializedName("price")
     private double price;
-    private int imageResId;   // for local drawable
-    private String imageUrl;  // for remote image via Glide
 
-//    public FoodItem() {}
-//
-//    public FoodItem(int id, String name, String description,
-//                    int soldCount, double price, int imageResId) {
-//        this.id = id;
-//        this.name = name;
-//        this.description = description;
-//        this.soldCount = soldCount;
-//        this.price = price;
-//        this.imageResId = imageResId;
-//    }
+    @SerializedName("rating")
+    private double rating;
 
-    public FoodItem(int id, String name, String description,
+    @SerializedName("image_url")
+    private String imageUrl;
+
+    @SerializedName("status")
+    private String status;
+
+    // These fields are kept for backward compatibility with local mock UI, not from DB.
+    private int soldCount;
+    private int imageResId;
+
+    public FoodItem(long id, String name, String description,
                     int soldCount, double price, String imageUrl) {
         this.id = id;
         this.name = name;
@@ -35,8 +46,14 @@ public class FoodItem {
 
     // --- Getters & Setters ---
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
+
+    public long getRestaurantId() { return restaurantId; }
+    public void setRestaurantId(long restaurantId) { this.restaurantId = restaurantId; }
+
+    public long getCategoryId() { return categoryId; }
+    public void setCategoryId(long categoryId) { this.categoryId = categoryId; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -50,11 +67,17 @@ public class FoodItem {
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
 
+    public double getRating() { return rating; }
+    public void setRating(double rating) { this.rating = rating; }
+
     public int getImageResId() { return imageResId; }
     public void setImageResId(int imageResId) { this.imageResId = imageResId; }
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
     /** Returns formatted price string, e.g. "35.000đ" */
     public String getFormattedPrice() {
