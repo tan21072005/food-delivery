@@ -69,6 +69,7 @@ dependencies {
 // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 
+
     // Supabase Android SDK
     implementation("io.github.jan-tennert.supabase:postgrest-kt:2.1.0")
     implementation("io.github.jan-tennert.supabase:gotrue-kt:2.1.0")
@@ -83,4 +84,8 @@ dependencies {
     // convert object sang Json
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+// Avatar
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+
 }

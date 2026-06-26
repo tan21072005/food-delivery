@@ -13,14 +13,14 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.databinding.SearchFragmentSearchBinding;
+import com.example.fooddelivery.databinding.SearchFragmentBinding;
 import com.example.fooddelivery.data.local.prefs.SessionManager;
 import com.example.fooddelivery.ui.home.adapters.FoodVerticalAdapter;
 import com.example.fooddelivery.ui.menu.MenuViewModel;
 
 public class SearchFragment extends Fragment {
 
-    private SearchFragmentSearchBinding binding;
+    private SearchFragmentBinding binding;
     private MenuViewModel viewModel;
     private FoodVerticalAdapter adapter;
     private SessionManager session;
@@ -28,7 +28,7 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        binding = SearchFragmentSearchBinding.inflate(inflater, container, false);
+        binding = SearchFragmentBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -43,7 +43,7 @@ public class SearchFragment extends Fragment {
         setupSearch();
         observeViewModel();
 
-        // Focus vào ô search ngay khi mở
+        // Focus vÃ o Ã´ search ngay khi má»Ÿ
         binding.etSearch.requestFocus();
     }
 
@@ -59,7 +59,7 @@ public class SearchFragment extends Fragment {
                 item -> {
                     if (!session.isLoggedIn()) {
                         Toast.makeText(requireContext(),
-                                "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show();
+                                "Vui lÃ²ng Ä‘Äƒng nháº­p", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     viewModel.addToCart(session.getBearerToken(), item.getId(), 1);
@@ -71,12 +71,12 @@ public class SearchFragment extends Fragment {
     }
 
     private void setupSearch() {
-        // Nút back
+        // NÃºt back
         binding.btnBack.setOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigateUp()
         );
 
-        // Lắng nghe gõ phím
+        // Láº¯ng nghe gÃµ phÃ­m
         binding.etSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
             @Override public void afterTextChanged(Editable s) {}
@@ -86,7 +86,7 @@ public class SearchFragment extends Fragment {
                 String keyword = s.toString().trim();
                 if (keyword.isEmpty()) {
                     binding.tvEmpty.setVisibility(View.VISIBLE);
-                    binding.tvEmpty.setText("Nhập tên món bạn muốn tìm...");
+                    binding.tvEmpty.setText("Nháº­p tÃªn mÃ³n báº¡n muá»‘n tÃ¬m...");
                     adapter.submitList(null);
                 } else {
                     viewModel.loadMenu("", keyword, "sold_count");
@@ -104,7 +104,7 @@ public class SearchFragment extends Fragment {
             adapter.submitList(list);
             if (list == null || list.isEmpty()) {
                 binding.tvEmpty.setVisibility(View.VISIBLE);
-                binding.tvEmpty.setText("Không tìm thấy món ăn nào");
+                binding.tvEmpty.setText("KhÃ´ng tÃ¬m tháº¥y mÃ³n Äƒn nÃ o");
             } else {
                 binding.tvEmpty.setVisibility(View.GONE);
             }

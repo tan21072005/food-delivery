@@ -11,13 +11,13 @@ import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.databinding.DetailFragmentFoodDetailBinding;
+import com.example.fooddelivery.databinding.FoodFragmentDetailBinding;
 import com.example.fooddelivery.data.local.prefs.SessionManager;
 import com.example.fooddelivery.ui.detail.FoodDetailViewModel;
 
 public class FoodDetailFragment extends Fragment {
 
-    private DetailFragmentFoodDetailBinding binding;
+    private FoodFragmentDetailBinding binding;
     private FoodDetailViewModel viewModel;
     private SessionManager session;
     private long foodId;
@@ -26,7 +26,7 @@ public class FoodDetailFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        binding = DetailFragmentFoodDetailBinding.inflate(inflater, container, false);
+        binding = FoodFragmentDetailBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -37,7 +37,7 @@ public class FoodDetailFragment extends Fragment {
         session = new SessionManager(requireContext());
         viewModel = new ViewModelProvider(this).get(FoodDetailViewModel.class);
 
-        // Nhận food_id từ HomeFragment hoặc MenuFragment
+        // Nháº­n food_id tá»« HomeFragment hoáº·c MenuFragment
         if (getArguments() != null) {
             foodId = getArguments().getLong("food_id", -1);
         }
@@ -49,19 +49,19 @@ public class FoodDetailFragment extends Fragment {
     }
 
     private void setupListeners() {
-        // Nút back
+        // NÃºt back
         binding.btnBack.setOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigateUp()
         );
 
-        // Tăng số lượng
+        // TÄƒng sá»‘ lÆ°á»£ng
         binding.btnPlus.setOnClickListener(v -> {
             quantity++;
             binding.tvQuantity.setText(String.valueOf(quantity));
             updateTotalPrice();
         });
 
-        // Giảm số lượng
+        // Giáº£m sá»‘ lÆ°á»£ng
         binding.btnMinus.setOnClickListener(v -> {
             if (quantity > 1) {
                 quantity--;
@@ -70,11 +70,11 @@ public class FoodDetailFragment extends Fragment {
             }
         });
 
-//        // Thêm vào giỏ hàng
+//        // ThÃªm vÃ o giá» hÃ ng
 //        binding.btnAddToCart.setOnClickListener(v -> {
 //            if (!session.isLoggedIn()) {
 //                Toast.makeText(requireContext(),
-//                        "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show();
+//                        "Vui lÃ²ng Ä‘Äƒng nháº­p", Toast.LENGTH_SHORT).show();
 //                Navigation.findNavController(requireView())
 //                        .navigate(R.id.action_foodDetail_to_login);
 //                return;
@@ -118,8 +118,8 @@ public class FoodDetailFragment extends Fragment {
         if (viewModel.getFoodItem().getValue() == null) return;
         double total = viewModel.getFoodItem().getValue().getPrice() * quantity;
         long rounded = Math.round(total);
-        String formatted = String.format("%,d", rounded).replace(",", ".") + "đ";
-        binding.tvTotalPrice.setText("Tổng: " + formatted);
+        String formatted = String.format("%,d", rounded).replace(",", ".") + "Ä‘";
+        binding.tvTotalPrice.setText("Tá»•ng: " + formatted);
     }
 
     @Override

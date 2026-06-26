@@ -32,7 +32,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.menu_activity_menu);
+        setContentView(R.layout.menu_activity);
 
         initViews();
         setupRecyclerView();
@@ -63,14 +63,14 @@ public class MenuActivity extends AppCompatActivity {
                 // intent.putExtra("food_id", item.getId());
                 // startActivity(intent);
                 Toast.makeText(MenuActivity.this,
-                        "Xem chi tiết: " + item.getName(), Toast.LENGTH_SHORT).show();
+                        "Xem chi tiáº¿t: " + item.getName(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onAddToCartClick(FoodItem item) {
                 // TODO: Add to cart via CartViewModel
                 Toast.makeText(MenuActivity.this,
-                        "Đã thêm: " + item.getName(), Toast.LENGTH_SHORT).show();
+                        "ÄÃ£ thÃªm: " + item.getName(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -84,72 +84,72 @@ public class MenuActivity extends AppCompatActivity {
                     isFavorite ? R.drawable.ic_favorite : R.drawable.ic_favorite_border
             );
             Toast.makeText(this,
-                    isFavorite ? "Đã thêm vào yêu thích" : "Đã bỏ yêu thích",
+                    isFavorite ? "ÄÃ£ thÃªm vÃ o yÃªu thÃ­ch" : "ÄÃ£ bá» yÃªu thÃ­ch",
                     Toast.LENGTH_SHORT).show();
         });
 
-        // Search icon click — show an inline search bar or SearchView
+        // Search icon click â€” show an inline search bar or SearchView
         findViewById(R.id.btnSearch).setOnClickListener(v -> {
             // TODO: Toggle a search EditText above the list, or open SearchActivity
-            Toast.makeText(this, "Tìm kiếm món ăn...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "TÃ¬m kiáº¿m mÃ³n Äƒn...", Toast.LENGTH_SHORT).show();
         });
 
         // Filter icon click
         findViewById(R.id.btnFilter).setOnClickListener(v -> {
             // TODO: Show a BottomSheetDialogFragment with filter options
-            Toast.makeText(this, "Bộ lọc", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Bá»™ lá»c", Toast.LENGTH_SHORT).show();
         });
     }
 
     /** Load banner image from URL or drawable */
     private void loadBanner() {
 
-        // URL ảnh mặc định từ Cloudinary
+        // URL áº£nh máº·c Ä‘á»‹nh tá»« Cloudinary
         String defaultBanner = "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/banner_food.jpg";
         // Replace with your actual URL from API/intent extras
         String bannerUrl = getIntent().getStringExtra("restaurant_banner_url");
         String urlToLoad = (bannerUrl == null || bannerUrl.isEmpty()) ? defaultBanner : bannerUrl;
             Glide.with(this)
                     .load(urlToLoad)
-                    .placeholder(R.drawable.placeholder_food) // ảnh chờ load
-                    .error(R.drawable.placeholder_food)// ảnh nếu lỗi
+                    .placeholder(R.drawable.placeholder_food) // áº£nh chá» load
+                    .error(R.drawable.placeholder_food)// áº£nh náº¿u lá»—i
                     .into(imgBanner);
 
     }
 
     // ---------------------------------------------------------------
-    // Sample data — replace with API call via ViewModel + Repository
+    // Sample data â€” replace with API call via ViewModel + Repository
     // ---------------------------------------------------------------
     private List<FoodItem> getSampleData() {
         List<FoodItem> list = new ArrayList<>();
-        list.add(new FoodItem(1, "Bún thập cẩm",
-                "Sợi bún tươi, tôm sông, gà đôi", 14, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_thap_cam_dkoipu.jpg"));
-        list.add(new FoodItem(2, "Bún riêu cua",
-                "Sợi bún tươi, tôm sông, gà đôi", 145, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_rieu_cua_tqfob4.jpg"));
-        list.add(new FoodItem(3, "Bún bò Huế",
-                "Sợi bún tươi, tôm sông, gà đôi", 144, 40000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_bo_hue_mwuawo.jpg"));
-        list.add(new FoodItem(4, "Bún giò heo",
-                "Sợi bún tươi, tôm sông, gà đôi", 344, 40000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_gio_heo_lcwlap.jpg"));
+        list.add(new FoodItem(1, "BÃºn tháº­p cáº©m",
+                "Sá»£i bÃºn tÆ°Æ¡i, tÃ´m sÃ´ng, gÃ  Ä‘Ã´i", 14, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_thap_cam_dkoipu.jpg"));
+        list.add(new FoodItem(2, "BÃºn riÃªu cua",
+                "Sá»£i bÃºn tÆ°Æ¡i, tÃ´m sÃ´ng, gÃ  Ä‘Ã´i", 145, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_rieu_cua_tqfob4.jpg"));
+        list.add(new FoodItem(3, "BÃºn bÃ² Huáº¿",
+                "Sá»£i bÃºn tÆ°Æ¡i, tÃ´m sÃ´ng, gÃ  Ä‘Ã´i", 144, 40000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_bo_hue_mwuawo.jpg"));
+        list.add(new FoodItem(4, "BÃºn giÃ² heo",
+                "Sá»£i bÃºn tÆ°Æ¡i, tÃ´m sÃ´ng, gÃ  Ä‘Ã´i", 344, 40000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_gio_heo_lcwlap.jpg"));
 
 
-        list.add(new FoodItem(1, "Bún thập cẩm",
-                "Sợi bún tươi, tôm sông, gà đôi", 14, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_thap_cam_dkoipu.jpg"));
-        list.add(new FoodItem(2, "Bún riêu cua",
-                "Sợi bún tươi, tôm sông, gà đôi", 145, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_rieu_cua_tqfob4.jpg"));
-        list.add(new FoodItem(3, "Bún bò Huế",
-                "Sợi bún tươi, tôm sông, gà đôi", 144, 40000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_bo_hue_mwuawo.jpg"));
-        list.add(new FoodItem(4, "Bún giò heo",
-                "Sợi bún tươi, tôm sông, gà đôi", 344, 40000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_gio_heo_lcwlap.jpg"));
+        list.add(new FoodItem(1, "BÃºn tháº­p cáº©m",
+                "Sá»£i bÃºn tÆ°Æ¡i, tÃ´m sÃ´ng, gÃ  Ä‘Ã´i", 14, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_thap_cam_dkoipu.jpg"));
+        list.add(new FoodItem(2, "BÃºn riÃªu cua",
+                "Sá»£i bÃºn tÆ°Æ¡i, tÃ´m sÃ´ng, gÃ  Ä‘Ã´i", 145, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_rieu_cua_tqfob4.jpg"));
+        list.add(new FoodItem(3, "BÃºn bÃ² Huáº¿",
+                "Sá»£i bÃºn tÆ°Æ¡i, tÃ´m sÃ´ng, gÃ  Ä‘Ã´i", 144, 40000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_bo_hue_mwuawo.jpg"));
+        list.add(new FoodItem(4, "BÃºn giÃ² heo",
+                "Sá»£i bÃºn tÆ°Æ¡i, tÃ´m sÃ´ng, gÃ  Ä‘Ã´i", 344, 40000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_gio_heo_lcwlap.jpg"));
 
 
-        list.add(new FoodItem(1, "Bún thập cẩm",
-                "Sợi bún tươi, tôm sông, gà đôi", 14, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_thap_cam_dkoipu.jpg"));
-        list.add(new FoodItem(2, "Bún riêu cua",
-                "Sợi bún tươi, tôm sông, gà đôi", 145, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_rieu_cua_tqfob4.jpg"));
-        list.add(new FoodItem(3, "Bún bò Huế",
-                "Sợi bún tươi, tôm sông, gà đôi", 144, 40000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_bo_hue_mwuawo.jpg"));
-        list.add(new FoodItem(4, "Bún giò heo",
-                "Sợi bún tươi, tôm sông, gà đôi", 344, 40000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_gio_heo_lcwlap.jpg"));
+        list.add(new FoodItem(1, "BÃºn tháº­p cáº©m",
+                "Sá»£i bÃºn tÆ°Æ¡i, tÃ´m sÃ´ng, gÃ  Ä‘Ã´i", 14, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_thap_cam_dkoipu.jpg"));
+        list.add(new FoodItem(2, "BÃºn riÃªu cua",
+                "Sá»£i bÃºn tÆ°Æ¡i, tÃ´m sÃ´ng, gÃ  Ä‘Ã´i", 145, 35000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_rieu_cua_tqfob4.jpg"));
+        list.add(new FoodItem(3, "BÃºn bÃ² Huáº¿",
+                "Sá»£i bÃºn tÆ°Æ¡i, tÃ´m sÃ´ng, gÃ  Ä‘Ã´i", 144, 40000,"https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_bo_hue_mwuawo.jpg"));
+        list.add(new FoodItem(4, "BÃºn giÃ² heo",
+                "Sá»£i bÃºn tÆ°Æ¡i, tÃ´m sÃ´ng, gÃ  Ä‘Ã´i", 344, 40000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778945025/food_bun_gio_heo_lcwlap.jpg"));
 
 
         return list;

@@ -16,11 +16,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 /**
- * Thay thế OrdersFragment (rỗng) và OrderManagementActivity.
- * Đây là Fragment được nav_ordes.xml trỏ tới, chứa toàn bộ
- * logic tab Đang chờ / Đã hoàn thành / Đã huỷ + ViewPager2.
+ * Thay tháº¿ OrdersFragment (rá»—ng) vÃ  OrderManagementActivity.
+ * ÄÃ¢y lÃ  Fragment Ä‘Æ°á»£c nav_ordes.xml trá» tá»›i, chá»©a toÃ n bá»™
+ * logic tab Äang chá» / ÄÃ£ hoÃ n thÃ nh / ÄÃ£ huá»· + ViewPager2.
  *
- * Xoá OrdersFragment.java và OrderManagementActivity.java sau khi dùng file này.
+ * XoÃ¡ OrdersFragment.java vÃ  OrderManagementActivity.java sau khi dÃ¹ng file nÃ y.
  */
 public class OrderManagementFragment extends Fragment {
 
@@ -38,15 +38,15 @@ public class OrderManagementFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        // Dùng lại layout fragment_order_management.xml
-        return inflater.inflate(R.layout.order_fragment_order_management, container, false);
+        // DÃ¹ng láº¡i layout fragment_order_management.xml
+        return inflater.inflate(R.layout.order_fragment_management, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Ẩn nút Back vì đây là Fragment trong bottom nav (không cần back)
+        // áº¨n nÃºt Back vÃ¬ Ä‘Ã¢y lÃ  Fragment trong bottom nav (khÃ´ng cáº§n back)
         View btnBack = view.findViewById(R.id.btnBack);
         if (btnBack != null) btnBack.setVisibility(View.GONE);
 
@@ -99,7 +99,7 @@ public class OrderManagementFragment extends Fragment {
     }
 
     private void selectTab(int index) {
-        // Reset tất cả
+        // Reset táº¥t cáº£
         tabPending.setTextColor(COLOR_INACTIVE);
         tabCompleted.setTextColor(COLOR_INACTIVE);
         tabCancelled.setTextColor(COLOR_INACTIVE);
@@ -111,7 +111,7 @@ public class OrderManagementFragment extends Fragment {
         indicatorCompleted.setBackgroundColor(COLOR_TRANSPARENT);
         indicatorCancelled.setBackgroundColor(COLOR_TRANSPARENT);
 
-        // Kích hoạt tab được chọn
+        // KÃ­ch hoáº¡t tab Ä‘Æ°á»£c chá»n
         switch (index) {
             case 0:
                 tabPending.setTextColor(COLOR_ACTIVE);
@@ -131,3 +131,4 @@ public class OrderManagementFragment extends Fragment {
         }
     }
 }
+
