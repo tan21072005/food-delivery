@@ -32,7 +32,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     public interface OnOrderActionListener {
         void onViewDetailClick(Order order);
-        void onReorderClick(Order order);   // chá»‰ gá»i vá»›i completed & cancelled
+        void onReorderClick(Order order);   // cho completed & cancelled
+        void onReviewClick(Order order);    // cho completed
     }
 
     private final Context context;
@@ -88,20 +89,62 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         // Text
         holder.tvFoodName.setText(order.getFoodName());
-        holder.tvTableInfo.setText(order.getTableInfo());
-        holder.tvQuantityPrice.setText(order.getQuantityAndPrice());
-        holder.tvTime.setText(order.getTimeLabel());
+        if (holder.tvTableInfo != null) {
+            holder.tvTableInfo.setText(order.getTableInfo());
+        }
+        if (holder.tvQuantityPrice != null) {
+            holder.tvQuantityPrice.setText(order.getQuantityAndPrice());
+        }
+        if (holder.tvTime != null) {
+            holder.tvTime.setText(order.getTimeLabel());
+        }
+        if (holder.tvStatusBadge != null) {
+            holder.tvStatusBadge.setText(getStatusLabel(order.getStatus()));
+        }
 
-        // Xem chi tiáº¿t
-        holder.btnViewDetail.setOnClickListener(v -> {
-            if (listener != null) listener.onViewDetailClick(order);
-        });
+        // Xem chi tiết / Review container logic
+        if (holder.btnViewDetail != null) {
+            holder.btnViewDetail.setOnClickListener(v -> {
+                if (listener != null) listener.onViewDetailClick(order);
+            });
+        }
+        
+        if (holder.btnReview != null) {
+            if (order.isReviewed()) {
+                holder.btnReview.setVisibility(View.GONE);
+                if (holder.btnViewReview != null) holder.btnViewReview.setVisibility(View.VISIBLE);
+            } else {
+                holder.btnReview.setVisibility(View.VISIBLE);
+                if (holder.btnViewReview != null) holder.btnViewReview.setVisibility(View.GONE);
+            }
 
-        // Äáº·t láº¡i (chá»‰ cÃ³ á»Ÿ completed & cancelled)
+            View.OnClickListener reviewClickListener = v -> {
+                if (listener != null && !order.isReviewed()) listener.onReviewClick(order);
+            };
+            holder.btnReview.setOnClickListener(reviewClickListener);
+            
+            // Đảm bảo click vào chữ hay icon cũng đều ăn sự kiện
+            TextView tvReviewText = holder.itemView.findViewById(R.id.tvReviewText);
+            if (tvReviewText != null) tvReviewText.setOnClickListener(reviewClickListener);
+            ImageView ivReviewArrow = holder.itemView.findViewById(R.id.ivReviewArrow);
+            if (ivReviewArrow != null) ivReviewArrow.setOnClickListener(reviewClickListener);
+            if (holder.btnViewReview != null) {
+                holder.btnViewReview.setOnClickListener(v -> {
+                     if (listener != null) listener.onReviewClick(order);
+                });
+            }
+        }
+
+        // Đặt lại (chỉ có ở completed & cancelled)
         if (holder.btnReorder != null) {
             holder.btnReorder.setOnClickListener(v -> {
                 if (listener != null) listener.onReorderClick(order);
             });
+        }
+
+        // Ngày giờ
+        if (holder.tvOrderDate != null) {
+            holder.tvOrderDate.setText(order.getOrderDate());
         }
     }
 
@@ -113,12 +156,23 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         notifyDataSetChanged();
     }
 
+    private String getStatusLabel(String status) {
+        switch (status) {
+            case "confirmed": return "Đã xác nhận";
+            case "preparing": return "Đang chuẩn bị";
+            case "delivering": return "Đang giao";
+            case "completed": return "Đã hoàn thành";
+            case "cancelled": return "Đã hủy";
+            default: return "Đang chờ";
+        }
+    }
+
     // â”€â”€â”€ ViewHolder â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     static class OrderViewHolder extends RecyclerView.ViewHolder {
         ImageView     imgFood;
-        TextView      tvFoodName, tvTableInfo, tvQuantityPrice, tvTime;
-        LinearLayout  btnViewDetail;
+        TextView      tvFoodName, tvTableInfo, tvQuantityPrice, tvTime, tvOrderDate, tvStatusBadge;
+        LinearLayout  btnViewDetail, btnReview, btnViewReview;
         TextView      btnReorder;   // null cho tab "pending"
 
         OrderViewHolder(@NonNull View itemView, int viewType) {
@@ -128,11 +182,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             tvTableInfo     = itemView.findViewById(R.id.tvTableInfo);
             tvQuantityPrice = itemView.findViewById(R.id.tvQuantityPrice);
             tvTime          = itemView.findViewById(R.id.tvTime);
+            tvStatusBadge   = itemView.findViewById(R.id.tvStatusBadge);
             btnViewDetail   = itemView.findViewById(R.id.btnViewDetail);
 
-            // btnReorder chá»‰ tá»“n táº¡i trong layout completed & cancelled
+            // Các layout mới có thêm tvOrderDate
+            tvOrderDate     = itemView.findViewById(R.id.tvOrderDate);
+
+            // btnReorder chỉ tồn tại trong layout completed & cancelled
             if (viewType == TYPE_COMPLETED || viewType == TYPE_CANCELLED) {
                 btnReorder = itemView.findViewById(R.id.btnReorder);
+            }
+            if (viewType == TYPE_COMPLETED) {
+                btnReview = itemView.findViewById(R.id.btnReview);
+                btnViewReview = itemView.findViewById(R.id.btnViewReview);
             }
         }
     }

@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F4FF"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <!-- ===== HEADER ===== -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -35,84 +35,25 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- ===== TAB BAR ===== -->
-    <LinearLayout
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="54dp"
         android:background="#FFFFFF"
-        android:orientation="horizontal">
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
-        <TextView
-            android:id="@+id/tabPending"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:text="Đơn của bạn"
-            android:textColor="#FF6B35"
-            android:textSize="13sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tabCompleted"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:text="Đã hoàn thành"
-            android:textColor="#999999"
-            android:textSize="13sp" />
+            <include layout="@layout/order_tab_pending" />
+            <include layout="@layout/order_tab_completed" />
+            <include layout="@layout/order_tab_cancelled" />
+        </LinearLayout>
+    </HorizontalScrollView>
 
-        <TextView
-            android:id="@+id/tabCancelled"
-            android:layout_width="0dp"
-            android:layout_height="46dp"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:text="Đã huỷ"
-            android:textColor="#999999"
-            android:textSize="13sp" />
-    </LinearLayout>
-
-    <!-- TAB INDICATOR -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="#FFFFFF"
-        android:orientation="horizontal">
-
-        <View
-            android:id="@+id/indicatorPending"
-            android:layout_width="0dp"
-            android:layout_height="3dp"
-            android:layout_weight="1"
-            android:background="#FF6B35" />
-
-        <View
-            android:id="@+id/indicatorCompleted"
-            android:layout_width="0dp"
-            android:layout_height="3dp"
-            android:layout_weight="1"
-            android:background="@android:color/transparent" />
-
-        <View
-            android:id="@+id/indicatorCancelled"
-            android:layout_width="0dp"
-            android:layout_height="3dp"
-            android:layout_weight="1"
-            android:background="@android:color/transparent" />
-    </LinearLayout>
-
-    <!-- ===== VIEWPAGER2 ===== -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"

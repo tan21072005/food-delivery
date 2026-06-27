@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
 
@@ -183,7 +184,8 @@
     <!--        <ImageButton-->
     <!--            android:id="@+id/imageButton"-->
     <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_height="match_parent"
+    android:fitsSystemWindows="true"-->
     <!--            android:layout_weight="1"-->
     <!--            android:scaleType="centerInside"-->
     <!--            android:background="@android:color/transparent"-->
@@ -192,7 +194,8 @@
     <!--        <ImageButton-->
     <!--            android:id="@+id/imageButton2"-->
     <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_height="match_parent"
+    android:fitsSystemWindows="true"-->
     <!--            android:layout_weight="1"-->
     <!--            android:scaleType="centerInside"-->
     <!--            android:background="@android:color/transparent"-->
@@ -200,7 +203,8 @@
     <!--        <ImageButton-->
     <!--            android:id="@+id/imageButton3"-->
     <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_height="match_parent"
+    android:fitsSystemWindows="true"-->
     <!--            android:layout_weight="1"-->
     <!--            android:scaleType="centerInside"-->
     <!--            android:background="@android:color/transparent"-->

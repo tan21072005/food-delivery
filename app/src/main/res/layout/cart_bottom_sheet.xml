@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Bottom sheet giỏ hàng — hiện khi user ấn nút + -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@color/white">
 
     <!-- Handle bar -->
     <View
+        android:id="@+id/handleBar"
         android:layout_width="40dp"
         android:layout_height="4dp"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="4dp"
         android:background="#DDDDDD"
-        android:backgroundTint="#CCCCCC" />
+        android:backgroundTint="#CCCCCC"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Header: "Giỏ hàng" + "Xóa hết" + "X" -->
     <RelativeLayout
+        android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:paddingStart="16dp"
-        android:paddingEnd="12dp">
+        android:paddingEnd="12dp"
+        app:layout_constraintTop_toBottomOf="@id/handleBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
@@ -61,32 +68,48 @@
     </RelativeLayout>
 
     <View
+        android:id="@+id/headerDivider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#EEEEEE" />
+        android:background="#EEEEEE"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout" />
 
     <!-- Danh sách món trong giỏ -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCartItems"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:overScrollMode="never"
-        android:nestedScrollingEnabled="true" />
+        android:nestedScrollingEnabled="true"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_max="400dp"
+        app:layout_constraintTop_toBottomOf="@id/headerDivider"
+        app:layout_constraintBottom_toTopOf="@id/footerDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <View
+        android:id="@+id/footerDivider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#EEEEEE"
-        android:layout_marginTop="4dp" />
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@id/rvCartItems"
+        app:layout_constraintBottom_toTopOf="@id/footerLayout" />
 
     <!-- Footer: icon giỏ + số lượng | Xem đơn hàng + tổng tiền -->
     <RelativeLayout
+        android:id="@+id/footerLayout"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/footerDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <!-- Trái: icon giỏ hàng + badge số lượng -->
         <FrameLayout
@@ -99,7 +122,7 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/ic_shopping_cart"
-                android:tint="#111111" />
+                app:tint="#111111" />
 
             <TextView
                 android:id="@+id/tvCartCount"
@@ -131,4 +154,4 @@
             android:stateListAnimator="@null" />
     </RelativeLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

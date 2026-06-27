@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="#F8F8F8">
 
     <!-- AppBar -->
@@ -58,6 +59,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
                 android:hint="Địa chỉ nhận hàng"
                 android:background="@null"
                 android:textSize="14sp"
@@ -119,6 +121,7 @@
         android:id="@+id/rvAddresses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
         android:layout_below="@id/tvSavedAddressesLabel"
         android:layout_above="@id/bottomBar"
         android:clipToPadding="false"

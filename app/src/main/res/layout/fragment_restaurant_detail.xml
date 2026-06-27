@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="#F8F8F8">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -17,6 +18,7 @@
             android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -24,6 +26,7 @@
                 android:id="@+id/imgRestaurantBanner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/placeholder_food"
                 app:layout_collapseMode="parallax" />
@@ -45,6 +48,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
                     android:layout_gravity="end"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
@@ -78,6 +82,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -115,14 +120,32 @@
                         android:paddingVertical="2dp"
                         android:layout_marginBottom="8dp"/>
 
-                    <TextView
-                        android:id="@+id/tvRestaurantName"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tiệm Ăn Phanh Phanh - Đồ Hàn &amp; Gà Chiên"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="#1A1A1A" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tvRestaurantName"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Tiệm Ăn Phanh Phanh - Đồ Hàn &amp; Gà Chiên"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A1A"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="?attr/selectableItemBackground"/>
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_chevron_right"
+                            app:tint="#999999"
+                            android:layout_marginStart="4dp"/>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -131,20 +154,41 @@
                         android:gravity="center_vertical"
                         android:layout_marginTop="8dp">
 
-                        <ImageView
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:src="@drawable/ic_star"
-                            app:tint="#F5A623"/>
-
-                        <TextView
-                            android:id="@+id/tvRating"
+                        <LinearLayout
+                            android:id="@+id/layoutRatingReview"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="4.9 | 2102 đánh giá"
-                            android:textSize="13sp"
-                            android:textColor="#555555"
-                            android:layout_marginStart="4dp"/>
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingVertical="4dp"
+                            android:paddingEnd="8dp"
+                            android:background="?attr/selectableItemBackground">
+
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:src="@drawable/ic_star"
+                                app:tint="#F5A623"/>
+
+                            <TextView
+                                android:id="@+id/tvRatingScore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="4.9 | "
+                                android:textSize="13sp"
+                                android:textColor="#555555"
+                                android:layout_marginStart="4dp"/>
+
+                            <TextView
+                                android:id="@+id/tvReviewCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2102 đánh giá"
+                                android:textSize="13sp"
+                                android:textColor="#555555"/>
+                        </LinearLayout>
                             
                         <ImageView
                             android:layout_width="14dp"
@@ -229,11 +273,15 @@
 
             <!-- Promos Section -->
             <LinearLayout
+                android:id="@+id/promoSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="20dp"
-                android:paddingHorizontal="16dp">
+                android:paddingHorizontal="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
                 
                 <TextView
                     android:layout_width="wrap_content"

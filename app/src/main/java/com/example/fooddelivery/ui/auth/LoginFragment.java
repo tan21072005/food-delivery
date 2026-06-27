@@ -1,14 +1,8 @@
 package com.example.fooddelivery.ui.auth;
 
-import com.example.fooddelivery.R;
-import com.example.fooddelivery.MainActivity;
-import androidx.lifecycle.ViewModelProvider;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,37 +14,24 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookAuthorizationException;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
-
-import com.google.android.gms.tasks.Task;
-
+import com.example.fooddelivery.MainActivity;
+import com.example.fooddelivery.R;
+import com.example.fooddelivery.data.local.prefs.SessionManager;
 
 public class LoginFragment extends Fragment {
 
     public static final String TAG = LoginFragment.class.getSimpleName();
-    private static final int RC_SIGN_IN = 100;
 
     private Button btnLogin;
-    private EditText edUsername, edPassword;
-    private TextView tvSignup, tvForgetpass;
-    private LoginButton fbLoginButton;
-    private CallbackManager callbackManager;
-    private GoogleSignInClient mGoogleSignInClient;
+    private EditText edUsername;
+    private EditText edPassword;
+    private TextView tvSignup;
+    private TextView tvForgetpass;
+    private View hiddenFacebookButton;
     private NavController navController;
     private AuthViewModel authViewModel;
 
@@ -69,9 +50,25 @@ public class LoginFragment extends Fragment {
         navController = Navigation.findNavController(view);
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
-        authViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
-            btnLogin.setEnabled(isLoading == null || !isLoading);
-        });
+        btnLogin      = view.findViewById(R.id.btnLogin);
+        edUsername    = view.findViewById(R.id.edUsername);
+        edPassword    = view.findViewById(R.id.edPassword);
+        tvSignup      = view.findViewById(R.id.tvSignup);
+        hiddenFacebookButton = view.findViewById(R.id.login_button);
+        tvForgetpass  = view.findViewById(R.id.tvForgetpass);
+
+        observeViewModel();
+        setupLogin();
+        setupSocialIcons(view);
+        setupSignup();
+        setupForgotPassword();
+        checkAlreadyLoggedIn();
+    }
+
+    private void observeViewModel() {
+        authViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading ->
+                btnLogin.setEnabled(isLoading == null || !isLoading)
+        );
 
         authViewModel.getError().observe(getViewLifecycleOwner(), errorMsg -> {
             if (errorMsg != null) {
@@ -80,88 +77,9 @@ public class LoginFragment extends Fragment {
         });
 
         authViewModel.getLoginSuccess().observe(getViewLifecycleOwner(), success -> {
-            if (success != null && success) {
-                Toast.makeText(requireContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+            if (Boolean.TRUE.equals(success)) {
+                Toast.makeText(requireContext(), "Dang nhap thanh cong", Toast.LENGTH_SHORT).show();
                 goToMain();
-            }
-        });
-
-        btnLogin      = view.findViewById(R.id.btnLogin);
-        edUsername    = view.findViewById(R.id.edUsername);
-        edPassword    = view.findViewById(R.id.edPassword);
-        tvSignup      = view.findViewById(R.id.tvSignup);
-        fbLoginButton = view.findViewById(R.id.login_button);
-        tvForgetpass  = view.findViewById(R.id.tvForgetpass);
-
-        setupGoogle(view);
-        setupFacebook();
-        setupLogin();
-        setupSignup();
-        setupForgotPassword();
-        checkAlreadyLoggedIn();
-    }
-
-    // ── Chuyển sang MainActivity sau khi login thành công ──
-    private void goToMain() {
-        Intent intent = new Intent(requireActivity(), MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-    }
-
-    private void setupGoogle(View view) {
-        GoogleSignInOptions gso = new GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestIdToken("536215355416-7nod5emba775megcu5bk7vmmp9b20f1v.apps.googleusercontent.com")
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
-
-        view.findViewById(R.id.btn_google_login).setOnClickListener(v -> {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
-        });
-
-        try {
-            android.content.pm.PackageInfo info = requireActivity()
-                    .getPackageManager()
-                    .getPackageInfo(
-                            "com.example.fooddelivery",
-                            android.content.pm.PackageManager.GET_SIGNATURES
-                    );
-            for (android.content.pm.Signature signature : info.signatures) {
-                java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", android.util.Base64.encodeToString(md.digest(), android.util.Base64.DEFAULT));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void setupFacebook() {
-        callbackManager = CallbackManager.Factory.create();
-
-        fbLoginButton.setReadPermissions("email");
-        fbLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "FB access token: " + loginResult.getAccessToken().getToken());
-                Toast.makeText(requireContext(), "Đăng nhập FB thành công", Toast.LENGTH_SHORT).show();
-                goToMain(); // ← Intent thay vì navController
-            }
-
-            @Override
-            public void onCancel() {
-                Toast.makeText(requireContext(), "Huỷ đăng nhập FB", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(@NonNull FacebookException exception) {
-                Log.e(TAG, "Lỗi FB: " + exception.getMessage());
-                if (exception instanceof FacebookAuthorizationException) {
-                    Log.e(TAG, "Lỗi cấu hình App ID hoặc Key Hash");
-                }
             }
         });
     }
@@ -170,73 +88,64 @@ public class LoginFragment extends Fragment {
         btnLogin.setOnClickListener(v -> {
             String username = edUsername.getText().toString().trim();
             String password = edPassword.getText().toString().trim();
-//
-//            if (TextUtils.isEmpty(username)) {
-//                edUsername.setError("Tên đăng nhập còn trống");
-//                edUsername.requestFocus();
-//            } else if (TextUtils.isEmpty(password)) {
-//                edPassword.setError("Mật khẩu còn trống");
-//                edPassword.requestFocus();
-//            } else if (username.equals("nhattan") && password.equals("123")) {
-//                Toast.makeText(requireContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-//                goToMain(); // ← Intent thay vì navController
-//            } else {
-//                Toast.makeText(requireContext(), "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
-//            }
 
-            // tại sao ko dùng if .... else mà lại dùng return
-            // phương pháp Early Return giúp code dễ đọc không bị lồng sau so với if.. else
-            if(TextUtils.isEmpty(username)){
-                edUsername.setError("Email còn trống");
+            if (TextUtils.isEmpty(username)) {
+                edUsername.setError("Email con trong");
                 edUsername.requestFocus();
                 return;
             }
-            if (TextUtils.isEmpty(password)){
-                edPassword.setError("Mật khảu còn trống");
+            if (TextUtils.isEmpty(password)) {
+                edPassword.setError("Mat khau con trong");
                 edPassword.requestFocus();
                 return;
             }
-            // tắt nút login tránh request nhiều lần trong kkhi đang gọi API
+
             authViewModel.signIn(username, password);
         });
     }
 
+    private void setupSocialIcons(View view) {
+        if (hiddenFacebookButton != null) {
+            hiddenFacebookButton.setVisibility(View.GONE);
+        }
+
+        View googleIcon = view.findViewById(R.id.btn_google_login);
+        if (googleIcon != null) {
+            googleIcon.setOnClickListener(v ->
+                    authViewModel.signIn("google.local@fooddelivery.app", "local")
+            );
+        }
+
+        View facebookIcon = view.findViewById(R.id.fbLoginButton);
+        if (facebookIcon != null) {
+            facebookIcon.setOnClickListener(v ->
+                    authViewModel.signIn("facebook.local@fooddelivery.app", "local")
+            );
+        }
+    }
 
     private void setupSignup() {
         tvSignup.setOnClickListener(v ->
-                navController.navigate(R.id.action_login_to_signup));
+                navController.navigate(R.id.action_login_to_signup)
+        );
     }
 
     private void setupForgotPassword() {
         tvForgetpass.setOnClickListener(v ->
-                navController.navigate(R.id.action_login_to_reset_password));
+                navController.navigate(R.id.action_login_to_reset_password)
+        );
     }
 
     private void checkAlreadyLoggedIn() {
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-        if (isLoggedIn) {
-            goToMain(); // ← Intent thay vì navController
+        SessionManager session = new SessionManager(requireContext());
+        if (session.isLoggedIn()) {
+            goToMain();
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                String name = account.getDisplayName();
-                Toast.makeText(requireContext(), "Chào mừng " + name, Toast.LENGTH_SHORT).show();
-                goToMain(); // ← Intent thay vì navController
-            } catch (ApiException e) {
-                Log.e(TAG, "Lỗi Google: " + e.getStatusCode());
-                Toast.makeText(requireContext(), "Đăng nhập Google thất bại", Toast.LENGTH_SHORT).show();
-            }
-        }
+    private void goToMain() {
+        Intent intent = new Intent(requireActivity(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }
-
