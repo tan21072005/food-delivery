@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tabPendingContainer"
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="match_parent"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tabPending"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Đang xử lý"
+        android:textColor="#FF6B35"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/indicatorPending"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#FF6B35" />
+</LinearLayout>

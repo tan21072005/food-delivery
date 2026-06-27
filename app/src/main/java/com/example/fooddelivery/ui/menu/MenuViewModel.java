@@ -8,11 +8,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fooddelivery.data.model.FoodItem;
-import com.example.fooddelivery.data.repository.OrderRepository;
+import com.example.fooddelivery.data.repository.FoodRepository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,41 +21,24 @@ import retrofit2.Response;
 
 public class MenuViewModel extends AndroidViewModel {
 
-    private final MutableLiveData<List<FoodItem>> foodItems = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
-    private final MutableLiveData<String> errorMsg = new MutableLiveData<>();
+    private final MutableLiveData<List<FoodItem>> foodItems = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<String> cartMessage = new MutableLiveData<>();
     private final MutableLiveData<Boolean> cartAddedEvent = new MutableLiveData<>(false);
-    private final OrderRepository orderRepository;
 
-    private final List<FoodItem> allFoods = Arrays.asList(
-            new FoodItem(1, "Bun thap cam", "Bun tuoi, tom song, ga doi", 14, 35000,
-                    "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_thap_cam.jpg"),
-            new FoodItem(2, "Bun rieu cua", "Bun tuoi, cua dong, ca chua", 145, 35000,
-                    "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_rieu_cua.jpg"),
-            new FoodItem(3, "Bun bo Hue", "Bun tuoi, bo, cha, sa thom", 144, 40000,
-                    "https://res.cloudinary.com/daakugdmw/image/upload/food_bun_bo_hue.jpg"),
-            new FoodItem(4, "Burger bo", "Beef patty, pho mai, rau tuoi", 88, 59000,
-                    "https://res.cloudinary.com/daakugdmw/image/upload/food_burger.jpg"),
-            new FoodItem(5, "Ga ran gion", "Ga ran gion tan, uop 24 tieng", 210, 49000,
-                    "https://res.cloudinary.com/daakugdmw/image/upload/food_ga_ran.jpg")
-    );
+    private final FoodRepository foodRepository;
 
     public MenuViewModel(@NonNull Application application) {
         super(application);
-        orderRepository = new OrderRepository(application);
-    }
-
-    public LiveData<List<FoodItem>> getFoodItems() {
-        return foodItems;
+        foodRepository = new FoodRepository(application);
     }
 
     public LiveData<Boolean> isLoading() {
         return isLoading;
     }
 
-    public LiveData<String> getErrorMsg() {
-        return errorMsg;
+    public LiveData<List<FoodItem>> getFoodItems() {
+        return foodItems;
     }
 
     public LiveData<String> getCartMessage() {
@@ -69,65 +53,54 @@ public class MenuViewModel extends AndroidViewModel {
         cartAddedEvent.setValue(false);
     }
 
-    public void loadMenu(String categorySlug, String keyword, String sortBy) {
-        isLoading.setValue(true);
-
-        new Thread(() -> {
-            try {
-                Thread.sleep(300);
-
-                List<FoodItem> result = allFoods.stream()
-                        .filter(food -> categorySlug == null || categorySlug.isEmpty()
-                                || food.getName().toLowerCase().contains(categorySlug.toLowerCase()))
-                        .filter(food -> keyword == null || keyword.isEmpty()
-                                || food.getName().toLowerCase().contains(keyword.toLowerCase())
-                                || food.getDescription().toLowerCase().contains(keyword.toLowerCase()))
-                        .sorted((left, right) -> {
-                            if ("price".equals(sortBy)) {
-                                return Double.compare(left.getPrice(), right.getPrice());
-                            }
-                            if ("name".equals(sortBy)) {
-                                return left.getName().compareTo(right.getName());
-                            }
-                            return Integer.compare(right.getSoldCount(), left.getSoldCount());
-                        })
-                        .collect(Collectors.toList());
-
-                foodItems.postValue(result);
-                isLoading.postValue(false);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                errorMsg.postValue("Loi tai du lieu");
-                isLoading.postValue(false);
-            }
-        }).start();
-    }
-
     public void loadFoods(String categorySlug) {
         loadMenu(categorySlug, "", "sold_count");
     }
 
-    public void addToCart(long userId, long foodId, int quantity) {
-        if (userId <= 0) {
-            cartMessage.setValue("Vui long dang nhap lai de them vao gio");
-            return;
-        }
+    public void loadMenu(String categorySlug, String keyword, String orderBy) {
+        isLoading.setValue(true);
+        Call<List<FoodItem>> call = (categorySlug == null || categorySlug.isEmpty())
+                ? foodRepository.getMenus("*")
+                : foodRepository.getMenusByCategory("eq." + categorySlug, "*");
 
-        orderRepository.addToCart(userId, foodId, quantity).enqueue(new Callback<Void>() {
+        call.enqueue(new Callback<List<FoodItem>>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    cartMessage.setValue("Da them vao gio hang!");
-                    cartAddedEvent.setValue(true);
-                } else {
-                    cartMessage.setValue("Loi khi them gio hang: " + response.code());
-                }
+            public void onResponse(Call<List<FoodItem>> call, Response<List<FoodItem>> response) {
+                isLoading.setValue(false);
+                List<FoodItem> items = response.isSuccessful() && response.body() != null
+                        ? response.body()
+                        : getMockFoods();
+                foodItems.setValue(filterByKeyword(items, keyword));
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                cartMessage.setValue("Loi ket noi: " + t.getMessage());
+            public void onFailure(Call<List<FoodItem>> call, Throwable t) {
+                isLoading.setValue(false);
+                foodItems.setValue(filterByKeyword(getMockFoods(), keyword));
             }
         });
+    }
+
+    private List<FoodItem> filterByKeyword(List<FoodItem> items, String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) return items;
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+        List<FoodItem> filtered = new ArrayList<>();
+        for (FoodItem item : items) {
+            String name = item.getName() == null ? "" : item.getName().toLowerCase(Locale.ROOT);
+            if (name.contains(normalizedKeyword)) {
+                filtered.add(item);
+            }
+        }
+        return filtered;
+    }
+
+    private List<FoodItem> getMockFoods() {
+        FoodItem bunCha = new FoodItem(1, "Bun cha Ha Noi", "Bun cha thit nuong thom ngon", 120, 35000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/bun.png");
+        bunCha.setRestaurantId(1);
+        FoodItem phoBo = new FoodItem(2, "Pho bo tai nam", "Pho bo truyen thong", 200, 45000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/pho.png");
+        phoBo.setRestaurantId(1);
+        FoodItem comTam = new FoodItem(3, "Com tam suon bi", "Com tam Sai Gon", 150, 40000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/com.png");
+        comTam.setRestaurantId(2);
+        return Arrays.asList(bunCha, phoBo, comTam);
     }
 }

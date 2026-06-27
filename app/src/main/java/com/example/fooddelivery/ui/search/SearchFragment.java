@@ -59,12 +59,8 @@ public class SearchFragment extends Fragment {
                             .navigate(R.id.action_search_to_foodDetail, args);
                 },
                 item -> {
-                    if (!session.isLoggedIn()) {
-                        Toast.makeText(requireContext(),
-                                "Vui lÃ²ng Ä‘Äƒng nháº­p", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    viewModel.addToCart(session.getUserId(), item.getId(), 1);
+                    com.example.fooddelivery.data.local.LocalCart.getInstance().add(item, 1);
+                    Toast.makeText(requireContext(), "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
                 }
         );
         binding.rvSearchResults.setAdapter(adapter);

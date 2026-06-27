@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tabDeliveringContainer"
+    android:layout_width="112dp"
+    android:layout_height="match_parent"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tabDelivering"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Đang giao"
+        android:textColor="#999999"
+        android:textSize="13sp" />
+
+    <View
+        android:id="@+id/indicatorDelivering"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@android:color/transparent" />
+</LinearLayout>

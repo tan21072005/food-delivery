@@ -42,13 +42,17 @@ public class LocalCart {
 
     /** Thêm 1 đơn vị FoodItem vào giỏ; nếu đã có thì tăng quantity. */
     public void addItem(FoodItem item) {
+        add(item, 1);
+    }
+
+    public void add(FoodItem item, int quantity) {
         for (CartEntry e : entries) {
             if (e.item.getId() == item.getId()) {
-                e.quantity++;
+                e.quantity += quantity;
                 return;
             }
         }
-        entries.add(new CartEntry(item, 1));
+        entries.add(new CartEntry(item, quantity));
     }
 
     /** Tăng quantity lên 1. */
