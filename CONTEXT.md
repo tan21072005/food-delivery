@@ -35,7 +35,7 @@ _Avoid_: RestaurantCategory, food type, loại quán
 ### Giỏ hàng & Đặt hàng
 
 **Cart**:
-Entity có ID lưu danh sách CartItem của Customer trước khi đặt hàng. Được persist (server/local DB) để đồng bộ giữa thiết bị và hỗ trợ "đặt lại đơn cũ".
+Entity có ID lưu danh sách CartItem của Customer trước khi đặt hàng. Mỗi Cart thuộc về một Restaurant; Customer có thể có nhiều Cart song song cho nhiều Restaurant khác nhau. Trên UI, Cart được hiển thị cho Customer dưới nhãn "Đơn nháp". Checkout diễn ra trên một Cart cụ thể và tạo một Order cho Restaurant đó. Cart được persist để đồng bộ giữa thiết bị và hỗ trợ "đặt lại đơn cũ".
 _Avoid_: Basket, shopping cart, giỏ
 
 **CartItem**:
