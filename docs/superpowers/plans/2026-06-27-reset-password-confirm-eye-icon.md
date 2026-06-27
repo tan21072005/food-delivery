@@ -106,7 +106,7 @@ git commit -m "fix: use eye icon for password confirmation"
 - Consumes: Android XML `android:id` and `android:src` attributes.
 - Produces: `ivToggleNew` rendering `@drawable/ic_eye_off`.
 
-- [ ] **Step 1: Write the failing regression test**
+- [x] **Step 1: Write the failing regression test**
 
 Add:
 
@@ -133,7 +133,7 @@ public void resetPasswordNewFieldUsesEyeIcon() throws Exception {
 }
 ```
 
-- [ ] **Step 2: Verify the current heart icon fails the test**
+- [x] **Step 2: Verify the current heart icon fails the test**
 
 Run:
 
@@ -143,7 +143,7 @@ Run:
 
 Expected: `FAILED`, showing expected `@drawable/ic_eye_off` but found `@drawable/ic_favorite_border`.
 
-- [ ] **Step 3: Replace only the new-password drawable**
+- [x] **Step 3: Replace only the new-password drawable**
 
 In the `ivToggleNew` element, change:
 
@@ -157,6 +157,6 @@ to:
 android:src="@drawable/ic_eye_off"
 ```
 
-- [ ] **Step 4: Run verification**
+- [x] **Step 4: Run verification**
 
 Run the targeted test and then `.\gradlew.bat :app:testDebugUnitTest`. Both commands must finish with `BUILD SUCCESSFUL`.

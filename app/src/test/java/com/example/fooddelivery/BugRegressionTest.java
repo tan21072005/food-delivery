@@ -211,6 +211,27 @@ public class BugRegressionTest {
         throw new AssertionError("Missing ivToggleConfirm");
     }
 
+    @Test
+    public void resetPasswordNewFieldUsesEyeIcon() throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        Document document = factory.newDocumentBuilder().parse(
+                Files.newInputStream(projectPath("src/main/res/layout/fragment_password_form.xml")));
+
+        NodeList imageViews = document.getElementsByTagName("ImageView");
+        for (int i = 0; i < imageViews.getLength(); i++) {
+            org.w3c.dom.Element imageView = (org.w3c.dom.Element) imageViews.item(i);
+            String id = imageView.getAttributeNS(
+                    "http://schemas.android.com/apk/res/android", "id");
+            if ("@+id/ivToggleNew".equals(id)) {
+                assertEquals("@drawable/ic_eye_off", imageView.getAttributeNS(
+                        "http://schemas.android.com/apk/res/android", "src"));
+                return;
+            }
+        }
+        throw new AssertionError("Missing ivToggleNew");
+    }
+
     private Path profileLayoutPath() {
         return projectPath("src/main/res/layout/profile_fragment.xml");
     }
