@@ -325,4 +325,11 @@
     <string name="rule_8_ky_tu">8 ký tự ( tối đa 20 ký tự)</string>
     <string name="rule_1_chu_cai">1 chữ cái, 1 chữ số, 1 ký tự đặc biệt</string>
     <string name="rule_mat_khau_manh">Mật khẩu mạnh</string>
+    <string name="title_reset_password">Đặt lại mật khẩu</string>
+    <string name="error_invalid_email">Email không hợp lệ</string>
+    <string name="msg_contact_support">Vui lòng liên hệ hỗ trợ</string>
+    <string name="btn_resend_otp_countdown">Gửi lại mã (%1$d giây)</string>
+    <string name="recovery_email_hint">Nhập email</string>
+    <string name="recovery_email_note">Nếu email khớp với tài khoản hiện có, chúng tôi sẽ gửi mã xác minh.</string>
+    <string name="recovery_password_rules">• 8–20 ký tự\n• Có chữ cái, chữ số và ký tự đặc biệt</string>
 </resources>
