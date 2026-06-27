@@ -327,6 +327,7 @@
     <string name="rule_mat_khau_manh">Mật khẩu mạnh</string>
     <string name="title_reset_password">Đặt lại mật khẩu</string>
     <string name="error_invalid_email">Email không hợp lệ</string>
+    <string name="error_email_domain_typo">Bạn có muốn nhập %1$s?</string>
     <string name="msg_contact_support">Vui lòng liên hệ hỗ trợ</string>
     <string name="btn_resend_otp_countdown">Gửi lại mã (%1$d giây)</string>
     <string name="recovery_email_hint">Nhập email</string>

@@ -1,5 +1,6 @@
 package com.example.fooddelivery.ui.auth;
 
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 public final class PasswordRecoveryValidator {
@@ -10,6 +11,21 @@ public final class PasswordRecoveryValidator {
 
     public static boolean isValidEmail(String value) {
         return value != null && EMAIL.matcher(value.trim()).matches();
+    }
+
+    public static String suggestEmailCorrection(String value) {
+        if (value == null) return null;
+        String normalized = value.trim().toLowerCase(Locale.ROOT);
+        int separator = normalized.lastIndexOf('@');
+        if (separator <= 0 || separator == normalized.length() - 1) return null;
+
+        String domain = normalized.substring(separator + 1);
+        if ("gmail.co".equals(domain)
+                || "gmai.com".equals(domain)
+                || "gmial.com".equals(domain)) {
+            return normalized.substring(0, separator + 1) + "gmail.com";
+        }
+        return null;
     }
 
     public static boolean isValidOtp(String value) {

@@ -49,6 +49,11 @@ public class ForgetPassFragment extends Fragment {
                 emailInput.setError(getString(R.string.error_invalid_email));
                 return;
             }
+            String suggestion = PasswordRecoveryValidator.suggestEmailCorrection(email);
+            if (suggestion != null) {
+                emailInput.setError(getString(R.string.error_email_domain_typo, suggestion));
+                return;
+            }
             vm.requestCode(email);
         });
         view.findViewById(R.id.tvBack).setOnClickListener(v -> {
