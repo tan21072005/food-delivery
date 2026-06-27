@@ -63,6 +63,8 @@ dependencies {
     implementation(libs.androidx.coordinatorlayout)
     implementation(libs.androidx.fragment)
     testImplementation(libs.junit)
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.lifecycle.livedata.ktx)
