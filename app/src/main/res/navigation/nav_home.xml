@@ -18,11 +18,11 @@
 
         <action
             android:id="@+id/action_home_to_foodDetail"
-            app:destination="@+id/foodDetailFragment"/>
+            app:destination="@id/foodDetailFragment"/>
             
         <action
             android:id="@+id/action_home_to_restaurantDetail"
-            app:destination="@+id/restaurantDetailFragment"/>
+            app:destination="@id/restaurantDetailFragment"/>
 
     </fragment>
     
@@ -33,10 +33,68 @@
         <action
             android:id="@+id/action_restaurantDetail_to_foodDetail"
             app:destination="@id/foodDetailFragment" />
+
+        <action
+            android:id="@+id/action_restaurantDetail_to_info"
+            app:destination="@id/restaurantInfoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/action_restaurantDetail_to_promotions"
+            app:destination="@id/promotionsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/action_restaurantDetail_to_reviews"
+            app:destination="@id/reviewsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
             
         <argument
             android:name="restaurant_id"
+            android:defaultValue="-1L"
             app:argType="long" />
+    </fragment>
+
+    <!-- Thông tin quán -->
+    <fragment
+        android:id="@+id/restaurantInfoFragment"
+        android:name="com.example.fooddelivery.ui.detail.RestaurantInfoFragment"
+        android:label="Thông tin quán">
+        <argument
+            android:name="restaurant_id"
+            android:defaultValue="-1L"
+            app:argType="long"/>
+    </fragment>
+
+    <!-- Khuyến mại / Ưu đãi -->
+    <fragment
+        android:id="@+id/promotionsFragment"
+        android:name="com.example.fooddelivery.ui.promotions.PromotionsFragment"
+        android:label="Khuyến mại">
+        <argument
+            android:name="restaurant_id"
+            android:defaultValue="-1L"
+            app:argType="long"/>
+    </fragment>
+
+    <!-- Đánh giá của quán -->
+    <fragment
+        android:id="@+id/reviewsFragment"
+        android:name="com.example.fooddelivery.ui.reviews.ReviewsFragment"
+        android:label="Đánh giá của quán">
+        <argument
+            android:name="restaurant_id"
+            android:defaultValue="-1L"
+            app:argType="long"/>
     </fragment>
 
     <fragment
@@ -55,6 +113,10 @@
         <action
             android:id="@+id/action_menu_to_foodDetail"
             app:destination="@id/foodDetailFragment" />
+
+        <action
+            android:id="@+id/action_menu_to_restaurantDetail"
+            app:destination="@id/restaurantDetailFragment"/>
 
         <argument
             android:name="category_slug"
@@ -77,6 +139,7 @@
         
         <argument
             android:name="food_id"
+            android:defaultValue="-1L"
             app:argType="long" />
         
     </fragment>

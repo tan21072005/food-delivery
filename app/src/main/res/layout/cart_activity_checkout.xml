@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="#F5F5F5">
 
     <LinearLayout
@@ -83,6 +84,7 @@
                     android:id="@+id/edNote"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
                     android:layout_toStartOf="@+id/ivEditNote"
                     android:background="@android:color/transparent"
                     android:hint="Nhều bún, không lấy đũa và thìa"

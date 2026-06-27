@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical" android:background="#FAFAFA">
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="56dp"
@@ -19,6 +20,7 @@
             app:cardBackgroundColor="#F5F5F5">
             <EditText android:id="@+id/etSearch"
                 android:layout_width="match_parent" android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
                 android:hint="Tìm kiếm món ăn..." android:textSize="14sp"
                 android:paddingStart="14dp" android:paddingEnd="14dp"
                 android:background="@null" android:inputType="text"

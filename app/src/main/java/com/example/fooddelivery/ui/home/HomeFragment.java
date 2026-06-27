@@ -1,5 +1,6 @@
 package com.example.fooddelivery.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,6 +29,7 @@ import com.example.fooddelivery.databinding.HomeFragmentBinding;
 
 import com.example.fooddelivery.data.model.FoodItem;
 import com.example.fooddelivery.data.local.prefs.SessionManager;
+import com.example.fooddelivery.ui.cart.Checkout;
 import com.example.fooddelivery.ui.home.HomeViewModel;
 import com.example.fooddelivery.ui.home.adapters.BannerAdapter;
 import com.example.fooddelivery.ui.home.adapters.CategoryAdapter;
@@ -245,6 +247,13 @@ public class HomeFragment extends Fragment {
             if (msg != null)
                 Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
         });
+
+        viewModel.getCartAddedEvent().observe(getViewLifecycleOwner(), added -> {
+            if (Boolean.TRUE.equals(added)) {
+                startActivity(new Intent(requireContext(), Checkout.class));
+                viewModel.consumeCartAddedEvent();
+            }
+        });
     }
 
     // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -270,21 +279,45 @@ public class HomeFragment extends Fragment {
 //        binding.layoutAddress.setOnClickListener(v ->
 //                Toast.makeText(requireContext(), "Chá»n Ä‘á»‹a chá»‰ giao hÃ ng", Toast.LENGTH_SHORT).show()
 //        );
+
+    // ————————————————————————————————————————————————————————
+    // Listeners
+    // ————————————————————————————————————————————————————————
+//    private void setupListeners() {
+//        // Search → navigate sang màn hình tìm kiếm
+//        binding.etSearch.setOnClickListener(v ->
+//                Navigation.findNavController(requireView())
+//                        .navigate(R.id.action_home_to_search)
+//        );
+//
+//        // Xem tất cả top bán chạy
+//        binding.tvSeeAll.setOnClickListener(v ->
+//                Navigation.findNavController(requireView())
+//                        .navigate(R.id.action_home_to_menu)
+//        );
+//
+//        // Pull-to-refresh
+//        binding.swipeRefresh.setOnRefreshListener(() -> viewModel.loadHome());
+//
+//        // Địa chỉ giao → mở màn hình chọn địa chỉ
+//        binding.layoutAddress.setOnClickListener(v ->
+//                Toast.makeText(requireContext(), "Chọn địa chỉ giao hàng", Toast.LENGTH_SHORT).show()
+//        );
 //    }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ————————————————————————————————————————————————————————
     // Navigation helpers
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ————————————————————————————————————————————————————————
     private void navigateToDetail(FoodItem item) {
         Bundle args = new Bundle();
-        args.putLong("food_id", item.getId());
+        args.putLong("restaurant_id", item.getRestaurantId());
         Navigation.findNavController(requireView())
-                .navigate(R.id.action_home_to_foodDetail, args);
+                .navigate(R.id.action_home_to_restaurantDetail, args);
     }
     // addToCart — dùng LocalCart (không cần Supabase) và hiện ToppingBottomSheet
     private void addToCart(FoodItem item) {
         ToppingBottomSheet toppingSheet = new ToppingBottomSheet(item, selectedItem -> {
-            com.example.fooddelivery.data.local.LocalCart.getInstance().addItem(selectedItem);
+            com.example.fooddelivery.data.local.LocalCart.getInstance().add(selectedItem, 1);
             updateStickyCart();
         });
         toppingSheet.show(getParentFragmentManager(), ToppingBottomSheet.TAG);
