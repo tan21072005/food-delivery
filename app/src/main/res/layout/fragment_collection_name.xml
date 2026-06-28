@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="#FFFFFF" android:padding="20dp">
+    <ImageButton android:id="@+id/backButton" android:layout_width="48dp" android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_arrow_back"
+        android:contentDescription="Quay lại" app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView android:id="@+id/title" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Thêm bộ sưu tập mới" android:textSize="24sp" android:textStyle="bold"
+        android:textColor="#111314" app:layout_constraintTop_toTopOf="@id/backButton"
+        app:layout_constraintBottom_toBottomOf="@id/backButton" app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <EditText android:id="@+id/nameInput" android:layout_width="0dp" android:layout_height="64dp"
+        android:layout_marginTop="28dp" android:background="@drawable/favorite_outline"
+        android:hint="Nhập tên bộ sưu tập" android:paddingStart="16dp" android:paddingEnd="52dp"
+        android:singleLine="true" android:textSize="18sp" android:textColor="#343A3D"
+        android:textColorHint="#9AA0A2" app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" />
+    <ImageButton android:id="@+id/clearButton" android:layout_width="48dp" android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_close"
+        android:contentDescription="Xóa tên" app:layout_constraintEnd_toEndOf="@id/nameInput"
+        app:layout_constraintTop_toTopOf="@id/nameInput" app:layout_constraintBottom_toBottomOf="@id/nameInput" />
+    <com.google.android.material.chip.ChipGroup android:id="@+id/suggestions"
+        android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="16dp"
+        app:chipSpacingHorizontal="8dp" app:chipSpacingVertical="8dp" app:singleLine="false"
+        app:layout_constraintTop_toBottomOf="@id/nameInput" app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Bữa sáng năng lượng 🌅" />
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Bữa trưa no nê ☀️" />
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Lót dạ xế chiều 🍩" />
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Bữa tối đủ vị 🌙" />
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Ăn chay nhẹ nhàng 🌱" />
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Healthy sống khỏe 🥑" />
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Cà phê &amp; Trà sữa chill 🧋" />
+    </com.google.android.material.chip.ChipGroup>
+    <Button android:id="@+id/continueButton" android:layout_width="0dp" android:layout_height="64dp"
+        android:background="@drawable/favorite_button" android:text="Quán yêu thích"
+        android:textAllCaps="false" android:textColor="#FFFFFF" android:textSize="20sp"
+        android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

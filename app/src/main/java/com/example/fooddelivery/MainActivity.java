@@ -33,10 +33,15 @@ public class MainActivity extends AppCompatActivity {
             int id = destination.getId();
             if (id == R.id.loginFragment
                     || id == R.id.accountMenuFragment
-                    || id == R.id.accountInfoFragment) {
+                    || id == R.id.accountInfoFragment
+                    || id == R.id.collectionNameFragment
+                    || id == R.id.collectionRestaurantsFragment) {
                 binding.bottomNav.setVisibility(View.GONE);
+                binding.navHostFragment.setPadding(0, 0, 0, 0);
             } else {
                 binding.bottomNav.setVisibility(View.VISIBLE);
+                binding.navHostFragment.setPadding(0, 0, 0,
+                        (int) (56 * getResources().getDisplayMetrics().density));
             }
         });
 
