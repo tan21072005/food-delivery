@@ -3,6 +3,10 @@ package com.example.fooddelivery.data.remote.apis;
 import com.example.fooddelivery.data.model.FoodCategory;
 import com.example.fooddelivery.data.model.FoodItem;
 import com.example.fooddelivery.data.model.CartRequest;
+import com.example.fooddelivery.data.model.CartQuantityRequest;
+import com.example.fooddelivery.data.model.DeliveryAddress;
+import com.example.fooddelivery.data.model.DeliveryAddressRequest;
+import com.example.fooddelivery.data.model.SetDefaultDeliveryAddressRequest;
 import com.example.fooddelivery.data.model.User;
 
 import java.util.List;
@@ -95,10 +99,35 @@ public interface ApiService {
     Call<Void> addToCart(@Body CartRequest request);
 
     @PATCH("rest/v1/carts")
-    Call<Void> updateCartQuantity(@Query("id") String eqId, @Body com.example.fooddelivery.data.model.CartRequest request);
+    Call<Void> updateCartQuantity(@Query("id") String eqId, @Body CartQuantityRequest request);
 
     @DELETE("rest/v1/carts")
     Call<Void> removeFromCart(@Query("id") String eqId);
+
+    @GET("rest/v1/user_addresses")
+    Call<List<DeliveryAddress>> getDeliveryAddresses(
+            @Query("select") String select,
+            @Query("deleted_at") String deletedAtFilter,
+            @Query("order") String order
+    );
+
+    @POST("rest/v1/user_addresses")
+    Call<Void> createDeliveryAddress(@Body DeliveryAddressRequest request);
+
+    @PATCH("rest/v1/user_addresses")
+    Call<Void> updateDeliveryAddress(
+            @Query("id") String idFilter,
+            @Body DeliveryAddressRequest request
+    );
+
+    @PATCH("rest/v1/user_addresses")
+    Call<Void> softDeleteDeliveryAddress(
+            @Query("id") String idFilter,
+            @Body DeliveryAddressRequest request
+    );
+
+    @POST("rest/v1/rpc/set_default_delivery_address")
+    Call<Void> setDefaultDeliveryAddress(@Body SetDefaultDeliveryAddressRequest request);
 
     // --------------------------------------------------------
     // SUPABASE STORAGE ENDPOINTS

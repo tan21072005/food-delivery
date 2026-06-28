@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.example.fooddelivery.data.remote.apis.ApiService;
+import com.example.fooddelivery.data.model.DeliveryAddress;
 
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -20,7 +21,9 @@ import java.nio.file.Paths;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import retrofit2.http.Headers;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PATCH;
 
 public class BugRegressionTest {
 
@@ -190,6 +193,38 @@ public class BugRegressionTest {
                 "viewPager.setCurrentItem(initialTab, false)");
     }
 
+    @Test
+    public void deliveryAddressDisplayTextUsesRecipientAndFullAddressSnapshot() {
+        DeliveryAddress address = new DeliveryAddress();
+        address.setLabel("Nhà");
+        address.setRecipientName("Nguyễn Văn A");
+        address.setRecipientPhone("0901234567");
+        address.setFullAddress("Phòng 605, Linh Đàm");
+
+        assertEquals("Nguyễn Văn A - 0901234567\nPhòng 605, Linh Đàm", address.toCheckoutDisplayText());
+    }
+
+    @Test
+    public void apiServiceExposesDeliveryAddressRestAndDefaultRpcContracts() throws Exception {
+        assertEndpoint("getDeliveryAddresses", GET.class, "rest/v1/user_addresses");
+        assertEndpoint("createDeliveryAddress", POST.class, "rest/v1/user_addresses");
+        assertEndpoint("updateDeliveryAddress", PATCH.class, "rest/v1/user_addresses");
+        assertEndpoint("softDeleteDeliveryAddress", PATCH.class, "rest/v1/user_addresses");
+        assertEndpoint("setDefaultDeliveryAddress", POST.class, "rest/v1/rpc/set_default_delivery_address");
+    }
+
+    @Test
+    public void checkoutActivityUsesSupabaseViewModelAndSelectedDeliveryAddress() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/cart/Checkout.java",
+                "CheckoutViewModel",
+                "loadDefaultDeliveryAddress",
+                "checkout(selectedDeliveryAddress",
+                "CartAdapter");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/cart/Checkout.java",
+                "LocalCart is a legacy fallback",
+                "LocalOrderStore");
+    }
+
     private Path profileLayoutPath() {
         return projectPath("src/main/res/layout/profile_fragment.xml");
     }
@@ -216,6 +251,19 @@ public class BugRegressionTest {
         for (String snippet : snippets) {
             assertTrue("Missing snippet in " + path + ": " + snippet, source.contains(snippet));
         }
+    }
+
+    private void assertEndpoint(String methodName, Class<?> annotationClass, String expectedValue) throws Exception {
+        Method method = Arrays.stream(ApiService.class.getMethods())
+                .filter(candidate -> candidate.getName().equals(methodName))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Missing endpoint: " + methodName));
+
+        Object annotation = method.getAnnotation((Class) annotationClass);
+        assertNotNull("Missing annotation on endpoint: " + methodName, annotation);
+
+        Method value = annotationClass.getMethod("value");
+        assertEquals(expectedValue, value.invoke(annotation));
     }
 
     private Path projectPath(String path) {

@@ -7,12 +7,15 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.fooddelivery.data.model.CartRequest;
+import com.example.fooddelivery.data.model.CartQuantityRequest;
 import com.example.fooddelivery.data.model.CartSummaryResponse;
 import com.example.fooddelivery.data.model.CheckoutRequest;
+import com.example.fooddelivery.data.model.DeliveryAddress;
+import com.example.fooddelivery.data.repository.DeliveryAddressRepository;
 import com.example.fooddelivery.data.repository.OrderRepository;
 
 import java.util.List;
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,18 +27,22 @@ public class CheckoutViewModel extends AndroidViewModel {
     private final MutableLiveData<CartSummaryResponse> _cartSummary = new MutableLiveData<>();
     private final MutableLiveData<String> _errorMsg = new MutableLiveData<>();
     private final MutableLiveData<List<Long>> _orderSuccess = new MutableLiveData<>();
+    private final MutableLiveData<DeliveryAddress> _selectedDeliveryAddress = new MutableLiveData<>();
 
     private final OrderRepository orderRepository;
+    private final DeliveryAddressRepository deliveryAddressRepository;
 
     public CheckoutViewModel(@NonNull Application application) {
         super(application);
         orderRepository = new OrderRepository(application);
+        deliveryAddressRepository = new DeliveryAddressRepository(application);
     }
 
     public LiveData<Boolean> isLoading() { return _isLoading; }
     public LiveData<CartSummaryResponse> getCartSummary() { return _cartSummary; }
     public LiveData<String> getErrorMsg() { return _errorMsg; }
     public LiveData<List<Long>> getOrderSuccess() { return _orderSuccess; }
+    public LiveData<DeliveryAddress> getSelectedDeliveryAddress() { return _selectedDeliveryAddress; }
 
     public void loadCartSummary() {
         _isLoading.setValue(true);
@@ -65,7 +72,7 @@ public class CheckoutViewModel extends AndroidViewModel {
         }
         
         _isLoading.setValue(true);
-        CartRequest request = new CartRequest(userId, menuId, newQuantity);
+        CartQuantityRequest request = new CartQuantityRequest(newQuantity);
         orderRepository.updateCartQuantity("eq." + cartId, request).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -106,9 +113,33 @@ public class CheckoutViewModel extends AndroidViewModel {
         });
     }
 
-    public void checkout(String address, String note) {
+    public void loadDefaultDeliveryAddress() {
+        deliveryAddressRepository.list().enqueue(new Callback<List<DeliveryAddress>>() {
+            @Override
+            public void onResponse(Call<List<DeliveryAddress>> call, Response<List<DeliveryAddress>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    _selectedDeliveryAddress.setValue(findDefault(response.body()));
+                } else {
+                    _selectedDeliveryAddress.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<DeliveryAddress>> call, Throwable t) {
+                _selectedDeliveryAddress.setValue(null);
+                _errorMsg.setValue("Lỗi tải DeliveryAddress: " + t.getMessage());
+            }
+        });
+    }
+
+    public void checkout(DeliveryAddress selectedDeliveryAddress, String note) {
+        if (selectedDeliveryAddress == null) {
+            _errorMsg.setValue("Vui lòng chọn DeliveryAddress trước khi đặt món");
+            return;
+        }
         _isLoading.setValue(true);
-        CheckoutRequest request = new CheckoutRequest(address, note);
+        // Temporary adapter until checkout_cart accepts p_delivery_address_id and snapshots server-side.
+        CheckoutRequest request = new CheckoutRequest(selectedDeliveryAddress.toSingleLineDisplayText(), note);
         orderRepository.checkoutCart(request).enqueue(new Callback<List<Long>>() {
             @Override
             public void onResponse(Call<List<Long>> call, Response<List<Long>> response) {
@@ -126,5 +157,14 @@ public class CheckoutViewModel extends AndroidViewModel {
                 _errorMsg.setValue("Lỗi kết nối: " + t.getMessage());
             }
         });
+    }
+
+    private DeliveryAddress findDefault(List<DeliveryAddress> addresses) {
+        for (DeliveryAddress address : addresses) {
+            if (address.isDefault()) {
+                return address;
+            }
+        }
+        return addresses.get(0);
     }
 }

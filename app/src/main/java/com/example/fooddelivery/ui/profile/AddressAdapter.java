@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.data.model.AddressItem;
+import com.example.fooddelivery.data.model.DeliveryAddress;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +19,12 @@ import java.util.List;
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
 
     private final Context context;
-    private final List<AddressItem> items = new ArrayList<>();
-    
+    private final List<DeliveryAddress> items = new ArrayList<>();
+
     public interface OnAddressClickListener {
-        void onClick(AddressItem item);
+        void onClick(DeliveryAddress item);
     }
-    
+
     private OnAddressClickListener listener;
 
     public AddressAdapter(Context context) {
@@ -35,7 +35,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
         this.listener = listener;
     }
 
-    public void submitList(List<AddressItem> newItems) {
+    public void submitList(List<DeliveryAddress> newItems) {
         items.clear();
         if (newItems != null) {
             items.addAll(newItems);
@@ -52,28 +52,25 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        AddressItem item = items.get(position);
+        DeliveryAddress item = items.get(position);
         holder.tvAddressLabel.setText(item.getLabel());
-        holder.tvAddressDetail.setText(item.getDetail());
-        holder.tvUserInfo.setText(item.getUserInfo());
+        holder.tvAddressDetail.setText(item.getFullAddress());
+        holder.tvUserInfo.setText(item.toCheckoutDisplayText().replace('\n', ' '));
+        holder.tvDefaultTag.setVisibility(item.isDefault() ? View.VISIBLE : View.GONE);
 
-        if (item.isDefault()) {
-            holder.tvDefaultTag.setVisibility(View.VISIBLE);
-        } else {
-            holder.tvDefaultTag.setVisibility(View.GONE);
-        }
-        
-        // Change icon depending on label (Home/Work/etc)
-        if (item.getLabel().toLowerCase().contains("nhà")) {
+        String label = item.getLabel() == null ? "" : item.getLabel().toLowerCase();
+        if (label.contains("nh")) {
             holder.imgAddressType.setImageResource(R.drawable.ic_home);
-        } else if (item.getLabel().toLowerCase().contains("công ty")) {
+        } else if (label.contains("ty")) {
             holder.imgAddressType.setImageResource(R.drawable.ic_work);
         } else {
             holder.imgAddressType.setImageResource(R.drawable.ic_location_on);
         }
-        
+
         holder.itemView.setOnClickListener(v -> {
-            if (listener != null) listener.onClick(item);
+            if (listener != null) {
+                listener.onClick(item);
+            }
         });
     }
 

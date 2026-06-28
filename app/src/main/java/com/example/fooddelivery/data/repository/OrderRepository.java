@@ -3,6 +3,7 @@ package com.example.fooddelivery.data.repository;
 import android.content.Context;
 
 import com.example.fooddelivery.data.model.CartRequest;
+import com.example.fooddelivery.data.model.CartQuantityRequest;
 import com.example.fooddelivery.data.model.CartSummaryResponse;
 import com.example.fooddelivery.data.model.CheckoutRequest;
 import com.example.fooddelivery.data.remote.SupabaseClient;
@@ -31,7 +32,7 @@ public class OrderRepository {
         return apiService.addToCart(new CartRequest(userId, menuId, quantity));
     }
 
-    public Call<Void> updateCartQuantity(String eqId, CartRequest request) {
+    public Call<Void> updateCartQuantity(String eqId, CartQuantityRequest request) {
         return apiService.updateCartQuantity(eqId, request);
     }
 
