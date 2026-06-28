@@ -8,10 +8,11 @@
     app:startDestination="@id/nav_home">
 
     <include app:graph="@navigation/nav_home"/>
-    <include app:graph="@navigation/nav_auth"/>
     <include app:graph="@navigation/nav_ordes"/>
     <include app:graph="@navigation/nav_favorites"/>
     <include app:graph="@navigation/nav_profile"/>
+
+    <include app:graph="@navigation/nav_auth"/>
 
 
 

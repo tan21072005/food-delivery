@@ -20,9 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.data.local.prefs.SessionManager;
 import com.example.fooddelivery.data.model.User;
-import com.example.fooddelivery.ui.auth.AuthActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -134,11 +132,8 @@ public class ProfileFragment extends Fragment {
             btnLogoutItem.setOnClickListener(v -> {
                 LogoutBottomSheet sheet = new LogoutBottomSheet(
                         () -> {
-                            new SessionManager(requireContext()).clearSession();
-                            Toast.makeText(requireContext(), "Đã đăng xuất", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(requireActivity(), AuthActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            androidx.navigation.Navigation.findNavController(requireView())
+                                    .navigate(R.id.action_profile_to_login);
                         },
                         () -> {
                             SwitchAccountBottomSheet switchSheet = new SwitchAccountBottomSheet();

@@ -137,7 +137,6 @@ public class Checkout extends AppCompatActivity {
                     Intent intent = new Intent(Checkout.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     intent.putExtra("open_tab", "orders");
-                    intent.putExtra("orders_tab", "pending");
                     startActivity(intent);
                     finish();
                 })

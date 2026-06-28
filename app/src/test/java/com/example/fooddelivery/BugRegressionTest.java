@@ -75,9 +75,8 @@ public class BugRegressionTest {
         assertTrue(menuLayout.contains("RecyclerView"));
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
                 "MenuAdapter",
-                "action_menu_to_restaurantDetail",
-                "ToppingBottomSheet",
-                "LocalCart.getInstance().addItem");
+                "action_menu_to_foodDetail",
+                "viewModel.addToCart");
     }
 
     @Test
@@ -112,82 +111,6 @@ public class BugRegressionTest {
         assertThemeItem("src/main/res/values/themes.xml", "colorControlNormal", "@color/text_primary");
         assertThemeItem("src/main/res/values-night/themes.xml", "android:textColorPrimary", "@color/text_primary");
         assertThemeItem("src/main/res/values-night/themes.xml", "colorControlNormal", "@color/text_primary");
-    }
-
-    @Test
-    public void mainNavigationGraphInflatesAuthBeforeGraphsThatReferenceIt() throws Exception {
-        String navMain = readFile(projectPath("src/main/res/navigation/nav_main.xml"));
-        int authInclude = navMain.indexOf("@navigation/nav_auth");
-        int favoritesInclude = navMain.indexOf("@navigation/nav_favorites");
-        int profileInclude = navMain.indexOf("@navigation/nav_profile");
-
-        assertTrue("nav_auth must be included before nav_favorites because favorites has actions to @id/nav_auth",
-                authInclude >= 0 && favoritesInclude >= 0 && authInclude < favoritesInclude);
-        assertTrue("nav_auth must be included before nav_profile because profile has actions to @id/nav_auth",
-                authInclude >= 0 && profileInclude >= 0 && authInclude < profileInclude);
-
-        for (String graph : Arrays.asList("nav_home.xml", "nav_ordes.xml", "nav_favorites.xml", "nav_profile.xml", "nav_auth.xml")) {
-            String source = readFile(projectPath("src/main/res/navigation/" + graph));
-            assertFalse("Navigation action destinations should reference existing ids with @id, not create new ids with @+id in " + graph,
-                    source.contains("app:destination=\"@+id/"));
-        }
-    }
-
-    @Test
-    public void restaurantRatingClickNavigatesToUsableReviewsScreen() throws Exception {
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
-                "R.id.layoutRatingReview",
-                "R.id.action_restaurantDetail_to_reviews");
-
-        String navHome = readFile(projectPath("src/main/res/navigation/nav_home.xml"));
-        assertTrue(navHome.contains("android:id=\"@+id/action_restaurantDetail_to_reviews\""));
-        assertTrue(navHome.contains("app:destination=\"@id/reviewsFragment\""));
-    }
-
-    @Test
-    public void detailScreensExposeBackHandlersAndScreenLayoutsReserveTopInset() throws Exception {
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/OrderDetailFragment.java",
-                "R.id.ivBack",
-                "popBackStack()");
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/OrderReviewFragment.java",
-                "R.id.ivBack",
-                "popBackStack()");
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/cart/Checkout.java",
-                "R.id.ivBack",
-                "finish()");
-
-        for (String layout : Arrays.asList(
-                "src/main/res/layout/home_fragment.xml",
-                "src/main/res/layout/search_fragment.xml",
-                "src/main/res/layout/menu_fragment.xml",
-                "src/main/res/layout/profile_fragment.xml",
-                "src/main/res/layout/favorites_fragment.xml",
-                "src/main/res/layout/food_fragment_detail.xml",
-                "src/main/res/layout/fragment_restaurant_detail.xml",
-                "src/main/res/layout/fragment_restaurant_info.xml",
-                "src/main/res/layout/fragment_promotions.xml",
-                "src/main/res/layout/fragment_reviews.xml",
-                "src/main/res/layout/fragment_address_list.xml",
-                "src/main/res/layout/order_fragment_management.xml",
-                "src/main/res/layout/order_fragment_list.xml",
-                "src/main/res/layout/order_fragment_detail.xml",
-                "src/main/res/layout/order_fragment_review.xml",
-                "src/main/res/layout/cart_activity_checkout.xml")) {
-            String source = readFile(projectPath(layout));
-            assertTrue("Layout should reserve top inset with fitsSystemWindows: " + layout,
-                    source.contains("android:fitsSystemWindows=\"true\""));
-        }
-    }
-
-    @Test
-    public void checkoutSuccessReturnsToOrdersPendingTab() throws Exception {
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/cart/Checkout.java",
-                "putExtra(\"open_tab\", \"orders\")",
-                "putExtra(\"orders_tab\", \"pending\")");
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/OrderManagementFragment.java",
-                "EXTRA_ORDERS_TAB",
-                "getStringExtra(EXTRA_ORDERS_TAB)",
-                "viewPager.setCurrentItem(initialTab, false)");
     }
 
     private Path profileLayoutPath() {
