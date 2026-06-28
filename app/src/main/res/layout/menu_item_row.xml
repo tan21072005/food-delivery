@@ -2,7 +2,6 @@
 <!-- item_menu_row.xml -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_menu_item_ripple"
@@ -21,7 +20,7 @@
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:src="@android:drawable/ic_menu_preferences"
-        app:tint="@color/icon_tint"
+        android:tint="@color/icon_tint"
         android:contentDescription="Menu icon" />
 
     <!-- Label -->

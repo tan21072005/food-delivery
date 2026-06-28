@@ -1,50 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--    Graph Đơn hàng — Orders → OrderDetail-->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_ordes"
     app:startDestination="@id/ordersFragment">
 
-    <!-- Danh sách đơn hàng -->
+<!--    Danh sách đơn hàng-->
+
+    <!-- ── Danh sách đơn hàng ── -->
     <fragment
         android:id="@+id/ordersFragment"
         android:name="com.example.fooddelivery.ui.order.OrderManagementFragment"
         android:label="Đơn hàng">
 
-        <action
-            android:id="@+id/action_orderManagement_to_orderDetail"
-            app:destination="@id/orderDetailFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+<!--        &lt;!&ndash; Orders đến Chi tiết đơn hàng &ndash;&gt;-->
+<!--        <action-->
+<!--            android:id="@+id/action_orders_to_orderDetail"-->
+<!--            app:destination="@id/orderDetailFragment"/>-->
+<!--            app:enterAnim="@anim/slide_in_right"-->
+<!--            app:exitAnim="@anim/slide_out_left"-->
+<!--            app:popEnterAnim="@anim/slide_in_left"-->
+<!--            app:popExitAnim="@anim/slide_out_right" />-->
 
-        <action
-            android:id="@+id/action_orderManagement_to_orderReview"
-            app:destination="@id/orderReviewFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
-    <!-- Chi tiết đơn hàng -->
-    <fragment
-        android:id="@+id/orderDetailFragment"
-        android:name="com.example.fooddelivery.ui.order.OrderDetailFragment"
-        android:label="Chi tiết đơn hàng">
-        <action
-            android:id="@+id/action_orderDetailFragment_to_orderReviewFragment"
-            app:destination="@id/orderReviewFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-    </fragment>
+<!--    &lt;!&ndash; ── Chi tiết đơn hàng ── &ndash;&gt;-->
+<!--    <fragment-->
+<!--        android:id="@+id/orderDetailFragment"-->
+<!--        android:name="com.example.fooddelivery.OrderDetailFragment"-->
+<!--        android:label="Chi tiết đơn hàng">-->
 
-    <!-- Đánh giá đơn hàng -->
-    <fragment
-        android:id="@+id/orderReviewFragment"
-        android:name="com.example.fooddelivery.ui.order.OrderReviewFragment"
-        android:label="Đánh giá đơn hàng" />
+<!--        <argument-->
+<!--            android:name="order_id"-->
+<!--            android:defaultValue=""-->
+<!--            app:argType="string" />-->
+
+<!--    </fragment>-->
 
 </navigation>

@@ -81,25 +81,27 @@ public class HomeViewModel extends AndroidViewModel {
     public void loadHome() {
         isLoading.setValue(true);
 
-        // Mock Categories
-        List<FoodCategory> mockCategories = java.util.Arrays.asList(
-                new FoodCategory(1, "Bun", "Bún", "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/bun.png"),
-                new FoodCategory(2, "Pho", "Phở", "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/pho.png"),
-                new FoodCategory(3, "Com", "Cơm", "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/com.png"),
-                new FoodCategory(4, "Nuoc", "Đồ Uống", "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/nuoc.png")
-        );
-        categories.setValue(mockCategories);
+        foodRepository.getHomeData().enqueue(new Callback<HomeDataResponse>() {
+            @Override
+            public void onResponse(Call<HomeDataResponse> call, Response<HomeDataResponse> response) {
+                isLoading.setValue(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    HomeDataResponse data = response.body();
+                    categories.setValue(data.getCategories());
+                    topSelling.setValue(data.getTopSelling());
+                    allFoods.setValue(data.getAllFoods());
+                } else {
+                    errorMsg.setValue("Loi tai du lieu: " + response.message());
+                }
+            }
 
-        // Mock Foods
-        List<FoodItem> mockFoods = java.util.Arrays.asList(
-                new FoodItem(1, "Bún chả Hà Nội", "Bún chả thịt nướng thơm ngon", 120, 35000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/bun.png"),
-                new FoodItem(2, "Phở bò tái nạm", "Phở bò truyền thống", 200, 45000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/pho.png"),
-                new FoodItem(3, "Cơm tấm sườn bì", "Cơm tấm Sài Gòn", 150, 40000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/com.png")
-        );
-        topSelling.setValue(mockFoods);
-        allFoods.setValue(mockFoods);
-
-        isLoading.setValue(false);
+            @Override
+            public void onFailure(Call<HomeDataResponse> call, Throwable t) {
+                isLoading.setValue(false);
+                errorMsg.setValue("Loi ket noi: " + t.getMessage());
+                Log.e("HomeViewModel", "Error fetching home data", t);
+            }
+        });
     }
 
     public void addToCart(long userId, long foodId, int quantity) {

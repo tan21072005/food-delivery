@@ -1,6 +1,7 @@
 package com.example.fooddelivery.ui.order;
 
-import android.content.Intent;
+import com.example.fooddelivery.R;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,32 +11,34 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.fooddelivery.R;
-
+/**
+ * Thay tháº¿ OrdersFragment (rá»—ng) vÃ  OrderManagementActivity.
+ * ÄÃ¢y lÃ  Fragment Ä‘Æ°á»£c nav_ordes.xml trá» tá»›i, chá»©a toÃ n bá»™
+ * logic tab Äang chá» / ÄÃ£ hoÃ n thÃ nh / ÄÃ£ huá»· + ViewPager2.
+ *
+ * XoÃ¡ OrdersFragment.java vÃ  OrderManagementActivity.java sau khi dÃ¹ng file nÃ y.
+ */
 public class OrderManagementFragment extends Fragment {
 
-    private static final String EXTRA_ORDERS_TAB = "orders_tab";
-
-    private final TextView[] tabs = new TextView[3];
-    private final View[] indicators = new View[3];
-    private View tabProcessingContainer;
-    private View tabCompletedContainer;
-    private View tabCancelledContainer;
+    private TextView tabPending, tabCompleted, tabCancelled;
+    private View indicatorPending, indicatorCompleted, indicatorCancelled;
     private ViewPager2 viewPager;
 
-    private static final int COLOR_ACTIVE = 0xFFFF6B35;
-    private static final int COLOR_INACTIVE = 0xFF999999;
+    private static final int COLOR_ACTIVE      = 0xFFFF6B35;
+    private static final int COLOR_INACTIVE    = 0xFF999999;
     private static final int COLOR_TRANSPARENT = 0x00000000;
-    private static final int COLOR_INDICATOR = 0xFFFF6B35;
+    private static final int COLOR_INDICATOR   = 0xFFFF6B35;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // DÃ¹ng láº¡i layout fragment_order_management.xml
         return inflater.inflate(R.layout.order_fragment_management, container, false);
     }
 
@@ -43,47 +46,42 @@ public class OrderManagementFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // áº¨n nÃºt Back vÃ¬ Ä‘Ã¢y lÃ  Fragment trong bottom nav (khÃ´ng cáº§n back)
         View btnBack = view.findViewById(R.id.btnBack);
         if (btnBack != null) btnBack.setVisibility(View.GONE);
 
         initViews(view);
         setupViewPager();
         setupTabClicks();
-        openRequestedTabIfAny();
+        selectTab(0);
     }
 
     private void initViews(View view) {
-        tabs[0] = view.findViewById(R.id.tabPending);
-        tabs[1] = view.findViewById(R.id.tabCompleted);
-        tabs[2] = view.findViewById(R.id.tabCancelled);
+        tabPending   = view.findViewById(R.id.tabPending);
+        tabCompleted = view.findViewById(R.id.tabCompleted);
+        tabCancelled = view.findViewById(R.id.tabCancelled);
 
-        indicators[0] = view.findViewById(R.id.indicatorPending);
-        indicators[1] = view.findViewById(R.id.indicatorCompleted);
-        indicators[2] = view.findViewById(R.id.indicatorCancelled);
-
-        tabProcessingContainer = view.findViewById(R.id.tabPendingContainer);
-        tabCompletedContainer = view.findViewById(R.id.tabCompletedContainer);
-        tabCancelledContainer = view.findViewById(R.id.tabCancelledContainer);
+        indicatorPending   = view.findViewById(R.id.indicatorPending);
+        indicatorCompleted = view.findViewById(R.id.indicatorCompleted);
+        indicatorCancelled = view.findViewById(R.id.indicatorCancelled);
 
         viewPager = view.findViewById(R.id.viewPager);
     }
 
     private void setupViewPager() {
-        viewPager.setAdapter(new FragmentStateAdapter(this) {
+        FragmentActivity activity = requireActivity();
+        viewPager.setAdapter(new FragmentStateAdapter(activity) {
             @NonNull
             @Override
             public Fragment createFragment(int position) {
                 switch (position) {
-                    case 1: return OrderListFragment.newInstance("completed");
-                    case 2: return OrderListFragment.newInstance("cancelled");
-                    default: return OrderListFragment.newInstance("processing");
+                    case 1:  return OrderListFragment.newInstance("completed");
+                    case 2:  return OrderListFragment.newInstance("cancelled");
+                    default: return OrderListFragment.newInstance("pending");
                 }
             }
-
             @Override
-            public int getItemCount() {
-                return 3;
-            }
+            public int getItemCount() { return 3; }
         });
 
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -95,34 +93,42 @@ public class OrderManagementFragment extends Fragment {
     }
 
     private void setupTabClicks() {
-        tabProcessingContainer.setOnClickListener(v -> viewPager.setCurrentItem(0, true));
-        tabCompletedContainer.setOnClickListener(v -> viewPager.setCurrentItem(1, true));
-        tabCancelledContainer.setOnClickListener(v -> viewPager.setCurrentItem(2, true));
-    }
-
-    private void openRequestedTabIfAny() {
-        int initialTab = 0;
-        Intent intent = requireActivity().getIntent();
-        if (intent != null) {
-            String requestedTab = intent.getStringExtra(EXTRA_ORDERS_TAB);
-            if ("completed".equals(requestedTab)) {
-                initialTab = 1;
-            } else if ("cancelled".equals(requestedTab)) {
-                initialTab = 2;
-            }
-            intent.removeExtra(EXTRA_ORDERS_TAB);
-        }
-        viewPager.setCurrentItem(initialTab, false);
-        selectTab(initialTab);
+        tabPending.setOnClickListener(v -> viewPager.setCurrentItem(0, true));
+        tabCompleted.setOnClickListener(v -> viewPager.setCurrentItem(1, true));
+        tabCancelled.setOnClickListener(v -> viewPager.setCurrentItem(2, true));
     }
 
     private void selectTab(int index) {
-        for (int i = 0; i < tabs.length; i++) {
-            tabs[i].setTextColor(i == index ? COLOR_ACTIVE : COLOR_INACTIVE);
-            tabs[i].setTypeface(null, i == index
-                    ? android.graphics.Typeface.BOLD
-                    : android.graphics.Typeface.NORMAL);
-            indicators[i].setBackgroundColor(i == index ? COLOR_INDICATOR : COLOR_TRANSPARENT);
+        // Reset táº¥t cáº£
+        tabPending.setTextColor(COLOR_INACTIVE);
+        tabCompleted.setTextColor(COLOR_INACTIVE);
+        tabCancelled.setTextColor(COLOR_INACTIVE);
+        tabPending.setTypeface(null, android.graphics.Typeface.NORMAL);
+        tabCompleted.setTypeface(null, android.graphics.Typeface.NORMAL);
+        tabCancelled.setTypeface(null, android.graphics.Typeface.NORMAL);
+
+        indicatorPending.setBackgroundColor(COLOR_TRANSPARENT);
+        indicatorCompleted.setBackgroundColor(COLOR_TRANSPARENT);
+        indicatorCancelled.setBackgroundColor(COLOR_TRANSPARENT);
+
+        // KÃ­ch hoáº¡t tab Ä‘Æ°á»£c chá»n
+        switch (index) {
+            case 0:
+                tabPending.setTextColor(COLOR_ACTIVE);
+                tabPending.setTypeface(null, android.graphics.Typeface.BOLD);
+                indicatorPending.setBackgroundColor(COLOR_INDICATOR);
+                break;
+            case 1:
+                tabCompleted.setTextColor(COLOR_ACTIVE);
+                tabCompleted.setTypeface(null, android.graphics.Typeface.BOLD);
+                indicatorCompleted.setBackgroundColor(COLOR_INDICATOR);
+                break;
+            case 2:
+                tabCancelled.setTextColor(COLOR_ACTIVE);
+                tabCancelled.setTypeface(null, android.graphics.Typeface.BOLD);
+                indicatorCancelled.setBackgroundColor(COLOR_INDICATOR);
+                break;
         }
     }
 }
+

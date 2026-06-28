@@ -1,5 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation">
+<resources>
     <string name="app_name">Food Delivery</string>
     <string name="app_tagline">Đặt đồ ăn - Giao tận nơi</string>
 
