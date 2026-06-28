@@ -225,6 +225,30 @@ public class BugRegressionTest {
                 "LocalOrderStore");
     }
 
+    @Test
+    public void sqlContractUsesCanonicalOrderStatusesAndDeliveryAddressSnapshots() throws Exception {
+        String sql = readFile(projectPath("../docs/sql.sql"));
+        assertTrue(sql.contains("CREATE TYPE order_status     AS ENUM ('pending', 'confirmed', 'preparing', 'ready_for_pickup', 'delivering', 'completed', 'cancelled')"));
+        assertFalse(sql.contains("'ready', 'on_the_way', 'delivered'"));
+        assertTrue(sql.contains("recipient_name"));
+        assertTrue(sql.contains("recipient_phone"));
+        assertTrue(sql.contains("delivery_address_id"));
+        assertTrue(sql.contains("recipient_name_snapshot"));
+        assertTrue(sql.contains("item_name_snapshot"));
+        assertTrue(sql.contains("item_image_snapshot"));
+    }
+
+    @Test
+    public void checkoutRpcAcceptsDeliveryAddressIdAndSnapshotsOrderLines() throws Exception {
+        String rpc = readFile(projectPath("../docs/rpc_cart_order.sql"));
+        assertTrue(rpc.contains("checkout_cart(p_delivery_address_id BIGINT, p_note TEXT)"));
+        assertTrue(rpc.contains("ua.user_id = v_user_id"));
+        assertTrue(rpc.contains("recipient_name_snapshot"));
+        assertTrue(rpc.contains("item_name_snapshot"));
+        assertTrue(rpc.contains("item_image_snapshot"));
+        assertFalse(rpc.contains("checkout_cart(p_delivery_address TEXT"));
+    }
+
     private Path profileLayoutPath() {
         return projectPath("src/main/res/layout/profile_fragment.xml");
     }

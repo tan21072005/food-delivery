@@ -23,7 +23,7 @@ CREATE TYPE offer_type       AS ENUM ('discount', 'freeship');
 CREATE TYPE discount_type    AS ENUM ('fixed', 'rate');
 CREATE TYPE payment_mode     AS ENUM ('net_banking', 'COD', 'debit_card', 'credit_card');
 CREATE TYPE payment_status   AS ENUM ('pending', 'paid', 'not_paid', 'refunded');
-CREATE TYPE order_status     AS ENUM ('pending', 'confirmed', 'preparing', 'ready', 'on_the_way', 'delivered', 'cancelled');
+CREATE TYPE order_status     AS ENUM ('pending', 'confirmed', 'preparing', 'ready_for_pickup', 'delivering', 'completed', 'cancelled');
 CREATE TYPE media_type       AS ENUM ('image', 'video');
 CREATE TYPE generic_status   AS ENUM ('active', 'inactive');
 
@@ -175,6 +175,8 @@ CREATE TABLE user_addresses (
     user_id        BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     address_id     BIGINT REFERENCES addresses(id) ON DELETE SET NULL,
     label          VARCHAR(50),
+    recipient_name  VARCHAR(150),
+    recipient_phone VARCHAR(30),
     address_detail TEXT NOT NULL,
     latitude       DECIMAL(10, 8),
     longitude      DECIMAL(11, 8),
@@ -373,6 +375,12 @@ CREATE TABLE orders (
     payment_mode     payment_mode,
     payment_status   payment_status NOT NULL DEFAULT 'pending',
     delivery_address TEXT,
+    delivery_address_id BIGINT REFERENCES user_addresses(id) ON DELETE SET NULL,
+    recipient_name_snapshot TEXT,
+    recipient_phone_snapshot TEXT,
+    full_address_snapshot TEXT,
+    latitude_snapshot DECIMAL(10, 8),
+    longitude_snapshot DECIMAL(11, 8),
     note             TEXT,
     created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at       TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -385,6 +393,10 @@ CREATE TABLE order_items (
     variant_id BIGINT REFERENCES menu_variants(id),
     quantity   INT NOT NULL DEFAULT 1 CHECK (quantity > 0),
     unit_price DECIMAL(12, 2) NOT NULL,
+    item_name_snapshot TEXT,
+    item_image_snapshot TEXT,
+    option_label TEXT,
+    note TEXT,
     subtotal   DECIMAL(12, 2) GENERATED ALWAYS AS (quantity * unit_price) STORED
 );
 

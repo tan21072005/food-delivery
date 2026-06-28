@@ -85,13 +85,17 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+REVOKE ALL ON FUNCTION checkout_cart(BIGINT, TEXT) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION checkout_cart(BIGINT, TEXT) TO authenticated;
+
 
 -- Function 2: checkout_cart()
 -- Gom dữ liệu giỏ hàng thành Đơn hàng (Order) và Xóa giỏ hàng
-CREATE OR REPLACE FUNCTION checkout_cart(p_delivery_address TEXT, p_note TEXT)
+CREATE OR REPLACE FUNCTION checkout_cart(p_delivery_address_id BIGINT, p_note TEXT)
 RETURNS BIGINT[] AS $$
 DECLARE
   v_user_id BIGINT;
+  v_delivery_address user_addresses%ROWTYPE;
   v_restaurant_id BIGINT;
   v_order_id BIGINT;
   v_subtotal DECIMAL(12,2);
@@ -104,6 +108,16 @@ BEGIN
   SELECT id INTO v_user_id FROM users WHERE auth_uid = auth.uid();
   IF v_user_id IS NULL THEN
      RAISE EXCEPTION 'User not found';
+  END IF;
+
+  SELECT * INTO v_delivery_address
+  FROM user_addresses ua
+  WHERE ua.id = p_delivery_address_id
+    AND ua.user_id = v_user_id
+    AND ua.deleted_at IS NULL;
+
+  IF v_delivery_address.id IS NULL THEN
+     RAISE EXCEPTION 'DeliveryAddress not found';
   END IF;
 
   -- 2. Lặp qua từng nhà hàng có trong giỏ hàng
@@ -125,16 +139,49 @@ BEGIN
 
       -- Tạo Order mới cho nhà hàng này
       INSERT INTO orders (
-        user_id, restaurant_id, status, total_amount, delivery_fee, net_amount, delivery_address, note
+        user_id,
+        restaurant_id,
+        status,
+        total_amount,
+        delivery_fee,
+        net_amount,
+        delivery_address,
+        delivery_address_id,
+        recipient_name_snapshot,
+        recipient_phone_snapshot,
+        full_address_snapshot,
+        latitude_snapshot,
+        longitude_snapshot,
+        note
       ) VALUES (
-        v_user_id, v_restaurant_id, 'pending', v_subtotal, v_delivery_fee, v_net_total, p_delivery_address, p_note
+        v_user_id,
+        v_restaurant_id,
+        'pending',
+        v_subtotal,
+        v_delivery_fee,
+        v_net_total,
+        v_delivery_address.address_detail,
+        v_delivery_address.id,
+        v_delivery_address.recipient_name,
+        v_delivery_address.recipient_phone,
+        v_delivery_address.address_detail,
+        v_delivery_address.latitude,
+        v_delivery_address.longitude,
+        p_note
       ) RETURNING id INTO v_order_id;
 
       v_order_ids := array_append(v_order_ids, v_order_id);
 
       -- Chuyển Item từ Cart sang Order Items
-      INSERT INTO order_items (order_id, menu_id, quantity, unit_price)
-      SELECT v_order_id, c.menu_id, c.quantity, m.price
+      INSERT INTO order_items (
+        order_id,
+        menu_id,
+        quantity,
+        unit_price,
+        item_name_snapshot,
+        item_image_snapshot
+      )
+      SELECT v_order_id, c.menu_id, c.quantity, m.price, m.item_name, m.image_url
       FROM carts c
       JOIN menus m ON c.menu_id = m.id
       WHERE c.user_id = v_user_id AND m.restaurant_id = v_restaurant_id;
