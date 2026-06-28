@@ -253,6 +253,17 @@ public class BugRegressionTest {
     }
 
     @Test
+    public void setDefaultDeliveryAddressRpcResolvesCustomerFromAuthUid() throws Exception {
+        String rpc = readFile(projectPath("../docs/rpc_cart_order.sql"));
+        assertTrue(rpc.contains("set_default_delivery_address(p_delivery_address_id BIGINT)"));
+        assertTrue(rpc.contains("WHERE auth_uid = auth.uid()"));
+        assertTrue(rpc.contains("ua.user_id = v_user_id"));
+        assertTrue(rpc.contains("SET is_default = FALSE"));
+        assertTrue(rpc.contains("SET is_default = TRUE"));
+        assertTrue(rpc.contains("GRANT EXECUTE ON FUNCTION set_default_delivery_address(BIGINT) TO authenticated"));
+    }
+
+    @Test
     public void checkoutRequestSendsDeliveryAddressIdNotFreeTextAddress() throws Exception {
         CheckoutRequest request = new CheckoutRequest(42L, "call before delivery");
         assertEquals(Long.valueOf(42L), request.getDeliveryAddressId());

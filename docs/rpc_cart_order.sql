@@ -29,6 +29,49 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 REVOKE ALL ON FUNCTION public.add_to_cart(BIGINT, INT) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.add_to_cart(BIGINT, INT) TO authenticated;
 
+-- Function 1a: set_default_delivery_address()
+-- Doi DeliveryAddress mac dinh dua tren JWT hien tai, khong tin user_id tu Android.
+CREATE OR REPLACE FUNCTION set_default_delivery_address(p_delivery_address_id BIGINT)
+RETURNS VOID AS $$
+DECLARE
+  v_user_id BIGINT;
+BEGIN
+  SELECT id INTO v_user_id
+  FROM users
+  WHERE auth_uid = auth.uid();
+
+  IF v_user_id IS NULL THEN
+     RAISE EXCEPTION 'User not found';
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1
+    FROM user_addresses ua
+    WHERE ua.id = p_delivery_address_id
+      AND ua.user_id = v_user_id
+      AND ua.deleted_at IS NULL
+  ) THEN
+     RAISE EXCEPTION 'DeliveryAddress not found';
+  END IF;
+
+  UPDATE user_addresses
+  SET is_default = FALSE,
+      updated_at = NOW()
+  WHERE user_id = v_user_id
+    AND deleted_at IS NULL;
+
+  UPDATE user_addresses
+  SET is_default = TRUE,
+      updated_at = NOW()
+  WHERE id = p_delivery_address_id
+    AND user_id = v_user_id
+    AND deleted_at IS NULL;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+REVOKE ALL ON FUNCTION set_default_delivery_address(BIGINT) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION set_default_delivery_address(BIGINT) TO authenticated;
+
 -- Function 1: get_cart_summary()
 -- Trả về danh sách giỏ hàng kèm tính toán tổng tiền
 CREATE OR REPLACE FUNCTION get_cart_summary()
