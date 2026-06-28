@@ -49,6 +49,9 @@ public class LoginFragment extends Fragment {
 
         navController = Navigation.findNavController(view);
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        new ViewModelProvider(requireActivity())
+                .get(PasswordRecoveryViewModel.class)
+                .restart();
 
         btnLogin      = view.findViewById(R.id.btnLogin);
         edUsername    = view.findViewById(R.id.edUsername);

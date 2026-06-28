@@ -29,6 +29,7 @@ public class PasswordFormFragment extends Fragment {
     private String currentMode = MODE_CHANGE;
     private EditText oldPassword, newPassword, confirmPassword;
     private Button submit;
+    private ImageView toggleNew, toggleConfirm;
     private PasswordRecoveryViewModel recoveryViewModel;
 
     @Nullable @Override
@@ -45,6 +46,8 @@ public class PasswordFormFragment extends Fragment {
         newPassword = view.findViewById(R.id.edNewPassword);
         confirmPassword = view.findViewById(R.id.edConfirmPassword);
         submit = view.findViewById(R.id.btnSubmitPassword);
+        toggleNew = view.findViewById(R.id.ivToggleNew);
+        toggleConfirm = view.findViewById(R.id.ivToggleConfirm);
         if (MODE_CREATE.equals(currentMode)) {
             title.setText(R.string.title_create_password); oldLayout.setVisibility(View.GONE);
         } else if (MODE_CHANGE.equals(currentMode)) {
@@ -61,8 +64,8 @@ public class PasswordFormFragment extends Fragment {
             }
             observeRecovery(view);
         }
-        setupToggle(view.findViewById(R.id.ivToggleNew), newPassword);
-        setupToggle(view.findViewById(R.id.ivToggleConfirm), confirmPassword);
+        setupToggle(toggleNew, newPassword);
+        setupToggle(toggleConfirm, confirmPassword);
         submit.setOnClickListener(v -> handleSubmit(view));
     }
 
@@ -70,6 +73,7 @@ public class PasswordFormFragment extends Fragment {
         recoveryViewModel.getLoading().observe(getViewLifecycleOwner(), loading -> {
             boolean enabled = !Boolean.TRUE.equals(loading);
             newPassword.setEnabled(enabled); confirmPassword.setEnabled(enabled); submit.setEnabled(enabled);
+            toggleNew.setEnabled(enabled); toggleConfirm.setEnabled(enabled);
         });
         recoveryViewModel.getEvents().observe(getViewLifecycleOwner(), source -> {
             RecoveryEvent event = source == null ? null : source.consume();
@@ -77,6 +81,10 @@ public class PasswordFormFragment extends Fragment {
             if (event.type() == RecoveryEvent.Type.PASSWORD_UPDATED) {
                 Toast.makeText(requireContext(), R.string.msg_change_password_success, Toast.LENGTH_SHORT).show();
                 Navigation.findNavController(view).navigate(R.id.action_reset_to_login);
+            } else if (event.type() == RecoveryEvent.Type.RECOVERY_EXPIRED) {
+                Toast.makeText(requireContext(), event.message(), Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(view)
+                        .popBackStack(R.id.forgetPassFragment, false);
             } else if (event.type() == RecoveryEvent.Type.ERROR) {
                 Toast.makeText(requireContext(), event.message(), Toast.LENGTH_SHORT).show();
             }

@@ -5,8 +5,13 @@ import androidx.annotation.NonNull;
 import com.example.fooddelivery.data.remote.PasswordRecoveryApiClient;
 import com.example.fooddelivery.data.remote.apis.PasswordRecoveryApiService;
 import com.example.fooddelivery.data.remote.request.PasswordRecoveryRequests;
+import com.example.fooddelivery.data.remote.response.AuthError;
 import com.example.fooddelivery.data.remote.response.AuthResponse;
 import com.example.fooddelivery.utils.Constants;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -58,7 +63,7 @@ public class PasswordRecoveryRepository {
                         if (response.isSuccessful()) {
                             callback.onSuccess(null);
                         } else {
-                            callback.onError(mapError(response.code(), false));
+                            callback.onError(mapError(response, false));
                         }
                     }
 
@@ -84,7 +89,7 @@ public class PasswordRecoveryRepository {
                                     response.code(),
                                     "Không nhận được phiên khôi phục. Vui lòng thử lại"));
                         } else {
-                            callback.onError(mapError(response.code(), true));
+                            callback.onError(mapError(response, true));
                         }
                     }
 
@@ -108,7 +113,7 @@ public class PasswordRecoveryRepository {
                         if (response.isSuccessful()) {
                             callback.onSuccess(null);
                         } else {
-                            callback.onError(mapError(response.code(), false));
+                            callback.onError(mapError(response, false));
                         }
                     }
 
@@ -139,6 +144,36 @@ public class PasswordRecoveryRepository {
         }
         return new RecoveryError(statusCode,
                 "Không thể xử lý yêu cầu. Vui lòng thử lại");
+    }
+
+    private RecoveryError mapError(Response<?> response, boolean otpOperation) {
+        AuthError authError = parseError(response);
+        if (otpOperation && isKnownOtpError(authError)) {
+            return new RecoveryError(response.code(),
+                    "Mã xác minh không đúng hoặc đã hết hạn");
+        }
+        return mapError(response.code(), otpOperation);
+    }
+
+    private AuthError parseError(Response<?> response) {
+        if (response.errorBody() == null) return null;
+        try {
+            return new Gson().fromJson(response.errorBody().string(), AuthError.class);
+        } catch (IOException | RuntimeException ignored) {
+            return null;
+        }
+    }
+
+    private boolean isKnownOtpError(AuthError error) {
+        if (error == null) return false;
+        String details = ((error.code == null ? "" : error.code) + " "
+                + (error.errorDescription == null ? "" : error.errorDescription) + " "
+                + (error.msg == null ? "" : error.msg) + " "
+                + (error.message == null ? "" : error.message)).toLowerCase(Locale.ROOT);
+        return details.contains("otp_expired")
+                || details.contains("token has expired")
+                || details.contains("invalid token")
+                || details.contains("otp is invalid");
     }
 
     private RecoveryError networkError() {

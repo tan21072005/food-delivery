@@ -127,6 +127,29 @@ public class PasswordRecoveryRepositoryTest {
         assertNotNull(callback.error.get());
     }
 
+    @Test
+    public void parsesKnownSupabaseOtpErrorsAndHidesUnknownDetails() throws Exception {
+        server.enqueue(new MockResponse()
+                .setResponseCode(422)
+                .setHeader("Content-Type", "application/json")
+                .setBody("{\"code\":\"otp_expired\",\"msg\":\"Token has expired\"}"));
+        AwaitingCallback<String> expired = new AwaitingCallback<>();
+        repository.verifyOtp("user@example.com", "123456", expired);
+        expired.await();
+        assertEquals("Mã xác minh không đúng hoặc đã hết hạn",
+                expired.error.get().userMessage());
+
+        server.enqueue(new MockResponse()
+                .setResponseCode(422)
+                .setHeader("Content-Type", "application/json")
+                .setBody("{\"message\":\"sensitive internal server detail\"}"));
+        AwaitingCallback<Void> unknown = new AwaitingCallback<>();
+        repository.sendCode("user@example.com", unknown);
+        unknown.await();
+        assertEquals("Không thể xử lý yêu cầu. Vui lòng thử lại",
+                unknown.error.get().userMessage());
+    }
+
     private static final class AwaitingCallback<T>
             implements PasswordRecoveryRepository.ResultCallback<T> {
         private final CountDownLatch latch = new CountDownLatch(1);

@@ -20,6 +20,7 @@ import com.example.fooddelivery.R;
 
 public class VerifyOtpFragment extends Fragment {
     private CountDownTimer timer;
+    private boolean requestLoading;
 
     @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -42,8 +43,10 @@ public class VerifyOtpFragment extends Fragment {
 
         vm.getLoading().observe(getViewLifecycleOwner(), loading -> {
             boolean enabled = !Boolean.TRUE.equals(loading);
+            requestLoading = !enabled;
             otpInput.setEnabled(enabled);
             submit.setEnabled(enabled);
+            resend.setEnabled(enabled && vm.getResendSecondsRemaining() == 0);
         });
         vm.getEvents().observe(getViewLifecycleOwner(), source -> {
             RecoveryEvent event = source == null ? null : source.consume();
@@ -55,6 +58,9 @@ public class VerifyOtpFragment extends Fragment {
                 startCooldown(resend, vm);
             } else if (event.type() == RecoveryEvent.Type.ERROR) {
                 Toast.makeText(requireContext(), event.message(), Toast.LENGTH_SHORT).show();
+                if (vm.getResendSecondsRemaining() > 0) {
+                    startCooldown(resend, vm);
+                }
             }
         });
         submit.setOnClickListener(v -> {
@@ -82,12 +88,12 @@ public class VerifyOtpFragment extends Fragment {
         timer = new CountDownTimer(Math.max(1, vm.getResendSecondsRemaining()) * 1000, 1000) {
             @Override public void onTick(long ignored) {
                 long remaining = vm.getResendSecondsRemaining();
-                resend.setEnabled(remaining == 0);
+                resend.setEnabled(!requestLoading && remaining == 0);
                 resend.setText(remaining == 0 ? getString(R.string.btn_resend_otp)
                         : getString(R.string.btn_resend_otp_countdown, remaining));
             }
             @Override public void onFinish() {
-                resend.setEnabled(true);
+                resend.setEnabled(!requestLoading);
                 resend.setText(R.string.btn_resend_otp);
             }
         }.start();
