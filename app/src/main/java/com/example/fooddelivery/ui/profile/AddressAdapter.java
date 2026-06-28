@@ -11,21 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.data.model.AddressItem;
+import com.example.fooddelivery.data.model.DeliveryAddress;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
 
     private final Context context;
-    private final List<AddressItem> items = new ArrayList<>();
-    
-    public interface OnAddressClickListener {
-        void onClick(AddressItem item);
-    }
-    
+    private final List<DeliveryAddress> items = new ArrayList<>();
     private OnAddressClickListener listener;
+    private OnAddressActionListener editListener;
 
     public AddressAdapter(Context context) {
         this.context = context;
@@ -35,45 +32,45 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
         this.listener = listener;
     }
 
-    public void submitList(List<AddressItem> newItems) {
+    public void setEditListener(OnAddressActionListener editListener) {
+        this.editListener = editListener;
+    }
+
+    public void submitList(List<DeliveryAddress> newItems) {
         items.clear();
-        if (newItems != null) {
-            items.addAll(newItems);
-        }
+        if (newItems != null) items.addAll(newItems);
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_address, parent, false);
-        return new VH(v);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_address, parent, false);
+        return new VH(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        AddressItem item = items.get(position);
-        holder.tvAddressLabel.setText(item.getLabel());
-        holder.tvAddressDetail.setText(item.getDetail());
-        holder.tvUserInfo.setText(item.getUserInfo());
+        DeliveryAddress item = items.get(position);
+        holder.tvAddressLabel.setText(item.getDisplayLabel());
+        holder.tvAddressDetail.setText(item.getFullAddress());
+        holder.tvUserInfo.setText(item.getRecipientLine());
+        holder.tvDefaultTag.setVisibility(item.isDefault() ? View.VISIBLE : View.GONE);
 
-        if (item.isDefault()) {
-            holder.tvDefaultTag.setVisibility(View.VISIBLE);
-        } else {
-            holder.tvDefaultTag.setVisibility(View.GONE);
-        }
-        
-        // Change icon depending on label (Home/Work/etc)
-        if (item.getLabel().toLowerCase().contains("nhà")) {
+        String type = item.getType() == null ? "" : item.getType().toLowerCase(Locale.ROOT);
+        if (type.contains("nha")) {
             holder.imgAddressType.setImageResource(R.drawable.ic_home);
-        } else if (item.getLabel().toLowerCase().contains("công ty")) {
+        } else if (type.contains("cong")) {
             holder.imgAddressType.setImageResource(R.drawable.ic_work);
         } else {
             holder.imgAddressType.setImageResource(R.drawable.ic_location_on);
         }
-        
+
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onClick(item);
+        });
+        holder.btnEditAddress.setOnClickListener(v -> {
+            if (editListener != null) editListener.onAction(item);
         });
     }
 
@@ -82,17 +79,30 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
         return items.size();
     }
 
+    public interface OnAddressClickListener {
+        void onClick(DeliveryAddress item);
+    }
+
+    public interface OnAddressActionListener {
+        void onAction(DeliveryAddress item);
+    }
+
     static class VH extends RecyclerView.ViewHolder {
         ImageView imgAddressType;
-        TextView tvAddressLabel, tvDefaultTag, tvAddressDetail, tvUserInfo;
+        ImageView btnEditAddress;
+        TextView tvAddressLabel;
+        TextView tvDefaultTag;
+        TextView tvAddressDetail;
+        TextView tvUserInfo;
 
-        VH(@NonNull View v) {
-            super(v);
-            imgAddressType = v.findViewById(R.id.imgAddressType);
-            tvAddressLabel = v.findViewById(R.id.tvAddressLabel);
-            tvDefaultTag = v.findViewById(R.id.tvDefaultTag);
-            tvAddressDetail = v.findViewById(R.id.tvAddressDetail);
-            tvUserInfo = v.findViewById(R.id.tvUserInfo);
+        VH(@NonNull View view) {
+            super(view);
+            imgAddressType = view.findViewById(R.id.imgAddressType);
+            btnEditAddress = view.findViewById(R.id.btnEditAddress);
+            tvAddressLabel = view.findViewById(R.id.tvAddressLabel);
+            tvDefaultTag = view.findViewById(R.id.tvDefaultTag);
+            tvAddressDetail = view.findViewById(R.id.tvAddressDetail);
+            tvUserInfo = view.findViewById(R.id.tvUserInfo);
         }
     }
 }

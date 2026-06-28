@@ -8,7 +8,6 @@
     android:fitsSystemWindows="true"
     android:background="#F8F8F8">
 
-    <!-- AppBar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -25,7 +24,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Chọn địa chỉ giao hàng"
+                android:text="Dia chi giao hang"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"
@@ -33,13 +32,13 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Search Box -->
     <LinearLayout
         android:id="@+id/llSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/appBarLayout"
         android:background="@color/white"
+        android:orientation="vertical"
         android:padding="16dp">
 
         <LinearLayout
@@ -57,18 +56,18 @@
                 app:tint="#888888"/>
 
             <EditText
-                android:layout_width="match_parent"
+                android:id="@+id/etSearchAddress"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-                android:hint="Địa chỉ nhận hàng"
-                android:background="@null"
-                android:textSize="14sp"
+                android:layout_weight="1"
                 android:layout_marginStart="8dp"
-                android:singleLine="true"/>
+                android:background="@null"
+                android:hint="Tim dia chi"
+                android:singleLine="true"
+                android:textSize="14sp"/>
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Use Current Location -->
     <LinearLayout
         android:id="@+id/llCurrentLocation"
         android:layout_width="match_parent"
@@ -79,21 +78,38 @@
         android:paddingBottom="16dp"
         android:orientation="horizontal"
         android:gravity="center_vertical">
-        
+
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_location_on"
             app:tint="#F5A623"/>
-            
-        <TextView
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Sử dụng vị trí hiện tại"
-            android:textSize="15sp"
-            android:textColor="#F5A623"
-            android:textStyle="bold"
-            android:layout_marginStart="12dp"/>
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dang chon"
+                android:textSize="12sp"
+                android:textColor="#888888"/>
+
+            <TextView
+                android:id="@+id/tvCurrentAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chua co dia chi dang chon"
+                android:textSize="15sp"
+                android:textColor="#1A1A1A"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"/>
+        </LinearLayout>
     </LinearLayout>
 
     <View
@@ -108,7 +124,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/divider"
-        android:text="Địa chỉ đã lưu"
+        android:text="Dia chi da luu"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="#1A1A1A"
@@ -116,19 +132,63 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"/>
 
-    <!-- Address List -->
+    <TextView
+        android:id="@+id/tvEmptyState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvSavedAddressesLabel"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Ban chua co dia chi da luu. Them dia chi de giao hang nhanh hon."
+        android:textColor="#666666"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/llEmptyShortcuts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvEmptyState"
+        android:layout_margin="16dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddHomeAddress"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Them dia chi Nha"
+            android:textColor="#1A1A1A"
+            android:textSize="13sp"
+            app:backgroundTint="#FFF8E1"
+            app:cornerRadius="8dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddWorkAddress"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:text="Them dia chi Cong ty"
+            android:textColor="#1A1A1A"
+            android:textSize="13sp"
+            app:backgroundTint="#FFF8E1"
+            app:cornerRadius="8dp"/>
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAddresses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+        android:fitsSystemWindows="true"
         android:layout_below="@id/tvSavedAddressesLabel"
         android:layout_above="@id/bottomBar"
         android:clipToPadding="false"
         android:paddingBottom="16dp"
         tools:listitem="@layout/item_address"/>
 
-    <!-- Add New Address Button -->
     <LinearLayout
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
@@ -142,12 +202,11 @@
             android:id="@+id/btnAddAddress"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:text="+ Thêm địa chỉ mới"
+            android:text="Them dia chi moi"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#1A1A1A"
             app:backgroundTint="#FFCA28"
             app:cornerRadius="8dp" />
     </LinearLayout>
-
 </RelativeLayout>

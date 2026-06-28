@@ -1,9 +1,14 @@
 package com.example.fooddelivery.ui.profile;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,14 +20,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.data.model.AddressItem;
+import com.example.fooddelivery.data.local.SharedPreferencesDeliveryAddressStore;
+import com.example.fooddelivery.data.model.DeliveryAddress;
+import com.example.fooddelivery.data.repository.DeliveryAddressRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class AddressListFragment extends Fragment {
 
     private AddressAdapter adapter;
+    private DeliveryAddressRepository repository;
+    private RecyclerView rvAddresses;
+    private TextView tvEmptyState;
+    private TextView tvCurrentAddress;
+    private LinearLayout llEmptyShortcuts;
+    private String source = "profile";
+    private final List<DeliveryAddress> allAddresses = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,36 +47,92 @@ public class AddressListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        repository = new DeliveryAddressRepository(new SharedPreferencesDeliveryAddressStore(requireContext()));
+        if (getArguments() != null) {
+            source = getArguments().getString("source", "profile");
+        }
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(v -> {
-            Navigation.findNavController(v).navigateUp();
-        });
+        toolbar.setNavigationOnClickListener(v -> Navigation.findNavController(v).navigateUp());
 
-        RecyclerView rvAddresses = view.findViewById(R.id.rvAddresses);
+        rvAddresses = view.findViewById(R.id.rvAddresses);
+        tvEmptyState = view.findViewById(R.id.tvEmptyState);
+        tvCurrentAddress = view.findViewById(R.id.tvCurrentAddress);
+        llEmptyShortcuts = view.findViewById(R.id.llEmptyShortcuts);
+        EditText etSearchAddress = view.findViewById(R.id.etSearchAddress);
+
         rvAddresses.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new AddressAdapter(requireContext());
         rvAddresses.setAdapter(adapter);
 
-        // Dummy data
-        List<AddressItem> dummyList = new ArrayList<>();
-        dummyList.add(new AddressItem("1", "Nhà", "Phòng 605, Tòa nhà HH1A, Linh Đàm, Hoàng Mai, Hà Nội", "Nguyễn Văn A - 0901234567", true));
-        dummyList.add(new AddressItem("2", "Công ty", "Tầng 3, Tòa nhà ABC, 123 Đường XYZ, Quận 1, TP.HCM", "Nguyễn Văn A - 0901234567", false));
-        adapter.submitList(dummyList);
-
         adapter.setListener(item -> {
-            Toast.makeText(requireContext(), "Đã chọn: " + item.getLabel(), Toast.LENGTH_SHORT).show();
-            // TODO: Select address and go back
+            if ("home".equals(source)) {
+                repository.select(item.getId());
+                Navigation.findNavController(requireView()).popBackStack(R.id.homeFragment, false);
+            } else {
+                openForm(item.getId(), null);
+            }
+        });
+        adapter.setEditListener(item -> openForm(item.getId(), null));
+
+        etSearchAddress.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                renderList(s == null ? "" : s.toString());
+            }
+            @Override public void afterTextChanged(Editable s) {}
         });
 
-        View btnAddAddress = view.findViewById(R.id.btnAddAddress);
-        btnAddAddress.setOnClickListener(v -> {
-            Toast.makeText(requireContext(), "Tính năng thêm địa chỉ đang được cập nhật", Toast.LENGTH_SHORT).show();
+        view.findViewById(R.id.btnAddAddress).setOnClickListener(v -> openForm(null, null));
+        view.findViewById(R.id.btnAddHomeAddress).setOnClickListener(v -> openForm(null, "Nha"));
+        view.findViewById(R.id.btnAddWorkAddress).setOnClickListener(v -> openForm(null, "Cong ty"));
+        view.findViewById(R.id.llCurrentLocation).setOnClickListener(v -> {
+            DeliveryAddress current = repository.getCurrentAddress();
+            if (current != null) {
+                repository.select(current.getId());
+                Toast.makeText(requireContext(), "Da chon dia chi hien tai", Toast.LENGTH_SHORT).show();
+            }
         });
-        
-        View llCurrentLocation = view.findViewById(R.id.llCurrentLocation);
-        llCurrentLocation.setOnClickListener(v -> {
-            Toast.makeText(requireContext(), "Đang lấy vị trí hiện tại...", Toast.LENGTH_SHORT).show();
-        });
+
+        refresh();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (repository != null) refresh();
+    }
+
+    private void refresh() {
+        allAddresses.clear();
+        allAddresses.addAll(repository.list());
+        DeliveryAddress current = repository.getCurrentAddress();
+        tvCurrentAddress.setText(current == null
+                ? "Chua co dia chi dang chon"
+                : current.getDisplayLabel() + ": " + current.getFullAddress());
+        renderList("");
+    }
+
+    private void renderList(String query) {
+        String normalized = query == null ? "" : query.toLowerCase(Locale.ROOT).trim();
+        List<DeliveryAddress> filtered = new ArrayList<>();
+        for (DeliveryAddress address : allAddresses) {
+            String haystack = (address.getDisplayLabel() + " " + address.getFullAddress() + " " + address.getRecipientLine())
+                    .toLowerCase(Locale.ROOT);
+            if (normalized.isEmpty() || haystack.contains(normalized)) filtered.add(address);
+        }
+        adapter.submitList(filtered);
+        boolean empty = allAddresses.isEmpty();
+        tvEmptyState.setVisibility(empty ? View.VISIBLE : View.GONE);
+        llEmptyShortcuts.setVisibility(empty ? View.VISIBLE : View.GONE);
+        rvAddresses.setVisibility(empty ? View.GONE : View.VISIBLE);
+    }
+
+    private void openForm(@Nullable String addressId, @Nullable String type) {
+        Bundle args = new Bundle();
+        args.putString("source", source);
+        if (addressId != null) args.putString("addressId", addressId);
+        if (type != null) args.putString("prefillType", type);
+        Navigation.findNavController(requireView()).navigate(R.id.action_addressList_to_deliveryAddressForm, args);
     }
 }

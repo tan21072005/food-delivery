@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:background="#F8F8F8">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:elevation="2dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_arrow_back">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Them dia chi moi"
+                android:textColor="#1A1A1A"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <EditText
+                android:id="@+id/etRecipientName"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@drawable/bg_rounded_white"
+                android:hint="Ten nguoi nhan"
+                android:inputType="textPersonName"
+                android:paddingHorizontal="14dp"
+                android:textSize="15sp"/>
+
+            <EditText
+                android:id="@+id/etRecipientPhone"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_rounded_white"
+                android:hint="So dien thoai nguoi nhan"
+                android:inputType="phone"
+                android:paddingHorizontal="14dp"
+                android:textSize="15sp"/>
+
+            <EditText
+                android:id="@+id/etFullAddress"
+                android:layout_width="match_parent"
+                android:layout_height="84dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_rounded_white"
+                android:gravity="top"
+                android:hint="Dia chi bat buoc"
+                android:inputType="textMultiLine"
+                android:minLines="2"
+                android:padding="14dp"
+                android:textSize="15sp"/>
+
+            <EditText
+                android:id="@+id/etBuildingFloor"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_rounded_white"
+                android:hint="Toa nha / tang (tuy chon)"
+                android:paddingHorizontal="14dp"
+                android:textSize="15sp"/>
+
+            <EditText
+                android:id="@+id/etGate"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_rounded_white"
+                android:hint="Cong vao (tuy chon)"
+                android:paddingHorizontal="14dp"
+                android:textSize="15sp"/>
+
+            <RadioGroup
+                android:id="@+id/rgAddressType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbHome"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Nha"/>
+
+                <RadioButton
+                    android:id="@+id/rbWork"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Cong ty"/>
+
+                <RadioButton
+                    android:id="@+id/rbOther"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Khac"/>
+            </RadioGroup>
+
+            <EditText
+                android:id="@+id/etCustomName"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_rounded_white"
+                android:hint="Ten dia chi"
+                android:paddingHorizontal="14dp"
+                android:textSize="15sp"
+                android:visibility="gone"/>
+
+            <EditText
+                android:id="@+id/etDriverNote"
+                android:layout_width="match_parent"
+                android:layout_height="84dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_rounded_white"
+                android:gravity="top"
+                android:hint="Ghi chu cho tai xe (tuy chon)"
+                android:inputType="textMultiLine"
+                android:minLines="2"
+                android:padding="14dp"
+                android:textSize="15sp"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="8dp"
+        android:padding="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSaveAddress"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:enabled="false"
+            android:text="Luu dia chi"
+            android:textColor="#1A1A1A"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="#FFCA28"
+            app:cornerRadius="8dp"/>
+    </LinearLayout>
+</LinearLayout>

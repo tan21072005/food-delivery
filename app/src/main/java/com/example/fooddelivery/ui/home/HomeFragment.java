@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.fooddelivery.R;
+import com.example.fooddelivery.data.local.SharedPreferencesDeliveryAddressStore;
 
 // tsao thÃªm má»—i .databinding lÃ  ko cÃ³ lá»—i nhá»‰ ???
 //.databinding â†’ sub-package do Android tá»± táº¡o
@@ -28,7 +29,9 @@ import com.example.fooddelivery.databinding.HomeFragmentBinding;
 
 
 import com.example.fooddelivery.data.model.FoodItem;
+import com.example.fooddelivery.data.model.DeliveryAddress;
 import com.example.fooddelivery.data.local.prefs.SessionManager;
+import com.example.fooddelivery.data.repository.DeliveryAddressRepository;
 import com.example.fooddelivery.ui.cart.Checkout;
 import com.example.fooddelivery.ui.home.HomeViewModel;
 import com.example.fooddelivery.ui.home.adapters.BannerAdapter;
@@ -44,6 +47,7 @@ public class HomeFragment extends Fragment {
     private HomeFragmentBinding binding;
     private HomeViewModel       viewModel;
     private SessionManager      session;
+    private DeliveryAddressRepository deliveryAddressRepository;
 
     // Adapters
     private BannerAdapter        bannerAdapter;
@@ -77,6 +81,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         session   = new SessionManager(requireContext());
+        deliveryAddressRepository = new DeliveryAddressRepository(new SharedPreferencesDeliveryAddressStore(requireContext()));
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         setupBannerSlider();
@@ -85,6 +90,7 @@ public class HomeFragment extends Fragment {
         setupAllFoods();
         observeViewModel();
 //        setupListeners();
+        setupDeliveryAddressEntry();
 
         View menuRow = binding.getRoot().findViewById(R.id.layoutMenuRow);
         if (menuRow != null) {
@@ -109,6 +115,21 @@ public class HomeFragment extends Fragment {
     // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Banner Slider + Auto-slide má»—i 3 giÃ¢y + Dot indicator
     // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    private void setupDeliveryAddressEntry() {
+        binding.layoutAddress.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putString("source", "home");
+            Navigation.findNavController(requireView()).navigate(R.id.addressListFragment, args);
+        });
+        updateDeliveryAddressPill();
+    }
+
+    private void updateDeliveryAddressPill() {
+        if (binding == null || deliveryAddressRepository == null) return;
+        DeliveryAddress current = deliveryAddressRepository.getCurrentAddress();
+        binding.tvAddress.setText(current == null ? "Them dia chi giao hang" : current.getFullAddress());
+    }
+
     private void setupBannerSlider() {
         bannerAdapter = new BannerAdapter(requireContext(), bannerUrls);
         binding.viewPagerBanner.setAdapter(bannerAdapter);
@@ -366,6 +387,7 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         bannerHandler.postDelayed(bannerRunnable, SLIDE_DELAY_MS); // tiáº¿p tá»¥c khi quay láº¡i
+        updateDeliveryAddressPill();
     }
 
     @Override

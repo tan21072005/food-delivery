@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import androidx.lifecycle.ViewModelProvider;
@@ -146,6 +147,15 @@ public class ProfileFragment extends Fragment {
                         }
                 );
                 sheet.show(getChildFragmentManager(), LogoutBottomSheet.TAG);
+            });
+        }
+
+        View btnDeliveryAddressItem = view.findViewById(R.id.btnDeliveryAddressItem);
+        if (btnDeliveryAddressItem != null) {
+            btnDeliveryAddressItem.setOnClickListener(v -> {
+                Bundle args = new Bundle();
+                args.putString("source", "profile");
+                Navigation.findNavController(v).navigate(R.id.action_profile_to_addressList, args);
             });
         }
     }

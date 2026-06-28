@@ -86,6 +86,7 @@
 
         <!-- Edit Icon -->
         <ImageView
+            android:id="@+id/btnEditAddress"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_arrow_forward"
