@@ -115,6 +115,19 @@ public class BugRegressionTest {
     }
 
     @Test
+    public void applicationUsesProjectThemeSoProfileVectorIconsAreTintedVisibly() throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        Document document = factory.newDocumentBuilder().parse(Files.newInputStream(projectPath("src/main/AndroidManifest.xml")));
+
+        org.w3c.dom.Element application = (org.w3c.dom.Element) document.getElementsByTagName("application").item(0);
+
+        assertNotNull(application);
+        assertEquals("@style/Theme.FoodDelivery",
+                application.getAttributeNS("http://schemas.android.com/apk/res/android", "theme"));
+    }
+
+    @Test
     public void mainNavigationGraphInflatesAuthBeforeGraphsThatReferenceIt() throws Exception {
         String navMain = readFile(projectPath("src/main/res/navigation/nav_main.xml"));
         int authInclude = navMain.indexOf("@navigation/nav_auth");

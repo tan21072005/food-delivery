@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import androidx.lifecycle.ViewModelProvider;
@@ -129,6 +130,13 @@ public class ProfileFragment extends Fragment {
         }
 
         // 4. Xử lý "Đăng xuất"
+        View btnAccount = view.findViewById(R.id.btnAccount);
+        if (btnAccount != null) {
+            btnAccount.setOnClickListener(v ->
+                    NavHostFragment.findNavController(this).navigate(R.id.action_profile_to_accountMenu)
+            );
+        }
+
         View btnLogoutItem = view.findViewById(R.id.btnLogoutItem);
         if (btnLogoutItem != null) {
             btnLogoutItem.setOnClickListener(v -> {

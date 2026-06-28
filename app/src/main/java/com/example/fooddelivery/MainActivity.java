@@ -31,7 +31,9 @@ public class MainActivity extends AppCompatActivity {
         // Ẩn bottom nav ở màn hình login
         navController.addOnDestinationChangedListener((controller, destination, args) -> {
             int id = destination.getId();
-            if (id == R.id.loginFragment) {
+            if (id == R.id.loginFragment
+                    || id == R.id.accountMenuFragment
+                    || id == R.id.accountInfoFragment) {
                 binding.bottomNav.setVisibility(View.GONE);
             } else {
                 binding.bottomNav.setVisibility(View.VISIBLE);
