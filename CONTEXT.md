@@ -15,7 +15,7 @@ _Avoid_: User, buyer, client, account
 _Avoid_: Shop, store, vendor, merchant, quán
 
 **DeliveryAddress**:
-Địa chỉ giao hàng đã lưu của Customer, gồm nhãn gợi nhớ ("Nhà", "Cơ quan"), địa chỉ đầy đủ, tọa độ GPS, và cờ `isDefault`. Một Customer có nhiều DeliveryAddress.
+Địa chỉ giao hàng đã lưu của Customer, gồm nhãn gợi nhớ ("Nhà", "Cơ quan"), tên người nhận, số điện thoại người nhận, địa chỉ đầy đủ, tọa độ GPS, và cờ `isDefault`. Một Customer có nhiều DeliveryAddress; Customer chọn một DeliveryAddress khi checkout.
 _Avoid_: Address, location, shipping address
 
 ### Thực đơn & Phân loại
