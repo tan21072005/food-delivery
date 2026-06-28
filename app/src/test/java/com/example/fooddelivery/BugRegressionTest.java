@@ -6,7 +6,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.example.fooddelivery.data.remote.apis.ApiService;
+import com.example.fooddelivery.data.model.CheckoutRequest;
 import com.example.fooddelivery.data.model.DeliveryAddress;
+
+import com.google.gson.annotations.SerializedName;
 
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -247,6 +250,24 @@ public class BugRegressionTest {
         assertTrue(rpc.contains("item_name_snapshot"));
         assertTrue(rpc.contains("item_image_snapshot"));
         assertFalse(rpc.contains("checkout_cart(p_delivery_address TEXT"));
+    }
+
+    @Test
+    public void checkoutRequestSendsDeliveryAddressIdNotFreeTextAddress() throws Exception {
+        CheckoutRequest request = new CheckoutRequest(42L, "call before delivery");
+        assertEquals(Long.valueOf(42L), request.getDeliveryAddressId());
+        assertEquals("call before delivery", request.getNote());
+
+        java.lang.reflect.Field idField = CheckoutRequest.class.getDeclaredField("deliveryAddressId");
+        java.lang.reflect.Field[] fields = CheckoutRequest.class.getDeclaredFields();
+        assertEquals("p_delivery_address_id", idField.getAnnotation(SerializedName.class).value());
+        for (java.lang.reflect.Field field : fields) {
+            SerializedName serializedName = field.getAnnotation(SerializedName.class);
+            if (serializedName != null) {
+                assertFalse("CheckoutRequest must not send legacy text address",
+                        "p_delivery_address".equals(serializedName.value()));
+            }
+        }
     }
 
     private Path profileLayoutPath() {

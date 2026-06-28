@@ -133,13 +133,12 @@ public class CheckoutViewModel extends AndroidViewModel {
     }
 
     public void checkout(DeliveryAddress selectedDeliveryAddress, String note) {
-        if (selectedDeliveryAddress == null) {
+        if (selectedDeliveryAddress == null || selectedDeliveryAddress.getId() == null) {
             _errorMsg.setValue("Vui lòng chọn DeliveryAddress trước khi đặt món");
             return;
         }
         _isLoading.setValue(true);
-        // Temporary adapter until checkout_cart accepts p_delivery_address_id and snapshots server-side.
-        CheckoutRequest request = new CheckoutRequest(selectedDeliveryAddress.toSingleLineDisplayText(), note);
+        CheckoutRequest request = new CheckoutRequest(selectedDeliveryAddress.getId(), note);
         orderRepository.checkoutCart(request).enqueue(new Callback<List<Long>>() {
             @Override
             public void onResponse(Call<List<Long>> call, Response<List<Long>> response) {

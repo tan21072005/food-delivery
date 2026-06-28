@@ -3,20 +3,30 @@ package com.example.fooddelivery.data.model;
 import com.google.gson.annotations.SerializedName;
 
 public class CheckoutRequest {
-    @SerializedName("p_delivery_address")
-    private String deliveryAddress;
+    @SerializedName("p_delivery_address_id")
+    private Long deliveryAddressId;
 
     @SerializedName("p_note")
     private String note;
 
-    public CheckoutRequest(String deliveryAddress, String note) {
-        this.deliveryAddress = deliveryAddress;
+    public CheckoutRequest(Long deliveryAddressId, String note) {
+        this.deliveryAddressId = deliveryAddressId;
         this.note = note;
     }
 
-    public String getDeliveryAddress() { return deliveryAddress; }
-    public void setDeliveryAddress(String deliveryAddress) { this.deliveryAddress = deliveryAddress; }
+    public Long getDeliveryAddressId() {
+        return deliveryAddressId;
+    }
 
-    public String getNote() { return note; }
-    public void setNote(String note) { this.note = note; }
+    public void setDeliveryAddressId(Long deliveryAddressId) {
+        this.deliveryAddressId = deliveryAddressId;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 }
