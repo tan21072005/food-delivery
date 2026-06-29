@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.fooddelivery.data.local.LocalCart;
 import com.example.fooddelivery.data.model.FoodItem;
 import com.example.fooddelivery.data.repository.FoodRepository;
 
@@ -43,6 +44,23 @@ public class MenuViewModel extends AndroidViewModel {
 
     public void consumeCartAddedEvent() {
         cartAddedEvent.setValue(false);
+    }
+
+    public void addToCart(int userId, long foodId, int quantity) {
+        List<FoodItem> current = foodItems.getValue();
+        if (current == null) {
+            cartMessage.setValue("Khong tim thay mon");
+            return;
+        }
+        for (FoodItem item : current) {
+            if (item.getId() == foodId) {
+                LocalCart.getInstance().add(item, quantity);
+                cartMessage.setValue("Da them vao gio hang");
+                cartAddedEvent.setValue(true);
+                return;
+            }
+        }
+        cartMessage.setValue("Khong tim thay mon");
     }
 
     public void loadFoods(String categoryIdOrSlug) {

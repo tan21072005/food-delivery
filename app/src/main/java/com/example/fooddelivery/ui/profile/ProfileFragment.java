@@ -59,7 +59,7 @@ public class ProfileFragment extends Fragment {
 
         profileViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
             if (user != null) {
-                // Cập nhật tên từ Supabase
+                // Cáº­p nháº­t tÃªn tá»« Supabase
                 String displayName = user.getFullName() != null && !user.getFullName().isEmpty()
                         ? user.getFullName()
                         : user.getUsername();
@@ -70,7 +70,7 @@ public class ProfileFragment extends Fragment {
                     tvUserName.setText(displayName);
                 }
 
-                // Cập nhật Avatar
+                // Cáº­p nháº­t Avatar
                 if (user.getAvatarUrl() != null && !user.getAvatarUrl().isEmpty()) {
                     Glide.with(ProfileFragment.this)
                             .load(user.getAvatarUrl())
@@ -94,33 +94,34 @@ public class ProfileFragment extends Fragment {
 
         profileViewModel.getUploadSuccess().observe(getViewLifecycleOwner(), success -> {
             if (success != null && success) {
-                Toast.makeText(getContext(), "Cập nhật ảnh đại diện thành công!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Cáº­p nháº­t áº£nh Ä‘áº¡i diá»‡n thÃ nh cÃ´ng!", Toast.LENGTH_SHORT).show();
             }
         });
 
         profileViewModel.loadUserInfo();
 
-        // 1. Đăng ký nhận kết quả chọn ảnh
+        // 1. ÄÄƒng kÃ½ nháº­n káº¿t quáº£ chá»n áº£nh
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         Uri imageUri = result.getData().getData();
                         if (imageUri != null) {
-                            uploadAvatar(imageUri);
+
+                            uploadAvatar(imageUri);
                         }
                     }
                 }
         );
 
-        // 2. Bắt sự kiện bấm vào nút sửa ảnh
+        // 2. Báº¯t sá»± kiá»‡n báº¥m vÃ o nÃºt sá»­a áº£nh
         btnEditProfile.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
             imagePickerLauncher.launch(intent);
         });
 
-        // 3. Xử lý "Chuyển đổi tài khoản"
+        // 3. Xá»­ lÃ½ "Chuyá»ƒn Ä‘á»•i tÃ i khoáº£n"
         View btnSwitchAccountItem = view.findViewById(R.id.btnSwitchAccountItem);
         if (btnSwitchAccountItem != null) {
             btnSwitchAccountItem.setOnClickListener(v -> {
@@ -129,14 +130,21 @@ public class ProfileFragment extends Fragment {
             });
         }
 
-        // 4. Xử lý "Đăng xuất"
+        // 4. Xá»­ lÃ½ "ÄÄƒng xuáº¥t"
+        View btnAccount = view.findViewById(R.id.btnAccount);
+        if (btnAccount != null) {
+            btnAccount.setOnClickListener(v ->
+                    Navigation.findNavController(v).navigate(R.id.action_profile_to_accountMenu)
+            );
+        }
+
         View btnLogoutItem = view.findViewById(R.id.btnLogoutItem);
         if (btnLogoutItem != null) {
             btnLogoutItem.setOnClickListener(v -> {
                 LogoutBottomSheet sheet = new LogoutBottomSheet(
                         () -> {
                             new SessionManager(requireContext()).clearSession();
-                            Toast.makeText(requireContext(), "Đã đăng xuất", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), "Da dang xuat", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(requireActivity(), AuthActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
@@ -162,10 +170,10 @@ public class ProfileFragment extends Fragment {
 
     private void uploadAvatar(Uri imageUri) {
         try {
-            // Hiển thị ảnh tạm thời
+            // Hiá»ƒn thá»‹ áº£nh táº¡m thá»i
             imgAvatar.setImageURI(imageUri);
 
-            // Đọc file thành mảng byte
+            // Äá»c file thÃ nh máº£ng byte
             InputStream inputStream = requireContext().getContentResolver().openInputStream(imageUri);
             ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
             int bufferSize = 1024;
@@ -176,7 +184,7 @@ public class ProfileFragment extends Fragment {
             }
             byte[] fileBytes = byteBuffer.toByteArray();
 
-            // Cấu hình request body chuẩn MIME type (image/jpeg hoặc image/png)
+            // Cáº¥u hÃ¬nh request body chuáº©n MIME type (image/jpeg hoáº·c image/png)
             String mimeType = requireContext().getContentResolver().getType(imageUri);
             if (mimeType == null) mimeType = "image/jpeg";
             RequestBody requestBody = RequestBody.create(MediaType.parse(mimeType), fileBytes);
@@ -186,7 +194,7 @@ public class ProfileFragment extends Fragment {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getContext(), "Lỗi đọc file!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Lá»—i Ä‘á»c file!", Toast.LENGTH_SHORT).show();
         }
     }
 }

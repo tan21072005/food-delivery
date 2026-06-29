@@ -74,9 +74,9 @@ public class MenuFragment extends Fragment {
             @Override
             public void onFoodClick(FoodItem item) {
                 Bundle args = new Bundle();
-                args.putLong("restaurant_id", item.getRestaurantId());
+                args.putLong("food_id", item.getId());
                 Navigation.findNavController(requireView())
-                        .navigate(R.id.action_menu_to_restaurantDetail, args);
+                        .navigate(R.id.action_menu_to_foodDetail, args);
             }
 
             @Override

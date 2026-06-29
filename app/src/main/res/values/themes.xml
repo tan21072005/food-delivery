@@ -119,5 +119,4 @@
         <item name="android:focusable">true</item>
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
-
 </resources>

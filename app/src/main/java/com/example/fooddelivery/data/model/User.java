@@ -25,6 +25,12 @@ public class User {
     @SerializedName("phone_number")
     private String phoneNumber;
 
+    @SerializedName(value = "birth_date", alternate = {"date_of_birth", "birthday"})
+    private String birthDate;
+
+    @SerializedName("country")
+    private String country;
+
     @SerializedName("avatar_url")
     private String avatarUrl;
 
@@ -90,6 +96,22 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getAvatarUrl() {

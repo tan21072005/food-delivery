@@ -3,14 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="#F0F4FF">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewOrders"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:clipToPadding="false" />
@@ -20,7 +18,6 @@
         android:id="@+id/layoutEmpty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="gone">

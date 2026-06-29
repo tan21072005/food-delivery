@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:minHeight="154dp" android:paddingTop="14dp"
+    android:paddingBottom="14dp" android:clickable="true" android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+    <ImageView android:id="@+id/restaurantImage" android:layout_width="128dp" android:layout_height="128dp"
+        android:scaleType="centerCrop" android:background="@drawable/favorite_card_teal"
+        android:clipToOutline="true" android:contentDescription="Ảnh nhà hàng"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+    <TextView android:id="@+id/restaurantName" android:layout_width="0dp" android:layout_height="wrap_content"
+        android:layout_marginStart="14dp" android:textColor="#343A3D" android:textSize="18sp"
+        android:textStyle="bold" android:maxLines="2" app:layout_constraintStart_toEndOf="@id/restaurantImage"
+        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/restaurantImage" />
+    <TextView android:id="@+id/restaurantMeta" android:layout_width="0dp" android:layout_height="wrap_content"
+        android:layout_marginStart="14dp" android:layout_marginTop="8dp" android:textColor="#8A9294"
+        android:textSize="15sp" app:layout_constraintStart_toEndOf="@id/restaurantImage"
+        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/restaurantName" />
+    <TextView android:id="@+id/restaurantDistance" android:layout_width="0dp" android:layout_height="wrap_content"
+        android:layout_marginStart="14dp" android:layout_marginTop="4dp" android:textColor="#8A9294"
+        android:textSize="15sp" app:layout_constraintStart_toEndOf="@id/restaurantImage"
+        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/restaurantMeta" />
+    <TextView android:id="@+id/selectionAction" android:layout_width="0dp" android:layout_height="48dp"
+        android:layout_marginStart="14dp" android:gravity="center_vertical" android:textSize="16sp"
+        android:textStyle="bold" app:layout_constraintStart_toEndOf="@id/restaurantImage"
+        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="@id/restaurantImage" />
+    <View android:layout_width="0dp" android:layout_height="1dp" android:background="#E3E6E7"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

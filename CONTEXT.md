@@ -32,10 +32,20 @@ _Avoid_: FoodCategory, category, loại món
 Loại ẩm thực phân loại Restaurant (ví dụ: "Trà sữa", "Quán ăn", "Pizza", "Sushi"). Dùng để filter/browse Restaurant. Tách biệt hoàn toàn với DishCategory.
 _Avoid_: RestaurantCategory, food type, loại quán
 
+### Yêu thích & Bộ sưu tập
+
+**FavoriteRestaurant**:
+Quan hệ thể hiện Customer đã đánh dấu yêu thích một Restaurant bằng hành động trái tim. Trạng thái này độc lập với membership của FavoriteCollection: thêm hoặc bỏ Restaurant khỏi collection không tự động thay đổi trạng thái trái tim.
+_Avoid_: FavoriteItem, favorite food, bộ sưu tập
+
+**FavoriteCollection**:
+Nhóm Restaurant do Customer đặt tên để tổ chức các Restaurant muốn lưu lại. Một FavoriteCollection có thể rỗng; một Restaurant có thể xuất hiện trong nhiều FavoriteCollection. Membership trong collection không ngụ ý Restaurant đã được đánh dấu FavoriteRestaurant.
+_Avoid_: Folder, tag, danh sách yêu thích
+
 ### Giỏ hàng & Đặt hàng
 
 **Cart**:
-Entity có ID lưu danh sách CartItem của Customer trước khi đặt hàng. Mỗi Cart thuộc về một Restaurant; Customer có thể có nhiều Cart song song cho nhiều Restaurant khác nhau. Trên UI, Cart được hiển thị cho Customer dưới nhãn "Đơn nháp". Checkout diễn ra trên một Cart cụ thể và tạo một Order cho Restaurant đó. Cart được persist để đồng bộ giữa thiết bị và hỗ trợ "đặt lại đơn cũ".
+Entity có ID lưu danh sách CartItem của Customer trước khi đặt hàng. Được persist (server/local DB) để đồng bộ giữa thiết bị và hỗ trợ "đặt lại đơn cũ".
 _Avoid_: Basket, shopping cart, giỏ
 
 **CartItem**:

@@ -83,11 +83,13 @@ public class FoodDetailFragment extends Fragment {
 //            viewModel.addToCart(session.getBearerToken(), foodId, quantity);
 //        });
         binding.btnAddToCart.setOnClickListener(v -> {
-            if (viewModel.getFoodItem().getValue() != null) {
-                com.example.fooddelivery.data.local.LocalCart.getInstance().add(
-                        viewModel.getFoodItem().getValue(), quantity);
-                Toast.makeText(requireContext(), "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+            if (!session.isLoggedIn()) {
+                Toast.makeText(requireContext(),
+                        "Vui lòng đăng nhập để thêm vào giỏ", Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(requireView()).navigate(R.id.nav_auth);
+                return;
             }
+            viewModel.addToCart(session.getUserId(), foodId, quantity);
         });
     }
 

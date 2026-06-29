@@ -1,130 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--    Graph Profile — Profile → AccountInfo → Settings → ChangePassword-->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_profile"
     app:startDestination="@id/profileFragment">
 
-        <!-- ── Trang tài khoản chính ── -->
-        <fragment
-            android:id="@+id/profileFragment"
-            android:name="com.example.fooddelivery.ui.profile.ProfileFragment" >
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.fooddelivery.ui.profile.ProfileFragment">
 
-            <!-- Profile → Thông tin tài khoản -->
-            <action
-                android:id="@+id/action_profile_to_accountInfo"
-                app:destination="@id/accountInfoFragment"/>
-<!--                app:enterAnim="@anim/slide_in_right"-->
-<!--                app:exitAnim="@anim/slide_out_left"-->
-<!--                app:popEnterAnim="@anim/slide_in_left"-->
-<!--                app:popExitAnim="@anim/slide_out_right" />-->
+        <action
+            android:id="@+id/action_profile_to_accountMenu"
+            app:destination="@id/accountMenuFragment" />
 
-            <!-- Profile → Cài đặt tài khoản -->
-<!--            <action-->
-<!--                android:id="@+id/action_profile_to_accountSettings"-->
-<!--                app:destination="@id/accountSettingsFragment"/>-->
-<!--                app:enterAnim="@anim/slide_in_right"-->
-<!--                app:exitAnim="@anim/slide_out_left"-->
-<!--                app:popEnterAnim="@anim/slide_in_left"-->
-<!--                app:popExitAnim="@anim/slide_out_right" />-->
+        <action
+            android:id="@+id/action_profile_to_login"
+            app:destination="@id/nav_auth"
+            app:popUpTo="@id/nav_main"
+            app:popUpToInclusive="true" />
 
-            <!-- Đăng xuất → Login (xóa toàn bộ back stack) -->
-            <action
-                android:id="@+id/action_profile_to_login"
-                app:destination="@id/nav_auth"
-                app:popUpTo="@id/nav_main"
-                app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_profile_to_addressList"
+            app:destination="@id/addressListFragment" />
 
-            <action
-                android:id="@+id/action_profile_to_addressList"
-                app:destination="@id/addressListFragment"/>
+    </fragment>
 
-        </fragment>
+    <fragment
+        android:id="@+id/addressListFragment"
+        android:name="com.example.fooddelivery.ui.profile.AddressListFragment"
+        android:label="Quan ly dia chi">
+        <argument
+            android:name="source"
+            android:defaultValue="profile"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_addressList_to_deliveryAddressForm"
+            app:destination="@id/deliveryAddressFormFragment" />
+    </fragment>
 
-        <fragment
-            android:id="@+id/addressListFragment"
-            android:name="com.example.fooddelivery.ui.profile.AddressListFragment"
-            android:label="Quan ly dia chi">
-            <argument
-                android:name="source"
-                android:defaultValue="profile"
-                app:argType="string"/>
-            <action
-                android:id="@+id/action_addressList_to_deliveryAddressForm"
-                app:destination="@id/deliveryAddressFormFragment"/>
-        </fragment>
+    <fragment
+        android:id="@+id/deliveryAddressFormFragment"
+        android:name="com.example.fooddelivery.ui.profile.DeliveryAddressFormFragment"
+        android:label="Them dia chi moi">
+        <argument
+            android:name="source"
+            android:defaultValue="profile"
+            app:argType="string" />
+        <argument
+            android:name="addressId"
+            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="prefillType"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
 
-        <fragment
-            android:id="@+id/deliveryAddressFormFragment"
-            android:name="com.example.fooddelivery.ui.profile.DeliveryAddressFormFragment"
-            android:label="Them dia chi moi">
-            <argument
-                android:name="source"
-                android:defaultValue="profile"
-                app:argType="string"/>
-            <argument
-                android:name="addressId"
-                android:defaultValue=""
-                app:argType="string"/>
-            <argument
-                android:name="prefillType"
-                android:defaultValue=""
-                app:argType="string"/>
-        </fragment>
+    <fragment
+        android:id="@+id/accountMenuFragment"
+        android:name="com.example.fooddelivery.ui.profile.AccountMenuFragment"
+        android:label="Tai khoan">
+        <action
+            android:id="@+id/action_accountMenu_to_accountInfo"
+            app:destination="@id/accountInfoFragment" />
+        <action
+            android:id="@+id/action_accountMenu_to_changePassword"
+            app:destination="@id/changePasswordFragment" />
+    </fragment>
 
-        <!-- ── Thông tin tài khoản (tên, sdt, email, ngày sinh) ── -->
-        <fragment
-            android:id="@+id/accountInfoFragment"
-            android:name="com.example.fooddelivery.ui.profile.ProfileFragment"
-            android:label="Thông tin tài khoản">
+    <fragment
+        android:id="@+id/accountInfoFragment"
+        android:name="com.example.fooddelivery.ui.profile.AccountInfoFragment"
+        android:label="Thong tin tai khoan" />
 
-            <!-- AccountInfo → Đổi mật khẩu -->
-            <action
-                android:id="@+id/action_accountInfo_to_changePassword"
-                app:destination="@id/changePasswordFragment"/>
-<!--                app:enterAnim="@anim/slide_in_right"-->
-<!--                app:exitAnim="@anim/slide_out_left"-->
-<!--                app:popEnterAnim="@anim/slide_in_left"-->
-<!--                app:popExitAnim="@anim/slide_out_right" />-->
-
-        </fragment>
-
-        <!-- ── Cài đặt tài khoản (menu list) ── -->
-<!--        <fragment-->
-<!--            android:id="@+id/accountSettingsFragment"-->
-<!--            android:name="com.example.fooddelivery.AccountSettingsFragment"-->
-<!--            android:label="Tài khoản">-->
-
-<!--            &lt;!&ndash; Settings → Thông tin tài khoản &ndash;&gt;-->
-<!--            <action-->
-<!--                android:id="@+id/action_settings_to_accountInfo"-->
-<!--                app:destination="@id/accountInfoFragment"/>-->
-<!--&lt;!&ndash;                app:enterAnim="@anim/slide_in_right"&ndash;&gt;-->
-<!--&lt;!&ndash;                app:exitAnim="@anim/slide_out_left"&ndash;&gt;-->
-<!--&lt;!&ndash;                app:popEnterAnim="@anim/slide_in_left"&ndash;&gt;-->
-<!--&lt;!&ndash;                app:popExitAnim="@anim/slide_out_right" />&ndash;&gt;-->
-
-<!--            &lt;!&ndash; Settings → Đổi mật khẩu &ndash;&gt;-->
-<!--            <action-->
-<!--                android:id="@+id/action_settings_to_changePassword"-->
-<!--                app:destination="@id/changePasswordFragment"/>-->
-<!--&lt;!&ndash;                app:enterAnim="@anim/slide_in_right"&ndash;&gt;-->
-<!--&lt;!&ndash;                app:exitAnim="@anim/slide_out_left"&ndash;&gt;-->
-<!--&lt;!&ndash;                app:popEnterAnim="@anim/slide_in_left"&ndash;&gt;-->
-<!--&lt;!&ndash;                app:popExitAnim="@anim/slide_out_right" />&ndash;&gt;-->
-
-<!--        </fragment>-->
-
-        <!-- ── Đổi mật khẩu ── -->
-        <fragment
-            android:id="@+id/changePasswordFragment"
-            android:name="com.example.fooddelivery.ui.auth.PasswordFormFragment"
-            android:label="Đổi mật khẩu">
-            <argument
-                android:name="MODE"
-                app:argType="string"
-                android:defaultValue="CHANGE" />
-        </fragment>
-
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.fooddelivery.ui.auth.PasswordFormFragment"
+        android:label="Doi mat khau">
+        <argument
+            android:name="MODE"
+            android:defaultValue="CHANGE"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

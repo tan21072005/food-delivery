@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -12,7 +11,6 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
         android:text="Profile"
         android:background="@color/white">
 
@@ -20,13 +18,11 @@
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
             android:background="#F3F3F3">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
                 android:orientation="vertical">
 
                 <!-- ===== HEADER / PROFILE SECTION ===== -->

@@ -24,6 +24,34 @@
             android:id="@+id/action_favorites_to_login"
             app:destination="@id/nav_auth" />
 
+        <action
+            android:id="@+id/action_favorites_to_collectionName"
+            app:destination="@id/collectionNameFragment" />
+
+        <action
+            android:id="@+id/action_favorites_to_collectionRestaurants"
+            app:destination="@id/collectionRestaurantsFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/collectionNameFragment"
+        android:name="com.example.fooddelivery.ui.favorites.CollectionNameFragment"
+        android:label="Thêm bộ sưu tập mới">
+        <action
+            android:id="@+id/action_collectionName_to_collectionRestaurants"
+            app:destination="@id/collectionRestaurantsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/collectionRestaurantsFragment"
+        android:name="com.example.fooddelivery.ui.favorites.CollectionRestaurantsFragment"
+        android:label="Thêm quán vào bộ sưu tập">
+        <argument
+            android:name="collection_id"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
     <!--
