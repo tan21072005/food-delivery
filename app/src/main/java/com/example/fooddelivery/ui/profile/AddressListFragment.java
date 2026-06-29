@@ -102,13 +102,7 @@ public class AddressListFragment extends Fragment {
         view.findViewById(R.id.btnAddAddress).setOnClickListener(v -> openForm(null, null));
         view.findViewById(R.id.btnAddHomeAddress).setOnClickListener(v -> openForm(null, "Nha"));
         view.findViewById(R.id.btnAddWorkAddress).setOnClickListener(v -> openForm(null, "Cong ty"));
-        view.findViewById(R.id.llCurrentLocation).setOnClickListener(v -> {
-            DeliveryAddress current = repository.getCurrentAddress();
-            if (current != null) {
-                repository.select(current.getId());
-                Toast.makeText(requireContext(), "Da chon dia chi hien tai", Toast.LENGTH_SHORT).show();
-            }
-        });
+        view.findViewById(R.id.llCurrentLocation).setOnClickListener(v -> selectCurrentAddress());
 
         refresh();
     }
@@ -142,6 +136,17 @@ public class AddressListFragment extends Fragment {
         tvEmptyState.setVisibility(empty ? View.VISIBLE : View.GONE);
         llEmptyShortcuts.setVisibility(empty ? View.VISIBLE : View.GONE);
         rvAddresses.setVisibility(empty ? View.GONE : View.VISIBLE);
+    }
+
+    private void selectCurrentAddress() {
+        DeliveryAddress current = repository.getCurrentAddress();
+        if (current == null) return;
+
+        repository.select(current.getId());
+        Toast.makeText(requireContext(), "Da chon dia chi hien tai", Toast.LENGTH_SHORT).show();
+        if ("home".equals(source)) {
+            Navigation.findNavController(requireView()).popBackStack(R.id.homeFragment, false);
+        }
     }
 
     private void openForm(@Nullable String addressId, @Nullable String type) {

@@ -206,6 +206,16 @@ public class BugRegressionTest {
                 "repository.delete");
     }
 
+    @Test
+    public void deliveryAddressCurrentCardReturnsHomeWhenOpenedFromHome() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressListFragment.java",
+                "setOnClickListener(v -> selectCurrentAddress())",
+                "private void selectCurrentAddress()",
+                "repository.select(current.getId())",
+                "if (\"home\".equals(source))",
+                "popBackStack(R.id.homeFragment, false)");
+    }
+
     private Path profileLayoutPath() {
         return projectPath("src/main/res/layout/profile_fragment.xml");
     }
