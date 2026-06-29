@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ public class DeliveryAddressFormFragment extends Fragment {
     private EditText etCustomName;
     private EditText etDriverNote;
     private RadioGroup rgAddressType;
+    private TextView tvDeliveryAddressFormTitle;
     private MaterialButton btnSaveAddress;
     private View groupCustomName;
     private String source = "profile";
@@ -68,9 +70,13 @@ public class DeliveryAddressFormFragment extends Fragment {
         etDriverNote = view.findViewById(R.id.etDriverNote);
         rgAddressType = view.findViewById(R.id.rgAddressType);
         groupCustomName = etCustomName;
+        tvDeliveryAddressFormTitle = view.findViewById(R.id.tvDeliveryAddressFormTitle);
         btnSaveAddress = view.findViewById(R.id.btnSaveAddress);
 
         DeliveryAddress existing = repository.find(addressId);
+        boolean editMode = existing != null;
+        tvDeliveryAddressFormTitle.setText(editMode ? "Sua dia chi" : "Them dia chi moi");
+        btnSaveAddress.setText(editMode ? "Cap nhat dia chi" : "Luu dia chi");
         if (existing != null) {
             bind(existing);
         } else if (getArguments() != null && getArguments().getString("prefillType") != null) {

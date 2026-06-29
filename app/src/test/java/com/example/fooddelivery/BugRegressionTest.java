@@ -216,6 +216,21 @@ public class BugRegressionTest {
                 "popBackStack(R.id.homeFragment, false)");
     }
 
+    @Test
+    public void deliveryAddressFormUsesAddAndEditModeCopy() throws Exception {
+        String formLayout = readFile(projectPath("src/main/res/layout/fragment_delivery_address_form.xml"));
+        assertTrue(formLayout.contains("@+id/tvDeliveryAddressFormTitle"));
+        assertTrue(formLayout.contains("@+id/btnSaveAddress"));
+
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/DeliveryAddressFormFragment.java",
+                "tvDeliveryAddressFormTitle",
+                "boolean editMode = existing != null",
+                "Sua dia chi",
+                "Them dia chi moi",
+                "Cap nhat dia chi",
+                "Luu dia chi");
+    }
+
     private Path profileLayoutPath() {
         return projectPath("src/main/res/layout/profile_fragment.xml");
     }
