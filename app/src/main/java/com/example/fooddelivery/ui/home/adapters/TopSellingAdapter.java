@@ -29,11 +29,17 @@ public class TopSellingAdapter extends RecyclerView.Adapter<TopSellingAdapter.VH
     private final List<FoodItem> items = new ArrayList<>();
     private final OnItemClick onItemClick;
     private final OnAddCart   onAddCart;
+    private final boolean showAddButton;
 
     public TopSellingAdapter(Context ctx, OnItemClick onItemClick, OnAddCart onAddCart) {
+        this(ctx, onItemClick, onAddCart, true);
+    }
+
+    public TopSellingAdapter(Context ctx, OnItemClick onItemClick, OnAddCart onAddCart, boolean showAddButton) {
         this.context     = ctx;
         this.onItemClick = onItemClick;
         this.onAddCart   = onAddCart;
+        this.showAddButton = showAddButton;
     }
 
     public void submitList(List<FoodItem> list) {
@@ -66,10 +72,13 @@ public class TopSellingAdapter extends RecyclerView.Adapter<TopSellingAdapter.VH
         h.itemView.setOnClickListener(v -> onItemClick.onClick(item));
 
         // Click nút + → thêm giỏ hàng
-        h.btnAdd.setOnClickListener(v -> {
-            onAddCart.onAdd(item);
-            animateButton(h.btnAdd);
-        });
+        h.btnAdd.setVisibility(showAddButton ? View.VISIBLE : View.GONE);
+        h.btnAdd.setOnClickListener(showAddButton ? v -> {
+            if (onAddCart != null) {
+                onAddCart.onAdd(item);
+                animateButton(h.btnAdd);
+            }
+        } : null);
     }
 
     private void animateButton(View btn) {

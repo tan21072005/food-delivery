@@ -43,15 +43,34 @@ public class BugRegressionTest {
 
     @Test
     public void addToCartSuccessNavigatesToCheckoutFromInteractiveSurfaces() throws Exception {
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java",
-                "getCartAddedEvent().observe",
-                "new Intent(requireContext(), Checkout.class)");
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
                 "getCartAddedEvent().observe",
                 "new Intent(requireContext(), Checkout.class)");
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/search/SearchFragment.java",
                 "getCartAddedEvent().observe",
                 "new Intent(requireContext(), Checkout.class)");
+    }
+
+    @Test
+    public void homeDiscoveryDoesNotAddDirectlyToCart() throws Exception {
+        String homeFragment = readFile(projectPath("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java"));
+        String homeViewModel = readFile(projectPath("src/main/java/com/example/fooddelivery/ui/home/HomeViewModel.java"));
+        String homeLayout = readFile(projectPath("src/main/res/layout/home_fragment.xml"));
+
+        assertFalse("HomeFragment must browse to Restaurant detail instead of opening a topping/cart flow",
+                homeFragment.contains("ToppingBottomSheet"));
+        assertFalse("HomeFragment must not mutate the local Cart",
+                homeFragment.contains("LocalCart.getInstance().add"));
+        assertFalse("HomeFragment must not observe add-to-cart events and jump to Checkout",
+                homeFragment.contains("getCartAddedEvent().observe"));
+        assertFalse("HomeViewModel must not expose Home add-to-cart behavior",
+                homeViewModel.contains("addToCart("));
+        assertFalse("Home must not show a sticky Cart; Cart belongs on Restaurant/Menu surfaces",
+                homeLayout.contains("layoutStickyCart"));
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java",
+                "navigateToRestaurantDetail",
+                "showAddButton",
+                "false");
     }
 
     @Test
