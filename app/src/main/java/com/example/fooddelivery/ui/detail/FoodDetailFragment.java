@@ -1,32 +1,35 @@
 package com.example.fooddelivery.ui.detail;
 
 import android.os.Bundle;
-import android.content.Intent;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.*;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.example.fooddelivery.R;
+import com.example.fooddelivery.data.local.LocalCart;
+import com.example.fooddelivery.data.model.FoodItem;
 import com.example.fooddelivery.databinding.FoodFragmentDetailBinding;
-import com.example.fooddelivery.data.local.prefs.SessionManager;
-import com.example.fooddelivery.ui.cart.Checkout;
 
 public class FoodDetailFragment extends Fragment {
 
     private FoodFragmentDetailBinding binding;
     private FoodDetailViewModel viewModel;
-    private SessionManager session;
     private long foodId;
     private int quantity = 1;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
         binding = FoodFragmentDetailBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -35,34 +38,28 @@ public class FoodDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        session = new SessionManager(requireContext());
         viewModel = new ViewModelProvider(this).get(FoodDetailViewModel.class);
-
-        // Nháº­n food_id tá»« HomeFragment hoáº·c MenuFragment
-        if (getArguments() != null) {
-            foodId = getArguments().getLong("food_id", -1);
-        }
+        foodId = getArguments() != null ? getArguments().getLong("food_id", -1) : -1;
 
         setupListeners();
         observeViewModel();
 
-        if (foodId != -1) viewModel.loadFoodDetail(foodId);
+        if (foodId != -1) {
+            viewModel.loadFoodDetail(foodId);
+        }
     }
 
     private void setupListeners() {
-        // Nút back
         binding.toolbar.setNavigationOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigateUp()
         );
 
-        // Tăng số lượng
         binding.btnPlus.setOnClickListener(v -> {
             quantity++;
             binding.tvQuantity.setText(String.valueOf(quantity));
             updateTotalPrice();
         });
 
-        // Giáº£m sá»‘ lÆ°á»£ng
         binding.btnMinus.setOnClickListener(v -> {
             if (quantity > 1) {
                 quantity--;
@@ -71,38 +68,41 @@ public class FoodDetailFragment extends Fragment {
             }
         });
 
-//        // ThÃªm vÃ o giá» hÃ ng
-//        binding.btnAddToCart.setOnClickListener(v -> {
-//            if (!session.isLoggedIn()) {
-//                Toast.makeText(requireContext(),
-//                        "Vui lÃ²ng Ä‘Äƒng nháº­p", Toast.LENGTH_SHORT).show();
-//                Navigation.findNavController(requireView())
-//                        .navigate(R.id.action_foodDetail_to_login);
-//                return;
-//            }
-//            viewModel.addToCart(session.getBearerToken(), foodId, quantity);
-//        });
         binding.btnAddToCart.setOnClickListener(v -> {
-            if (viewModel.getFoodItem().getValue() != null) {
-                com.example.fooddelivery.data.local.LocalCart.getInstance().add(
-                        viewModel.getFoodItem().getValue(), quantity);
-                Toast.makeText(requireContext(), "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+            FoodItem item = viewModel.getFoodItem().getValue();
+            if (item != null) {
+                addItemToCartWithRestaurantGuard(item, quantity);
             }
         });
     }
 
-    private void observeViewModel() {
-        viewModel.isLoading().observe(getViewLifecycleOwner(), loading -> {
-            // binding.progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
-        });
+    private void addItemToCartWithRestaurantGuard(FoodItem item, int quantity) {
+        LocalCart cart = LocalCart.getInstance();
+        if (!cart.hasDifferentRestaurant(item)) {
+            addItemToCart(item, quantity);
+            return;
+        }
 
+        new AlertDialog.Builder(requireContext())
+                .setMessage("Ban dang co mon tu quan khac. Xoa gio hien tai de dat mon tu quan nay?")
+                .setNegativeButton("Giu gio cu", null)
+                .setPositiveButton("Xoa va them mon moi", (dialog, which) -> {
+                    cart.clear();
+                    addItemToCart(item, quantity);
+                })
+                .show();
+    }
+
+    private void addItemToCart(FoodItem item, int quantity) {
+        LocalCart.getInstance().add(item, quantity);
+        Toast.makeText(requireContext(), "Da them vao gio hang", Toast.LENGTH_SHORT).show();
+    }
+
+    private void observeViewModel() {
         viewModel.getFoodItem().observe(getViewLifecycleOwner(), item -> {
             if (item == null) return;
             binding.tvFoodName.setText(item.getName());
             binding.tvDescription.setText(item.getDescription());
-//            binding.tvPrice.setText(item.getPriceFormatted());
-//            binding.tvSoldCount.setText(item.getSoldCountLabel());
-//            binding.tvCategory.setText(item.getCategoryName());
             updateTotalPrice();
 
             Glide.with(requireContext())
@@ -111,30 +111,21 @@ public class FoodDetailFragment extends Fragment {
                     .into(binding.imgFood);
         });
 
-        viewModel.getCartMessage().observe(getViewLifecycleOwner(), msg -> {
-            if (msg != null)
-                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
-        });
-
-        viewModel.getCartAddedEvent().observe(getViewLifecycleOwner(), added -> {
-            if (Boolean.TRUE.equals(added)) {
-                startActivity(new Intent(requireContext(), Checkout.class));
-                viewModel.consumeCartAddedEvent();
-            }
-        });
-
         viewModel.getErrorMsg().observe(getViewLifecycleOwner(), msg -> {
-            if (msg != null)
+            if (msg != null) {
                 Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     private void updateTotalPrice() {
-        if (viewModel.getFoodItem().getValue() == null) return;
-        double total = viewModel.getFoodItem().getValue().getPrice() * quantity;
+        FoodItem item = viewModel.getFoodItem().getValue();
+        if (item == null) return;
+
+        double total = item.getPrice() * quantity;
         long rounded = Math.round(total);
-        String formatted = String.format("%,d", rounded).replace(",", ".") + "Ä‘";
-        binding.tvTotalPrice.setText("Tá»•ng: " + formatted);
+        String formatted = String.format("%,d", rounded).replace(",", ".") + "d";
+        binding.tvTotalPrice.setText("Tong: " + formatted);
     }
 
     @Override

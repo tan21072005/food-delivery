@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -99,14 +100,35 @@ public class RestaurantDetailFragment extends Fragment {
             @Override
             public void onAddToCartClick(FoodItem item) {
                 ToppingBottomSheet toppingSheet = new ToppingBottomSheet(item, selectedItem -> {
-                    LocalCart.getInstance().addItem(selectedItem);
-                    updateStickyCart(view);
-                    Toast.makeText(requireContext(),
-                            "Da them " + selectedItem.getName() + " vao gio", Toast.LENGTH_SHORT).show();
+                    addItemToCartWithRestaurantGuard(selectedItem, 1, view);
                 });
                 toppingSheet.show(getParentFragmentManager(), ToppingBottomSheet.TAG);
             }
         });
+    }
+
+    private void addItemToCartWithRestaurantGuard(FoodItem item, int quantity, View view) {
+        LocalCart cart = LocalCart.getInstance();
+        if (!cart.hasDifferentRestaurant(item)) {
+            addItemToCart(item, quantity, view);
+            return;
+        }
+
+        new AlertDialog.Builder(requireContext())
+                .setMessage("Ban dang co mon tu quan khac. Xoa gio hien tai de dat mon tu quan nay?")
+                .setNegativeButton("Giu gio cu", null)
+                .setPositiveButton("Xoa va them mon moi", (dialog, which) -> {
+                    cart.clear();
+                    addItemToCart(item, quantity, view);
+                })
+                .show();
+    }
+
+    private void addItemToCart(FoodItem item, int quantity, View view) {
+        LocalCart.getInstance().add(item, quantity);
+        updateStickyCart(view);
+        Toast.makeText(requireContext(),
+                "Da them " + item.getName() + " vao gio", Toast.LENGTH_SHORT).show();
     }
 
     private void observeViewModel() {

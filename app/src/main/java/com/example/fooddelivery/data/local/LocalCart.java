@@ -55,6 +55,18 @@ public class LocalCart {
         entries.add(new CartEntry(item, quantity));
     }
 
+    public long getRestaurantId() {
+        return entries.isEmpty() ? -1L : entries.get(0).item.getRestaurantId();
+    }
+
+    public boolean hasDifferentRestaurant(FoodItem item) {
+        return item != null
+                && !entries.isEmpty()
+                && getRestaurantId() > 0
+                && item.getRestaurantId() > 0
+                && getRestaurantId() != item.getRestaurantId();
+    }
+
     /** Tăng quantity lên 1. */
     public void increase(long itemId) {
         for (CartEntry e : entries) {
