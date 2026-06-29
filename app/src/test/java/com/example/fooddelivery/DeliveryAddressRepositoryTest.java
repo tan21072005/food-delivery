@@ -2,180 +2,100 @@ package com.example.fooddelivery;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.example.fooddelivery.data.local.DeliveryAddressStore;
-import com.example.fooddelivery.data.model.DeliveryAddress;
 import com.example.fooddelivery.data.repository.DeliveryAddressRepository;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DeliveryAddressRepositoryTest {
 
     @Test
-    public void saveWithoutRequiredFieldsReturnsValidationErrorsAndKeepsStoreEmpty() {
-        DeliveryAddressRepository repository = new DeliveryAddressRepository(new MemoryStore());
-        DeliveryAddress draft = new DeliveryAddress();
-        draft.setType("Nha");
+    public void storeConstructorFailsFastBecauseDeliveryAddressesUseSupabase() {
+        try {
+            new DeliveryAddressRepository(new MemoryStore());
+        } catch (IllegalStateException exception) {
+            assertEquals("Use DeliveryAddressRepository(Context) for Supabase delivery addresses",
+                    exception.getMessage());
+            return;
+        }
 
-        DeliveryAddressRepository.SaveResult result = repository.save(draft);
-
-        assertFalse(result.isSuccess());
-        assertEquals("Recipient name is required", result.getErrors().get("recipientName"));
-        assertEquals("Recipient phone is required", result.getErrors().get("recipientPhone"));
-        assertEquals("Full address is required", result.getErrors().get("fullAddress"));
-        assertEquals(0, repository.list().size());
+        throw new AssertionError("Expected DeliveryAddressRepository(DeliveryAddressStore) to fail");
     }
 
     @Test
-    public void khacTypeRequiresCustomName() {
-        DeliveryAddressRepository repository = new DeliveryAddressRepository(new MemoryStore());
-        DeliveryAddress draft = validDraft("Nha");
-        draft.setType("Khac");
-        draft.setCustomName("");
+    public void repositoryExposesCallbackApiForRemoteDeliveryAddresses() throws Exception {
+        String source = readFile(projectPath(
+                "src/main/java/com/example/fooddelivery/data/repository/DeliveryAddressRepository.java"));
 
-        DeliveryAddressRepository.SaveResult result = repository.save(draft);
+        assertTrue(source.contains("public void list(ResultCallback<List<DeliveryAddress>> callback)"));
+        assertTrue(source.contains("public void getCurrentAddress(ResultCallback<DeliveryAddress> callback)"));
+        assertTrue(source.contains("public void save(DeliveryAddress draft, SaveCallback callback)"));
+        assertTrue(source.contains("public void setDefault(String id, ResultCallback<Void> callback)"));
+        assertTrue(source.contains("public void delete(String id, ResultCallback<Void> callback)"));
 
-        assertFalse(result.isSuccess());
-        assertEquals("Address name is required", result.getErrors().get("customName"));
+        assertFalse(source.contains("public List<DeliveryAddress> list()"));
+        assertFalse(source.contains("public DeliveryAddress getCurrentAddress()"));
+        assertFalse(source.contains("public SaveResult save(DeliveryAddress draft)"));
+        assertFalse(source.contains("public boolean select(String id)"));
     }
 
     @Test
-    public void firstSavedAddressBecomesDefaultAndCurrent() {
-        DeliveryAddressRepository repository = new DeliveryAddressRepository(new MemoryStore());
+    public void saveResultFailureCarriesValidationErrorsWithoutAddress() {
+        Map<String, String> errors = new LinkedHashMap<>();
+        errors.put("recipientName", "Recipient name is required");
 
-        DeliveryAddressRepository.SaveResult result = repository.save(validDraft("Nha"));
-
-        assertTrue(result.isSuccess());
-        assertTrue(result.getAddress().isDefault());
-        assertEquals(result.getAddress().getId(), repository.getCurrentAddress().getId());
-    }
-
-    @Test
-    public void selectingExistingAddressUpdatesCurrentAddress() {
-        DeliveryAddressRepository repository = new DeliveryAddressRepository(new MemoryStore());
-        DeliveryAddress first = repository.save(validDraft("Nha")).getAddress();
-        DeliveryAddress second = repository.save(validDraft("Cong ty")).getAddress();
-
-        assertTrue(repository.select(second.getId()));
-
-        assertEquals(second.getId(), repository.getCurrentAddress().getId());
-        assertFalse(first.getId().equals(repository.getCurrentAddress().getId()));
-    }
-
-    @Test
-    public void deletingCurrentDefaultPromotesRemainingAddressAndClearsStaleSelection() {
-        DeliveryAddressRepository repository = new DeliveryAddressRepository(new MemoryStore());
-        DeliveryAddress first = repository.save(validDraft("Nha")).getAddress();
-        DeliveryAddress second = repository.save(validDraft("Cong ty")).getAddress();
-        repository.select(first.getId());
-
-        repository.delete(first.getId());
-
-        assertEquals(1, repository.list().size());
-        assertEquals(second.getId(), repository.getCurrentAddress().getId());
-        assertTrue(repository.getCurrentAddress().isDefault());
-    }
-
-    @Test
-    public void editingCurrentAddressKeepsItCurrentAndUpdatesVisibleFields() {
-        DeliveryAddressRepository repository = new DeliveryAddressRepository(new MemoryStore());
-        DeliveryAddress first = repository.save(validDraft("Nha")).getAddress();
-        repository.save(validDraft("Cong ty"));
-        repository.select(first.getId());
-
-        DeliveryAddress edit = validDraft("Khac");
-        edit.setId(first.getId());
-        edit.setCustomName("Nha rieng");
-        edit.setFullAddress("88 Nguyen Trai, Thanh Xuan, Ha Noi");
-
-        DeliveryAddressRepository.SaveResult result = repository.save(edit);
-
-        assertTrue(result.isSuccess());
-        assertEquals(first.getId(), repository.getCurrentAddress().getId());
-        assertEquals("Nha rieng", repository.getCurrentAddress().getDisplayLabel());
-        assertEquals("88 Nguyen Trai, Thanh Xuan, Ha Noi", repository.getCurrentAddress().getFullAddress());
-        assertTrue(repository.getCurrentAddress().isDefault());
-    }
-
-    @Test
-    public void listPlacesDefaultAddressFirstAfterDefaultChanges() {
-        DeliveryAddressRepository repository = new DeliveryAddressRepository(new MemoryStore());
-        DeliveryAddress first = repository.save(validDraft("Nha")).getAddress();
-        DeliveryAddress second = repository.save(validDraft("Cong ty")).getAddress();
-
-        repository.setDefault(second.getId());
-
-        List<DeliveryAddress> addresses = repository.list();
-        assertEquals(second.getId(), addresses.get(0).getId());
-        assertTrue(addresses.get(0).isDefault());
-        assertEquals(first.getId(), addresses.get(1).getId());
-    }
-
-    @Test
-    public void saveReturnsPersistenceErrorWhenStoreFails() {
-        DeliveryAddressRepository repository = new DeliveryAddressRepository(new FailingStore());
-
-        DeliveryAddressRepository.SaveResult result = repository.save(validDraft("Nha"));
+        DeliveryAddressRepository.SaveResult result =
+                DeliveryAddressRepository.SaveResult.failure(errors);
 
         assertFalse(result.isSuccess());
         assertNull(result.getAddress());
-        assertEquals("Could not save delivery address", result.getErrors().get("persistence"));
+        assertEquals("Recipient name is required", result.getErrors().get("recipientName"));
     }
 
-    private DeliveryAddress validDraft(String type) {
-        DeliveryAddress draft = new DeliveryAddress();
-        draft.setType(type);
-        draft.setRecipientName("Nguyen Van A");
-        draft.setRecipientPhone("0901234567");
-        draft.setFullAddress("72 Tran Dai Nghia, Hai Ba Trung, Ha Noi");
-        if ("Khac".equals(type)) {
-            draft.setCustomName("Phong tap");
+    private Path projectPath(String path) {
+        Path moduleRelative = Paths.get(path);
+        if (Files.exists(moduleRelative)) {
+            return moduleRelative;
         }
-        return draft;
+        return Paths.get("app").resolve(path);
+    }
+
+    private String readFile(Path path) throws Exception {
+        return new String(Files.readAllBytes(path), java.nio.charset.StandardCharsets.UTF_8);
     }
 
     private static class MemoryStore implements DeliveryAddressStore {
-        private final List<DeliveryAddress> addresses = new ArrayList<>();
-        private String selectedId;
-        private int nextId = 1;
-
         @Override
-        public List<DeliveryAddress> load() {
-            return new ArrayList<>(addresses);
+        public List<com.example.fooddelivery.data.model.DeliveryAddress> load() {
+            return java.util.Collections.emptyList();
         }
 
         @Override
-        public void save(List<DeliveryAddress> newAddresses) {
-            addresses.clear();
-            addresses.addAll(newAddresses);
+        public void save(List<com.example.fooddelivery.data.model.DeliveryAddress> addresses) {
         }
 
         @Override
         public String newId() {
-            return String.valueOf(nextId++);
+            return "1";
         }
 
         @Override
         public String getSelectedId() {
-            return selectedId;
+            return null;
         }
 
         @Override
         public void setSelectedId(String id) {
-            selectedId = id;
-        }
-    }
-
-    private static class FailingStore extends MemoryStore {
-        @Override
-        public void save(List<DeliveryAddress> newAddresses) {
-            throw new IllegalStateException("disk full");
         }
     }
 }
