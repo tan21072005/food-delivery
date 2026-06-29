@@ -121,6 +121,12 @@ public interface ApiService {
             @Query("select") String select
     );
 
+    @GET("rest/v1/menus_compat")
+    Call<List<FoodItem>> getMenuItemById(
+            @Query("id") String foodIdFilter,
+            @Query("select") String select
+    );
+
     // [RPC] Lấy dữ liệu tổng hợp cho màn hình Home
     @POST("rest/v1/rpc/get_home_data_v3")
     Call<com.example.fooddelivery.data.model.HomeDataResponse> getHomeData();

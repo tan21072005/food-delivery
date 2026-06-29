@@ -63,6 +63,34 @@ public class BugRegressionTest {
     }
 
     @Test
+    public void foodDetailLoadsSelectedFoodInsteadOfMockingRestaurantOne() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/data/repository/FoodRepository.java",
+                "getFoodById",
+                "\"eq.\" + foodId");
+        assertSourceContains("src/main/java/com/example/fooddelivery/data/remote/apis/ApiService.java",
+                "getMenuItemById",
+                "@Query(\"id\")");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailViewModel.java",
+                "foodRepository.getFoodById(foodId)");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailViewModel.java",
+                "new FoodItem(foodId",
+                "setRestaurantId(1)");
+    }
+
+    @Test
+    public void orderSurfacesUseDeliveryAddressCopyInsteadOfTableServiceCopy() throws Exception {
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/data/local/LocalOrderStore.java",
+                "Bàn",
+                "tầng");
+        assertSourceDoesNotContain("src/main/res/values/strings.xml",
+                "Bàn",
+                "tầng");
+        assertSourceContains("src/main/res/values/strings.xml",
+                "label_delivery_address",
+                "Địa chỉ giao hàng");
+    }
+
+    @Test
     public void homeDiscoveryDoesNotAddDirectlyToCart() throws Exception {
         String homeFragment = readFile(projectPath("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java"));
         String homeViewModel = readFile(projectPath("src/main/java/com/example/fooddelivery/ui/home/HomeViewModel.java"));
