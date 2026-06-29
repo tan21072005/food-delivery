@@ -2,6 +2,7 @@ package com.example.fooddelivery.data.local;
 
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.data.model.Order;
+import com.example.fooddelivery.ui.cart.CheckoutSummary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,7 @@ public class LocalOrderStore {
                 foodName,
                 tableInfo,
                 cart.getTotalCount(),
-                Math.round(cart.getTotalPrice()),
+                Math.round(cart.getTotalPrice()) + CheckoutSummary.DEFAULT_DELIVERY_FEE,
                 15,
                 "pending",
                 first.item.getImageResId(),
