@@ -1,6 +1,5 @@
 package com.example.fooddelivery.ui.menu;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +17,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.data.local.prefs.SessionManager;
+import com.example.fooddelivery.data.local.LocalCart;
 import com.example.fooddelivery.data.model.FoodItem;
-import com.example.fooddelivery.ui.cart.Checkout;
+import com.example.fooddelivery.ui.cart.CartBottomSheet;
+import com.example.fooddelivery.ui.home.ToppingBottomSheet;
 import com.example.fooddelivery.ui.menu.adapters.MenuAdapter;
+import com.example.fooddelivery.utils.MoneyFormatter;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,6 @@ public class MenuFragment extends Fragment {
 
     private MenuViewModel viewModel;
     private MenuAdapter adapter;
-    private SessionManager session;
     private ProgressBar progressBar;
 
     @Override
@@ -43,7 +43,6 @@ public class MenuFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        session = new SessionManager(requireContext());
         viewModel = new ViewModelProvider(this).get(MenuViewModel.class);
         progressBar = view.findViewById(R.id.progressBar);
 
@@ -53,14 +52,14 @@ public class MenuFragment extends Fragment {
 
         String categorySlug = getArguments() != null ? getArguments().getString("category_slug", "") : "";
         viewModel.loadFoods(categorySlug);
-        
+
         updateStickyCart(view);
     }
 
     private void setupHeader(View view) {
         TextView title = view.findViewById(R.id.tvMenuTitle);
-        String categoryName = getArguments() != null ? getArguments().getString("category_name", "Tat ca mon") : "Tat ca mon";
-        title.setText(categoryName == null || categoryName.isEmpty() ? "Tat ca mon" : categoryName);
+        String categoryName = getArguments() != null ? getArguments().getString("category_name", "Tất cả món") : "Tất cả món";
+        title.setText(categoryName == null || categoryName.isEmpty() ? "Tất cả món" : categoryName);
 
         view.findViewById(R.id.btnBack).setOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigateUp()
@@ -81,12 +80,10 @@ public class MenuFragment extends Fragment {
 
             @Override
             public void onAddToCartClick(FoodItem item) {
-                com.example.fooddelivery.ui.home.ToppingBottomSheet toppingSheet = 
-                        new com.example.fooddelivery.ui.home.ToppingBottomSheet(item, selectedItem -> {
-                            com.example.fooddelivery.data.local.LocalCart.getInstance().addItem(selectedItem);
-                            updateStickyCart(getView());
-                        });
-                toppingSheet.show(getParentFragmentManager(), com.example.fooddelivery.ui.home.ToppingBottomSheet.TAG);
+                ToppingBottomSheet toppingSheet =
+                        new ToppingBottomSheet(item, selectedItem ->
+                                addItemToCartWithRestaurantGuard(selectedItem, 1, getView()));
+                toppingSheet.show(getParentFragmentManager(), ToppingBottomSheet.TAG);
             }
         });
 
@@ -108,41 +105,43 @@ public class MenuFragment extends Fragment {
                 Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
-        viewModel.getCartAddedEvent().observe(getViewLifecycleOwner(), added -> {
-            if (Boolean.TRUE.equals(added)) {
-                startActivity(new Intent(requireContext(), Checkout.class));
-                viewModel.consumeCartAddedEvent();
-            }
-        });
+    private void addItemToCartWithRestaurantGuard(FoodItem item, int quantity, View view) {
+        addItemToCart(item, quantity, view);
+    }
+
+    private void addItemToCart(FoodItem item, int quantity, View view) {
+        LocalCart.getInstance().add(item, quantity);
+        updateStickyCart(view);
+        Toast.makeText(requireContext(),
+                "Đã thêm " + item.getName() + " vào giỏ", Toast.LENGTH_SHORT).show();
     }
 
     public void updateStickyCart(View view) {
         if (view == null) return;
         View stickyCart = view.findViewById(R.id.layoutStickyCart);
-        if (stickyCart != null) {
-            int count = com.example.fooddelivery.data.local.LocalCart.getInstance().getTotalCount();
-            if (count > 0) {
-                stickyCart.setVisibility(View.VISIBLE);
-                TextView tvCount = stickyCart.findViewById(R.id.tvStickyCartCount);
-                TextView tvTotal = stickyCart.findViewById(R.id.tvStickyCartTotal);
-                
-                if (tvCount != null) tvCount.setText(String.valueOf(count));
-                if (tvTotal != null) {
-                    double total = com.example.fooddelivery.data.local.LocalCart.getInstance().getTotalPrice();
-                    java.text.NumberFormat formatter = new java.text.DecimalFormat("#,###");
-                    tvTotal.setText(formatter.format(total) + "đ");
-                }
-                
-                stickyCart.setOnClickListener(v -> {
-                    com.example.fooddelivery.ui.cart.CartBottomSheet sheet =
-                            new com.example.fooddelivery.ui.cart.CartBottomSheet();
-                    sheet.show(getParentFragmentManager(),
-                            com.example.fooddelivery.ui.cart.CartBottomSheet.TAG);
-                });
-            } else {
-                stickyCart.setVisibility(View.GONE);
-            }
+        if (stickyCart == null) return;
+
+        int count = LocalCart.getInstance().getTotalCount();
+        if (count <= 0) {
+            stickyCart.setVisibility(View.GONE);
+            return;
         }
+
+        stickyCart.setVisibility(View.VISIBLE);
+        TextView tvCount = stickyCart.findViewById(R.id.tvStickyCartCount);
+        TextView tvTotal = stickyCart.findViewById(R.id.tvStickyCartTotal);
+
+        if (tvCount != null) tvCount.setText(String.valueOf(count));
+        if (tvTotal != null) {
+            double total = LocalCart.getInstance().getTotalPrice();
+            tvTotal.setText(MoneyFormatter.format(total));
+        }
+
+        stickyCart.setOnClickListener(v -> {
+            CartBottomSheet sheet = new CartBottomSheet(() -> updateStickyCart(view));
+            sheet.show(getParentFragmentManager(), CartBottomSheet.TAG);
+        });
     }
 }

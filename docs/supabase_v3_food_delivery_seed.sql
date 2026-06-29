@@ -60,8 +60,8 @@ values
   (
     (select id from public.users where email = 'owner.bunbo@food.local'),
     (select id from public.cuisines where slug = 'bun-pho'),
-    'Bun Bo Hue 199',
-    'Bun bo Hue, bun gio heo, cha cua va nuoc dung dam vi.',
+    'Bun Bo Hue Dong Ba',
+    'Quan bun bo phong cach Hue voi bep mo, phuc vu nhanh cho bua trua va toi.',
     '0287000199',
     '199 Nguyen Trai, District 1, Ho Chi Minh City',
     10.767215,
@@ -76,8 +76,8 @@ values
   (
     (select id from public.users where email = 'owner.trasua@food.local'),
     (select id from public.cuisines where slug = 'tra-sua'),
-    'Tra Sua May',
-    'Tra sua, tra trai cay va topping tu lam moi moi ngay.',
+    'Bobapop CMT8',
+    'Quan tra sua take-away gan truong hoc, noi bat voi tran chau nau moi moi ngay.',
     '0287000200',
     '88 Cach Mang Thang 8, District 3, Ho Chi Minh City',
     10.779512,
@@ -92,8 +92,8 @@ values
   (
     (select id from public.users where email = 'owner.pizza@food.local'),
     (select id from public.cuisines where slug = 'pizza'),
-    'Pizza Corner',
-    'Pizza de mong, nhieu pho mai, nuong nong khi co don.',
+    'Pizza 4Ps Le Loi',
+    'Nha hang pizza phong cach Y, co khu ngoi lai va nhan don giao nhanh.',
     '0287000300',
     '12 Le Loi, District 1, Ho Chi Minh City',
     10.775843,
@@ -108,8 +108,8 @@ values
   (
     (select id from public.users where email = 'owner.sushi@food.local'),
     (select id from public.cuisines where slug = 'sushi'),
-    'Sushi Sato',
-    'Sushi, sashimi va set lunch Nhat Ban.',
+    'Sushi Tei Pasteur',
+    'Nha hang sushi Nhat Ban voi quay sushi va cac set giao hang dong goi ky.',
     '0287000400',
     '45 Pasteur, District 1, Ho Chi Minh City',
     10.780018,
@@ -141,17 +141,17 @@ set
 -- ============================================================
 insert into public.dish_categories (restaurant_id, name, slug, sort_order, status)
 values
-  ((select id from public.restaurants where name = 'Bun Bo Hue 199'), 'Bun bo', 'bun-bo', 1, 'active'),
-  ((select id from public.restaurants where name = 'Bun Bo Hue 199'), 'Mon them', 'mon-them', 2, 'active'),
-  ((select id from public.restaurants where name = 'Bun Bo Hue 199'), 'Do uong', 'do-uong', 3, 'active'),
-  ((select id from public.restaurants where name = 'Tra Sua May'), 'Tra sua', 'tra-sua', 1, 'active'),
-  ((select id from public.restaurants where name = 'Tra Sua May'), 'Tra trai cay', 'tra-trai-cay', 2, 'active'),
-  ((select id from public.restaurants where name = 'Tra Sua May'), 'Topping', 'topping', 3, 'active'),
-  ((select id from public.restaurants where name = 'Pizza Corner'), 'Pizza', 'pizza', 1, 'active'),
-  ((select id from public.restaurants where name = 'Pizza Corner'), 'My Y', 'my-y', 2, 'active'),
-  ((select id from public.restaurants where name = 'Pizza Corner'), 'Combo', 'combo', 3, 'active'),
-  ((select id from public.restaurants where name = 'Sushi Sato'), 'Sushi set', 'sushi-set', 1, 'active'),
-  ((select id from public.restaurants where name = 'Sushi Sato'), 'Sashimi', 'sashimi', 2, 'active')
+  ((select id from public.restaurants where name = 'Bun Bo Hue Dong Ba'), 'Bun bo', 'bun-bo', 1, 'active'),
+  ((select id from public.restaurants where name = 'Bun Bo Hue Dong Ba'), 'Mon them', 'mon-them', 2, 'active'),
+  ((select id from public.restaurants where name = 'Bun Bo Hue Dong Ba'), 'Do uong', 'do-uong', 3, 'active'),
+  ((select id from public.restaurants where name = 'Bobapop CMT8'), 'Tra sua', 'tra-sua', 1, 'active'),
+  ((select id from public.restaurants where name = 'Bobapop CMT8'), 'Tra trai cay', 'tra-trai-cay', 2, 'active'),
+  ((select id from public.restaurants where name = 'Bobapop CMT8'), 'Topping', 'topping', 3, 'active'),
+  ((select id from public.restaurants where name = 'Pizza 4Ps Le Loi'), 'Pizza', 'pizza', 1, 'active'),
+  ((select id from public.restaurants where name = 'Pizza 4Ps Le Loi'), 'My Y', 'my-y', 2, 'active'),
+  ((select id from public.restaurants where name = 'Pizza 4Ps Le Loi'), 'Combo', 'combo', 3, 'active'),
+  ((select id from public.restaurants where name = 'Sushi Tei Pasteur'), 'Sushi set', 'sushi-set', 1, 'active'),
+  ((select id from public.restaurants where name = 'Sushi Tei Pasteur'), 'Sashimi', 'sashimi', 2, 'active')
 on conflict (restaurant_id, slug) do update
 set name = excluded.name, sort_order = excluded.sort_order, status = excluded.status;
 
@@ -171,8 +171,8 @@ insert into public.menu_items (
 )
 values
   (
-    (select id from public.restaurants where name = 'Bun Bo Hue 199'),
-    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Bun Bo Hue 199' and dc.slug = 'bun-bo'),
+    (select id from public.restaurants where name = 'Bun Bo Hue Dong Ba'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Bun Bo Hue Dong Ba' and dc.slug = 'bun-bo'),
     'Bun bo dac biet',
     'Bun bo, gio heo, cha cua, bo tai va rau song.',
     65000,
@@ -182,8 +182,8 @@ values
     'active'
   ),
   (
-    (select id from public.restaurants where name = 'Bun Bo Hue 199'),
-    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Bun Bo Hue 199' and dc.slug = 'bun-bo'),
+    (select id from public.restaurants where name = 'Bun Bo Hue Dong Ba'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Bun Bo Hue Dong Ba' and dc.slug = 'bun-bo'),
     'Bun bo tai',
     'Bun bo tai mem, nuoc dung cay nhe.',
     55000,
@@ -193,8 +193,19 @@ values
     'active'
   ),
   (
-    (select id from public.restaurants where name = 'Bun Bo Hue 199'),
-    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Bun Bo Hue 199' and dc.slug = 'mon-them'),
+    (select id from public.restaurants where name = 'Bun Bo Hue Dong Ba'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Bun Bo Hue Dong Ba' and dc.slug = 'bun-bo'),
+    'Bun bo gio heo',
+    'Bun bo Hue voi khoanh gio heo mem, cha Hue va rau song.',
+    62000,
+    'https://images.unsplash.com/photo-1555126634-323283e090fa?auto=format&fit=crop&w=800&q=80',
+    4.7,
+    716,
+    'active'
+  ),
+  (
+    (select id from public.restaurants where name = 'Bun Bo Hue Dong Ba'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Bun Bo Hue Dong Ba' and dc.slug = 'mon-them'),
     'Cha cua them',
     'Mot phan cha cua them cho mon bun.',
     18000,
@@ -204,8 +215,8 @@ values
     'active'
   ),
   (
-    (select id from public.restaurants where name = 'Bun Bo Hue 199'),
-    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Bun Bo Hue 199' and dc.slug = 'do-uong'),
+    (select id from public.restaurants where name = 'Bun Bo Hue Dong Ba'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Bun Bo Hue Dong Ba' and dc.slug = 'do-uong'),
     'Tra dao cam sa',
     'Tra dao mat lanh voi cam va sa.',
     30000,
@@ -215,8 +226,8 @@ values
     'active'
   ),
   (
-    (select id from public.restaurants where name = 'Tra Sua May'),
-    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Tra Sua May' and dc.slug = 'tra-sua'),
+    (select id from public.restaurants where name = 'Bobapop CMT8'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Bobapop CMT8' and dc.slug = 'tra-sua'),
     'Tra sua tran chau duong den',
     'Tra sua beo nhe, tran chau duong den deo.',
     42000,
@@ -226,8 +237,8 @@ values
     'active'
   ),
   (
-    (select id from public.restaurants where name = 'Tra Sua May'),
-    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Tra Sua May' and dc.slug = 'tra-trai-cay'),
+    (select id from public.restaurants where name = 'Bobapop CMT8'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Bobapop CMT8' and dc.slug = 'tra-trai-cay'),
     'Tra vai hoa hong',
     'Tra vai thom nhe, ngot thanh.',
     39000,
@@ -237,8 +248,30 @@ values
     'active'
   ),
   (
-    (select id from public.restaurants where name = 'Pizza Corner'),
-    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Pizza Corner' and dc.slug = 'pizza'),
+    (select id from public.restaurants where name = 'Bobapop CMT8'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Bobapop CMT8' and dc.slug = 'tra-sua'),
+    'Tra sua oolong nuong',
+    'Tra oolong nuong thom, sua tuoi va tran chau den.',
+    45000,
+    'https://images.unsplash.com/photo-1525385133512-2f3bdd039054?auto=format&fit=crop&w=800&q=80',
+    4.7,
+    1188,
+    'active'
+  ),
+  (
+    (select id from public.restaurants where name = 'Bobapop CMT8'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Bobapop CMT8' and dc.slug = 'tra-trai-cay'),
+    'Tra dao cam sa',
+    'Tra dao cam sa mat lanh, phu hop buoi trua.',
+    39000,
+    'https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=800&q=80',
+    4.5,
+    812,
+    'active'
+  ),
+  (
+    (select id from public.restaurants where name = 'Pizza 4Ps Le Loi'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Pizza 4Ps Le Loi' and dc.slug = 'pizza'),
     'Pizza hai san size M',
     'Tom, muc, thanh cua, pho mai mozzarella.',
     159000,
@@ -248,8 +281,8 @@ values
     'active'
   ),
   (
-    (select id from public.restaurants where name = 'Pizza Corner'),
-    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Pizza Corner' and dc.slug = 'pizza'),
+    (select id from public.restaurants where name = 'Pizza 4Ps Le Loi'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Pizza 4Ps Le Loi' and dc.slug = 'pizza'),
     'Pizza pepperoni size M',
     'Pepperoni, sot ca chua, pho mai day.',
     139000,
@@ -259,8 +292,52 @@ values
     'active'
   ),
   (
-    (select id from public.restaurants where name = 'Sushi Sato'),
-    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Sushi Sato' and dc.slug = 'sushi-set'),
+    (select id from public.restaurants where name = 'Pizza 4Ps Le Loi'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Pizza 4Ps Le Loi' and dc.slug = 'pizza'),
+    'Pizza margherita size M',
+    'Sot ca chua, mozzarella, basil va dau olive.',
+    129000,
+    'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80',
+    4.5,
+    534,
+    'active'
+  ),
+  (
+    (select id from public.restaurants where name = 'Pizza 4Ps Le Loi'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Pizza 4Ps Le Loi' and dc.slug = 'my-y'),
+    'Spaghetti bo bam',
+    'Mi Y sot bo bam ca chua, phu parmesan.',
+    99000,
+    'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=80',
+    4.4,
+    421,
+    'active'
+  ),
+  (
+    (select id from public.restaurants where name = 'Sushi Tei Pasteur'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Sushi Tei Pasteur' and dc.slug = 'sushi-set'),
+    'Set sushi ca hoi 8 mieng',
+    'Sushi ca hoi, avocado va trung cuon rong bien.',
+    168000,
+    'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80',
+    4.7,
+    486,
+    'active'
+  ),
+  (
+    (select id from public.restaurants where name = 'Sushi Tei Pasteur'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Sushi Tei Pasteur' and dc.slug = 'sashimi'),
+    'Sashimi ca hoi',
+    'Ca hoi tuoi cat day, an kem wasabi va shoyu.',
+    189000,
+    'https://images.unsplash.com/photo-1534482421-64566f976cfa?auto=format&fit=crop&w=800&q=80',
+    4.8,
+    377,
+    'active'
+  ),
+  (
+    (select id from public.restaurants where name = 'Sushi Tei Pasteur'),
+    (select dc.id from public.dish_categories dc join public.restaurants r on r.id = dc.restaurant_id where r.name = 'Sushi Tei Pasteur' and dc.slug = 'sushi-set'),
     'Set sushi tong hop 12 mieng',
     'Ca hoi, ca ngu, tom, trung va cuon rong bien.',
     220000,
@@ -393,7 +470,7 @@ on conflict do nothing;
 insert into public.carts (customer_id, restaurant_id, status)
 values (
   (select id from public.users where email = 'minhanh@food.local'),
-  (select id from public.restaurants where name = 'Bun Bo Hue 199'),
+  (select id from public.restaurants where name = 'Bun Bo Hue Dong Ba'),
   'active'
 )
 on conflict (customer_id, restaurant_id) where status = 'active'
@@ -407,7 +484,7 @@ values (
     join public.users u on u.id = c.customer_id
     join public.restaurants r on r.id = c.restaurant_id
     where u.email = 'minhanh@food.local'
-      and r.name = 'Bun Bo Hue 199'
+      and r.name = 'Bun Bo Hue Dong Ba'
       and c.status = 'active'
   ),
   (select id from public.menu_items where name = 'Bun bo dac biet'),
@@ -460,7 +537,7 @@ insert into public.orders (
 values
   (
     (select id from public.users where email = 'minhanh@food.local'),
-    (select id from public.restaurants where name = 'Pizza Corner'),
+    (select id from public.restaurants where name = 'Pizza 4Ps Le Loi'),
     (select id from public.delivery_addresses where customer_id = (select id from public.users where email = 'minhanh@food.local') and label = 'Cong ty' limit 1),
     jsonb_build_object('label','Cong ty','receiver_name','Nguyen Minh Anh','receiver_phone','0901000001','address_line','2 Hai Trieu, District 1, Ho Chi Minh City'),
     'pending',
@@ -475,7 +552,7 @@ values
   ),
   (
     (select id from public.users where email = 'minhanh@food.local'),
-    (select id from public.restaurants where name = 'Bun Bo Hue 199'),
+    (select id from public.restaurants where name = 'Bun Bo Hue Dong Ba'),
     (select id from public.delivery_addresses where customer_id = (select id from public.users where email = 'minhanh@food.local') and label = 'Nha' limit 1),
     jsonb_build_object('label','Nha','receiver_name','Nguyen Minh Anh','receiver_phone','0901000001','address_line','25 Nguyen Dinh Chieu, District 1, Ho Chi Minh City'),
     'completed',
@@ -490,7 +567,7 @@ values
   ),
   (
     (select id from public.users where email = 'baongoc@food.local'),
-    (select id from public.restaurants where name = 'Tra Sua May'),
+    (select id from public.restaurants where name = 'Bobapop CMT8'),
     (select id from public.delivery_addresses where customer_id = (select id from public.users where email = 'baongoc@food.local') and label = 'Nha' limit 1),
     jsonb_build_object('label','Nha','receiver_name','Tran Bao Ngoc','receiver_phone','0901000002','address_line','102 Nguyen Van Troi, Phu Nhuan, Ho Chi Minh City'),
     'cancelled',
@@ -525,7 +602,7 @@ select
 from public.orders o
 join public.restaurants r on r.id = o.restaurant_id
 join public.menu_items mi on mi.restaurant_id = r.id and mi.name = 'Pizza hai san size M'
-where r.name = 'Pizza Corner'
+where r.name = 'Pizza 4Ps Le Loi'
   and o.status = 'pending'
 on conflict do nothing;
 
@@ -549,7 +626,7 @@ select
 from public.orders o
 join public.restaurants r on r.id = o.restaurant_id
 join public.menu_items mi on mi.restaurant_id = r.id and mi.name = 'Bun bo dac biet'
-where r.name = 'Bun Bo Hue 199'
+where r.name = 'Bun Bo Hue Dong Ba'
   and o.status = 'completed'
 on conflict do nothing;
 
@@ -573,7 +650,7 @@ select
 from public.orders o
 join public.restaurants r on r.id = o.restaurant_id
 join public.menu_items mi on mi.restaurant_id = r.id and mi.name = 'Tra sua tran chau duong den'
-where r.name = 'Tra Sua May'
+where r.name = 'Bobapop CMT8'
   and o.status = 'cancelled'
 on conflict do nothing;
 

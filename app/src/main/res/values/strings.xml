@@ -124,7 +124,7 @@
     <string name="title_checkout">Thanh toán</string>
 
     -------------Địa chỉ ---------------------------
-    <string name="label_delivery_address">Bàn số S tầng 2</string>
+    <string name="label_delivery_address">Địa chỉ giao hàng</string>
     <string name="hint_note_for_restaurant">Ghi chú cho nhà hàng</string>
 
     ------------Thời gian ---------------------------

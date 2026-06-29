@@ -48,6 +48,7 @@ public class Checkout extends AppCompatActivity {
     private Button btnOrder;
     private EditText edNote;
 
+    private long restaurantId = -1L;
     private boolean isSubmitting = false;
     private boolean hasDeliveryAddress = true;
     private String selectedPaymentMethod = PAYMENT_COD;
@@ -56,6 +57,8 @@ public class Checkout extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart_activity_checkout);
+        restaurantId = getIntent().getLongExtra("restaurant_id", LocalCart.getInstance().getRestaurantId());
+        LocalCart.getInstance().setActiveRestaurantId(restaurantId);
         initViews();
         renderCart();
     }
@@ -106,17 +109,17 @@ public class Checkout extends AppCompatActivity {
         rvCartItems.setLayoutManager(new LinearLayoutManager(this));
         adapter = new CartBottomSheetAdapter(
                 this,
-                LocalCart.getInstance().getEntries(),
+                LocalCart.getInstance().getEntries(restaurantId),
                 new CartBottomSheetAdapter.Listener() {
                     @Override
                     public void onIncrease(LocalCart.CartEntry entry) {
-                        LocalCart.getInstance().increase(entry.item.getId());
+                        LocalCart.getInstance().increase(restaurantId, entry.item.getId());
                         refreshCartUi();
                     }
 
                     @Override
                     public void onDecrease(LocalCart.CartEntry entry) {
-                        LocalCart.getInstance().decrease(entry.item.getId());
+                        LocalCart.getInstance().decrease(restaurantId, entry.item.getId());
                         refreshCartUi();
                     }
                 });
@@ -129,14 +132,14 @@ public class Checkout extends AppCompatActivity {
     private void refreshCartUi() {
         LocalCart cart = LocalCart.getInstance();
         if (adapter != null) {
-            adapter.updateData(cart.getEntries());
+            adapter.updateData(cart.getEntries(restaurantId));
         }
 
-        boolean cartEmpty = cart.isEmpty();
+        boolean cartEmpty = cart.isEmpty(restaurantId);
         tvEmptyCart.setVisibility(cartEmpty ? View.VISIBLE : View.GONE);
         CheckoutSummary summary = buildSummary(cart);
 
-        tvSubtotalLabel.setText("Tạm tính (" + cart.getTotalCount() + " phần)");
+        tvSubtotalLabel.setText("Tạm tính (" + cart.getTotalCount(restaurantId) + " phần)");
         tvSubtotal.setText(formatPrice(summary.getSubtotal()));
         tvDeliveryFee.setText(formatPrice(summary.getDeliveryFee()));
         tvServiceFee.setText(formatPrice(summary.getServiceFee()));
@@ -166,8 +169,8 @@ public class Checkout extends AppCompatActivity {
     }
 
     private CheckoutSummary buildSummary(LocalCart cart) {
-        long subtotal = Math.round(cart.getTotalPrice());
-        long deliveryFee = cart.isEmpty() ? 0 : CheckoutSummary.DEFAULT_DELIVERY_FEE;
+        long subtotal = Math.round(cart.getTotalPrice(restaurantId));
+        long deliveryFee = cart.isEmpty(restaurantId) ? 0 : CheckoutSummary.DEFAULT_DELIVERY_FEE;
         return new CheckoutSummary(
                 subtotal,
                 deliveryFee,
@@ -189,7 +192,7 @@ public class Checkout extends AppCompatActivity {
         title.setTypeface(title.getTypeface(), android.graphics.Typeface.BOLD);
         content.addView(title);
 
-        addPaymentOption(content, dialog, "Thanh toán khi nhận hàng", true, true);
+        addPaymentOption(content, dialog, PAYMENT_COD, true, true);
         addPaymentOption(content, dialog, "QR ngân hàng", false, false);
         addPaymentOption(content, dialog, "MoMo", false, false);
         addPaymentOption(content, dialog, "ZaloPay", false, false);
@@ -238,7 +241,7 @@ public class Checkout extends AppCompatActivity {
     private void placeOrder() {
         LocalCart cart = LocalCart.getInstance();
         if (!CheckoutSummary.canPlaceOrder(
-                cart.isEmpty(),
+                cart.isEmpty(restaurantId),
                 hasDeliveryAddress,
                 selectedPaymentMethod != null && !selectedPaymentMethod.trim().isEmpty(),
                 isSubmitting)) {
@@ -250,14 +253,14 @@ public class Checkout extends AppCompatActivity {
         refreshCartUi();
 
         String deliveryAddress = FALLBACK_ADDRESS_LABEL + " - " + FALLBACK_ADDRESS_DETAIL;
-        if (LocalOrderStore.getInstance().createFromCart(cart, deliveryAddress) == null) {
+        if (LocalOrderStore.getInstance().createFromCart(cart, restaurantId, deliveryAddress) == null) {
             isSubmitting = false;
             refreshCartUi();
             Toast.makeText(this, "Không thể tạo đơn từ giỏ hàng trống", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        cart.clear();
+        cart.clearRestaurant(restaurantId);
         showSuccessDialog();
     }
 

@@ -42,16 +42,80 @@ public class BugRegressionTest {
     }
 
     @Test
-    public void addToCartSuccessNavigatesToCheckoutFromInteractiveSurfaces() throws Exception {
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java",
-                "getCartAddedEvent().observe",
-                "new Intent(requireContext(), Checkout.class)");
+    public void orderingSurfacesAddToPerRestaurantDraftCartWithoutClearingOtherCarts() throws Exception {
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
-                "getCartAddedEvent().observe",
+                "LocalCart.getInstance().add");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
+                "hasDifferentRestaurant",
+                "Xoa va them mon moi",
+                "cart.clear()");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
                 "new Intent(requireContext(), Checkout.class)");
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/search/SearchFragment.java",
-                "getCartAddedEvent().observe",
-                "new Intent(requireContext(), Checkout.class)");
+
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
+                "ToppingBottomSheet",
+                "CartBottomSheet",
+                "layoutStickyCart");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
+                "Xoa va them mon moi",
+                "cart.clear()");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
+                "ToppingBottomSheet",
+                "CartBottomSheet",
+                "layoutStickyCart");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
+                "Xoa va them mon moi",
+                "cart.clear()");
+    }
+
+    @Test
+    public void foodDetailLoadsSelectedFoodInsteadOfMockingRestaurantOne() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/data/repository/FoodRepository.java",
+                "getFoodById",
+                "\"eq.\" + foodId");
+        assertSourceContains("src/main/java/com/example/fooddelivery/data/remote/apis/ApiService.java",
+                "getMenuItemById",
+                "@Query(\"id\")");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailViewModel.java",
+                "foodRepository.getFoodById(foodId)");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailViewModel.java",
+                "new FoodItem(foodId",
+                "setRestaurantId(1)");
+    }
+
+    @Test
+    public void orderSurfacesUseDeliveryAddressCopyInsteadOfTableServiceCopy() throws Exception {
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/data/local/LocalOrderStore.java",
+                "Bàn",
+                "tầng");
+        assertSourceDoesNotContain("src/main/res/values/strings.xml",
+                "Bàn",
+                "tầng");
+        assertSourceContains("src/main/res/values/strings.xml",
+                "label_delivery_address",
+                "Địa chỉ giao hàng");
+    }
+
+    @Test
+    public void homeDiscoveryDoesNotAddDirectlyToCart() throws Exception {
+        String homeFragment = readFile(projectPath("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java"));
+        String homeViewModel = readFile(projectPath("src/main/java/com/example/fooddelivery/ui/home/HomeViewModel.java"));
+        String homeLayout = readFile(projectPath("src/main/res/layout/home_fragment.xml"));
+
+        assertFalse("HomeFragment must browse to Restaurant detail instead of opening a topping/cart flow",
+                homeFragment.contains("ToppingBottomSheet"));
+        assertFalse("HomeFragment must not mutate the local Cart",
+                homeFragment.contains("LocalCart.getInstance().add"));
+        assertFalse("HomeFragment must not observe add-to-cart events and jump to Checkout",
+                homeFragment.contains("getCartAddedEvent().observe"));
+        assertFalse("HomeViewModel must not expose Home add-to-cart behavior",
+                homeViewModel.contains("addToCart("));
+        assertFalse("Home must not show a sticky Cart; Cart belongs on Restaurant/Menu surfaces",
+                homeLayout.contains("layoutStickyCart"));
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java",
+                "navigateToRestaurantDetail",
+                "showAddButton",
+                "false");
     }
 
     @Test
@@ -76,7 +140,8 @@ public class BugRegressionTest {
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
                 "MenuAdapter",
                 "action_menu_to_restaurantDetail",
-                "viewModel.addToCart");
+                "ToppingBottomSheet",
+                "addItemToCartWithRestaurantGuard");
     }
 
     @Test
@@ -143,8 +208,11 @@ public class BugRegressionTest {
         assertTrue(navHome.contains("app:destination=\"@id/reviewsFragment\""));
 
         String reviewsLayout = readFile(projectPath("src/main/res/layout/fragment_reviews.xml"));
-        assertTrue("ReviewsFragment registers btnSendReview, so the layout must define it",
-                reviewsLayout.contains("android:id=\"@+id/btnSendReview\""));
+        assertTrue("ReviewsFragment registers btnResetFilter, so the layout must define it",
+                reviewsLayout.contains("android:id=\"@+id/btnResetFilter\""));
+        assertTrue(reviewsLayout.contains("android:id=\"@+id/chipPhoto\""));
+        assertTrue(reviewsLayout.contains("android:id=\"@+id/chipStar\""));
+        assertTrue(reviewsLayout.contains("android:id=\"@+id/tvReset\""));
     }
 
     private Path profileLayoutPath() {
@@ -172,6 +240,13 @@ public class BugRegressionTest {
         String source = readFile(projectPath(path));
         for (String snippet : snippets) {
             assertTrue("Missing snippet in " + path + ": " + snippet, source.contains(snippet));
+        }
+    }
+
+    private void assertSourceDoesNotContain(String path, String... snippets) throws Exception {
+        String source = readFile(projectPath(path));
+        for (String snippet : snippets) {
+            assertFalse("Unexpected snippet in " + path + ": " + snippet, source.contains(snippet));
         }
     }
 

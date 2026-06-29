@@ -29,11 +29,17 @@ public class FoodVerticalAdapter extends RecyclerView.Adapter<FoodVerticalAdapte
     private final List<FoodItem> items = new ArrayList<>();
     private final OnItemClick onItemClick;
     private final OnAddCart   onAddCart;
+    private final boolean showAddButton;
 
     public FoodVerticalAdapter(Context ctx, OnItemClick onItemClick, OnAddCart onAddCart) {
+        this(ctx, onItemClick, onAddCart, true);
+    }
+
+    public FoodVerticalAdapter(Context ctx, OnItemClick onItemClick, OnAddCart onAddCart, boolean showAddButton) {
         this.context     = ctx;
         this.onItemClick = onItemClick;
         this.onAddCart   = onAddCart;
+        this.showAddButton = showAddButton;
     }
 
     public void submitList(List<FoodItem> list) {
@@ -65,13 +71,16 @@ public class FoodVerticalAdapter extends RecyclerView.Adapter<FoodVerticalAdapte
                 .into(h.imgFood);
 
         h.itemView.setOnClickListener(v -> onItemClick.onClick(item));
-        h.btnAdd.setOnClickListener(v -> {
-            onAddCart.onAdd(item);
-            h.btnAdd.animate().scaleX(0.8f).scaleY(0.8f).setDuration(80)
-                    .withEndAction(() ->
-                            h.btnAdd.animate().scaleX(1f).scaleY(1f).setDuration(80).start())
-                    .start();
-        });
+        h.btnAdd.setVisibility(showAddButton ? View.VISIBLE : View.GONE);
+        h.btnAdd.setOnClickListener(showAddButton ? v -> {
+            if (onAddCart != null) {
+                onAddCart.onAdd(item);
+                h.btnAdd.animate().scaleX(0.8f).scaleY(0.8f).setDuration(80)
+                        .withEndAction(() ->
+                                h.btnAdd.animate().scaleX(1f).scaleY(1f).setDuration(80).start())
+                        .start();
+            }
+        } : null);
     }
 
     @Override public int getItemCount() { return items.size(); }
