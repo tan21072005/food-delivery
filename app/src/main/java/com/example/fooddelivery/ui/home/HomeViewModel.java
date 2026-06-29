@@ -1,7 +1,6 @@
 package com.example.fooddelivery.ui.home;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -15,6 +14,7 @@ import com.example.fooddelivery.data.repository.FoodRepository;
 import com.example.fooddelivery.data.repository.LocationRepository;
 import com.example.fooddelivery.data.repository.OrderRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -80,26 +80,76 @@ public class HomeViewModel extends AndroidViewModel {
 
     public void loadHome() {
         isLoading.setValue(true);
+        errorMsg.setValue(null);
 
-        // Mock Categories
-        List<FoodCategory> mockCategories = java.util.Arrays.asList(
-                new FoodCategory(1, "Bun", "Bún", "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/bun.png"),
-                new FoodCategory(2, "Pho", "Phở", "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/pho.png"),
-                new FoodCategory(3, "Com", "Cơm", "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/com.png"),
-                new FoodCategory(4, "Nuoc", "Đồ Uống", "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/nuoc.png")
-        );
-        categories.setValue(mockCategories);
+        foodRepository.getHomeData().enqueue(new Callback<HomeDataResponse>() {
+            @Override
+            public void onResponse(Call<HomeDataResponse> call, Response<HomeDataResponse> response) {
+                isLoading.setValue(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    HomeDataResponse body = response.body();
+                    List<FoodCategory> remoteCategories = body.getCategories();
+                    List<FoodItem> remoteTopSelling = body.getTopSelling();
+                    List<FoodItem> remoteAllFoods = body.getAllFoods();
+                    if (remoteAllFoods == null) remoteAllFoods = remoteTopSelling;
 
-        // Mock Foods
-        List<FoodItem> mockFoods = java.util.Arrays.asList(
-                new FoodItem(1, "Bún chả Hà Nội", "Bún chả thịt nướng thơm ngon", 120, 35000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/bun.png"),
-                new FoodItem(2, "Phở bò tái nạm", "Phở bò truyền thống", 200, 45000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/pho.png"),
-                new FoodItem(3, "Cơm tấm sườn bì", "Cơm tấm Sài Gòn", 150, 40000, "https://res.cloudinary.com/daakugdmw/image/upload/v1778937385/com.png")
-        );
-        topSelling.setValue(mockFoods);
-        allFoods.setValue(mockFoods);
+                    categories.setValue(remoteCategories == null ? new ArrayList<>() : remoteCategories);
+                    topSelling.setValue(remoteTopSelling == null ? new ArrayList<>() : remoteTopSelling);
+                    allFoods.setValue(remoteAllFoods == null ? new ArrayList<>() : remoteAllFoods);
+                } else {
+                    loadHomeFromRestFallback("RPC trang chu loi: " + response.code());
+                }
+            }
 
-        isLoading.setValue(false);
+            @Override
+            public void onFailure(Call<HomeDataResponse> call, Throwable t) {
+                loadHomeFromRestFallback("RPC trang chu loi ket noi: " + t.getMessage());
+            }
+        });
+    }
+
+    private void loadHomeFromRestFallback(String rpcError) {
+        foodRepository.getCategories("id,name,slug,icon_url").enqueue(new Callback<List<FoodCategory>>() {
+            @Override
+            public void onResponse(Call<List<FoodCategory>> call, Response<List<FoodCategory>> response) {
+                categories.setValue(response.isSuccessful() && response.body() != null
+                        ? response.body()
+                        : new ArrayList<>());
+                loadMenusFallback(rpcError);
+            }
+
+            @Override
+            public void onFailure(Call<List<FoodCategory>> call, Throwable t) {
+                categories.setValue(new ArrayList<>());
+                loadMenusFallback(rpcError + "; cuisine loi: " + t.getMessage());
+            }
+        });
+    }
+
+    private void loadMenusFallback(String rpcError) {
+        foodRepository.getMenus(FoodRepository.MENU_SELECT).enqueue(new Callback<List<FoodItem>>() {
+            @Override
+            public void onResponse(Call<List<FoodItem>> call, Response<List<FoodItem>> response) {
+                isLoading.setValue(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    topSelling.setValue(response.body());
+                    allFoods.setValue(response.body());
+                    errorMsg.setValue(rpcError + ". Dang dung REST fallback.");
+                } else {
+                    topSelling.setValue(new ArrayList<>());
+                    allFoods.setValue(new ArrayList<>());
+                    errorMsg.setValue(rpcError + "; REST menu loi: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<FoodItem>> call, Throwable t) {
+                isLoading.setValue(false);
+                topSelling.setValue(new ArrayList<>());
+                allFoods.setValue(new ArrayList<>());
+                errorMsg.setValue(rpcError + "; REST menu loi ket noi: " + t.getMessage());
+            }
+        });
     }
 
     public void addToCart(long userId, long foodId, int quantity) {

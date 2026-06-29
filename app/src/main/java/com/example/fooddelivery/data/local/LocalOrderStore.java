@@ -75,6 +75,33 @@ public class LocalOrderStore {
         return order;
     }
 
+    public List<Order> getDraftOrders() {
+        List<Order> draftOrders = new ArrayList<>();
+        LocalCart cart = LocalCart.getInstance();
+        if (cart.isEmpty()) return draftOrders;
+
+        List<LocalCart.CartEntry> entries = cart.getEntries();
+        LocalCart.CartEntry first = entries.get(0);
+        String foodName = first.item.getName();
+        if (entries.size() > 1) {
+            foodName += " + " + (entries.size() - 1) + " món khác";
+        }
+
+        draftOrders.add(new Order(
+                -1,
+                foodName,
+                "Giỏ hàng hiện tại",
+                cart.getTotalCount(),
+                Math.round(cart.getTotalPrice()),
+                0,
+                "draft",
+                first.item.getImageResId(),
+                false,
+                "Chưa đặt"
+        ));
+        return draftOrders;
+    }
+
     public List<Order> getPendingOrders() {
         return new ArrayList<>(pendingOrders);
     }

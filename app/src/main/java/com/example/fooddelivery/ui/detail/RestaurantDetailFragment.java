@@ -96,6 +96,15 @@ public class RestaurantDetailFragment extends Fragment {
         // Observe + load data
         viewModel.getFoods().observe(getViewLifecycleOwner(), items ->
                 adapter.submitList(items));
-        viewModel.loadRestaurantFoods(1L);
+        viewModel.getErrorMsg().observe(getViewLifecycleOwner(), message -> {
+            if (message != null && !message.trim().isEmpty()) {
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        long restaurantId = getArguments() != null
+                ? getArguments().getLong("restaurant_id", -1L)
+                : -1L;
+        viewModel.loadRestaurantFoods(restaurantId);
     }
 }

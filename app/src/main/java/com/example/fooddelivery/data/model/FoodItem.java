@@ -30,8 +30,10 @@ public class FoodItem {
     @SerializedName("status")
     private String status;
 
-    // These fields are kept for backward compatibility with local mock UI, not from DB.
+    @SerializedName("sold_count")
     private int soldCount;
+
+    // Kept for backward compatibility with older local mock UI, not from DB.
     private int imageResId;
 
     public FoodItem(long id, String name, String description,

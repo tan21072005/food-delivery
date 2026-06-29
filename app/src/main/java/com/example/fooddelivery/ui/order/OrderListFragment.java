@@ -91,6 +91,8 @@ public class OrderListFragment extends Fragment
 
     private List<Order> getMockOrders(String status) {
         switch (status) {
+            case "draft":
+                return com.example.fooddelivery.data.local.LocalOrderStore.getInstance().getDraftOrders();
             case "completed":
                 return com.example.fooddelivery.data.local.LocalOrderStore.getInstance().getCompletedOrders();
             case "cancelled":
@@ -107,6 +109,12 @@ public class OrderListFragment extends Fragment
 
     @Override
     public void onViewDetailClick(Order order) {
+        if ("draft".equals(order.getStatus())) {
+            Intent intent = new Intent(requireContext(), Checkout.class);
+            startActivity(intent);
+            return;
+        }
+
         try {
             androidx.navigation.NavController navController = androidx.navigation.fragment.NavHostFragment.findNavController(getParentFragment());
             navController.navigate(R.id.action_orderManagement_to_orderDetail);

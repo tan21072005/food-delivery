@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.data.local.SharedPreferencesDeliveryAddressStore;
 import com.example.fooddelivery.data.model.DeliveryAddress;
 import com.example.fooddelivery.data.repository.DeliveryAddressRepository;
 import com.google.android.material.button.MaterialButton;
@@ -42,6 +41,7 @@ public class DeliveryAddressFormFragment extends Fragment {
     private View groupCustomName;
     private String source = "profile";
     private String addressId;
+    private boolean editingDefault;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class DeliveryAddressFormFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        repository = new DeliveryAddressRepository(new SharedPreferencesDeliveryAddressStore(requireContext()));
+        repository = new DeliveryAddressRepository(requireContext());
 
         if (getArguments() != null) {
             source = getArguments().getString("source", "profile");
@@ -73,12 +73,23 @@ public class DeliveryAddressFormFragment extends Fragment {
         tvDeliveryAddressFormTitle = view.findViewById(R.id.tvDeliveryAddressFormTitle);
         btnSaveAddress = view.findViewById(R.id.btnSaveAddress);
 
-        DeliveryAddress existing = repository.find(addressId);
-        boolean editMode = existing != null;
-        tvDeliveryAddressFormTitle.setText(editMode ? "Sua dia chi" : "Them dia chi moi");
-        btnSaveAddress.setText(editMode ? "Cap nhat dia chi" : "Luu dia chi");
-        if (existing != null) {
-            bind(existing);
+        tvDeliveryAddressFormTitle.setText(addressId == null ? "Them dia chi moi" : "Sua dia chi");
+        btnSaveAddress.setText(addressId == null ? "Luu dia chi" : "Cap nhat dia chi");
+        if (addressId != null) {
+            repository.find(addressId, new DeliveryAddressRepository.ResultCallback<DeliveryAddress>() {
+                @Override
+                public void onSuccess(DeliveryAddress existing) {
+                    if (existing != null) {
+                        editingDefault = existing.isDefault();
+                        bind(existing);
+                    }
+                }
+
+                @Override
+                public void onError(String message) {
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+                }
+            });
         } else if (getArguments() != null && getArguments().getString("prefillType") != null) {
             setType(getArguments().getString("prefillType"));
         } else {
@@ -127,21 +138,22 @@ public class DeliveryAddressFormFragment extends Fragment {
         draft.setGate(text(etGate));
         draft.setCustomName(text(etCustomName));
         draft.setDriverNote(text(etDriverNote));
+        draft.setDefault(editingDefault);
 
-        DeliveryAddress existing = repository.find(addressId);
-        if (existing != null) draft.setDefault(existing.isDefault());
+        btnSaveAddress.setEnabled(false);
+        repository.save(draft, result -> {
+            btnSaveAddress.setEnabled(true);
+            if (!result.isSuccess()) {
+                showErrors(result.getErrors());
+                return;
+            }
 
-        DeliveryAddressRepository.SaveResult result = repository.save(draft);
-        if (!result.isSuccess()) {
-            showErrors(result.getErrors());
-            return;
-        }
-
-        if ("home".equals(source)) {
-            Navigation.findNavController(requireView()).popBackStack(R.id.homeFragment, false);
-        } else {
-            Navigation.findNavController(requireView()).popBackStack(R.id.addressListFragment, false);
-        }
+            if ("home".equals(source)) {
+                Navigation.findNavController(requireView()).popBackStack(R.id.homeFragment, false);
+            } else {
+                Navigation.findNavController(requireView()).popBackStack(R.id.addressListFragment, false);
+            }
+        });
     }
 
     private void showErrors(Map<String, String> errors) {

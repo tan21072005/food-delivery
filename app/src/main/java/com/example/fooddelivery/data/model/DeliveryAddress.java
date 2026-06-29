@@ -1,18 +1,43 @@
 package com.example.fooddelivery.data.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class DeliveryAddress {
+    @SerializedName("id")
     private String id;
+
+    @SerializedName("label")
     private String type;
+
+    @SerializedName("receiver_name")
     private String recipientName;
+
+    @SerializedName("receiver_phone")
     private String recipientPhone;
+
+    @SerializedName("address_line")
     private String fullAddress;
+
+    @SerializedName("floor")
     private String buildingFloor;
+
+    @SerializedName("gate_note")
     private String gate;
+
     private String customName;
     private String driverNote;
+
+    @SerializedName("latitude")
     private Double latitude;
+
+    @SerializedName("longitude")
     private Double longitude;
+
+    @SerializedName("is_default")
     private boolean isDefault;
+
+    @SerializedName("customer_id")
+    private long customerId;
 
     public String getId() {
         return id;
@@ -108,6 +133,14 @@ public class DeliveryAddress {
 
     public void setDefault(boolean aDefault) {
         isDefault = aDefault;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
     }
 
     public String getDisplayLabel() {

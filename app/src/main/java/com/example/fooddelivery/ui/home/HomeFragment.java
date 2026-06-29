@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.data.local.SharedPreferencesDeliveryAddressStore;
 
 // tsao thÃªm má»—i .databinding lÃ  ko cÃ³ lá»—i nhá»‰ ???
 //.databinding â†’ sub-package do Android tá»± táº¡o
@@ -81,7 +80,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         session   = new SessionManager(requireContext());
-        deliveryAddressRepository = new DeliveryAddressRepository(new SharedPreferencesDeliveryAddressStore(requireContext()));
+        deliveryAddressRepository = new DeliveryAddressRepository(requireContext());
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         setupBannerSlider();
@@ -126,8 +125,19 @@ public class HomeFragment extends Fragment {
 
     private void updateDeliveryAddressPill() {
         if (binding == null || deliveryAddressRepository == null) return;
-        DeliveryAddress current = deliveryAddressRepository.getCurrentAddress();
-        binding.tvAddress.setText(current == null ? "Them dia chi giao hang" : current.getFullAddress());
+        deliveryAddressRepository.getCurrentAddress(new DeliveryAddressRepository.ResultCallback<DeliveryAddress>() {
+            @Override
+            public void onSuccess(DeliveryAddress current) {
+                if (binding != null) {
+                    binding.tvAddress.setText(current == null ? "Them dia chi giao hang" : current.getFullAddress());
+                }
+            }
+
+            @Override
+            public void onError(String message) {
+                if (binding != null) binding.tvAddress.setText("Them dia chi giao hang");
+            }
+        });
     }
 
     private void setupBannerSlider() {

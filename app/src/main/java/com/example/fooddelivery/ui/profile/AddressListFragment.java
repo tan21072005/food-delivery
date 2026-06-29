@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.data.local.SharedPreferencesDeliveryAddressStore;
 import com.example.fooddelivery.data.model.DeliveryAddress;
 import com.example.fooddelivery.data.repository.DeliveryAddressRepository;
 
@@ -49,7 +48,7 @@ public class AddressListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        repository = new DeliveryAddressRepository(new SharedPreferencesDeliveryAddressStore(requireContext()));
+        repository = new DeliveryAddressRepository(requireContext());
         if (getArguments() != null) {
             source = getArguments().getString("source", "profile");
         }
@@ -79,18 +78,36 @@ public class AddressListFragment extends Fragment {
         });
         adapter.setEditListener(item -> openForm(item.getId(), null));
         adapter.setDefaultListener(item -> {
-            repository.setDefault(item.getId());
-            Toast.makeText(requireContext(), "Da dat lam dia chi mac dinh", Toast.LENGTH_SHORT).show();
-            refresh();
+            repository.setDefault(item.getId(), new DeliveryAddressRepository.ResultCallback<Void>() {
+                @Override
+                public void onSuccess(Void value) {
+                    Toast.makeText(requireContext(), "Da dat lam dia chi mac dinh", Toast.LENGTH_SHORT).show();
+                    refresh();
+                }
+
+                @Override
+                public void onError(String message) {
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+                }
+            });
         });
         adapter.setDeleteListener(item -> new AlertDialog.Builder(requireContext())
                 .setTitle("Xoa dia chi")
                 .setMessage("Ban muon xoa dia chi nay?")
                 .setNegativeButton("Huy", null)
                 .setPositiveButton("Xoa", (dialog, which) -> {
-                    repository.delete(item.getId());
-                    Toast.makeText(requireContext(), "Da xoa dia chi", Toast.LENGTH_SHORT).show();
-                    refresh();
+                    repository.delete(item.getId(), new DeliveryAddressRepository.ResultCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void value) {
+                            Toast.makeText(requireContext(), "Da xoa dia chi", Toast.LENGTH_SHORT).show();
+                            refresh();
+                        }
+
+                        @Override
+                        public void onError(String message) {
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 })
                 .show());
 
@@ -117,14 +134,36 @@ public class AddressListFragment extends Fragment {
     }
 
     private void refresh() {
-        allAddresses.clear();
-        allAddresses.addAll(repository.list());
-        DeliveryAddress current = repository.getCurrentAddress();
-        llCurrentLocation.setVisibility(current == null ? View.GONE : View.VISIBLE);
-        tvCurrentAddress.setText(current == null
-                ? "Chua co dia chi dang chon"
-                : current.getDisplayLabel() + ": " + current.getFullAddress());
-        renderList("");
+        repository.list(new DeliveryAddressRepository.ResultCallback<List<DeliveryAddress>>() {
+            @Override
+            public void onSuccess(List<DeliveryAddress> addresses) {
+                allAddresses.clear();
+                allAddresses.addAll(addresses);
+                repository.getCurrentAddress(new DeliveryAddressRepository.ResultCallback<DeliveryAddress>() {
+                    @Override
+                    public void onSuccess(DeliveryAddress current) {
+                        llCurrentLocation.setVisibility(current == null ? View.GONE : View.VISIBLE);
+                        tvCurrentAddress.setText(current == null
+                                ? "Chua co dia chi dang chon"
+                                : current.getDisplayLabel() + ": " + current.getFullAddress());
+                        renderList("");
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+                        renderList("");
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                allAddresses.clear();
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+                renderList("");
+            }
+        });
     }
 
     private void renderList(String query) {
@@ -147,14 +186,23 @@ public class AddressListFragment extends Fragment {
     }
 
     private void selectCurrentAddress() {
-        DeliveryAddress current = repository.getCurrentAddress();
-        if (current == null) return;
+        repository.getCurrentAddress(new DeliveryAddressRepository.ResultCallback<DeliveryAddress>() {
+            @Override
+            public void onSuccess(DeliveryAddress current) {
+                if (current == null) return;
 
-        repository.select(current.getId());
-        Toast.makeText(requireContext(), "Da chon dia chi hien tai", Toast.LENGTH_SHORT).show();
-        if ("home".equals(source)) {
-            Navigation.findNavController(requireView()).popBackStack(R.id.homeFragment, false);
-        }
+                repository.select(current.getId());
+                Toast.makeText(requireContext(), "Da chon dia chi hien tai", Toast.LENGTH_SHORT).show();
+                if ("home".equals(source)) {
+                    Navigation.findNavController(requireView()).popBackStack(R.id.homeFragment, false);
+                }
+            }
+
+            @Override
+            public void onError(String message) {
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void openForm(@Nullable String addressId, @Nullable String type) {

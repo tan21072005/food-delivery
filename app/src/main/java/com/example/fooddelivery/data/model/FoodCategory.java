@@ -8,7 +8,7 @@ public class FoodCategory {
 
     // Mapping to both 'name' (menu_categories) and 'cat_name' (categories) could be tricky. 
     // Usually we pick one based on which table is queried. Assuming 'categories' for home page:
-    @SerializedName("cat_name") 
+    @SerializedName(value = "cat_name", alternate = {"name"})
     private String name;
 
     private String slug;

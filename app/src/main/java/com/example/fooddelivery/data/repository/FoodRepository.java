@@ -13,6 +13,9 @@ import java.util.List;
 import retrofit2.Call;
 
 public class FoodRepository {
+    public static final String MENU_SELECT =
+            "id,restaurant_id,category_id,item_name,description,image_url,price,rating,status";
+
     private final ApiService apiService;
 
     public FoodRepository(Context context) {
@@ -29,6 +32,14 @@ public class FoodRepository {
 
     public Call<List<FoodItem>> getMenusByCategory(String categoryId, String select) {
         return apiService.getMenusByCategory(categoryId, select);
+    }
+
+    public Call<List<FoodItem>> getMenusByDishCategory(long dishCategoryId) {
+        return getMenusByCategory("eq." + dishCategoryId, MENU_SELECT);
+    }
+
+    public Call<List<FoodItem>> getRestaurantMenu(long restaurantId) {
+        return apiService.getMenusByRestaurant("eq." + restaurantId, MENU_SELECT);
     }
 
     public Call<HomeDataResponse> getHomeData() {

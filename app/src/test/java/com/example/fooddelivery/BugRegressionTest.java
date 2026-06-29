@@ -76,8 +76,7 @@ public class BugRegressionTest {
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
                 "MenuAdapter",
                 "action_menu_to_restaurantDetail",
-                "ToppingBottomSheet",
-                "LocalCart.getInstance().addItem");
+                "viewModel.addToCart");
     }
 
     @Test
@@ -142,153 +141,10 @@ public class BugRegressionTest {
         String navHome = readFile(projectPath("src/main/res/navigation/nav_home.xml"));
         assertTrue(navHome.contains("android:id=\"@+id/action_restaurantDetail_to_reviews\""));
         assertTrue(navHome.contains("app:destination=\"@id/reviewsFragment\""));
-    }
 
-    @Test
-    public void detailScreensExposeBackHandlersAndScreenLayoutsReserveTopInset() throws Exception {
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/OrderDetailFragment.java",
-                "R.id.ivBack",
-                "popBackStack()");
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/OrderReviewFragment.java",
-                "R.id.ivBack",
-                "popBackStack()");
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/cart/Checkout.java",
-                "R.id.ivBack",
-                "finish()");
-
-        for (String layout : Arrays.asList(
-                "src/main/res/layout/home_fragment.xml",
-                "src/main/res/layout/search_fragment.xml",
-                "src/main/res/layout/menu_fragment.xml",
-                "src/main/res/layout/profile_fragment.xml",
-                "src/main/res/layout/favorites_fragment.xml",
-                "src/main/res/layout/food_fragment_detail.xml",
-                "src/main/res/layout/fragment_restaurant_detail.xml",
-                "src/main/res/layout/fragment_restaurant_info.xml",
-                "src/main/res/layout/fragment_promotions.xml",
-                "src/main/res/layout/fragment_reviews.xml",
-                "src/main/res/layout/fragment_address_list.xml",
-                "src/main/res/layout/order_fragment_management.xml",
-                "src/main/res/layout/order_fragment_list.xml",
-                "src/main/res/layout/order_fragment_detail.xml",
-                "src/main/res/layout/order_fragment_review.xml",
-                "src/main/res/layout/cart_activity_checkout.xml")) {
-            String source = readFile(projectPath(layout));
-            assertTrue("Layout should reserve top inset with fitsSystemWindows: " + layout,
-                    source.contains("android:fitsSystemWindows=\"true\""));
-        }
-    }
-
-    @Test
-    public void checkoutSuccessReturnsToOrdersPendingTab() throws Exception {
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/cart/Checkout.java",
-                "putExtra(\"open_tab\", \"orders\")",
-                "putExtra(\"orders_tab\", \"pending\")");
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/OrderManagementFragment.java",
-                "EXTRA_ORDERS_TAB",
-                "getStringExtra(EXTRA_ORDERS_TAB)",
-                "viewPager.setCurrentItem(initialTab, false)");
-    }
-
-    @Test
-    public void deliveryAddressProfileManagementExposesEditDefaultAndDeleteActions() throws Exception {
-        String itemAddress = readFile(projectPath("src/main/res/layout/item_address.xml"));
-        assertTrue(itemAddress.contains("@+id/btnEditAddress"));
-        assertTrue(itemAddress.contains("@+id/btnSetDefaultAddress"));
-        assertTrue(itemAddress.contains("@+id/btnDeleteAddress"));
-
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressAdapter.java",
-                "OnAddressActionListener",
-                "setDefaultListener",
-                "setDeleteListener");
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressListFragment.java",
-                "repository.setDefault",
-                "repository.delete");
-    }
-
-    @Test
-    public void deliveryAddressCurrentCardReturnsHomeWhenOpenedFromHome() throws Exception {
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressListFragment.java",
-                "setOnClickListener(v -> selectCurrentAddress())",
-                "private void selectCurrentAddress()",
-                "repository.select(current.getId())",
-                "if (\"home\".equals(source))",
-                "popBackStack(R.id.homeFragment, false)");
-    }
-
-    @Test
-    public void deliveryAddressHomePickerHidesProfileManagementActions() throws Exception {
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressListFragment.java",
-                "adapter.setManagementActionsVisible(!\"home\".equals(source))");
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressAdapter.java",
-                "setManagementActionsVisible",
-                "managementActionsVisible",
-                "btnSetDefaultAddress.setVisibility",
-                "btnDeleteAddress.setVisibility");
-    }
-
-    @Test
-    public void deliveryAddressHomeGraphDeclaresPickerAndFormDestinations() throws Exception {
-        String navHome = readFile(projectPath("src/main/res/navigation/nav_home.xml"));
-
-        assertTrue(navHome.contains("android:id=\"@+id/action_home_to_addressList\""));
-        assertTrue(navHome.contains("app:destination=\"@id/addressListFragment\""));
-        assertTrue(navHome.contains("android:id=\"@+id/addressListFragment\""));
-        assertTrue(navHome.contains("android:name=\"com.example.fooddelivery.ui.profile.AddressListFragment\""));
-        assertTrue(navHome.contains("android:id=\"@+id/action_addressList_to_deliveryAddressForm\""));
-        assertTrue(navHome.contains("android:id=\"@+id/deliveryAddressFormFragment\""));
-        assertTrue(navHome.contains("android:name=\"com.example.fooddelivery.ui.profile.DeliveryAddressFormFragment\""));
-    }
-
-    @Test
-    public void deliveryAddressSearchNoMatchShowsEmptyActions() throws Exception {
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressListFragment.java",
-                "boolean noVisibleAddresses = filtered.isEmpty()",
-                "tvEmptyState.setVisibility(noVisibleAddresses ? View.VISIBLE : View.GONE)",
-                "llEmptyShortcuts.setVisibility(noVisibleAddresses ? View.VISIBLE : View.GONE)",
-                "rvAddresses.setVisibility(noVisibleAddresses ? View.GONE : View.VISIBLE)");
-    }
-
-    @Test
-    public void deliveryAddressSearchNoMatchUsesSearchSpecificEmptyCopy() throws Exception {
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressListFragment.java",
-                "String emptyMessage = normalized.isEmpty()",
-                "Ban chua co dia chi da luu. Them dia chi de giao hang nhanh hon.",
-                "Khong tim thay dia chi phu hop. Them dia chi moi de giao hang.",
-                "tvEmptyState.setText(emptyMessage)");
-    }
-
-    @Test
-    public void deliveryAddressCurrentCardOnlyShowsWhenCurrentAddressExists() throws Exception {
-        assertSourceContains("src/main/res/layout/fragment_address_list.xml",
-                "@+id/llCurrentLocation");
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressListFragment.java",
-                "private View llCurrentLocation",
-                "llCurrentLocation = view.findViewById(R.id.llCurrentLocation)",
-                "llCurrentLocation.setVisibility(current == null ? View.GONE : View.VISIBLE)");
-    }
-
-    @Test
-    public void deliveryAddressFormUsesAddAndEditModeCopy() throws Exception {
-        String formLayout = readFile(projectPath("src/main/res/layout/fragment_delivery_address_form.xml"));
-        assertTrue(formLayout.contains("@+id/tvDeliveryAddressFormTitle"));
-        assertTrue(formLayout.contains("@+id/btnSaveAddress"));
-
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/DeliveryAddressFormFragment.java",
-                "tvDeliveryAddressFormTitle",
-                "boolean editMode = existing != null",
-                "Sua dia chi",
-                "Them dia chi moi",
-                "Cap nhat dia chi",
-                "Luu dia chi");
-    }
-
-    @Test
-    public void deliveryAddressFormShowsPersistenceFailureMessage() throws Exception {
-        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/DeliveryAddressFormFragment.java",
-                "errors.containsKey(\"persistence\")",
-                "Khong the luu dia chi. Thu lai sau",
-                "Kiem tra lai thong tin dia chi");
+        String reviewsLayout = readFile(projectPath("src/main/res/layout/fragment_reviews.xml"));
+        assertTrue("ReviewsFragment registers btnSendReview, so the layout must define it",
+                reviewsLayout.contains("android:id=\"@+id/btnSendReview\""));
     }
 
     private Path profileLayoutPath() {

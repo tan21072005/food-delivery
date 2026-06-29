@@ -96,7 +96,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             holder.tvQuantityPrice.setText(order.getQuantityAndPrice());
         }
         if (holder.tvTime != null) {
-            holder.tvTime.setText(order.getTimeLabel());
+            holder.tvTime.setText("draft".equals(order.getStatus()) ? "Chưa đặt" : order.getTimeLabel());
         }
         if (holder.tvStatusBadge != null) {
             holder.tvStatusBadge.setText(getStatusLabel(order.getStatus()));
@@ -158,6 +158,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     private String getStatusLabel(String status) {
         switch (status) {
+            case "draft": return "Đơn nháp";
             case "confirmed": return "Đã xác nhận";
             case "preparing": return "Đang chuẩn bị";
             case "delivering": return "Đang giao";

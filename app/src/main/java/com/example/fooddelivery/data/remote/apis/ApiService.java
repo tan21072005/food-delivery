@@ -11,6 +11,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -57,27 +58,71 @@ public interface ApiService {
     @DELETE("rest/v1/users")
     Call<Void> deleteUser(@Query("id") String idFilter);
 
+    @GET("rest/v1/delivery_addresses")
+    Call<List<com.example.fooddelivery.data.model.DeliveryAddress>> getDeliveryAddresses(
+            @Query("select") String select,
+            @Query("customer_id") String customerIdFilter,
+            @Query("deleted_at") String deletedAtFilter,
+            @Query("order") String order
+    );
+
+    @GET("rest/v1/delivery_addresses")
+    Call<List<com.example.fooddelivery.data.model.DeliveryAddress>> getDeliveryAddressById(
+            @Query("id") String idFilter,
+            @Query("select") String select
+    );
+
+    @Headers("Prefer: return=representation")
+    @POST("rest/v1/delivery_addresses")
+    Call<List<com.example.fooddelivery.data.model.DeliveryAddress>> createDeliveryAddress(
+            @Body java.util.Map<String, Object> body
+    );
+
+    @Headers("Prefer: return=representation")
+    @PATCH("rest/v1/delivery_addresses")
+    Call<List<com.example.fooddelivery.data.model.DeliveryAddress>> updateDeliveryAddress(
+            @Query("id") String idFilter,
+            @Body java.util.Map<String, Object> body
+    );
+
+    @Headers("Prefer: return=minimal")
+    @PATCH("rest/v1/delivery_addresses")
+    Call<Void> updateDeliveryAddressDefaults(
+            @Query("customer_id") String customerIdFilter,
+            @Query("is_default") String defaultFilter,
+            @Body java.util.Map<String, Object> body
+    );
+
+    @DELETE("rest/v1/delivery_addresses")
+    Call<Void> deleteDeliveryAddress(@Query("id") String idFilter);
+
     // Lấy danh sách category (bảng categories)
-    @GET("rest/v1/categories")
+    @GET("rest/v1/cuisines")
     Call<List<FoodCategory>> getCategories(
             @Query("select") String select
     );
 
     // Lấy danh sách món ăn (bảng menus)
-    @GET("rest/v1/menus")
+    @GET("rest/v1/menus_compat")
     Call<List<FoodItem>> getMenus(
             @Query("select") String select
     );
 
     // Lấy danh sách món ăn theo category
-    @GET("rest/v1/menus")
+    @GET("rest/v1/menus_compat")
     Call<List<FoodItem>> getMenusByCategory(
             @Query("category_id") String categoryIdFilter,
             @Query("select") String select
     );
 
+    @GET("rest/v1/menus_compat")
+    Call<List<FoodItem>> getMenusByRestaurant(
+            @Query("restaurant_id") String restaurantIdFilter,
+            @Query("select") String select
+    );
+
     // [RPC] Lấy dữ liệu tổng hợp cho màn hình Home
-    @POST("rest/v1/rpc/get_home_data")
+    @POST("rest/v1/rpc/get_home_data_v3")
     Call<com.example.fooddelivery.data.model.HomeDataResponse> getHomeData();
 
     // --------------------------------------------------------

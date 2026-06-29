@@ -19,8 +19,9 @@ public class OrderManagementFragment extends Fragment {
 
     private static final String EXTRA_ORDERS_TAB = "orders_tab";
 
-    private final TextView[] tabs = new TextView[3];
-    private final View[] indicators = new View[3];
+    private final TextView[] tabs = new TextView[4];
+    private final View[] indicators = new View[4];
+    private View tabDraftContainer;
     private View tabProcessingContainer;
     private View tabCompletedContainer;
     private View tabCancelledContainer;
@@ -53,14 +54,17 @@ public class OrderManagementFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        tabs[0] = view.findViewById(R.id.tabPending);
-        tabs[1] = view.findViewById(R.id.tabCompleted);
-        tabs[2] = view.findViewById(R.id.tabCancelled);
+        tabs[0] = view.findViewById(R.id.tabDraft);
+        tabs[1] = view.findViewById(R.id.tabPending);
+        tabs[2] = view.findViewById(R.id.tabCompleted);
+        tabs[3] = view.findViewById(R.id.tabCancelled);
 
-        indicators[0] = view.findViewById(R.id.indicatorPending);
-        indicators[1] = view.findViewById(R.id.indicatorCompleted);
-        indicators[2] = view.findViewById(R.id.indicatorCancelled);
+        indicators[0] = view.findViewById(R.id.indicatorDraft);
+        indicators[1] = view.findViewById(R.id.indicatorPending);
+        indicators[2] = view.findViewById(R.id.indicatorCompleted);
+        indicators[3] = view.findViewById(R.id.indicatorCancelled);
 
+        tabDraftContainer = view.findViewById(R.id.tabDraftContainer);
         tabProcessingContainer = view.findViewById(R.id.tabPendingContainer);
         tabCompletedContainer = view.findViewById(R.id.tabCompletedContainer);
         tabCancelledContainer = view.findViewById(R.id.tabCancelledContainer);
@@ -74,15 +78,16 @@ public class OrderManagementFragment extends Fragment {
             @Override
             public Fragment createFragment(int position) {
                 switch (position) {
-                    case 1: return OrderListFragment.newInstance("completed");
-                    case 2: return OrderListFragment.newInstance("cancelled");
+                    case 0: return OrderListFragment.newInstance("draft");
+                    case 2: return OrderListFragment.newInstance("completed");
+                    case 3: return OrderListFragment.newInstance("cancelled");
                     default: return OrderListFragment.newInstance("processing");
                 }
             }
 
             @Override
             public int getItemCount() {
-                return 3;
+                return 4;
             }
         });
 
@@ -95,20 +100,25 @@ public class OrderManagementFragment extends Fragment {
     }
 
     private void setupTabClicks() {
-        tabProcessingContainer.setOnClickListener(v -> viewPager.setCurrentItem(0, true));
-        tabCompletedContainer.setOnClickListener(v -> viewPager.setCurrentItem(1, true));
-        tabCancelledContainer.setOnClickListener(v -> viewPager.setCurrentItem(2, true));
+        tabDraftContainer.setOnClickListener(v -> viewPager.setCurrentItem(0, true));
+        tabProcessingContainer.setOnClickListener(v -> viewPager.setCurrentItem(1, true));
+        tabCompletedContainer.setOnClickListener(v -> viewPager.setCurrentItem(2, true));
+        tabCancelledContainer.setOnClickListener(v -> viewPager.setCurrentItem(3, true));
     }
 
     private void openRequestedTabIfAny() {
-        int initialTab = 0;
+        int initialTab = 1;
         Intent intent = requireActivity().getIntent();
         if (intent != null) {
             String requestedTab = intent.getStringExtra(EXTRA_ORDERS_TAB);
-            if ("completed".equals(requestedTab)) {
-                initialTab = 1;
-            } else if ("cancelled".equals(requestedTab)) {
+            if ("draft".equals(requestedTab)) {
+                initialTab = 0;
+            } else if ("completed".equals(requestedTab)) {
                 initialTab = 2;
+            } else if ("cancelled".equals(requestedTab)) {
+                initialTab = 3;
+            } else {
+                initialTab = 1;
             }
             intent.removeExtra(EXTRA_ORDERS_TAB);
         }

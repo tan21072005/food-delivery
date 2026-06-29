@@ -48,6 +48,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
+            <include layout="@layout/order_tab_draft" />
             <include layout="@layout/order_tab_pending" />
             <include layout="@layout/order_tab_completed" />
             <include layout="@layout/order_tab_cancelled" />

@@ -7,6 +7,9 @@ public class HomeDataResponse {
     
     @SerializedName("categories")
     private List<FoodCategory> categories;
+
+    @SerializedName("cuisines")
+    private List<FoodCategory> cuisines;
     
     @SerializedName("top_selling")
     private List<FoodItem> topSelling;
@@ -17,11 +20,19 @@ public class HomeDataResponse {
     public HomeDataResponse() {}
 
     public List<FoodCategory> getCategories() {
-        return categories;
+        return categories != null ? categories : cuisines;
     }
 
     public void setCategories(List<FoodCategory> categories) {
         this.categories = categories;
+    }
+
+    public List<FoodCategory> getCuisines() {
+        return cuisines;
+    }
+
+    public void setCuisines(List<FoodCategory> cuisines) {
+        this.cuisines = cuisines;
     }
 
     public List<FoodItem> getTopSelling() {

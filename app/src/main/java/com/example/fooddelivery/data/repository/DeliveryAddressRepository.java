@@ -1,129 +1,323 @@
 package com.example.fooddelivery.data.repository;
 
+import android.content.Context;
+
 import com.example.fooddelivery.data.local.DeliveryAddressStore;
+import com.example.fooddelivery.data.local.SharedPreferencesDeliveryAddressStore;
+import com.example.fooddelivery.data.local.prefs.SessionManager;
 import com.example.fooddelivery.data.model.DeliveryAddress;
+import com.example.fooddelivery.data.model.User;
+import com.example.fooddelivery.data.remote.SupabaseClient;
+import com.example.fooddelivery.data.remote.apis.ApiService;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class DeliveryAddressRepository {
-    private final DeliveryAddressStore store;
+    private static final String ADDRESS_SELECT =
+            "id,customer_id,label,receiver_name,receiver_phone,address_line,building_name,floor,gate_note,latitude,longitude,is_default,created_at,updated_at";
+
+    private final DeliveryAddressStore selectedStore;
+    private final SessionManager sessionManager;
+    private final ApiService apiService;
+
+    public DeliveryAddressRepository(Context context) {
+        this.selectedStore = new SharedPreferencesDeliveryAddressStore(context);
+        this.sessionManager = new SessionManager(context);
+        this.apiService = SupabaseClient.getInstance(context).create(ApiService.class);
+    }
 
     public DeliveryAddressRepository(DeliveryAddressStore store) {
-        this.store = store;
+        throw new IllegalStateException("Use DeliveryAddressRepository(Context) for Supabase delivery addresses");
     }
 
-    public List<DeliveryAddress> list() {
-        List<DeliveryAddress> addresses = store.load();
-        sortDefaultFirst(addresses);
-        return addresses;
+    public void list(ResultCallback<List<DeliveryAddress>> callback) {
+        resolveCustomerId(new ResultCallback<Long>() {
+            @Override
+            public void onSuccess(Long customerId) {
+                apiService.getDeliveryAddresses(
+                        ADDRESS_SELECT,
+                        "eq." + customerId,
+                        "is.null",
+                        "is_default.desc,created_at.desc"
+                ).enqueue(new Callback<List<DeliveryAddress>>() {
+                    @Override
+                    public void onResponse(Call<List<DeliveryAddress>> call, Response<List<DeliveryAddress>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            callback.onSuccess(response.body());
+                        } else {
+                            callback.onError("Khong tai duoc dia chi: " + response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<DeliveryAddress>> call, Throwable t) {
+                        callback.onError("Loi ket noi dia chi: " + t.getMessage());
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                callback.onError(message);
+            }
+        });
     }
 
-    public DeliveryAddress find(String id) {
-        if (id == null) return null;
-        for (DeliveryAddress address : store.load()) {
-            if (id.equals(address.getId())) return address;
+    public void find(String id, ResultCallback<DeliveryAddress> callback) {
+        if (id == null || id.trim().isEmpty()) {
+            callback.onSuccess(null);
+            return;
         }
-        return null;
+
+        apiService.getDeliveryAddressById("eq." + id, ADDRESS_SELECT)
+                .enqueue(new Callback<List<DeliveryAddress>>() {
+                    @Override
+                    public void onResponse(Call<List<DeliveryAddress>> call, Response<List<DeliveryAddress>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<DeliveryAddress> addresses = response.body();
+                            callback.onSuccess(addresses.isEmpty() ? null : addresses.get(0));
+                        } else {
+                            callback.onError("Khong tai duoc dia chi: " + response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<DeliveryAddress>> call, Throwable t) {
+                        callback.onError("Loi ket noi dia chi: " + t.getMessage());
+                    }
+                });
     }
 
-    public DeliveryAddress getCurrentAddress() {
-        List<DeliveryAddress> addresses = store.load();
-        String selectedId = store.getSelectedId();
-        DeliveryAddress fallbackDefault = null;
-        for (DeliveryAddress address : addresses) {
-            if (selectedId != null && selectedId.equals(address.getId())) return address;
-            if (address.isDefault()) fallbackDefault = address;
-        }
-        return fallbackDefault != null ? fallbackDefault : (addresses.isEmpty() ? null : addresses.get(0));
+    public void getCurrentAddress(ResultCallback<DeliveryAddress> callback) {
+        list(new ResultCallback<List<DeliveryAddress>>() {
+            @Override
+            public void onSuccess(List<DeliveryAddress> addresses) {
+                String selectedId = selectedStore.getSelectedId();
+                DeliveryAddress fallbackDefault = null;
+                for (DeliveryAddress address : addresses) {
+                    if (selectedId != null && selectedId.equals(address.getId())) {
+                        callback.onSuccess(address);
+                        return;
+                    }
+                    if (address.isDefault()) fallbackDefault = address;
+                }
+                callback.onSuccess(fallbackDefault != null
+                        ? fallbackDefault
+                        : (addresses.isEmpty() ? null : addresses.get(0)));
+            }
+
+            @Override
+            public void onError(String message) {
+                callback.onError(message);
+            }
+        });
     }
 
-    public SaveResult save(DeliveryAddress draft) {
+    public void save(DeliveryAddress draft, SaveCallback callback) {
         Map<String, String> errors = validate(draft);
         if (!errors.isEmpty()) {
-            return SaveResult.failure(errors);
+            callback.onComplete(SaveResult.failure(errors));
+            return;
         }
 
-        List<DeliveryAddress> addresses = store.load();
-        DeliveryAddress saved = copy(draft);
-        boolean isNew = saved.getId() == null || saved.getId().trim().isEmpty();
-        if (isNew) {
-            saved.setId(store.newId());
-        }
-
-        if (addresses.isEmpty()) {
-            saved.setDefault(true);
-        }
-        if (saved.isDefault()) {
-            for (DeliveryAddress address : addresses) {
-                address.setDefault(false);
+        resolveCustomerId(new ResultCallback<Long>() {
+            @Override
+            public void onSuccess(Long customerId) {
+                Map<String, Object> body = toPayload(draft, customerId);
+                boolean isNew = draft.getId() == null || draft.getId().trim().isEmpty();
+                if (isNew) {
+                    createRemote(body, callback);
+                } else {
+                    updateRemote(draft.getId(), body, callback);
+                }
             }
-        }
 
-        boolean replaced = false;
-        for (int i = 0; i < addresses.size(); i++) {
-            if (saved.getId().equals(addresses.get(i).getId())) {
-                addresses.set(i, saved);
-                replaced = true;
-                break;
+            @Override
+            public void onError(String message) {
+                callback.onComplete(SaveResult.failure(persistenceError(message)));
             }
-        }
-        if (!replaced) addresses.add(saved);
-
-        ensureOneDefault(addresses);
-        try {
-            store.save(addresses);
-            store.setSelectedId(saved.getId());
-        } catch (RuntimeException exception) {
-            Map<String, String> persistenceError = new LinkedHashMap<>();
-            persistenceError.put("persistence", "Could not save delivery address");
-            return SaveResult.failure(persistenceError);
-        }
-        return SaveResult.success(saved);
+        });
     }
 
-    public boolean select(String id) {
-        DeliveryAddress address = find(id);
-        if (address == null) return false;
-        store.setSelectedId(id);
-        return true;
+    public void select(String id) {
+        selectedStore.setSelectedId(id);
     }
 
-    public void setDefault(String id) {
-        List<DeliveryAddress> addresses = store.load();
-        boolean found = false;
-        for (DeliveryAddress address : addresses) {
-            boolean selected = id != null && id.equals(address.getId());
-            address.setDefault(selected);
-            found = found || selected;
-        }
-        if (found) {
-            store.save(addresses);
-            store.setSelectedId(id);
-        }
-    }
+    public void setDefault(String id, ResultCallback<Void> callback) {
+        resolveCustomerId(new ResultCallback<Long>() {
+            @Override
+            public void onSuccess(Long customerId) {
+                Map<String, Object> clearBody = new LinkedHashMap<>();
+                clearBody.put("is_default", false);
+                apiService.updateDeliveryAddressDefaults("eq." + customerId, "eq.true", clearBody)
+                        .enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                if (response.isSuccessful()) {
+                                    Map<String, Object> setBody = new LinkedHashMap<>();
+                                    setBody.put("is_default", true);
+                                    apiService.updateDeliveryAddress("eq." + id, setBody)
+                                            .enqueue(new Callback<List<DeliveryAddress>>() {
+                                                @Override
+                                                public void onResponse(Call<List<DeliveryAddress>> call, Response<List<DeliveryAddress>> response) {
+                                                    if (response.isSuccessful()) {
+                                                        selectedStore.setSelectedId(id);
+                                                        callback.onSuccess(null);
+                                                    } else {
+                                                        callback.onError("Khong dat duoc mac dinh: " + response.code());
+                                                    }
+                                                }
 
-    public void delete(String id) {
-        List<DeliveryAddress> addresses = new ArrayList<>();
-        boolean deletedDefault = false;
-        for (DeliveryAddress address : store.load()) {
-            if (id != null && id.equals(address.getId())) {
-                deletedDefault = address.isDefault();
-            } else {
-                addresses.add(address);
+                                                @Override
+                                                public void onFailure(Call<List<DeliveryAddress>> call, Throwable t) {
+                                                    callback.onError("Loi ket noi: " + t.getMessage());
+                                                }
+                                            });
+                                } else {
+                                    callback.onError("Khong cap nhat mac dinh: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                callback.onError("Loi ket noi: " + t.getMessage());
+                            }
+                        });
             }
+
+            @Override
+            public void onError(String message) {
+                callback.onError(message);
+            }
+        });
+    }
+
+    public void delete(String id, ResultCallback<Void> callback) {
+        apiService.deleteDeliveryAddress("eq." + id).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    if (id != null && id.equals(selectedStore.getSelectedId())) selectedStore.setSelectedId(null);
+                    callback.onSuccess(null);
+                } else {
+                    callback.onError("Khong xoa duoc dia chi: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                callback.onError("Loi ket noi: " + t.getMessage());
+            }
+        });
+    }
+
+    private void createRemote(Map<String, Object> body, SaveCallback callback) {
+        body.put("is_default", true);
+        list(new ResultCallback<List<DeliveryAddress>>() {
+            @Override
+            public void onSuccess(List<DeliveryAddress> addresses) {
+                if (!addresses.isEmpty()) body.put("is_default", false);
+                apiService.createDeliveryAddress(body).enqueue(saveResponseCallback(callback));
+            }
+
+            @Override
+            public void onError(String message) {
+                callback.onComplete(SaveResult.failure(persistenceError(message)));
+            }
+        });
+    }
+
+    private void updateRemote(String id, Map<String, Object> body, SaveCallback callback) {
+        apiService.updateDeliveryAddress("eq." + id, body).enqueue(saveResponseCallback(callback));
+    }
+
+    private Callback<List<DeliveryAddress>> saveResponseCallback(SaveCallback callback) {
+        return new Callback<List<DeliveryAddress>>() {
+            @Override
+            public void onResponse(Call<List<DeliveryAddress>> call, Response<List<DeliveryAddress>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    DeliveryAddress saved = response.body().get(0);
+                    selectedStore.setSelectedId(saved.getId());
+                    callback.onComplete(SaveResult.success(saved));
+                } else {
+                    callback.onComplete(SaveResult.failure(persistenceError("Supabase response " + response.code())));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<DeliveryAddress>> call, Throwable t) {
+                callback.onComplete(SaveResult.failure(persistenceError(t.getMessage())));
+            }
+        };
+    }
+
+    private void resolveCustomerId(ResultCallback<Long> callback) {
+        int savedId = sessionManager.getUserId();
+        if (savedId > 0) {
+            callback.onSuccess((long) savedId);
+            return;
         }
-        if (deletedDefault && !addresses.isEmpty()) {
-            addresses.get(0).setDefault(true);
+
+        String email = sessionManager.getEmail();
+        if (email == null || email.trim().isEmpty()) {
+            callback.onError("Ban can dang nhap de luu dia chi");
+            return;
         }
-        ensureOneDefault(addresses);
-        store.save(addresses);
-        if (id != null && id.equals(store.getSelectedId())) {
-            DeliveryAddress current = getCurrentFrom(addresses);
-            store.setSelectedId(current == null ? null : current.getId());
+
+        apiService.getUserByEmail("eq." + email.trim()).enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    long userId = response.body().get(0).getId();
+                    if (userId > 0 && userId <= Integer.MAX_VALUE) {
+                        sessionManager.saveSession(
+                                sessionManager.getToken(),
+                                (int) userId,
+                                sessionManager.getUserName(),
+                                sessionManager.getEmail(),
+                                sessionManager.getRole()
+                        );
+                    }
+                    callback.onSuccess(userId);
+                } else {
+                    callback.onError("Khong tim thay ho so nguoi dung tren Supabase");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                callback.onError("Loi ket noi nguoi dung: " + t.getMessage());
+            }
+        });
+    }
+
+    private Map<String, Object> toPayload(DeliveryAddress draft, long customerId) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("customer_id", customerId);
+        body.put("label", displayLabel(draft));
+        body.put("receiver_name", trim(draft.getRecipientName()));
+        body.put("receiver_phone", trim(draft.getRecipientPhone()));
+        body.put("address_line", trim(draft.getFullAddress()));
+        body.put("floor", trim(draft.getBuildingFloor()));
+        body.put("gate_note", trim(draft.getGate()));
+        body.put("latitude", draft.getLatitude());
+        body.put("longitude", draft.getLongitude());
+        body.put("is_default", draft.isDefault());
+        return body;
+    }
+
+    private String displayLabel(DeliveryAddress draft) {
+        if ("Khac".equals(draft.getType()) && !isBlank(draft.getCustomName())) {
+            return trim(draft.getCustomName());
         }
+        return isBlank(draft.getType()) ? "Nha" : trim(draft.getType());
     }
 
     private Map<String, String> validate(DeliveryAddress draft) {
@@ -138,55 +332,27 @@ public class DeliveryAddressRepository {
         return errors;
     }
 
-    private void ensureOneDefault(List<DeliveryAddress> addresses) {
-        if (addresses.isEmpty()) return;
-        DeliveryAddress firstDefault = null;
-        for (DeliveryAddress address : addresses) {
-            if (address.isDefault()) {
-                if (firstDefault == null) {
-                    firstDefault = address;
-                } else {
-                    address.setDefault(false);
-                }
-            }
-        }
-        if (firstDefault == null) addresses.get(0).setDefault(true);
-    }
-
-    private void sortDefaultFirst(List<DeliveryAddress> addresses) {
-        addresses.sort((first, second) -> Boolean.compare(second.isDefault(), first.isDefault()));
-    }
-
-    private DeliveryAddress getCurrentFrom(List<DeliveryAddress> addresses) {
-        for (DeliveryAddress address : addresses) {
-            if (address.isDefault()) return address;
-        }
-        return addresses.isEmpty() ? null : addresses.get(0);
+    private Map<String, String> persistenceError(String message) {
+        Map<String, String> errors = new LinkedHashMap<>();
+        errors.put("persistence", message == null ? "Could not save delivery address" : message);
+        return errors;
     }
 
     private boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
     }
 
-    private DeliveryAddress copy(DeliveryAddress source) {
-        DeliveryAddress copy = new DeliveryAddress();
-        copy.setId(source.getId());
-        copy.setType(trim(source.getType()));
-        copy.setRecipientName(trim(source.getRecipientName()));
-        copy.setRecipientPhone(trim(source.getRecipientPhone()));
-        copy.setFullAddress(trim(source.getFullAddress()));
-        copy.setBuildingFloor(trim(source.getBuildingFloor()));
-        copy.setGate(trim(source.getGate()));
-        copy.setCustomName(trim(source.getCustomName()));
-        copy.setDriverNote(trim(source.getDriverNote()));
-        copy.setLatitude(source.getLatitude());
-        copy.setLongitude(source.getLongitude());
-        copy.setDefault(source.isDefault());
-        return copy;
-    }
-
     private String trim(String value) {
         return value == null ? null : value.trim();
+    }
+
+    public interface ResultCallback<T> {
+        void onSuccess(T value);
+        void onError(String message);
+    }
+
+    public interface SaveCallback {
+        void onComplete(SaveResult result);
     }
 
     public static class SaveResult {
