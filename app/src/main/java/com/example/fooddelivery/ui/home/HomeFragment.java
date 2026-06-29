@@ -26,6 +26,7 @@ import com.example.fooddelivery.databinding.HomeFragmentBinding;
 import com.example.fooddelivery.ui.home.adapters.BannerAdapter;
 import com.example.fooddelivery.ui.home.adapters.CategoryAdapter;
 import com.example.fooddelivery.ui.home.adapters.FoodVerticalAdapter;
+import com.example.fooddelivery.ui.home.adapters.NearbyRestaurantAdapter;
 import com.example.fooddelivery.ui.home.adapters.TopSellingAdapter;
 
 import java.util.Arrays;
@@ -43,6 +44,7 @@ public class HomeFragment extends Fragment {
     private CategoryAdapter categoryAdapter;
     private TopSellingAdapter topSellingAdapter;
     private FoodVerticalAdapter foodVerticalAdapter;
+    private NearbyRestaurantAdapter nearbyRestaurantAdapter;
 
     private final Handler bannerHandler = new Handler(Looper.getMainLooper());
     private Runnable bannerRunnable;
@@ -74,6 +76,7 @@ public class HomeFragment extends Fragment {
         setupCategories();
         setupTopSelling();
         setupAllFoods();
+        setupNearbyRestaurants();
         setupDiscoveryActions();
         setupDeliveryAddressEntry();
         observeViewModel();
@@ -202,6 +205,18 @@ public class HomeFragment extends Fragment {
         binding.rvAllFoods.setNestedScrollingEnabled(false);
     }
 
+    private void setupNearbyRestaurants() {
+        nearbyRestaurantAdapter = new NearbyRestaurantAdapter(
+                requireContext(),
+                this::navigateToRestaurantDetail
+        );
+
+        binding.rvNearbyRestaurants.setAdapter(nearbyRestaurantAdapter);
+        binding.rvNearbyRestaurants.setLayoutManager(
+                new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        );
+    }
+
     private void setupDiscoveryActions() {
         binding.etSearch.setOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigate(R.id.action_home_to_search)
@@ -242,7 +257,10 @@ public class HomeFragment extends Fragment {
         );
 
         viewModel.getAllFoods().observe(getViewLifecycleOwner(), list ->
-                foodVerticalAdapter.submitList(list)
+        {
+            foodVerticalAdapter.submitList(list);
+            nearbyRestaurantAdapter.submitList(list);
+        }
         );
 
         viewModel.getErrorMsg().observe(getViewLifecycleOwner(), msg -> {
