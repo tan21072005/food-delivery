@@ -23,8 +23,14 @@ public class AccountInfoViewModel extends AndroidViewModel {
 
     private final MutableLiveData<AccountInfoUiState> uiState =
             new MutableLiveData<>(AccountInfoUiState.empty());
+    private final MutableLiveData<UpdateResult> updateResult = new MutableLiveData<>();
     private final SessionManager sessionManager;
     private final UserRepository userRepository;
+    private boolean updating;
+
+    public enum AccountField {
+        NAME, PHONE, EMAIL, BIRTH_DATE, COUNTRY
+    }
 
     public AccountInfoViewModel(@NonNull Application application) {
         super(application);
@@ -34,6 +40,14 @@ public class AccountInfoViewModel extends AndroidViewModel {
 
     public LiveData<AccountInfoUiState> getUiState() {
         return uiState;
+    }
+
+    public LiveData<UpdateResult> getUpdateResult() {
+        return updateResult;
+    }
+
+    public void clearUpdateResult() {
+        updateResult.setValue(null);
     }
 
     public void loadAccountInfo() {
@@ -62,6 +76,69 @@ public class AccountInfoViewModel extends AndroidViewModel {
         });
     }
 
+    public void updateField(AccountField field, String value) {
+        int userId = sessionManager.getUserId();
+        String normalized = value == null ? "" : value.trim();
+        if (userId <= 0 || normalized.isEmpty() || updating) {
+            return;
+        }
+
+        User patch = createPatch(field, normalized);
+        updating = true;
+        userRepository.updateUser("eq." + userId, patch).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                updating = false;
+                if (!response.isSuccessful()) {
+                    updateResult.setValue(new UpdateResult(false, field));
+                    return;
+                }
+                AccountInfoUiState current = uiState.getValue();
+                uiState.setValue((current == null ? AccountInfoUiState.empty() : current)
+                        .withValue(field, normalized));
+                updateResult.setValue(new UpdateResult(true, field));
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable throwable) {
+                updating = false;
+                updateResult.setValue(new UpdateResult(false, field));
+            }
+        });
+    }
+
+    static User createPatch(AccountField field, String value) {
+        User patch = new User();
+        switch (field) {
+            case NAME:
+                patch.setFullName(value);
+                break;
+            case PHONE:
+                patch.setPhoneNumber(value);
+                break;
+            case EMAIL:
+                patch.setEmail(value);
+                break;
+            case BIRTH_DATE:
+                patch.setBirthDate(value);
+                break;
+            case COUNTRY:
+                patch.setCountry(value);
+                break;
+        }
+        return patch;
+    }
+
+    public static class UpdateResult {
+        public final boolean successful;
+        public final AccountField field;
+
+        UpdateResult(boolean successful, AccountField field) {
+            this.successful = successful;
+            this.field = field;
+        }
+    }
+
     public static class AccountInfoUiState {
         public final String name;
         public final String phoneNumber;
@@ -87,9 +164,27 @@ public class AccountInfoViewModel extends AndroidViewModel {
                     valueOrEmpty(displayName),
                     valueOrEmpty(user.getPhoneNumber()),
                     valueOrEmpty(user.getEmail()),
-                    valueOrEmpty(user.getBirthDate()),
+                    displayBirthDate(user.getBirthDate()),
                     valueOrEmpty(user.getCountry())
             );
+        }
+
+        AccountInfoUiState withValue(AccountField field, String value) {
+            switch (field) {
+                case NAME:
+                    return new AccountInfoUiState(value, phoneNumber, email, birthDate, country);
+                case PHONE:
+                    return new AccountInfoUiState(name, value, email, birthDate, country);
+                case EMAIL:
+                    return new AccountInfoUiState(name, phoneNumber, value, birthDate, country);
+                case BIRTH_DATE:
+                    return new AccountInfoUiState(name, phoneNumber, email,
+                            AccountInfoValidator.formatBirthDateForDisplay(value), country);
+                case COUNTRY:
+                    return new AccountInfoUiState(name, phoneNumber, email, birthDate, value);
+                default:
+                    return this;
+            }
         }
 
         private static String firstNonEmpty(String primary, String secondary) {
@@ -101,6 +196,13 @@ public class AccountInfoViewModel extends AndroidViewModel {
 
         private static String valueOrEmpty(String value) {
             return value == null || value.trim().isEmpty() ? EMPTY_VALUE : value.trim();
+        }
+
+        private static String displayBirthDate(String value) {
+            String normalized = valueOrEmpty(value);
+            return EMPTY_VALUE.equals(normalized)
+                    ? EMPTY_VALUE
+                    : AccountInfoValidator.formatBirthDateForDisplay(normalized);
         }
     }
 }

@@ -13,9 +13,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.navigation.NavBackStackEntry;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.fooddelivery.R;
+import com.example.fooddelivery.ui.profile.AccountMenuFragment;
 
 public class PasswordFormFragment extends Fragment {
 
@@ -99,8 +102,18 @@ public class PasswordFormFragment extends Fragment {
             return;
         }
 
-        // TODO: Gắn ViewModel gọi API tương ứng với từng Mode
+        NavController controller = NavHostFragment.findNavController(this);
+        if (MODE_CHANGE.equals(currentMode)) {
+            NavBackStackEntry previous = controller.getPreviousBackStackEntry();
+            if (previous != null) {
+                previous.getSavedStateHandle().set(
+                        AccountMenuFragment.PASSWORD_CHANGED_RESULT, true);
+            }
+            controller.popBackStack();
+            return;
+        }
+
         Toast.makeText(getContext(), "Xử lý thành công!", Toast.LENGTH_SHORT).show();
-        Navigation.findNavController(requireView()).popBackStack();
+        controller.popBackStack();
     }
 }

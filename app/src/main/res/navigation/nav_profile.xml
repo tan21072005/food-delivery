@@ -38,18 +38,16 @@
             android:id="@+id/action_accountMenu_to_accountInfo"
             app:destination="@id/accountInfoFragment" />
 
+        <action
+            android:id="@+id/action_accountMenu_to_changePassword"
+            app:destination="@id/changePasswordFragment" />
+
     </fragment>
 
     <fragment
         android:id="@+id/accountInfoFragment"
         android:name="com.example.fooddelivery.ui.profile.AccountInfoFragment"
-        android:label="Thông tin tài khoản">
-
-        <action
-            android:id="@+id/action_accountInfo_to_changePassword"
-            app:destination="@id/changePasswordFragment" />
-
-    </fragment>
+        android:label="Thông tin tài khoản" />
 
     <fragment
         android:id="@+id/changePasswordFragment"
