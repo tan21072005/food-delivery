@@ -24,6 +24,41 @@
             android:id="@+id/action_home_to_restaurantDetail"
             app:destination="@id/restaurantDetailFragment"/>
 
+        <action
+            android:id="@+id/action_home_to_addressList"
+            app:destination="@id/addressListFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/addressListFragment"
+        android:name="com.example.fooddelivery.ui.profile.AddressListFragment"
+        android:label="Dia chi giao hang">
+        <argument
+            android:name="source"
+            android:defaultValue="home"
+            app:argType="string"/>
+        <action
+            android:id="@+id/action_addressList_to_deliveryAddressForm"
+            app:destination="@id/deliveryAddressFormFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/deliveryAddressFormFragment"
+        android:name="com.example.fooddelivery.ui.profile.DeliveryAddressFormFragment"
+        android:label="Them dia chi moi">
+        <argument
+            android:name="source"
+            android:defaultValue="home"
+            app:argType="string"/>
+        <argument
+            android:name="addressId"
+            android:defaultValue=""
+            app:argType="string"/>
+        <argument
+            android:name="prefillType"
+            android:defaultValue=""
+            app:argType="string"/>
     </fragment>
     
     <fragment

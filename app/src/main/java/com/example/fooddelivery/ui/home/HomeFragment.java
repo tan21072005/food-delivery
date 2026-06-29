@@ -119,7 +119,7 @@ public class HomeFragment extends Fragment {
         binding.layoutAddress.setOnClickListener(v -> {
             Bundle args = new Bundle();
             args.putString("source", "home");
-            Navigation.findNavController(requireView()).navigate(R.id.addressListFragment, args);
+            Navigation.findNavController(requireView()).navigate(R.id.action_home_to_addressList, args);
         });
         updateDeliveryAddressPill();
     }

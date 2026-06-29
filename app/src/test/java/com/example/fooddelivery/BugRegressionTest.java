@@ -228,12 +228,34 @@ public class BugRegressionTest {
     }
 
     @Test
+    public void deliveryAddressHomeGraphDeclaresPickerAndFormDestinations() throws Exception {
+        String navHome = readFile(projectPath("src/main/res/navigation/nav_home.xml"));
+
+        assertTrue(navHome.contains("android:id=\"@+id/action_home_to_addressList\""));
+        assertTrue(navHome.contains("app:destination=\"@id/addressListFragment\""));
+        assertTrue(navHome.contains("android:id=\"@+id/addressListFragment\""));
+        assertTrue(navHome.contains("android:name=\"com.example.fooddelivery.ui.profile.AddressListFragment\""));
+        assertTrue(navHome.contains("android:id=\"@+id/action_addressList_to_deliveryAddressForm\""));
+        assertTrue(navHome.contains("android:id=\"@+id/deliveryAddressFormFragment\""));
+        assertTrue(navHome.contains("android:name=\"com.example.fooddelivery.ui.profile.DeliveryAddressFormFragment\""));
+    }
+
+    @Test
     public void deliveryAddressSearchNoMatchShowsEmptyActions() throws Exception {
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressListFragment.java",
                 "boolean noVisibleAddresses = filtered.isEmpty()",
                 "tvEmptyState.setVisibility(noVisibleAddresses ? View.VISIBLE : View.GONE)",
                 "llEmptyShortcuts.setVisibility(noVisibleAddresses ? View.VISIBLE : View.GONE)",
                 "rvAddresses.setVisibility(noVisibleAddresses ? View.GONE : View.VISIBLE)");
+    }
+
+    @Test
+    public void deliveryAddressSearchNoMatchUsesSearchSpecificEmptyCopy() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressListFragment.java",
+                "String emptyMessage = normalized.isEmpty()",
+                "Ban chua co dia chi da luu. Them dia chi de giao hang nhanh hon.",
+                "Khong tim thay dia chi phu hop. Them dia chi moi de giao hang.",
+                "tvEmptyState.setText(emptyMessage)");
     }
 
     @Test

@@ -137,6 +137,10 @@ public class AddressListFragment extends Fragment {
         }
         adapter.submitList(filtered);
         boolean noVisibleAddresses = filtered.isEmpty();
+        String emptyMessage = normalized.isEmpty()
+                ? "Ban chua co dia chi da luu. Them dia chi de giao hang nhanh hon."
+                : "Khong tim thay dia chi phu hop. Them dia chi moi de giao hang.";
+        tvEmptyState.setText(emptyMessage);
         tvEmptyState.setVisibility(noVisibleAddresses ? View.VISIBLE : View.GONE);
         llEmptyShortcuts.setVisibility(noVisibleAddresses ? View.VISIBLE : View.GONE);
         rvAddresses.setVisibility(noVisibleAddresses ? View.GONE : View.VISIBLE);
