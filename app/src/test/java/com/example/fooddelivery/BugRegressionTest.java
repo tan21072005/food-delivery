@@ -237,6 +237,16 @@ public class BugRegressionTest {
     }
 
     @Test
+    public void deliveryAddressCurrentCardOnlyShowsWhenCurrentAddressExists() throws Exception {
+        assertSourceContains("src/main/res/layout/fragment_address_list.xml",
+                "@+id/llCurrentLocation");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressListFragment.java",
+                "private View llCurrentLocation",
+                "llCurrentLocation = view.findViewById(R.id.llCurrentLocation)",
+                "llCurrentLocation.setVisibility(current == null ? View.GONE : View.VISIBLE)");
+    }
+
+    @Test
     public void deliveryAddressFormUsesAddAndEditModeCopy() throws Exception {
         String formLayout = readFile(projectPath("src/main/res/layout/fragment_delivery_address_form.xml"));
         assertTrue(formLayout.contains("@+id/tvDeliveryAddressFormTitle"));

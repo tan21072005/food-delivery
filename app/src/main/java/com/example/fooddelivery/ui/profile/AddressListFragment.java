@@ -37,6 +37,7 @@ public class AddressListFragment extends Fragment {
     private TextView tvEmptyState;
     private TextView tvCurrentAddress;
     private LinearLayout llEmptyShortcuts;
+    private View llCurrentLocation;
     private String source = "profile";
     private final List<DeliveryAddress> allAddresses = new ArrayList<>();
 
@@ -60,6 +61,7 @@ public class AddressListFragment extends Fragment {
         tvEmptyState = view.findViewById(R.id.tvEmptyState);
         tvCurrentAddress = view.findViewById(R.id.tvCurrentAddress);
         llEmptyShortcuts = view.findViewById(R.id.llEmptyShortcuts);
+        llCurrentLocation = view.findViewById(R.id.llCurrentLocation);
         EditText etSearchAddress = view.findViewById(R.id.etSearchAddress);
 
         rvAddresses.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -118,6 +120,7 @@ public class AddressListFragment extends Fragment {
         allAddresses.clear();
         allAddresses.addAll(repository.list());
         DeliveryAddress current = repository.getCurrentAddress();
+        llCurrentLocation.setVisibility(current == null ? View.GONE : View.VISIBLE);
         tvCurrentAddress.setText(current == null
                 ? "Chua co dia chi dang chon"
                 : current.getDisplayLabel() + ": " + current.getFullAddress());
