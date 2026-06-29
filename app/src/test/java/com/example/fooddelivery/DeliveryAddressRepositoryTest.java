@@ -103,6 +103,20 @@ public class DeliveryAddressRepositoryTest {
         assertTrue(repository.getCurrentAddress().isDefault());
     }
 
+    @Test
+    public void listPlacesDefaultAddressFirstAfterDefaultChanges() {
+        DeliveryAddressRepository repository = new DeliveryAddressRepository(new MemoryStore());
+        DeliveryAddress first = repository.save(validDraft("Nha")).getAddress();
+        DeliveryAddress second = repository.save(validDraft("Cong ty")).getAddress();
+
+        repository.setDefault(second.getId());
+
+        List<DeliveryAddress> addresses = repository.list();
+        assertEquals(second.getId(), addresses.get(0).getId());
+        assertTrue(addresses.get(0).isDefault());
+        assertEquals(first.getId(), addresses.get(1).getId());
+    }
+
     private DeliveryAddress validDraft(String type) {
         DeliveryAddress draft = new DeliveryAddress();
         draft.setType(type);

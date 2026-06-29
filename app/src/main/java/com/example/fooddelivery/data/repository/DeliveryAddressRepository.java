@@ -16,7 +16,9 @@ public class DeliveryAddressRepository {
     }
 
     public List<DeliveryAddress> list() {
-        return store.load();
+        List<DeliveryAddress> addresses = store.load();
+        sortDefaultFirst(addresses);
+        return addresses;
     }
 
     public DeliveryAddress find(String id) {
@@ -143,6 +145,10 @@ public class DeliveryAddressRepository {
             }
         }
         if (firstDefault == null) addresses.get(0).setDefault(true);
+    }
+
+    private void sortDefaultFirst(List<DeliveryAddress> addresses) {
+        addresses.sort((first, second) -> Boolean.compare(second.isDefault(), first.isDefault()));
     }
 
     private DeliveryAddress getCurrentFrom(List<DeliveryAddress> addresses) {
