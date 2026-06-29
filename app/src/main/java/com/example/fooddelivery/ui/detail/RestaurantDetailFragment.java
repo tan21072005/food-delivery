@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -14,16 +15,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.fooddelivery.R;
+import com.example.fooddelivery.data.local.LocalCart;
+import com.example.fooddelivery.data.model.FoodItem;
+import com.example.fooddelivery.ui.cart.CartBottomSheet;
 import com.example.fooddelivery.ui.detail.adapters.StorefrontAdapter;
-import com.google.android.material.appbar.AppBarLayout;
+import com.example.fooddelivery.ui.home.ToppingBottomSheet;
 
 public class RestaurantDetailFragment extends Fragment {
 
     private RestaurantDetailViewModel viewModel;
     private StorefrontAdapter adapter;
-    private Toolbar toolbar;
-    private AppBarLayout appBarLayout;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,30 +38,38 @@ public class RestaurantDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(RestaurantDetailViewModel.class);
 
-        toolbar    = view.findViewById(R.id.toolbar);
-        appBarLayout = view.findViewById(R.id.appBarLayout);
+        setupToolbar(view);
+        setupHeaderActions(view);
+        setupFoodGrid(view);
+        observeViewModel();
 
-        // Back button
-        toolbar.setNavigationOnClickListener(v ->
-                Navigation.findNavController(v).popBackStack());
+        long restaurantId = getArguments() != null
+                ? getArguments().getLong("restaurant_id", -1L)
+                : -1L;
+        viewModel.loadRestaurantFoods(restaurantId);
+        updateStickyCart(view);
+    }
 
-        // ── Click tên nhà hàng → Thông tin quán ──────────────────────────────
+    private void setupToolbar(View view) {
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(v -> Navigation.findNavController(v).popBackStack());
+    }
+
+    private void setupHeaderActions(View view) {
         View tvRestaurantName = view.findViewById(R.id.tvRestaurantName);
         if (tvRestaurantName != null) {
             tvRestaurantName.setOnClickListener(v ->
-                    Navigation.findNavController(v)
-                            .navigate(R.id.action_restaurantDetail_to_info));
+                    Navigation.findNavController(v).navigate(R.id.action_restaurantDetail_to_info)
+            );
         }
 
-        // ── Click khu vực Ưu đãi → Khuyến mại ───────────────────────────────
         View promoSection = view.findViewById(R.id.promoSection);
         if (promoSection != null) {
             promoSection.setOnClickListener(v ->
-                    Navigation.findNavController(v)
-                            .navigate(R.id.action_restaurantDetail_to_promotions));
+                    Navigation.findNavController(v).navigate(R.id.action_restaurantDetail_to_promotions)
+            );
         }
 
-        // ── Click "đánh giá" / số sao → Đánh giá của quán ───────────────────
         View layoutRatingReview = view.findViewById(R.id.layoutRatingReview);
         if (layoutRatingReview != null) {
             layoutRatingReview.setOnClickListener(v -> {
@@ -66,12 +77,12 @@ public class RestaurantDetailFragment extends Fragment {
                 if (getArguments() != null) {
                     bundle.putLong("restaurant_id", getArguments().getLong("restaurant_id", -1L));
                 }
-                Navigation.findNavController(v)
-                        .navigate(R.id.action_restaurantDetail_to_reviews, bundle);
+                Navigation.findNavController(v).navigate(R.id.action_restaurantDetail_to_reviews, bundle);
             });
         }
+    }
 
-        // ── RecyclerView foods ────────────────────────────────────────────────
+    private void setupFoodGrid(View view) {
         RecyclerView rvFoods = view.findViewById(R.id.rvFoods);
         rvFoods.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         adapter = new StorefrontAdapter(requireContext());
@@ -79,32 +90,62 @@ public class RestaurantDetailFragment extends Fragment {
 
         adapter.setOnItemClickListener(new StorefrontAdapter.OnItemClickListener() {
             @Override
-            public void onFoodClick(com.example.fooddelivery.data.model.FoodItem item) {
+            public void onFoodClick(FoodItem item) {
                 Bundle bundle = new Bundle();
                 bundle.putLong("food_id", item.getId());
-                Navigation.findNavController(view)
-                        .navigate(R.id.action_restaurantDetail_to_foodDetail, bundle);
+                Navigation.findNavController(view).navigate(R.id.action_restaurantDetail_to_foodDetail, bundle);
             }
 
             @Override
-            public void onAddToCartClick(com.example.fooddelivery.data.model.FoodItem item) {
-                Toast.makeText(requireContext(),
-                        "Đã thêm " + item.getName() + " vào giỏ", Toast.LENGTH_SHORT).show();
+            public void onAddToCartClick(FoodItem item) {
+                ToppingBottomSheet toppingSheet = new ToppingBottomSheet(item, selectedItem -> {
+                    LocalCart.getInstance().addItem(selectedItem);
+                    updateStickyCart(view);
+                    Toast.makeText(requireContext(),
+                            "Da them " + selectedItem.getName() + " vao gio", Toast.LENGTH_SHORT).show();
+                });
+                toppingSheet.show(getParentFragmentManager(), ToppingBottomSheet.TAG);
             }
         });
+    }
 
-        // Observe + load data
-        viewModel.getFoods().observe(getViewLifecycleOwner(), items ->
-                adapter.submitList(items));
+    private void observeViewModel() {
+        viewModel.getFoods().observe(getViewLifecycleOwner(), items -> adapter.submitList(items));
         viewModel.getErrorMsg().observe(getViewLifecycleOwner(), message -> {
             if (message != null && !message.trim().isEmpty()) {
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
-        long restaurantId = getArguments() != null
-                ? getArguments().getLong("restaurant_id", -1L)
-                : -1L;
-        viewModel.loadRestaurantFoods(restaurantId);
+    public void updateStickyCart(View view) {
+        if (view == null) return;
+
+        View stickyCart = view.findViewById(R.id.layoutStickyCart);
+        if (stickyCart == null) return;
+
+        int count = LocalCart.getInstance().getTotalCount();
+        if (count <= 0) {
+            stickyCart.setVisibility(View.GONE);
+            return;
+        }
+
+        stickyCart.setVisibility(View.VISIBLE);
+        TextView tvCount = stickyCart.findViewById(R.id.tvStickyCartCount);
+        TextView tvTotal = stickyCart.findViewById(R.id.tvStickyCartTotal);
+
+        if (tvCount != null) {
+            tvCount.setText(String.valueOf(count));
+        }
+        if (tvTotal != null) {
+            double total = LocalCart.getInstance().getTotalPrice();
+            java.text.NumberFormat formatter = new java.text.DecimalFormat("#,###");
+            tvTotal.setText(formatter.format(total) + "d");
+        }
+
+        stickyCart.setOnClickListener(v -> {
+            CartBottomSheet sheet = new CartBottomSheet();
+            sheet.show(getParentFragmentManager(), CartBottomSheet.TAG);
+        });
     }
 }
