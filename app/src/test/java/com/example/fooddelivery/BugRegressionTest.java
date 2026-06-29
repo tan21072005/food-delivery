@@ -42,24 +42,30 @@ public class BugRegressionTest {
     }
 
     @Test
-    public void orderingSurfacesAddToDraftCartWithRestaurantGuard() throws Exception {
+    public void orderingSurfacesAddToPerRestaurantDraftCartWithoutClearingOtherCarts() throws Exception {
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
-                "LocalCart.getInstance().add",
+                "LocalCart.getInstance().add");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
                 "hasDifferentRestaurant",
-                "Xoa va them mon moi");
+                "Xoa va them mon moi",
+                "cart.clear()");
         assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
                 "new Intent(requireContext(), Checkout.class)");
 
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
                 "ToppingBottomSheet",
                 "CartBottomSheet",
-                "hasDifferentRestaurant",
                 "layoutStickyCart");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
+                "Xoa va them mon moi",
+                "cart.clear()");
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
                 "ToppingBottomSheet",
                 "CartBottomSheet",
-                "hasDifferentRestaurant",
                 "layoutStickyCart");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
+                "Xoa va them mon moi",
+                "cart.clear()");
     }
 
     @Test

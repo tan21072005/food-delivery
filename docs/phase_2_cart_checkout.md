@@ -1,28 +1,95 @@
-# Giai đoạn 2: Cấu trúc lại Giỏ hàng & Thanh toán (Multi-Vendor)
+# Giai đoạn 2: Cart theo từng Restaurant và Checkout từng Đơn nháp
 
-Mình đã hoàn thành việc refactor logic Giỏ hàng và Thanh toán để hỗ trợ việc đặt món từ nhiều nhà hàng cùng lúc.
+> Trạng thái: đã chốt lại hướng domain theo `CONTEXT.md` và `docs/prd-ordering-mvp.md`.
 
-## Các thay đổi chính
+## Quyết định đã chốt
 
-### 1. Cập nhật Logic Database (Supabase)
-- Sửa đổi hàm `checkout_cart` trong file `docs/rpc_cart_order.sql`:
-  - Thêm vòng lặp qua từng `restaurant_id` có trong giỏ hàng.
-  - Mỗi nhà hàng sẽ được tạo một bản ghi `Order` riêng biệt với phí giao hàng (15,000đ/quán) và tổng tiền độc lập.
-  - Hàm giờ đây trả về danh sách mã đơn hàng (`BIGINT[]`) thay vì chỉ một ID duy nhất.
-- Sửa đổi hàm `get_cart_summary` trong file `docs/rpc_cart_order.sql`:
-  - Logic tính phí vận chuyển được điều chỉnh để nhân với số lượng nhà hàng (`COUNT(DISTINCT restaurant_id) * 15000`).
-  - Gộp chung tổng số tiền cần thanh toán một cách chính xác.
+Ordering MVP không dùng mô hình một Cart chứa món từ nhiều Restaurant rồi checkout một lần.
 
-*(**Lưu ý:** Bạn cần copy toàn bộ file `docs/rpc_cart_order.sql` và dán vào Supabase SQL Editor để các Function này được cập nhật trên Cloud Database).*
+Luồng chuẩn của repo là:
 
-### 2. Cập nhật Android Code (Retrofit & Repository)
-- Đổi kiểu trả về của endpoint `checkoutCart` trong `ApiService.java` từ `Call<Long>` sang `Call<List<Long>>`.
-- Cập nhật `OrderRepository.java` và `CheckoutViewModel.java` để xử lý luồng `List<Long>` khi thanh toán thành công.
+```text
+Restaurant A -> Cart A / Đơn nháp A
+Restaurant B -> Cart B / Đơn nháp B
+Customer checkout từng Cart riêng
+Mỗi lần checkout tạo một Order riêng cho Restaurant đó
+```
 
-### 3. Cập nhật Giao diện (UI) Giỏ Hàng
-- Sửa `CartAdapter.java` để tự động sắp xếp và gom nhóm (`sort`) các món ăn theo cùng một `restaurant_id` để chúng hiển thị cạnh nhau trên giao diện.
-- Sửa đổi text trong `Checkout.java` thành "Đơn hàng của bạn" thay vì cố định tên của một nhà hàng, và cập nhật thông báo thành công để hiển thị toàn bộ các mã đơn hàng vừa được tạo (VD: "Đặt món thành công! Mã đơn: #12, #13").
+## Nguyên tắc domain
 
-## Kiểm thử
-- Các hàm RPC mới sẽ chia nhỏ giỏ hàng một cách mượt mà dưới backend mà không cần gửi quá nhiều request từ client.
-- Giao diện Android sẵn sàng hiển thị danh sách đơn hàng đã được gom cụm theo từng quán.
+- Mỗi Customer có thể có nhiều Cart song song.
+- Mỗi Cart chỉ thuộc về một Restaurant.
+- Một Customer chỉ có tối đa một Cart draft cho mỗi Restaurant.
+- Checkout luôn diễn ra trên một Cart cụ thể.
+- Checkout một Cart tạo đúng một Order cho Restaurant của Cart đó.
+- Tab Đơn nháp hiển thị danh sách Cart theo từng Restaurant.
+
+## Luồng thêm món
+
+Khi Customer thêm Món từ Restaurant A:
+
+- Nếu Cart A đã tồn tại, dùng lại Cart A.
+- Nếu Món đã có trong Cart A với cùng option/note, tăng quantity.
+- Nếu Món chưa có trong Cart A, tạo CartItem mới.
+- Nếu Cart A chưa tồn tại, tạo Cart draft mới cho Restaurant A rồi thêm CartItem.
+
+Khi Customer sau đó thêm Món từ Restaurant B:
+
+- Không merge vào Cart A.
+- Không xoá Cart A.
+- Tạo hoặc dùng lại Cart B.
+- Cart A và Cart B cùng xuất hiện trong tab Đơn nháp.
+
+## Luồng Đơn nháp
+
+Tab Đơn nháp hiển thị mỗi Cart như một card riêng:
+
+```text
+Restaurant name
+Restaurant address / delivery context
+Item count
+Subtotal
+Updated time
+CTA: Xem / Thanh toán
+```
+
+Customer chọn một card Đơn nháp để mở Checkout cho đúng Cart đó.
+
+## Luồng Checkout
+
+Checkout nhận `cartId` hoặc `restaurantId` để load đúng Cart:
+
+```text
+Checkout Cart A
+-> chọn DeliveryAddress
+-> chọn payment/voucher/note nếu có
+-> đặt món
+-> tạo Order A
+-> xoá/ẩn Cart A khỏi Đơn nháp
+-> Order A xuất hiện ở tab Đang xử lý
+```
+
+Cart B không bị ảnh hưởng khi checkout Cart A.
+
+## Backend/RPC kỳ vọng
+
+Backend nên hỗ trợ per-Restaurant Cart thay vì multi-vendor Cart:
+
+- `carts` có `customer_id`, `restaurant_id`, `status = draft`.
+- Unique draft Cart theo `(customer_id, restaurant_id, status)` hoặc constraint tương đương.
+- `cart_items` thuộc về một `cart_id`.
+- Add-to-Cart upsert vào Cart của đúng Restaurant.
+- Checkout nhận một `cart_id` và tạo một `orders` row.
+- Checkout không trả về danh sách nhiều order IDs cho một Cart.
+
+## Ghi chú về hướng cũ
+
+Phiên bản cũ của file này từng mô tả multi-vendor Cart:
+
+```text
+Một Cart chứa nhiều Restaurant
+checkout_cart lặp qua từng restaurant_id
+một lần checkout trả về List<OrderId>
+```
+
+Hướng đó không còn là chuẩn cho Ordering MVP vì mâu thuẫn với `CONTEXT.md` và `docs/prd-ordering-mvp.md`.

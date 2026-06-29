@@ -111,6 +111,7 @@ public class OrderListFragment extends Fragment
     public void onViewDetailClick(Order order) {
         if ("draft".equals(order.getStatus())) {
             Intent intent = new Intent(requireContext(), Checkout.class);
+            intent.putExtra("restaurant_id", -order.getId());
             startActivity(intent);
             return;
         }
@@ -131,10 +132,10 @@ public class OrderListFragment extends Fragment
                 System.currentTimeMillis(), order.getFoodName(), "Reordered Item", 0, unitPrice, null);
         food.setImageResId(order.getFoodImageResId());
 
-        com.example.fooddelivery.data.local.LocalCart.getInstance().clear();
         com.example.fooddelivery.data.local.LocalCart.getInstance().add(food, order.getQuantity());
 
         Intent intent = new Intent(requireContext(), Checkout.class);
+        intent.putExtra("restaurant_id", food.getRestaurantId());
         startActivity(intent);
     }
 

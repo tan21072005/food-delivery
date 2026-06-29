@@ -9,9 +9,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.data.model.FoodItem;
+import com.example.fooddelivery.utils.MoneyFormatter;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class ToppingBottomSheet extends BottomSheetDialogFragment {
@@ -37,6 +43,22 @@ public class ToppingBottomSheet extends BottomSheetDialogFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
+        if (dialog == null) return;
+
+        View sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+        if (sheet == null) return;
+
+        sheet.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+        BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(sheet);
+        behavior.setSkipCollapsed(true);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        behavior.setPeekHeight(getResources().getDisplayMetrics().heightPixels);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -47,8 +69,21 @@ public class ToppingBottomSheet extends BottomSheetDialogFragment {
 
         if (foodItem != null) {
             tvTitle.setText(foodItem.getName());
-            tvTotal.setText(foodItem.getFormattedPrice());
+            tvTotal.setText(MoneyFormatter.format(foodItem.getPrice()));
         }
+
+        View footer = view.findViewById(R.id.toppingFooter);
+        int originalFooterBottomPadding = footer.getPaddingBottom();
+        ViewCompat.setOnApplyWindowInsetsListener(footer, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(
+                    v.getPaddingLeft(),
+                    v.getPaddingTop(),
+                    v.getPaddingRight(),
+                    originalFooterBottomPadding + systemBars.bottom
+            );
+            return insets;
+        });
 
         tvClose.setOnClickListener(v -> dismiss());
 

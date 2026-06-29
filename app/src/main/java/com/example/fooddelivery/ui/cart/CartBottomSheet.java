@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,25 +16,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.data.local.LocalCart;
 import com.example.fooddelivery.ui.cart.adapters.CartBottomSheetAdapter;
+import com.example.fooddelivery.utils.MoneyFormatter;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import java.text.NumberFormat;
-import java.util.Locale;
-
-/**
- * CartBottomSheet — hiện khi user ấn nút [+] trên bất kỳ màn hình nào.
- *
- * Cách dùng:
- *   CartBottomSheet sheet = new CartBottomSheet();
- *   sheet.show(getParentFragmentManager(), CartBottomSheet.TAG);
- */
 public class CartBottomSheet extends BottomSheetDialogFragment {
 
     public static final String TAG = "CartBottomSheet";
 
     private CartBottomSheetAdapter adapter;
-    private TextView tvViewOrder;
     private TextView tvCartCount;
+    private long restaurantId;
+    private OnCartChangedListener onCartChangedListener;
+
+    public interface OnCartChangedListener {
+        void onCartChanged();
+    }
+
+    public CartBottomSheet() {}
+
+    public CartBottomSheet(OnCartChangedListener onCartChangedListener) {
+        this.onCartChangedListener = onCartChangedListener;
+    }
 
     @Nullable
     @Override
@@ -49,28 +50,30 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecyclerView rv          = view.findViewById(R.id.rvCartItems);
-        Button btnViewOrder      = view.findViewById(R.id.btnViewOrder);
-        TextView tvClearAll      = view.findViewById(R.id.tvClearAll);
-        TextView tvClose         = view.findViewById(R.id.tvClose);
-        tvCartCount              = view.findViewById(R.id.tvCartCount);
+        RecyclerView rv = view.findViewById(R.id.rvCartItems);
+        Button btnViewOrder = view.findViewById(R.id.btnViewOrder);
+        TextView tvClearAll = view.findViewById(R.id.tvClearAll);
+        TextView tvClose = view.findViewById(R.id.tvClose);
+        tvCartCount = view.findViewById(R.id.tvCartCount);
+        restaurantId = LocalCart.getInstance().getRestaurantId();
 
-        // Setup RecyclerView
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new CartBottomSheetAdapter(
                 requireContext(),
-                LocalCart.getInstance().getEntries(),
+                LocalCart.getInstance().getEntries(restaurantId),
                 new CartBottomSheetAdapter.Listener() {
                     @Override
                     public void onIncrease(LocalCart.CartEntry entry) {
-                        LocalCart.getInstance().increase(entry.item.getId());
+                        LocalCart.getInstance().increase(restaurantId, entry.item.getId());
+                        notifyCartChanged();
                         refreshCart();
                     }
 
                     @Override
                     public void onDecrease(LocalCart.CartEntry entry) {
-                        LocalCart.getInstance().decrease(entry.item.getId());
-                        if (LocalCart.getInstance().isEmpty()) {
+                        LocalCart.getInstance().decrease(restaurantId, entry.item.getId());
+                        notifyCartChanged();
+                        if (LocalCart.getInstance().isEmpty(restaurantId)) {
                             dismiss();
                             return;
                         }
@@ -79,42 +82,45 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
                 });
         rv.setAdapter(adapter);
 
-        // "Xóa hết"
         tvClearAll.setOnClickListener(v -> {
-            LocalCart.getInstance().clear();
+            LocalCart.getInstance().clearRestaurant(restaurantId);
+            notifyCartChanged();
             dismiss();
         });
 
-        // "✕ Đóng"
         tvClose.setOnClickListener(v -> dismiss());
 
-        // "Xem đơn hàng"
         btnViewOrder.setOnClickListener(v -> {
+            if (LocalCart.getInstance().isEmpty(restaurantId)) {
+                refreshCart();
+                return;
+            }
             dismiss();
             Intent intent = new Intent(requireContext(), Checkout.class);
+            intent.putExtra("restaurant_id", restaurantId);
             startActivity(intent);
         });
 
         refreshCart();
     }
 
-    /** Cập nhật giao diện sau khi thay đổi giỏ hàng. */
     private void refreshCart() {
         LocalCart cart = LocalCart.getInstance();
-        adapter.updateData(cart.getEntries());
-
-        int count = cart.getTotalCount();
+        int count = cart.getTotalCount(restaurantId);
+        if (adapter != null) {
+            adapter.updateData(cart.getEntries(restaurantId));
+        }
         tvCartCount.setText(String.valueOf(count));
 
-        // Cập nhật text nút "Xem đơn hàng"
         Button btnViewOrder = requireView().findViewById(R.id.btnViewOrder);
-        String priceText = formatPrice(cart.getTotalPrice());
-        btnViewOrder.setText("Xem đơn hàng  •  " + priceText);
+        btnViewOrder.setEnabled(count > 0);
+        btnViewOrder.setAlpha(count > 0 ? 1f : 0.55f);
+        btnViewOrder.setText("Xem đơn hàng  •  " + MoneyFormatter.format(cart.getTotalPrice(restaurantId)));
     }
 
-    private String formatPrice(double price) {
-        long rounded = Math.round(price);
-        NumberFormat nf = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
-        return nf.format(rounded) + "đ";
+    private void notifyCartChanged() {
+        if (onCartChangedListener != null) {
+            onCartChangedListener.onCartChanged();
+        }
     }
 }

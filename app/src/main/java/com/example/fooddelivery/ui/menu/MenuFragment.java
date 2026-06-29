@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -23,6 +22,7 @@ import com.example.fooddelivery.data.model.FoodItem;
 import com.example.fooddelivery.ui.cart.CartBottomSheet;
 import com.example.fooddelivery.ui.home.ToppingBottomSheet;
 import com.example.fooddelivery.ui.menu.adapters.MenuAdapter;
+import com.example.fooddelivery.utils.MoneyFormatter;
 
 import java.util.ArrayList;
 
@@ -52,14 +52,14 @@ public class MenuFragment extends Fragment {
 
         String categorySlug = getArguments() != null ? getArguments().getString("category_slug", "") : "";
         viewModel.loadFoods(categorySlug);
-        
+
         updateStickyCart(view);
     }
 
     private void setupHeader(View view) {
         TextView title = view.findViewById(R.id.tvMenuTitle);
-        String categoryName = getArguments() != null ? getArguments().getString("category_name", "Tat ca mon") : "Tat ca mon";
-        title.setText(categoryName == null || categoryName.isEmpty() ? "Tat ca mon" : categoryName);
+        String categoryName = getArguments() != null ? getArguments().getString("category_name", "Tất cả món") : "Tất cả món";
+        title.setText(categoryName == null || categoryName.isEmpty() ? "Tất cả món" : categoryName);
 
         view.findViewById(R.id.btnBack).setOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigateUp()
@@ -108,53 +108,40 @@ public class MenuFragment extends Fragment {
     }
 
     private void addItemToCartWithRestaurantGuard(FoodItem item, int quantity, View view) {
-        LocalCart cart = LocalCart.getInstance();
-        if (!cart.hasDifferentRestaurant(item)) {
-            addItemToCart(item, quantity, view);
-            return;
-        }
-
-        new AlertDialog.Builder(requireContext())
-                .setMessage("Ban dang co mon tu quan khac. Xoa gio hien tai de dat mon tu quan nay?")
-                .setNegativeButton("Giu gio cu", null)
-                .setPositiveButton("Xoa va them mon moi", (dialog, which) -> {
-                    cart.clear();
-                    addItemToCart(item, quantity, view);
-                })
-                .show();
+        addItemToCart(item, quantity, view);
     }
 
     private void addItemToCart(FoodItem item, int quantity, View view) {
         LocalCart.getInstance().add(item, quantity);
         updateStickyCart(view);
         Toast.makeText(requireContext(),
-                "Da them " + item.getName() + " vao gio", Toast.LENGTH_SHORT).show();
+                "Đã thêm " + item.getName() + " vào giỏ", Toast.LENGTH_SHORT).show();
     }
 
     public void updateStickyCart(View view) {
         if (view == null) return;
         View stickyCart = view.findViewById(R.id.layoutStickyCart);
-        if (stickyCart != null) {
-            int count = LocalCart.getInstance().getTotalCount();
-            if (count > 0) {
-                stickyCart.setVisibility(View.VISIBLE);
-                TextView tvCount = stickyCart.findViewById(R.id.tvStickyCartCount);
-                TextView tvTotal = stickyCart.findViewById(R.id.tvStickyCartTotal);
-                
-                if (tvCount != null) tvCount.setText(String.valueOf(count));
-                if (tvTotal != null) {
-                    double total = LocalCart.getInstance().getTotalPrice();
-                    java.text.NumberFormat formatter = new java.text.DecimalFormat("#,###");
-                    tvTotal.setText(formatter.format(total) + "đ");
-                }
-                
-                stickyCart.setOnClickListener(v -> {
-                    CartBottomSheet sheet = new CartBottomSheet();
-                    sheet.show(getParentFragmentManager(), CartBottomSheet.TAG);
-                });
-            } else {
-                stickyCart.setVisibility(View.GONE);
-            }
+        if (stickyCart == null) return;
+
+        int count = LocalCart.getInstance().getTotalCount();
+        if (count <= 0) {
+            stickyCart.setVisibility(View.GONE);
+            return;
         }
+
+        stickyCart.setVisibility(View.VISIBLE);
+        TextView tvCount = stickyCart.findViewById(R.id.tvStickyCartCount);
+        TextView tvTotal = stickyCart.findViewById(R.id.tvStickyCartTotal);
+
+        if (tvCount != null) tvCount.setText(String.valueOf(count));
+        if (tvTotal != null) {
+            double total = LocalCart.getInstance().getTotalPrice();
+            tvTotal.setText(MoneyFormatter.format(total));
+        }
+
+        stickyCart.setOnClickListener(v -> {
+            CartBottomSheet sheet = new CartBottomSheet(() -> updateStickyCart(view));
+            sheet.show(getParentFragmentManager(), CartBottomSheet.TAG);
+        });
     }
 }

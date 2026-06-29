@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,11 +22,13 @@ import com.example.fooddelivery.data.model.FoodItem;
 import com.example.fooddelivery.ui.cart.CartBottomSheet;
 import com.example.fooddelivery.ui.detail.adapters.StorefrontAdapter;
 import com.example.fooddelivery.ui.home.ToppingBottomSheet;
+import com.example.fooddelivery.utils.MoneyFormatter;
 
 public class RestaurantDetailFragment extends Fragment {
 
     private RestaurantDetailViewModel viewModel;
     private StorefrontAdapter adapter;
+    private long restaurantId = -1L;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class RestaurantDetailFragment extends Fragment {
         setupFoodGrid(view);
         observeViewModel();
 
-        long restaurantId = getArguments() != null
+        restaurantId = getArguments() != null
                 ? getArguments().getLong("restaurant_id", -1L)
                 : -1L;
         viewModel.loadRestaurantFoods(restaurantId);
@@ -108,20 +109,7 @@ public class RestaurantDetailFragment extends Fragment {
     }
 
     private void addItemToCartWithRestaurantGuard(FoodItem item, int quantity, View view) {
-        LocalCart cart = LocalCart.getInstance();
-        if (!cart.hasDifferentRestaurant(item)) {
-            addItemToCart(item, quantity, view);
-            return;
-        }
-
-        new AlertDialog.Builder(requireContext())
-                .setMessage("Ban dang co mon tu quan khac. Xoa gio hien tai de dat mon tu quan nay?")
-                .setNegativeButton("Giu gio cu", null)
-                .setPositiveButton("Xoa va them mon moi", (dialog, which) -> {
-                    cart.clear();
-                    addItemToCart(item, quantity, view);
-                })
-                .show();
+        addItemToCart(item, quantity, view);
     }
 
     private void addItemToCart(FoodItem item, int quantity, View view) {
@@ -146,7 +134,8 @@ public class RestaurantDetailFragment extends Fragment {
         View stickyCart = view.findViewById(R.id.layoutStickyCart);
         if (stickyCart == null) return;
 
-        int count = LocalCart.getInstance().getTotalCount();
+        long stickyRestaurantId = restaurantId > 0 ? restaurantId : LocalCart.getInstance().getRestaurantId();
+        int count = LocalCart.getInstance().getTotalCount(stickyRestaurantId);
         if (count <= 0) {
             stickyCart.setVisibility(View.GONE);
             return;
@@ -160,13 +149,13 @@ public class RestaurantDetailFragment extends Fragment {
             tvCount.setText(String.valueOf(count));
         }
         if (tvTotal != null) {
-            double total = LocalCart.getInstance().getTotalPrice();
-            java.text.NumberFormat formatter = new java.text.DecimalFormat("#,###");
-            tvTotal.setText(formatter.format(total) + "d");
+            double total = LocalCart.getInstance().getTotalPrice(stickyRestaurantId);
+            tvTotal.setText(MoneyFormatter.format(total));
         }
 
         stickyCart.setOnClickListener(v -> {
-            CartBottomSheet sheet = new CartBottomSheet();
+            LocalCart.getInstance().setActiveRestaurantId(stickyRestaurantId);
+            CartBottomSheet sheet = new CartBottomSheet(() -> updateStickyCart(view));
             sheet.show(getParentFragmentManager(), CartBottomSheet.TAG);
         });
     }

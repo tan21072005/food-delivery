@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -18,6 +17,7 @@ import com.example.fooddelivery.R;
 import com.example.fooddelivery.data.local.LocalCart;
 import com.example.fooddelivery.data.model.FoodItem;
 import com.example.fooddelivery.databinding.FoodFragmentDetailBinding;
+import com.example.fooddelivery.utils.MoneyFormatter;
 
 public class FoodDetailFragment extends Fragment {
 
@@ -77,20 +77,7 @@ public class FoodDetailFragment extends Fragment {
     }
 
     private void addItemToCartWithRestaurantGuard(FoodItem item, int quantity) {
-        LocalCart cart = LocalCart.getInstance();
-        if (!cart.hasDifferentRestaurant(item)) {
-            addItemToCart(item, quantity);
-            return;
-        }
-
-        new AlertDialog.Builder(requireContext())
-                .setMessage("Ban dang co mon tu quan khac. Xoa gio hien tai de dat mon tu quan nay?")
-                .setNegativeButton("Giu gio cu", null)
-                .setPositiveButton("Xoa va them mon moi", (dialog, which) -> {
-                    cart.clear();
-                    addItemToCart(item, quantity);
-                })
-                .show();
+        addItemToCart(item, quantity);
     }
 
     private void addItemToCart(FoodItem item, int quantity) {
@@ -123,9 +110,7 @@ public class FoodDetailFragment extends Fragment {
         if (item == null) return;
 
         double total = item.getPrice() * quantity;
-        long rounded = Math.round(total);
-        String formatted = String.format("%,d", rounded).replace(",", ".") + "d";
-        binding.tvTotalPrice.setText("Tong: " + formatted);
+        binding.tvTotalPrice.setText("Tổng: " + MoneyFormatter.format(total));
     }
 
     @Override

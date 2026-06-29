@@ -50,21 +50,23 @@ public class LocalOrderStore {
         pendingOrders.add(0, order);
     }
 
-    public Order createFromCart(LocalCart cart, String tableInfo) {
-        if (cart.isEmpty()) return null;
+    public Order createFromCart(LocalCart cart, String deliveryAddress) {
+        return createFromCart(cart, cart.getRestaurantId(), deliveryAddress);
+    }
 
-        LocalCart.CartEntry first = cart.getEntries().get(0);
-        String foodName = first.item.getName();
-        if (cart.getEntries().size() > 1) {
-            foodName += " + " + (cart.getEntries().size() - 1) + " món khác";
-        }
+    public Order createFromCart(LocalCart cart, long restaurantId, String deliveryAddress) {
+        if (cart.isEmpty(restaurantId)) return null;
+
+        List<LocalCart.CartEntry> entries = cart.getEntries(restaurantId);
+        LocalCart.CartEntry first = entries.get(0);
+        String foodName = draftTitle(entries);
 
         Order order = new Order(
                 nextId++,
                 foodName,
-                tableInfo,
-                cart.getTotalCount(),
-                Math.round(cart.getTotalPrice()) + CheckoutSummary.DEFAULT_DELIVERY_FEE,
+                deliveryAddress,
+                cart.getTotalCount(restaurantId),
+                Math.round(cart.getTotalPrice(restaurantId)) + CheckoutSummary.DEFAULT_DELIVERY_FEE,
                 15,
                 "pending",
                 first.item.getImageResId(),
@@ -81,25 +83,24 @@ public class LocalOrderStore {
         LocalCart cart = LocalCart.getInstance();
         if (cart.isEmpty()) return draftOrders;
 
-        List<LocalCart.CartEntry> entries = cart.getEntries();
-        LocalCart.CartEntry first = entries.get(0);
-        String foodName = first.item.getName();
-        if (entries.size() > 1) {
-            foodName += " + " + (entries.size() - 1) + " món khác";
-        }
+        for (long restaurantId : cart.getRestaurantIds()) {
+            List<LocalCart.CartEntry> entries = cart.getEntries(restaurantId);
+            if (entries.isEmpty()) continue;
+            LocalCart.CartEntry first = entries.get(0);
 
-        draftOrders.add(new Order(
-                -1,
-                foodName,
-                "Giỏ hàng hiện tại",
-                cart.getTotalCount(),
-                Math.round(cart.getTotalPrice()),
-                0,
-                "draft",
-                first.item.getImageResId(),
-                false,
-                "Chưa đặt"
-        ));
+            draftOrders.add(new Order(
+                    (int) -restaurantId,
+                    draftTitle(entries),
+                    "Cart Restaurant #" + restaurantId,
+                    cart.getTotalCount(restaurantId),
+                    Math.round(cart.getTotalPrice(restaurantId)),
+                    0,
+                    "draft",
+                    first.item.getImageResId(),
+                    false,
+                    "Chưa đặt"
+            ));
+        }
         return draftOrders;
     }
 
@@ -157,5 +158,14 @@ public class LocalOrderStore {
                 return;
             }
         }
+    }
+
+    private String draftTitle(List<LocalCart.CartEntry> entries) {
+        LocalCart.CartEntry first = entries.get(0);
+        String foodName = first.item.getName();
+        if (entries.size() > 1) {
+            foodName += " + " + (entries.size() - 1) + " món khác";
+        }
+        return foodName;
     }
 }
