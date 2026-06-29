@@ -82,6 +82,27 @@ public class DeliveryAddressRepositoryTest {
         assertTrue(repository.getCurrentAddress().isDefault());
     }
 
+    @Test
+    public void editingCurrentAddressKeepsItCurrentAndUpdatesVisibleFields() {
+        DeliveryAddressRepository repository = new DeliveryAddressRepository(new MemoryStore());
+        DeliveryAddress first = repository.save(validDraft("Nha")).getAddress();
+        repository.save(validDraft("Cong ty"));
+        repository.select(first.getId());
+
+        DeliveryAddress edit = validDraft("Khac");
+        edit.setId(first.getId());
+        edit.setCustomName("Nha rieng");
+        edit.setFullAddress("88 Nguyen Trai, Thanh Xuan, Ha Noi");
+
+        DeliveryAddressRepository.SaveResult result = repository.save(edit);
+
+        assertTrue(result.isSuccess());
+        assertEquals(first.getId(), repository.getCurrentAddress().getId());
+        assertEquals("Nha rieng", repository.getCurrentAddress().getDisplayLabel());
+        assertEquals("88 Nguyen Trai, Thanh Xuan, Ha Noi", repository.getCurrentAddress().getFullAddress());
+        assertTrue(repository.getCurrentAddress().isDefault());
+    }
+
     private DeliveryAddress validDraft(String type) {
         DeliveryAddress draft = new DeliveryAddress();
         draft.setType(type);

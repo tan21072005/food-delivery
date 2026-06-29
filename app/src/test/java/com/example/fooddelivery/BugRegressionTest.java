@@ -190,6 +190,22 @@ public class BugRegressionTest {
                 "viewPager.setCurrentItem(initialTab, false)");
     }
 
+    @Test
+    public void deliveryAddressProfileManagementExposesEditDefaultAndDeleteActions() throws Exception {
+        String itemAddress = readFile(projectPath("src/main/res/layout/item_address.xml"));
+        assertTrue(itemAddress.contains("@+id/btnEditAddress"));
+        assertTrue(itemAddress.contains("@+id/btnSetDefaultAddress"));
+        assertTrue(itemAddress.contains("@+id/btnDeleteAddress"));
+
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressAdapter.java",
+                "OnAddressActionListener",
+                "setDefaultListener",
+                "setDeleteListener");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressListFragment.java",
+                "repository.setDefault",
+                "repository.delete");
+    }
+
     private Path profileLayoutPath() {
         return projectPath("src/main/res/layout/profile_fragment.xml");
     }

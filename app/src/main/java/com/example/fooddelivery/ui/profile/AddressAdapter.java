@@ -23,6 +23,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
     private final List<DeliveryAddress> items = new ArrayList<>();
     private OnAddressClickListener listener;
     private OnAddressActionListener editListener;
+    private OnAddressActionListener setDefaultListener;
+    private OnAddressActionListener deleteListener;
 
     public AddressAdapter(Context context) {
         this.context = context;
@@ -34,6 +36,14 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
 
     public void setEditListener(OnAddressActionListener editListener) {
         this.editListener = editListener;
+    }
+
+    public void setDefaultListener(OnAddressActionListener setDefaultListener) {
+        this.setDefaultListener = setDefaultListener;
+    }
+
+    public void setDeleteListener(OnAddressActionListener deleteListener) {
+        this.deleteListener = deleteListener;
     }
 
     public void submitList(List<DeliveryAddress> newItems) {
@@ -56,6 +66,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
         holder.tvAddressDetail.setText(item.getFullAddress());
         holder.tvUserInfo.setText(item.getRecipientLine());
         holder.tvDefaultTag.setVisibility(item.isDefault() ? View.VISIBLE : View.GONE);
+        holder.btnSetDefaultAddress.setEnabled(!item.isDefault());
+        holder.btnSetDefaultAddress.setAlpha(item.isDefault() ? 0.45f : 1f);
 
         String type = item.getType() == null ? "" : item.getType().toLowerCase(Locale.ROOT);
         if (type.contains("nha")) {
@@ -71,6 +83,12 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
         });
         holder.btnEditAddress.setOnClickListener(v -> {
             if (editListener != null) editListener.onAction(item);
+        });
+        holder.btnSetDefaultAddress.setOnClickListener(v -> {
+            if (setDefaultListener != null && !item.isDefault()) setDefaultListener.onAction(item);
+        });
+        holder.btnDeleteAddress.setOnClickListener(v -> {
+            if (deleteListener != null) deleteListener.onAction(item);
         });
     }
 
@@ -94,6 +112,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
         TextView tvDefaultTag;
         TextView tvAddressDetail;
         TextView tvUserInfo;
+        TextView btnSetDefaultAddress;
+        TextView btnDeleteAddress;
 
         VH(@NonNull View view) {
             super(view);
@@ -103,6 +123,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
             tvDefaultTag = view.findViewById(R.id.tvDefaultTag);
             tvAddressDetail = view.findViewById(R.id.tvAddressDetail);
             tvUserInfo = view.findViewById(R.id.tvUserInfo);
+            btnSetDefaultAddress = view.findViewById(R.id.btnSetDefaultAddress);
+            btnDeleteAddress = view.findViewById(R.id.btnDeleteAddress);
         }
     }
 }
