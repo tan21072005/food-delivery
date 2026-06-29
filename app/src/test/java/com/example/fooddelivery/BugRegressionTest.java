@@ -261,6 +261,14 @@ public class BugRegressionTest {
                 "Luu dia chi");
     }
 
+    @Test
+    public void deliveryAddressFormShowsPersistenceFailureMessage() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/DeliveryAddressFormFragment.java",
+                "errors.containsKey(\"persistence\")",
+                "Khong the luu dia chi. Thu lai sau",
+                "Kiem tra lai thong tin dia chi");
+    }
+
     private Path profileLayoutPath() {
         return projectPath("src/main/res/layout/profile_fragment.xml");
     }

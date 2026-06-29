@@ -149,7 +149,10 @@ public class DeliveryAddressFormFragment extends Fragment {
         etRecipientPhone.setError(errors.get("recipientPhone"));
         etFullAddress.setError(errors.get("fullAddress"));
         etCustomName.setError(errors.get("customName"));
-        Toast.makeText(requireContext(), "Kiem tra lai thong tin dia chi", Toast.LENGTH_SHORT).show();
+        String message = errors.containsKey("persistence")
+                ? "Khong the luu dia chi. Thu lai sau"
+                : "Kiem tra lai thong tin dia chi";
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     private void updateSaveEnabled() {
