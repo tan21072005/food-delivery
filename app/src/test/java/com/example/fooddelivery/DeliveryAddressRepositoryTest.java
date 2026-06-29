@@ -117,6 +117,17 @@ public class DeliveryAddressRepositoryTest {
         assertEquals(first.getId(), addresses.get(1).getId());
     }
 
+    @Test
+    public void saveReturnsPersistenceErrorWhenStoreFails() {
+        DeliveryAddressRepository repository = new DeliveryAddressRepository(new FailingStore());
+
+        DeliveryAddressRepository.SaveResult result = repository.save(validDraft("Nha"));
+
+        assertFalse(result.isSuccess());
+        assertNull(result.getAddress());
+        assertEquals("Could not save delivery address", result.getErrors().get("persistence"));
+    }
+
     private DeliveryAddress validDraft(String type) {
         DeliveryAddress draft = new DeliveryAddress();
         draft.setType(type);
@@ -158,6 +169,13 @@ public class DeliveryAddressRepositoryTest {
         @Override
         public void setSelectedId(String id) {
             selectedId = id;
+        }
+    }
+
+    private static class FailingStore extends MemoryStore {
+        @Override
+        public void save(List<DeliveryAddress> newAddresses) {
+            throw new IllegalStateException("disk full");
         }
     }
 }

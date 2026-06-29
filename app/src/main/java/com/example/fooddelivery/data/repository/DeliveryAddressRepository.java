@@ -73,8 +73,14 @@ public class DeliveryAddressRepository {
         if (!replaced) addresses.add(saved);
 
         ensureOneDefault(addresses);
-        store.save(addresses);
-        store.setSelectedId(saved.getId());
+        try {
+            store.save(addresses);
+            store.setSelectedId(saved.getId());
+        } catch (RuntimeException exception) {
+            Map<String, String> persistenceError = new LinkedHashMap<>();
+            persistenceError.put("persistence", "Could not save delivery address");
+            return SaveResult.failure(persistenceError);
+        }
         return SaveResult.success(saved);
     }
 
