@@ -228,6 +228,15 @@ public class BugRegressionTest {
     }
 
     @Test
+    public void deliveryAddressSearchNoMatchShowsEmptyActions() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressListFragment.java",
+                "boolean noVisibleAddresses = filtered.isEmpty()",
+                "tvEmptyState.setVisibility(noVisibleAddresses ? View.VISIBLE : View.GONE)",
+                "llEmptyShortcuts.setVisibility(noVisibleAddresses ? View.VISIBLE : View.GONE)",
+                "rvAddresses.setVisibility(noVisibleAddresses ? View.GONE : View.VISIBLE)");
+    }
+
+    @Test
     public void deliveryAddressFormUsesAddAndEditModeCopy() throws Exception {
         String formLayout = readFile(projectPath("src/main/res/layout/fragment_delivery_address_form.xml"));
         assertTrue(formLayout.contains("@+id/tvDeliveryAddressFormTitle"));

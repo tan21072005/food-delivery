@@ -133,10 +133,10 @@ public class AddressListFragment extends Fragment {
             if (normalized.isEmpty() || haystack.contains(normalized)) filtered.add(address);
         }
         adapter.submitList(filtered);
-        boolean empty = allAddresses.isEmpty();
-        tvEmptyState.setVisibility(empty ? View.VISIBLE : View.GONE);
-        llEmptyShortcuts.setVisibility(empty ? View.VISIBLE : View.GONE);
-        rvAddresses.setVisibility(empty ? View.GONE : View.VISIBLE);
+        boolean noVisibleAddresses = filtered.isEmpty();
+        tvEmptyState.setVisibility(noVisibleAddresses ? View.VISIBLE : View.GONE);
+        llEmptyShortcuts.setVisibility(noVisibleAddresses ? View.VISIBLE : View.GONE);
+        rvAddresses.setVisibility(noVisibleAddresses ? View.GONE : View.VISIBLE);
     }
 
     private void selectCurrentAddress() {
