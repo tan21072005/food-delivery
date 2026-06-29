@@ -14,7 +14,7 @@
     <EditText android:id="@+id/nameInput" android:layout_width="0dp" android:layout_height="64dp"
         android:layout_marginTop="28dp" android:background="@drawable/favorite_outline"
         android:hint="Nhập tên bộ sưu tập" android:paddingStart="16dp" android:paddingEnd="52dp"
-        android:singleLine="true" android:textSize="18sp" android:textColor="#343A3D"
+        android:singleLine="true" android:maxLength="61" android:textSize="18sp" android:textColor="#343A3D"
         android:textColorHint="#9AA0A2" app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" />
     <ImageButton android:id="@+id/clearButton" android:layout_width="48dp" android:layout_height="48dp"
@@ -26,13 +26,20 @@
         app:chipSpacingHorizontal="8dp" app:chipSpacingVertical="8dp" app:singleLine="false"
         app:layout_constraintTop_toBottomOf="@id/nameInput" app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Bữa sáng năng lượng 🌅" />
-        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Bữa trưa no nê ☀️" />
-        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Lót dạ xế chiều 🍩" />
-        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Bữa tối đủ vị 🌙" />
-        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Ăn chay nhẹ nhàng 🌱" />
-        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Healthy sống khỏe 🥑" />
-        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice" android:text="Cà phê &amp; Trà sữa chill 🧋" />
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bữa sáng năng lượng 🌅" />
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bữa trưa no nê ☀️" />
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Lót dạ xế chiều 🍩" />
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bữa tối đủ vị 🌙" />
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ăn chay nhẹ nhàng 🌱" />
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Healthy sống khỏe 🥑" />
+        <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cà phê &amp; Trà sữa chill 🧋" />
     </com.google.android.material.chip.ChipGroup>
     <Button android:id="@+id/continueButton" android:layout_width="0dp" android:layout_height="64dp"
         android:background="@drawable/favorite_button" android:text="Quán yêu thích"

@@ -7,6 +7,8 @@ import com.example.fooddelivery.data.model.Order;
 import com.example.fooddelivery.data.repository.OrderHistoryRepository;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -17,6 +19,7 @@ public final class SharedPreferencesOrderHistoryRepository implements OrderHisto
     private static final String PREFS = "order_history";
     private static final String KEY = "orders_json";
     private static final Type TYPE = new TypeToken<List<Order>>() {}.getType();
+    private static final int CURRENT_VERSION = 1;
     private final SharedPreferences preferences;
     private final Gson gson = new Gson();
 
@@ -40,17 +43,35 @@ public final class SharedPreferencesOrderHistoryRepository implements OrderHisto
         List<Order> values = readAll();
         values.removeIf(existing -> existing.getId() == order.getId());
         values.add(order);
-        preferences.edit().putString(KEY, gson.toJson(values)).apply();
+        preferences.edit().putString(KEY,
+                gson.toJson(new StoredOrders(CURRENT_VERSION, values))).apply();
     }
 
     private List<Order> readAll() {
         String json = preferences.getString(KEY, null);
         if (json == null) return new ArrayList<>();
         try {
-            List<Order> values = gson.fromJson(json, TYPE);
+            JsonElement root = new JsonParser().parse(json);
+            List<Order> values;
+            if (root.isJsonArray()) {
+                values = gson.fromJson(root, TYPE);
+            } else {
+                StoredOrders stored = gson.fromJson(root, StoredOrders.class);
+                if (stored == null || stored.version != CURRENT_VERSION) return new ArrayList<>();
+                values = stored.orders;
+            }
             return values == null ? new ArrayList<>() : new ArrayList<>(values);
         } catch (JsonParseException exception) {
             return new ArrayList<>();
+        }
+    }
+
+    private static final class StoredOrders {
+        final int version;
+        final List<Order> orders;
+        StoredOrders(int version, List<Order> orders) {
+            this.version = version;
+            this.orders = new ArrayList<>(orders);
         }
     }
 }

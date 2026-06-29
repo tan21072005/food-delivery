@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.core.view.ViewCompat;
 
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.ui.favorites.model.FavoriteRestaurant;
@@ -39,7 +40,12 @@ public class FavoriteRestaurantAdapter extends RecyclerView.Adapter<FavoriteRest
             distance.setText("📍 " + item.getDistance());
             action.setText(isSelected ? "✓  Đã thêm vào bộ sưu tập" : "+  Thêm vào bộ sưu tập");
             action.setTextColor(Color.parseColor(isSelected ? "#1F9D55" : "#20B8C2"));
-            itemView.setSelected(isSelected); itemView.setOnClickListener(v -> listener.onToggle(item.getId()));
+            itemView.setSelected(isSelected);
+            ViewCompat.setStateDescription(itemView,
+                    isSelected ? "Đã thêm vào bộ sưu tập" : "Chưa thêm vào bộ sưu tập");
+            itemView.setContentDescription(item.getName() + ", "
+                    + (isSelected ? "đã thêm vào bộ sưu tập" : "chưa thêm vào bộ sưu tập"));
+            itemView.setOnClickListener(v -> listener.onToggle(item.getId()));
         }
     }
 }

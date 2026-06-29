@@ -22,6 +22,7 @@ import com.example.fooddelivery.ui.favorites.data.RestaurantSuggestionService;
 import com.example.fooddelivery.data.local.SharedPreferencesOrderHistoryRepository;
 import com.example.fooddelivery.data.repository.OrderHistoryRepository;
 import com.example.fooddelivery.ui.favorites.model.RestaurantSuggestion;
+import com.example.fooddelivery.ui.favorites.model.FavoriteRestaurant;
 import com.example.fooddelivery.ui.favorites.model.FavoriteCollection;
 import java.util.List;
 
@@ -43,6 +44,16 @@ public class CollectionRestaurantsFragment extends Fragment {
         OrderHistoryRepository historyRepository = new SharedPreferencesOrderHistoryRepository(requireContext());
         List<RestaurantSuggestion> suggestions = new RestaurantSuggestionService()
                 .suggest(historyRepository.getCompletedOrders());
+        for (String selectedId : draft.getSelectedIds()) {
+            boolean alreadyShown = false;
+            for (RestaurantSuggestion suggestion : suggestions) {
+                if (selectedId.equals(suggestion.getRestaurantId())) { alreadyShown = true; break; }
+            }
+            if (!alreadyShown) {
+                FavoriteRestaurant restaurant = FavoriteRestaurantCatalog.findById(selectedId);
+                if (restaurant != null) suggestions.add(new RestaurantSuggestion(restaurant, 0, 0L));
+            }
+        }
         boolean empty = suggestions.isEmpty();
         binding.restaurantsList.setVisibility(empty ? View.GONE : View.VISIBLE);
         binding.emptyHistory.setVisibility(empty ? View.VISIBLE : View.GONE);
@@ -56,6 +67,7 @@ public class CollectionRestaurantsFragment extends Fragment {
         binding.backButton.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
         binding.completeButton.setOnClickListener(v -> {
             if (!draft.isNameValid()) return;
+            binding.completeButton.setEnabled(false);
             store.save(draft.toCollection());
             NavHostFragment.findNavController(this).popBackStack(R.id.favoritesFragment, false);
         });

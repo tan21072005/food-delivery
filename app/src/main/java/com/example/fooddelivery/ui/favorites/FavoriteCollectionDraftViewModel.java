@@ -30,7 +30,10 @@ public class FavoriteCollectionDraftViewModel extends ViewModel {
     public void setName(String value) { name = value == null ? "" : value; }
     public String getName() { return name; }
     public String getId() { return id; }
-    public boolean isNameValid() { return !name.trim().isEmpty(); }
+    public boolean isNameValid() {
+        int length = name.trim().length();
+        return length >= 1 && length <= 60;
+    }
     public boolean isSelected(String restaurantId) { return selectedIds.contains(restaurantId); }
     public Set<String> getSelectedIds() { return new LinkedHashSet<>(selectedIds); }
 

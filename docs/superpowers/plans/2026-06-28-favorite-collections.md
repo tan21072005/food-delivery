@@ -15,7 +15,10 @@
 - Xếp hạng theo số Order giảm dần, sau đó `completedAt` mới nhất.
 - Membership collection không tự động thay đổi trạng thái trái tim.
 - Tên collection được phép trùng; ID phải duy nhất.
+- Tên sau khi trim dài từ 1 đến 60 ký tự.
 - Không có lịch sử hợp lệ thì hiển thị empty state và CTA về Trang chủ.
+- Local JSON có version, dữ liệu hỏng không làm crash hoặc bị ghi đè âm thầm.
+- Vùng chạm tối thiểu 48dp, icon có content description và trạng thái selected hỗ trợ TalkBack.
 - Không ghi đè các thay đổi Profile hoặc tài liệu không liên quan trong worktree.
 
 ---
@@ -325,7 +328,66 @@ Run: `.\gradlew.bat :app:assembleDebug --console=plain`
 
 Expected: `BUILD SUCCESSFUL`.
 
-### Task 7: Full Verification
+### Task 7: Production Hardening
+
+**Files:**
+- Modify: `app/src/main/java/com/example/fooddelivery/ui/favorites/FavoriteCollectionDraftViewModel.java`
+- Modify: `app/src/main/java/com/example/fooddelivery/ui/favorites/data/FavoriteCollectionStore.java`
+- Modify: `app/src/main/java/com/example/fooddelivery/data/local/SharedPreferencesOrderHistoryRepository.java`
+- Modify: `app/src/main/java/com/example/fooddelivery/ui/favorites/CollectionNameFragment.java`
+- Modify: `app/src/main/java/com/example/fooddelivery/ui/favorites/CollectionRestaurantsFragment.java`
+- Test: `app/src/test/java/com/example/fooddelivery/FavoriteCollectionValidationTest.java`
+
+**Interfaces:**
+- Produces: `isNameValid()` enforcing 1–60 trimmed characters and versioned local payloads.
+
+- [ ] **Step 1: Write validation boundary tests**
+
+```java
+@Test public void nameMustBeBetweenOneAndSixtyTrimmedCharacters() {
+    viewModel.setName(" "); assertFalse(viewModel.isNameValid());
+    viewModel.setName(repeat("a", 60)); assertTrue(viewModel.isNameValid());
+    viewModel.setName(repeat("a", 61)); assertFalse(viewModel.isNameValid());
+}
+```
+
+- [ ] **Step 2: Implement one validation source**
+
+```java
+public boolean isNameValid() {
+    int length = name.trim().length();
+    return length >= 1 && length <= 60;
+}
+```
+
+`CollectionNameFragment` derives button state and error copy from this method; it does not duplicate numeric rules.
+
+- [ ] **Step 3: Version local JSON envelopes**
+
+```java
+final class StoredCollections {
+    int version = 1;
+    List<FavoriteCollection> collections = new ArrayList<>();
+}
+```
+
+Read legacy array JSON as version 0 and migrate in memory. Unknown versions and malformed JSON return an explicit empty/error result; do not overwrite preferences until the next successful user save.
+
+- [ ] **Step 4: Prevent duplicate actions**
+
+Disable complete/save/delete controls immediately on click, perform one store operation, and only re-enable on failure. Navigation occurs once after successful save.
+
+- [ ] **Step 5: Accessibility and restoration pass**
+
+Set content descriptions for back, clear, overflow and collection images. Keep all actionable views at least 48dp. Set `itemView.setSelected(selected)` plus a state description for Restaurant rows. Preserve draft in ViewModel and RecyclerView state through normal configuration recreation.
+
+- [ ] **Step 6: Run hardening tests and build**
+
+Run: `.\gradlew.bat :app:testDebugUnitTest --tests "*FavoriteCollectionValidationTest" :app:assembleDebug --console=plain`
+
+Expected: focused tests pass and `BUILD SUCCESSFUL`.
+
+### Task 8: Full Verification
 
 **Files:**
 - Test only; change source only for a reproduced defect.
@@ -352,9 +414,12 @@ Expected: `BUILD SUCCESSFUL`.
 6. Rename and delete with confirmation; verify Restaurant/Order history remains.
 7. Restart the app and verify Orders and collections persist.
 8. Verify collection actions never alter heart state.
+9. Verify 60 characters accepted, 61 rejected without losing input.
+10. Verify rapid double-taps create/update only one collection.
+11. Verify content descriptions and 48dp touch targets with TalkBack/layout inspection.
 
 ## Self-Review Result
 
-- Spec coverage: Order identity, repository seam, completed-only filtering, ranking, empty state, duplicate names, edit, rename, confirmed delete and heart independence each map to a task.
+- Spec coverage: Order identity, repository seam, completed-only filtering, ranking, empty state, duplicate names, edit, rename, confirmed delete, heart independence, validation, versioning, duplicate-action prevention and accessibility each map to a task.
 - Placeholder scan: no deferred implementation markers remain.
 - Type consistency: Tasks 3 and 5 consistently use `RestaurantSuggestion`; Tasks 2 and 5 use `OrderHistoryRepository`.

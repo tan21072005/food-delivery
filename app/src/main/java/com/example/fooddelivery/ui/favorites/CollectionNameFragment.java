@@ -43,6 +43,14 @@ public class CollectionNameFragment extends Fragment {
         render();
         return binding.getRoot();
     }
-    private void render() { boolean valid = draft.isNameValid(); binding.clearButton.setVisibility(valid ? View.VISIBLE : View.GONE); binding.continueButton.setEnabled(valid); binding.continueButton.setTextColor(valid ? 0xFFFFFFFF : 0xFFCFD2D4); }
+    private void render() {
+        boolean hasText = !draft.getName().isEmpty();
+        boolean valid = draft.isNameValid();
+        binding.clearButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
+        binding.continueButton.setEnabled(valid);
+        binding.continueButton.setTextColor(valid ? 0xFFFFFFFF : 0xFFCFD2D4);
+        binding.nameInput.setError(draft.getName().trim().length() > 60
+                ? "Tên bộ sưu tập tối đa 60 ký tự" : null);
+    }
     @Override public void onDestroyView() { super.onDestroyView(); binding = null; }
 }

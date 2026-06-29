@@ -68,6 +68,11 @@ public class OrderListFragment extends Fragment
 
     private void loadOrders() {
         List<Order> list = getMockOrders(tabStatus);
+        if ("completed".equals(tabStatus)) {
+            com.example.fooddelivery.data.repository.OrderHistoryRepository history =
+                    new com.example.fooddelivery.data.local.SharedPreferencesOrderHistoryRepository(requireContext());
+            for (Order order : list) history.save(order);
+        }
         if (list.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             layoutEmpty.setVisibility(View.VISIBLE);
@@ -100,10 +105,10 @@ public class OrderListFragment extends Fragment
                 list.add(new Order(3, "Bún bò Huế",    "Bàn 2, tầng 3", 3, 105000, 7, "pending", R.drawable.food_bun_bo_hue));
                 break;
             case "completed":
-                list.add(new Order(1, "Bún thập cẩm", "Bàn 3, tầng 2", 4, 125000, 7, "completed", R.drawable.food_bun_thap_cam));
-                list.add(new Order(2, "Bún riêu cua",  "Bàn 1, tầng 2", 2,  70000, 7, "completed", R.drawable.food_bun_rieu_cua));
-                list.add(new Order(3, "Bún bò Huế",    "Bàn 2, tầng 3", 3, 105000, 7, "completed", R.drawable.food_bun_bo_hue));
-                list.add(new Order(6, "Bún thập cẩm", "Bàn 3, tầng 2", 4, 125000, 7, "completed", R.drawable.food_bun_thap_cam));
+                list.add(new Order(1, "guu_chicken", "Guu Chicken", "Bún thập cẩm", "Bàn 3, tầng 2", 4, 125000, 7, "completed", R.drawable.food_bun_thap_cam, 1719550000000L));
+                list.add(new Order(2, "lotteria", "Lotteria", "Bún riêu cua", "Bàn 1, tầng 2", 2, 70000, 7, "completed", R.drawable.food_bun_rieu_cua, 1719650000000L));
+                list.add(new Order(3, "kfc", "KFC", "Bún bò Huế", "Bàn 2, tầng 3", 3, 105000, 7, "completed", R.drawable.food_bun_bo_hue, 1719750000000L));
+                list.add(new Order(6, "guu_chicken", "Guu Chicken", "Bún thập cẩm", "Bàn 3, tầng 2", 4, 125000, 7, "completed", R.drawable.food_bun_thap_cam, 1719850000000L));
                 break;
             case "cancelled":
                 list.add(new Order(7, "Bún thập cẩm", "Bàn 4, tầng 2", 4, 125000, 7, "cancelled", R.drawable.food_bun_thap_cam));

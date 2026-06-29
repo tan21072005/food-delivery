@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import com.example.fooddelivery.ui.favorites.model.FavoriteCollection;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -16,6 +18,7 @@ public final class FavoriteCollectionStore {
     private static final String PREFS = "favorite_collections";
     private static final String KEY = "collections_json";
     private static final Type LIST_TYPE = new TypeToken<List<FavoriteCollection>>() {}.getType();
+    private static final int CURRENT_VERSION = 1;
     private final SharedPreferences preferences;
     private final Gson gson = new Gson();
 
@@ -27,7 +30,15 @@ public final class FavoriteCollectionStore {
         String json = preferences.getString(KEY, null);
         if (json == null) return new ArrayList<>();
         try {
-            List<FavoriteCollection> values = gson.fromJson(json, LIST_TYPE);
+            JsonElement root = new JsonParser().parse(json);
+            List<FavoriteCollection> values;
+            if (root.isJsonArray()) {
+                values = gson.fromJson(root, LIST_TYPE);
+            } else {
+                StoredCollections stored = gson.fromJson(root, StoredCollections.class);
+                if (stored == null || stored.version != CURRENT_VERSION) return new ArrayList<>();
+                values = stored.collections;
+            }
             return values == null ? new ArrayList<>() : new ArrayList<>(values);
         } catch (JsonParseException exception) {
             return new ArrayList<>();
@@ -45,11 +56,11 @@ public final class FavoriteCollectionStore {
         List<FavoriteCollection> values = getAll();
         values.removeIf(item -> item.getId().equals(value.getId()));
         values.add(value);
-        preferences.edit().putString(KEY, gson.toJson(values)).apply();
+        write(values);
     }
 
     public boolean rename(String id, String name) {
-        if (name == null || name.trim().isEmpty()) return false;
+        if (name == null || name.trim().isEmpty() || name.trim().length() > 60) return false;
         List<FavoriteCollection> values = getAll();
         for (int index = 0; index < values.size(); index++) {
             FavoriteCollection item = values.get(index);
@@ -70,6 +81,16 @@ public final class FavoriteCollectionStore {
     }
 
     private void write(List<FavoriteCollection> values) {
-        preferences.edit().putString(KEY, gson.toJson(values)).apply();
+        preferences.edit().putString(KEY,
+                gson.toJson(new StoredCollections(CURRENT_VERSION, values))).apply();
+    }
+
+    private static final class StoredCollections {
+        final int version;
+        final List<FavoriteCollection> collections;
+        StoredCollections(int version, List<FavoriteCollection> collections) {
+            this.version = version;
+            this.collections = new ArrayList<>(collections);
+        }
     }
 }
