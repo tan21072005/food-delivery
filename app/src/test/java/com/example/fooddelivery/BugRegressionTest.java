@@ -217,6 +217,17 @@ public class BugRegressionTest {
     }
 
     @Test
+    public void deliveryAddressHomePickerHidesProfileManagementActions() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressListFragment.java",
+                "adapter.setManagementActionsVisible(!\"home\".equals(source))");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/profile/AddressAdapter.java",
+                "setManagementActionsVisible",
+                "managementActionsVisible",
+                "btnSetDefaultAddress.setVisibility",
+                "btnDeleteAddress.setVisibility");
+    }
+
+    @Test
     public void deliveryAddressFormUsesAddAndEditModeCopy() throws Exception {
         String formLayout = readFile(projectPath("src/main/res/layout/fragment_delivery_address_form.xml"));
         assertTrue(formLayout.contains("@+id/tvDeliveryAddressFormTitle"));

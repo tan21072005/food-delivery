@@ -64,6 +64,7 @@ public class AddressListFragment extends Fragment {
 
         rvAddresses.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new AddressAdapter(requireContext());
+        adapter.setManagementActionsVisible(!"home".equals(source));
         rvAddresses.setAdapter(adapter);
 
         adapter.setListener(item -> {

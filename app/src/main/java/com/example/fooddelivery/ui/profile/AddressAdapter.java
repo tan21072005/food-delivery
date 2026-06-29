@@ -25,6 +25,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
     private OnAddressActionListener editListener;
     private OnAddressActionListener setDefaultListener;
     private OnAddressActionListener deleteListener;
+    private boolean managementActionsVisible = true;
 
     public AddressAdapter(Context context) {
         this.context = context;
@@ -44,6 +45,11 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
 
     public void setDeleteListener(OnAddressActionListener deleteListener) {
         this.deleteListener = deleteListener;
+    }
+
+    public void setManagementActionsVisible(boolean managementActionsVisible) {
+        this.managementActionsVisible = managementActionsVisible;
+        notifyDataSetChanged();
     }
 
     public void submitList(List<DeliveryAddress> newItems) {
@@ -66,6 +72,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.VH> {
         holder.tvAddressDetail.setText(item.getFullAddress());
         holder.tvUserInfo.setText(item.getRecipientLine());
         holder.tvDefaultTag.setVisibility(item.isDefault() ? View.VISIBLE : View.GONE);
+        holder.btnSetDefaultAddress.setVisibility(managementActionsVisible ? View.VISIBLE : View.GONE);
+        holder.btnDeleteAddress.setVisibility(managementActionsVisible ? View.VISIBLE : View.GONE);
         holder.btnSetDefaultAddress.setEnabled(!item.isDefault());
         holder.btnSetDefaultAddress.setAlpha(item.isDefault() ? 0.45f : 1f);
 
