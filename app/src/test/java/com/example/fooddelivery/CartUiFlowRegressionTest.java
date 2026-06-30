@@ -8,6 +8,10 @@ import static org.junit.Assert.assertTrue;
 
 import com.example.fooddelivery.data.model.DraftCartV3Response;
 import com.example.fooddelivery.ui.cart.RpcCartUiState;
+import com.example.fooddelivery.ui.order.OrderDetailFragment;
+import com.example.fooddelivery.utils.MoneyFormatter;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.junit.Test;
 
@@ -301,6 +305,79 @@ public class CartUiFlowRegressionTest {
                 "orderRepository.getDraftCartsV3()",
                 "String rpcStatus = \"processing\".equals(tabStatus) ? null : tabStatus",
                 "orderRepository.getMyOrdersV3(rpcStatus)");
+    }
+
+    @Test
+    public void orderRpcIdsStayLongAndDetailRendersEveryReturnedItem() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/data/model/Order.java",
+                "private long   id;",
+                "public long   getId()");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/OrderListFragment.java",
+                "draftCart.getCartId()",
+                "response.getOrderId()",
+                "bundle.putLong(\"order_id\", order.getId())");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/order/OrderListFragment.java",
+                "safeIntId(",
+                "(int) response.getOrderId()");
+
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/OrderDetailFragment.java",
+                "JsonArray items = orderItems(detail)",
+                "for (JsonElement itemElement : items)",
+                "appendLine(quantities",
+                "appendLine(names",
+                "appendLine(prices");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/order/OrderDetailFragment.java",
+                "firstOrderItem",
+                "items.get(0)");
+    }
+
+    @Test
+    public void orderDetailParsesNestedRestaurantAndDeliveryAddress() {
+        JsonObject detail = new JsonParser().parse("{"
+                + "\"restaurant\":{\"name\":\"Bun Cha Ho Guom\"},"
+                + "\"delivery_address\":{"
+                + "\"recipient_name\":\"An Nguyen\","
+                + "\"phone\":\"0909123456\","
+                + "\"address_line\":\"12 Ly Thuong Kiet\","
+                + "\"ward\":\"Phan Chu Trinh\","
+                + "\"district\":\"Hoan Kiem\","
+                + "\"city\":\"Ha Noi\""
+                + "}"
+                + "}").getAsJsonObject();
+
+        assertEquals("Bun Cha Ho Guom", OrderDetailFragment.restaurantName(detail));
+        String deliveryAddress = OrderDetailFragment.deliveryAddress(detail);
+        assertTrue(deliveryAddress.contains("An Nguyen"));
+        assertTrue(deliveryAddress.contains("0909123456"));
+        assertTrue(deliveryAddress.contains("12 Ly Thuong Kiet"));
+        assertTrue(deliveryAddress.contains("Hoan Kiem"));
+    }
+
+    @Test
+    public void orderDetailKeepsPrimitiveFallbacksForOlderRpcShape() {
+        JsonObject detail = new JsonParser().parse("{"
+                + "\"restaurant_name\":\"Pho Thin\","
+                + "\"delivery_address\":\"45 Nguyen Trai\""
+                + "}").getAsJsonObject();
+
+        assertEquals("Pho Thin", OrderDetailFragment.restaurantName(detail));
+        assertEquals("45 Nguyen Trai", OrderDetailFragment.deliveryAddress(detail));
+    }
+
+    @Test
+    public void orderDetailFormatsEveryReturnedLineItem() {
+        JsonObject detail = new JsonParser().parse("{"
+                + "\"items\":["
+                + "{\"quantity\":2,\"item_name\":\"Com ga\",\"line_total\":80000},"
+                + "{\"qty\":1,\"menu_item\":{\"name\":\"Tra dao\"},\"unit_price\":25000}"
+                + "]"
+                + "}").getAsJsonObject();
+
+        OrderDetailFragment.OrderItemLines lines = OrderDetailFragment.orderItemLines(detail);
+
+        assertEquals("2x\n1x", lines.quantities);
+        assertEquals("Com ga\nTra dao", lines.names);
+        assertEquals(MoneyFormatter.format(80_000L) + "\n" + MoneyFormatter.format(25_000L), lines.prices);
     }
 
     private void assertSourceContains(String path, String... snippets) throws Exception {

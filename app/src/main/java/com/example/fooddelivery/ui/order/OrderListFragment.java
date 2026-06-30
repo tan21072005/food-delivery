@@ -155,7 +155,7 @@ public class OrderListFragment extends Fragment
             String title = draftCartTitle(draftCart);
             String restaurantName = safeText(draftCart.getRestaurantName(), "Cart #" + draftCart.getCartId());
             Order order = new Order(
-                    safeIntId(draftCart.getCartId()),
+                    draftCart.getCartId(),
                     String.valueOf(draftCart.getRestaurantId()),
                     restaurantName,
                     title,
@@ -202,7 +202,7 @@ public class OrderListFragment extends Fragment
 
             String restaurantName = safeText(response.getRestaurantName(), "Don hang #" + response.getOrderId());
             Order order = new Order(
-                    safeIntId(response.getOrderId()),
+                    response.getOrderId(),
                     String.valueOf(response.getRestaurantId()),
                     restaurantName,
                     orderTitle(response),
@@ -246,12 +246,6 @@ public class OrderListFragment extends Fragment
                 || "delivering".equals(status);
     }
 
-    private int safeIntId(long value) {
-        if (value > Integer.MAX_VALUE) return Integer.MAX_VALUE;
-        if (value < Integer.MIN_VALUE) return Integer.MIN_VALUE;
-        return (int) value;
-    }
-
     private String safeText(String value, String fallback) {
         return value == null || value.trim().isEmpty() ? fallback : value;
     }
@@ -269,7 +263,7 @@ public class OrderListFragment extends Fragment
     public void onViewDetailClick(Order order) {
         if ("draft".equals(order.getStatus())) {
             Intent intent = new Intent(requireContext(), Checkout.class);
-            intent.putExtra("cart_id", order.getRpcCartId() > 0 ? order.getRpcCartId() : (long) order.getId());
+            intent.putExtra("cart_id", order.getRpcCartId() > 0 ? order.getRpcCartId() : order.getId());
             try {
                 intent.putExtra("restaurant_id", Long.parseLong(order.getRestaurantId()));
             } catch (NumberFormatException ignored) {
@@ -281,7 +275,9 @@ public class OrderListFragment extends Fragment
 
         try {
             androidx.navigation.NavController navController = androidx.navigation.fragment.NavHostFragment.findNavController(getParentFragment());
-            navController.navigate(R.id.action_orderManagement_to_orderDetail);
+            Bundle bundle = new Bundle();
+            bundle.putLong("order_id", order.getId());
+            navController.navigate(R.id.action_orderManagement_to_orderDetail, bundle);
         } catch (Exception e) {
             android.widget.Toast.makeText(getContext(), "Nav Error: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -290,16 +286,9 @@ public class OrderListFragment extends Fragment
 
     @Override
     public void onReorderClick(Order order) {
-        double unitPrice = order.getTotalPrice() / (double) order.getQuantity();
-        com.example.fooddelivery.data.model.FoodItem food = new com.example.fooddelivery.data.model.FoodItem(
-                System.currentTimeMillis(), order.getFoodName(), "Reordered Item", 0, unitPrice, null);
-        food.setImageResId(order.getFoodImageResId());
-
-        com.example.fooddelivery.data.local.LocalCart.getInstance().add(food, order.getQuantity());
-
-        Intent intent = new Intent(requireContext(), Checkout.class);
-        intent.putExtra("restaurant_id", food.getRestaurantId());
-        startActivity(intent);
+        // TODO(cart-rpc): Implement reorder through Supabase when get_my_orders_v3/get_order_detail_v3
+        // expose menu_item_id and option_choice_ids for every ordered line.
+        Toast.makeText(requireContext(), "Tinh nang dat lai se duoc ho tro khi RPC tra du du lieu mon", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -77,10 +77,13 @@ public class Checkout extends AppCompatActivity {
         orderRepository = new OrderRepository(this);
         deliveryAddressRepository = new DeliveryAddressRepository(this);
         cartId = getIntent().getLongExtra("cart_id", -1L);
-        restaurantId = getIntent().getLongExtra("restaurant_id", LocalCart.getInstance().getRestaurantId());
+        restaurantId = getIntent().getLongExtra("restaurant_id", -1L);
         if (isRpcCheckout()) {
             hasDeliveryAddress = false;
         } else {
+            if (restaurantId <= 0) {
+                restaurantId = LocalCart.getInstance().getRestaurantId();
+            }
             LocalCart.getInstance().setActiveRestaurantId(restaurantId);
         }
 
@@ -417,6 +420,8 @@ public class Checkout extends AppCompatActivity {
             return;
         }
 
+        // TODO(cart-rpc): Keep this only for legacy callers that still launch checkout without cart_id.
+        // RPC checkout paths must stay above and must not create LocalOrderStore orders.
         LocalCart cart = LocalCart.getInstance();
         if (!CheckoutSummary.canPlaceOrder(
                 cart.isEmpty(restaurantId),
