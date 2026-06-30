@@ -1,0 +1,27 @@
+package com.example.fooddelivery;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.example.fooddelivery.ui.auth.AuthActivity;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+@RunWith(AndroidJUnit4.class)
+public class FoodGoLayoutInstrumentedTest {
+    @Rule
+    public final ActivityScenarioRule<AuthActivity> activityRule =
+            new ActivityScenarioRule<>(AuthActivity.class);
+
+    @Test
+    public void authNavigationHostIsDisplayed() {
+        onView(withId(R.id.fragment_container)).check(matches(isDisplayed()));
+    }
+}
