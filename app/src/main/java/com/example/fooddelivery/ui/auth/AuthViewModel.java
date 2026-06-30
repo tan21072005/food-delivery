@@ -8,10 +8,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fooddelivery.data.local.prefs.SessionManager;
+import com.example.fooddelivery.data.model.User;
+import com.example.fooddelivery.data.remote.response.AuthErrorParser;
 import com.example.fooddelivery.data.remote.response.AuthResponse;
 import com.example.fooddelivery.data.repository.AuthRepository;
-
-import com.example.fooddelivery.data.model.User;
 import com.example.fooddelivery.data.repository.UserRepository;
 
 import java.util.List;
@@ -37,82 +37,45 @@ public class AuthViewModel extends AndroidViewModel {
         userRepository = new UserRepository(application);
     }
 
-    public LiveData<Boolean> getIsLoading() { return isLoading; }
-    public LiveData<String> getError() { return error; }
-    public LiveData<Boolean> getLoginSuccess() { return loginSuccess; }
-    public LiveData<Boolean> getSignupSuccess() { return signupSuccess; }
+    public LiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
+
+    public LiveData<String> getError() {
+        return error;
+    }
+
+    public LiveData<Boolean> getLoginSuccess() {
+        return loginSuccess;
+    }
+
+    public LiveData<Boolean> getSignupSuccess() {
+        return signupSuccess;
+    }
 
     public void signIn(String email, String password) {
         isLoading.setValue(true);
         authRepository.signIn(email, password).enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    String token = response.body().accessToken;
-                    String authUid = response.body().user.id;
-
-                    // Lưu tạm token để các request sau (như lấy user info) có JWT
-                    sessionManager.saveSession(token, -1, "", "", "customer");
-
-                    userRepository.getUserByAuthUid("eq." + authUid).enqueue(new Callback<List<User>>() {
-                        @Override
-                        public void onResponse(Call<List<User>> call2, Response<List<User>> response2) {
-                            if (response2.isSuccessful() && response2.body() != null && !response2.body().isEmpty()) {
-                                User dbUser = response2.body().get(0);
-                                // Cập nhật SessionManager với User ID (BIGINT) thật
-                                sessionManager.saveSession(
-                                        token,
-                                        (int) dbUser.getId(),
-                                        dbUser.getUsername(),
-                                        dbUser.getEmail(),
-                                        dbUser.getRole()
-                                );
-                                isLoading.setValue(false);
-                                loginSuccess.setValue(true);
-                            } else {
-                                // Thử fallback tìm theo email
-                                userRepository.getUserByEmail("eq." + email).enqueue(new Callback<List<User>>() {
-                                    @Override
-                                    public void onResponse(Call<List<User>> call3, Response<List<User>> response3) {
-                                        isLoading.setValue(false);
-                                        if (response3.isSuccessful() && response3.body() != null && !response3.body().isEmpty()) {
-                                            User dbUser = response3.body().get(0);
-                                            sessionManager.saveSession(token, (int) dbUser.getId(), dbUser.getUsername(), dbUser.getEmail(), dbUser.getRole());
-                                        } else {
-                                            // Fallback: Vẫn cho đăng nhập nhưng ID = -1 (Lỗi đồng bộ DB)
-                                            sessionManager.saveSession(token, -1, email, email, "customer");
-                                        }
-                                        loginSuccess.setValue(true);
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<List<User>> call3, Throwable t3) {
-                                        isLoading.setValue(false);
-                                        sessionManager.saveSession(token, -1, email, email, "customer");
-                                        loginSuccess.setValue(true);
-                                    }
-                                });
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<User>> call2, Throwable t2) {
-                            isLoading.setValue(false);
-                            // Fallback: Vẫn cho đăng nhập nhưng ID = -1
-                            sessionManager.saveSession(token, -1, email, email, "customer");
-                            loginSuccess.setValue(true);
-                        }
-                    });
+                AuthResponse authResponse = response.body();
+                if (response.isSuccessful() && hasAuthenticatedSession(authResponse)) {
+                    completeAuthenticatedSession(
+                            authResponse.accessToken,
+                            authResponse.user.id,
+                            resolveEmail(authResponse, email),
+                            () -> loginSuccess.setValue(true)
+                    );
                 } else {
                     isLoading.setValue(false);
-                    error.setValue("Sai email hoặc mật khẩu");
+                    error.setValue("Sai email ho\u1eb7c m\u1eadt kh\u1ea9u");
                 }
             }
 
             @Override
             public void onFailure(Call<AuthResponse> call, Throwable t) {
                 isLoading.setValue(false);
-                error.setValue("Lỗi kết nối: " + t.getMessage());
+                error.setValue(AuthErrorParser.networkMessage(t));
             }
         });
     }
@@ -122,19 +85,120 @@ public class AuthViewModel extends AndroidViewModel {
         authRepository.signUp(email, password).enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
-                isLoading.setValue(false);
-                if (response.isSuccessful() && response.body() != null) {
-                    signupSuccess.setValue(true);
+                AuthResponse authResponse = response.body();
+                if (response.isSuccessful() && authResponse != null) {
+                    if (hasAuthenticatedSession(authResponse)) {
+                        completeAuthenticatedSession(
+                                authResponse.accessToken,
+                                authResponse.user.id,
+                                resolveEmail(authResponse, email),
+                                () -> signupSuccess.setValue(true)
+                        );
+                    } else {
+                        isLoading.setValue(false);
+                        error.setValue(AuthErrorParser.EMAIL_CONFIRMATION_REQUIRED);
+                    }
                 } else {
-                    error.setValue("Đăng ký thất bại");
+                    isLoading.setValue(false);
+                    error.setValue(AuthErrorParser.parse(response));
                 }
             }
 
             @Override
             public void onFailure(Call<AuthResponse> call, Throwable t) {
                 isLoading.setValue(false);
-                error.setValue("Lỗi kết nối: " + t.getMessage());
+                error.setValue(AuthErrorParser.networkMessage(t));
             }
         });
+    }
+
+    private void completeAuthenticatedSession(
+            String token,
+            String authUid,
+            String email,
+            AuthSuccessEmitter successEmitter
+    ) {
+        sessionManager.saveSession(token, -1, "", "", "customer");
+
+        userRepository.getUserByAuthUid("eq." + authUid).enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    saveResolvedSession(token, response.body().get(0));
+                    isLoading.setValue(false);
+                    successEmitter.emit();
+                } else {
+                    completeSessionFromEmail(token, email, successEmitter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                completeSessionFallback(token, email, successEmitter);
+            }
+        });
+    }
+
+    private void completeSessionFromEmail(String token, String email, AuthSuccessEmitter successEmitter) {
+        userRepository.getUserByEmail("eq." + email).enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    saveResolvedSession(token, response.body().get(0));
+                } else {
+                    saveFallbackSession(token, email);
+                }
+                isLoading.setValue(false);
+                successEmitter.emit();
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                completeSessionFallback(token, email, successEmitter);
+            }
+        });
+    }
+
+    private void completeSessionFallback(String token, String email, AuthSuccessEmitter successEmitter) {
+        saveFallbackSession(token, email);
+        isLoading.setValue(false);
+        successEmitter.emit();
+    }
+
+    private void saveResolvedSession(String token, User dbUser) {
+        sessionManager.saveSession(
+                token,
+                (int) dbUser.getId(),
+                dbUser.getUsername(),
+                dbUser.getEmail(),
+                dbUser.getRole()
+        );
+    }
+
+    private void saveFallbackSession(String token, String email) {
+        sessionManager.saveSession(token, -1, email, email, "customer");
+    }
+
+    private boolean hasAuthenticatedSession(AuthResponse authResponse) {
+        return authResponse != null
+                && authResponse.accessToken != null
+                && !authResponse.accessToken.trim().isEmpty()
+                && authResponse.user != null
+                && authResponse.user.id != null
+                && !authResponse.user.id.trim().isEmpty();
+    }
+
+    private String resolveEmail(AuthResponse authResponse, String fallbackEmail) {
+        if (authResponse != null
+                && authResponse.user != null
+                && authResponse.user.email != null
+                && !authResponse.user.email.trim().isEmpty()) {
+            return authResponse.user.email;
+        }
+        return fallbackEmail;
+    }
+
+    private interface AuthSuccessEmitter {
+        void emit();
     }
 }
