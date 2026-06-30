@@ -18,14 +18,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.data.local.LocalCart;
+import com.example.fooddelivery.data.model.CartSummaryV3Response;
+import com.example.fooddelivery.data.model.DraftCartV3Response;
 import com.example.fooddelivery.data.model.FoodItem;
 import com.example.fooddelivery.data.repository.OrderRepository;
 import com.example.fooddelivery.ui.cart.CartBottomSheet;
+import com.example.fooddelivery.ui.cart.RpcCartUiState;
 import com.example.fooddelivery.ui.detail.adapters.StorefrontAdapter;
 import com.example.fooddelivery.ui.home.ToppingBottomSheet;
 import com.example.fooddelivery.utils.MoneyFormatter;
 
 import java.util.Collections;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,6 +41,10 @@ public class RestaurantDetailFragment extends Fragment {
     private OrderRepository orderRepository;
     private StorefrontAdapter adapter;
     private long restaurantId = -1L;
+    private long activeCartId = -1L;
+    private long activeCartRestaurantId = -1L;
+    private int activeCartItemCount = 0;
+    private double activeCartTotal = 0;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,7 +66,7 @@ public class RestaurantDetailFragment extends Fragment {
                 ? getArguments().getLong("restaurant_id", -1L)
                 : -1L;
         viewModel.loadRestaurantFoods(restaurantId);
-        updateStickyCart(view);
+        refreshDraftCartState(view, restaurantId, -1L, null, false);
     }
 
     private void setupToolbar(View view) {
@@ -109,27 +117,43 @@ public class RestaurantDetailFragment extends Fragment {
 
             @Override
             public void onAddToCartClick(FoodItem item) {
-                ToppingBottomSheet toppingSheet = new ToppingBottomSheet(item, selectedItem -> {
-                    addItemToCartWithRestaurantGuard(selectedItem, 1, view);
-                });
+                ToppingBottomSheet toppingSheet = new ToppingBottomSheet(item,
+                        (selectedItem, note, sheet) ->
+                                addItemToCartWithRestaurantGuard(selectedItem, 1, note, view, sheet));
                 toppingSheet.show(getParentFragmentManager(), ToppingBottomSheet.TAG);
             }
         });
     }
 
-    private void addItemToCartWithRestaurantGuard(FoodItem item, int quantity, View view) {
-        addItemToCart(item, quantity, view);
+    private void addItemToCartWithRestaurantGuard(FoodItem item,
+                                                  int quantity,
+                                                  String note,
+                                                  View view,
+                                                  ToppingBottomSheet sheet) {
+        addItemToCart(item, quantity, note, view, sheet);
     }
 
-    private void addItemToCart(FoodItem item, int quantity, View view) {
-        orderRepository.addToCartV3(item.getId(), quantity, null, Collections.emptyList())
+    private void addItemToCart(FoodItem item,
+                               int quantity,
+                               String note,
+                               View view,
+                               ToppingBottomSheet sheet) {
+        String safeNote = note == null || note.trim().isEmpty() ? null : note.trim();
+        long preferredRestaurantId = item.getRestaurantId() > 0 ? item.getRestaurantId() : restaurantId;
+        orderRepository.addToCartV3(item.getId(), quantity, safeNote, Collections.emptyList())
                 .enqueue(new Callback<Long>() {
                     @Override
                     public void onResponse(@NonNull Call<Long> call, @NonNull Response<Long> response) {
                         if (!isAdded()) return;
                         if (response.isSuccessful()) {
-                            Toast.makeText(requireContext(),
-                                    "Da them " + item.getName() + " vao gio", Toast.LENGTH_SHORT).show();
+                            Long returnedCartId = response.body();
+                            refreshDraftCartState(
+                                    view,
+                                    preferredRestaurantId,
+                                    returnedCartId == null ? -1L : returnedCartId,
+                                    sheet,
+                                    true
+                            );
                             return;
                         }
                         Toast.makeText(requireContext(),
@@ -143,6 +167,90 @@ public class RestaurantDetailFragment extends Fragment {
                                 "Khong the them mon vao gio: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void refreshDraftCartState(View view,
+                                       long preferredRestaurantId,
+                                       long fallbackCartId,
+                                       ToppingBottomSheet sheetToDismiss,
+                                       boolean showAddedToast) {
+        orderRepository.getDraftCartsV3().enqueue(new Callback<List<DraftCartV3Response>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<DraftCartV3Response>> call,
+                                   @NonNull Response<List<DraftCartV3Response>> response) {
+                if (!isAdded()) return;
+                if (response.isSuccessful()) {
+                    DraftCartV3Response draft = RpcCartUiState.selectActiveDraft(
+                            response.body(),
+                            preferredRestaurantId
+                    );
+                    if (draft != null) {
+                        activeCartId = draft.getCartId();
+                        activeCartRestaurantId = draft.getRestaurantId();
+                        activeCartItemCount = RpcCartUiState.itemCount(draft);
+                        activeCartTotal = RpcCartUiState.totalAmount(draft);
+                        updateStickyCart(view);
+                        finishAddSuccess(sheetToDismiss, showAddedToast);
+                        return;
+                    }
+                }
+                if (fallbackCartId > 0) {
+                    refreshStickyFromSummary(view, preferredRestaurantId, fallbackCartId, sheetToDismiss, showAddedToast);
+                    return;
+                }
+                updateStickyCart(view);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<DraftCartV3Response>> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                if (fallbackCartId > 0) {
+                    refreshStickyFromSummary(view, preferredRestaurantId, fallbackCartId, sheetToDismiss, showAddedToast);
+                } else if (showAddedToast) {
+                    Toast.makeText(requireContext(), "Da them mon, nhung chua tai duoc gio", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void refreshStickyFromSummary(View view,
+                                          long preferredRestaurantId,
+                                          long cartId,
+                                          ToppingBottomSheet sheetToDismiss,
+                                          boolean showAddedToast) {
+        orderRepository.getCartSummaryV3(cartId).enqueue(new Callback<CartSummaryV3Response>() {
+            @Override
+            public void onResponse(@NonNull Call<CartSummaryV3Response> call,
+                                   @NonNull Response<CartSummaryV3Response> response) {
+                if (!isAdded()) return;
+                activeCartId = cartId;
+                activeCartRestaurantId = preferredRestaurantId;
+                if (response.isSuccessful() && response.body() != null) {
+                    activeCartItemCount = RpcCartUiState.itemCount(response.body());
+                    activeCartTotal = RpcCartUiState.totalAmount(response.body());
+                }
+                updateStickyCart(view);
+                finishAddSuccess(sheetToDismiss, showAddedToast);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CartSummaryV3Response> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                activeCartId = cartId;
+                activeCartRestaurantId = preferredRestaurantId;
+                updateStickyCart(view);
+                finishAddSuccess(sheetToDismiss, showAddedToast);
+            }
+        });
+    }
+
+    private void finishAddSuccess(ToppingBottomSheet sheetToDismiss, boolean showAddedToast) {
+        if (sheetToDismiss != null) {
+            sheetToDismiss.dismiss();
+        }
+        if (showAddedToast) {
+            Toast.makeText(requireContext(), "Da them mon vao gio", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void observeViewModel() {
@@ -160,8 +268,12 @@ public class RestaurantDetailFragment extends Fragment {
         View stickyCart = view.findViewById(R.id.layoutStickyCart);
         if (stickyCart == null) return;
 
-        long stickyRestaurantId = restaurantId > 0 ? restaurantId : LocalCart.getInstance().getRestaurantId();
-        int count = LocalCart.getInstance().getTotalCount(stickyRestaurantId);
+        long stickyRestaurantId = activeCartRestaurantId > 0
+                ? activeCartRestaurantId
+                : (restaurantId > 0 ? restaurantId : LocalCart.getInstance().getRestaurantId());
+        int count = activeCartId > 0
+                ? activeCartItemCount
+                : LocalCart.getInstance().getTotalCount(stickyRestaurantId);
         if (count <= 0) {
             stickyCart.setVisibility(View.GONE);
             return;
@@ -175,13 +287,21 @@ public class RestaurantDetailFragment extends Fragment {
             tvCount.setText(String.valueOf(count));
         }
         if (tvTotal != null) {
-            double total = LocalCart.getInstance().getTotalPrice(stickyRestaurantId);
+            double total = activeCartId > 0
+                    ? activeCartTotal
+                    : LocalCart.getInstance().getTotalPrice(stickyRestaurantId);
             tvTotal.setText(MoneyFormatter.format(total));
         }
 
         stickyCart.setOnClickListener(v -> {
             LocalCart.getInstance().setActiveRestaurantId(stickyRestaurantId);
             CartBottomSheet sheet = new CartBottomSheet(() -> updateStickyCart(view));
+            if (activeCartId > 0) {
+                Bundle args = new Bundle();
+                args.putLong("cart_id", activeCartId);
+                args.putLong("restaurant_id", stickyRestaurantId);
+                sheet.setArguments(args);
+            }
             sheet.show(getParentFragmentManager(), CartBottomSheet.TAG);
         });
     }

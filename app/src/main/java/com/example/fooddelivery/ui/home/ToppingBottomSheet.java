@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,7 +29,7 @@ public class ToppingBottomSheet extends BottomSheetDialogFragment {
     private OnAddToCartListener listener;
 
     public interface OnAddToCartListener {
-        void onAddToCart(FoodItem item);
+        void onAddToCart(FoodItem item, String note, ToppingBottomSheet sheet);
     }
 
     public ToppingBottomSheet(FoodItem foodItem, OnAddToCartListener listener) {
@@ -65,6 +66,7 @@ public class ToppingBottomSheet extends BottomSheetDialogFragment {
         TextView tvTitle = view.findViewById(R.id.tvToppingTitle);
         TextView tvTotal = view.findViewById(R.id.tvToppingTotal);
         TextView tvClose = view.findViewById(R.id.tvCloseTopping);
+        EditText etNote = view.findViewById(R.id.etToppingNote);
         Button btnAdd = view.findViewById(R.id.btnAddToppingCart);
 
         if (foodItem != null) {
@@ -89,9 +91,9 @@ public class ToppingBottomSheet extends BottomSheetDialogFragment {
 
         btnAdd.setOnClickListener(v -> {
             if (listener != null && foodItem != null) {
-                listener.onAddToCart(foodItem);
+                String note = etNote == null ? null : etNote.getText().toString();
+                listener.onAddToCart(foodItem, note, this);
             }
-            dismiss();
         });
     }
 }

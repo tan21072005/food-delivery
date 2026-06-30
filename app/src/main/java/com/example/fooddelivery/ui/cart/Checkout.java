@@ -19,10 +19,8 @@ import com.example.fooddelivery.MainActivity;
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.data.local.LocalCart;
 import com.example.fooddelivery.data.local.LocalOrderStore;
-import com.example.fooddelivery.data.model.CartOptionV3Response;
 import com.example.fooddelivery.data.model.CartSummaryV3Response;
 import com.example.fooddelivery.data.model.DeliveryAddress;
-import com.example.fooddelivery.data.model.FoodItem;
 import com.example.fooddelivery.data.repository.DeliveryAddressRepository;
 import com.example.fooddelivery.data.repository.OrderRepository;
 import com.example.fooddelivery.ui.cart.adapters.CartBottomSheetAdapter;
@@ -236,12 +234,12 @@ public class Checkout extends AppCompatActivity {
                 || rpcSummary.getItems().isEmpty();
 
         if (adapter != null) {
-            adapter.updateData(cartEmpty ? new ArrayList<>() : mapRpcItems(rpcSummary.getItems()));
+            adapter.updateData(cartEmpty ? new ArrayList<>() : RpcCartUiState.mapSummaryItems(rpcSummary.getItems()));
         }
 
         tvEmptyCart.setVisibility(cartEmpty ? View.VISIBLE : View.GONE);
         CheckoutSummary summary = buildSummary(rpcSummary);
-        int itemCount = cartEmpty ? 0 : rpcSummary.getItems().size();
+        int itemCount = cartEmpty ? 0 : RpcCartUiState.itemCount(rpcSummary);
 
         tvSubtotalLabel.setText("Tam tinh (" + itemCount + " phan)");
         tvSubtotal.setText(formatPrice(summary.getSubtotal()));
@@ -445,43 +443,6 @@ public class Checkout extends AppCompatActivity {
 
     private boolean isRpcCheckout() {
         return cartId > 0;
-    }
-
-    private List<LocalCart.CartEntry> mapRpcItems(List<CartSummaryV3Response.Item> items) {
-        List<LocalCart.CartEntry> entries = new ArrayList<>();
-        if (items == null) return entries;
-
-        for (CartSummaryV3Response.Item item : items) {
-            if (item == null) continue;
-            FoodItem foodItem = new FoodItem(
-                    item.getMenuItemId(),
-                    item.getItemName(),
-                    optionSummary(item.getOptions(), item.getNote()),
-                    0,
-                    item.getBasePrice(),
-                    item.getImageUrl()
-            );
-            entries.add(new LocalCart.CartEntry(foodItem, item.getQuantity()));
-        }
-        return entries;
-    }
-
-    private String optionSummary(List<CartOptionV3Response> options, String note) {
-        StringBuilder builder = new StringBuilder();
-        if (options != null) {
-            for (CartOptionV3Response option : options) {
-                if (option == null || option.getName() == null || option.getName().trim().isEmpty()) {
-                    continue;
-                }
-                if (builder.length() > 0) builder.append(", ");
-                builder.append(option.getName().trim());
-            }
-        }
-        if (note != null && !note.trim().isEmpty()) {
-            if (builder.length() > 0) builder.append(", ");
-            builder.append(note.trim());
-        }
-        return builder.length() == 0 ? "Tuy chon mac dinh" : builder.toString();
     }
 
     private void loadCurrentDeliveryAddress() {
