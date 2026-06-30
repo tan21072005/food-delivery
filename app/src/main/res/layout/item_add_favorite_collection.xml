@@ -5,8 +5,8 @@
     android:focusable="true" android:background="@drawable/favorite_card_teal"
     android:foreground="?attr/selectableItemBackground">
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="+" android:textColor="#138F98" android:textSize="38sp" />
+        android:text="@string/auto_ui_symbol_78" android:textColor="#138F98" android:textSize="38sp" />
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Thêm bộ sưu tập mới" android:textColor="#138F98"
+        android:text="@string/auto_ui_them_bo_suu_tap_moi_1o3h54" android:textColor="#138F98"
         android:textStyle="bold" android:textSize="16sp" />
 </LinearLayout>

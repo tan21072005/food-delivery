@@ -15,7 +15,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="Đơn nháp"
+        android:text="@string/auto_ui_on_nhap_nt6wc3"
         android:textColor="#999999"
         android:textSize="13sp" />
 

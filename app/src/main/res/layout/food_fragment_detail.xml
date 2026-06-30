@@ -25,7 +25,7 @@
                 android:id="@+id/tvToolbarTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Chi tiết món ăn"
+                android:text="@string/auto_ui_chi_tiet_mon_an_1yxrq0"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"
@@ -75,7 +75,7 @@
                     android:id="@+id/tvFoodName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tên món ăn"
+                    android:text="@string/auto_ui_ten_mon_an_1jhvfa"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A1A" />
@@ -84,7 +84,7 @@
                     android:id="@+id/tvDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Mô tả món ăn"
+                    android:text="@string/auto_ui_mo_ta_mon_an_rsjrs2"
                     android:textSize="14sp"
                     android:textColor="#666666"
                     android:layout_marginTop="8dp"/>
@@ -106,14 +106,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Chọn size"
+                        android:text="@string/auto_ui_chon_size_1ihmjh"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A1A"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Bắt buộc"
+                        android:text="@string/auto_ui_bat_buoc_1hvd5y"
                         android:textSize="12sp"
                         android:textColor="#1A1A1A"
                         android:background="#F0F0F0"
@@ -129,9 +129,9 @@
                     android:layout_marginTop="12dp">
                     
                     <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="12dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Size vừa" android:textSize="15sp" android:textColor="#1A1A1A" android:layout_centerVertical="true"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_size_vua_iwjbro" android:textSize="15sp" android:textColor="#1A1A1A" android:layout_centerVertical="true"/>
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_alignParentEnd="true" android:gravity="center_vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0đ" android:textSize="14sp" android:textColor="#666666" android:layout_marginEnd="8dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_0_6js" android:textSize="14sp" android:textColor="#666666" android:layout_marginEnd="8dp"/>
                             <RadioButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:checked="true" android:buttonTint="#F5A623"/>
                         </LinearLayout>
                     </RelativeLayout>
@@ -139,9 +139,9 @@
                     <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0" />
                     
                     <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="12dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Size lớn" android:textSize="15sp" android:textColor="#1A1A1A" android:layout_centerVertical="true"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_size_lon_iwj3zb" android:textSize="15sp" android:textColor="#1A1A1A" android:layout_centerVertical="true"/>
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_alignParentEnd="true" android:gravity="center_vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="10.000đ" android:textSize="14sp" android:textColor="#666666" android:layout_marginEnd="8dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_10_000_l0ol7t" android:textSize="14sp" android:textColor="#666666" android:layout_marginEnd="8dp"/>
                             <RadioButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:buttonTint="#F5A623"/>
                         </LinearLayout>
                     </RelativeLayout>
@@ -161,14 +161,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Thêm Sốt"
+                    android:text="@string/auto_ui_them_sot_f62qz8"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A1A"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chọn tối đa 2"
+                    android:text="@string/auto_ui_chon_toi_a_2_ega6y1"
                     android:textSize="13sp"
                     android:textColor="#666666"
                     android:layout_marginTop="4dp"/>
@@ -180,9 +180,9 @@
                     android:layout_marginTop="12dp">
                     
                     <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="12dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Thêm 2 Gói Tương Chua Ngọt" android:textSize="15sp" android:textColor="#1A1A1A" android:layout_centerVertical="true"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_them_2_goi_tuong_chua_ngot_1co7r7" android:textSize="15sp" android:textColor="#1A1A1A" android:layout_centerVertical="true"/>
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_alignParentEnd="true" android:gravity="center_vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1.000đ" android:textSize="14sp" android:textColor="#666666" android:layout_marginEnd="8dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_1_000_1jn1mi" android:textSize="14sp" android:textColor="#666666" android:layout_marginEnd="8dp"/>
                             <CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:buttonTint="#F5A623"/>
                         </LinearLayout>
                     </RelativeLayout>
@@ -190,9 +190,9 @@
                     <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0" />
                     
                     <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="12dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Thêm 2 Gói Tương Cà" android:textSize="15sp" android:textColor="#1A1A1A" android:layout_centerVertical="true"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_them_2_goi_tuong_ca_1wcpsq" android:textSize="15sp" android:textColor="#1A1A1A" android:layout_centerVertical="true"/>
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_alignParentEnd="true" android:gravity="center_vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1.000đ" android:textSize="14sp" android:textColor="#666666" android:layout_marginEnd="8dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_1_000_1jn1mi" android:textSize="14sp" android:textColor="#666666" android:layout_marginEnd="8dp"/>
                             <CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:buttonTint="#F5A623"/>
                         </LinearLayout>
                     </RelativeLayout>
@@ -212,7 +212,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ghi chú cho quán"
+                    android:text="@string/auto_ui_ghi_chu_cho_quan_1d8lfa"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A1A"
@@ -222,7 +222,7 @@
                     android:id="@+id/edNote"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Cho quán biết thêm về yêu cầu của bạn."
+                    android:hint="@string/auto_ui_cho_quan_biet_them_ve_yeu_cau_cua_ban_1r7nrm"
                     android:background="@drawable/bg_rounded_border"
                     android:padding="12dp"
                     android:textSize="14sp"
@@ -257,7 +257,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="145.000đ"
+                android:text="@string/auto_ui_145_000_39uh9g"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A" />
@@ -281,7 +281,7 @@
                     android:id="@+id/tvQuantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
+                    android:text="@string/auto_ui_1_7e"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A1A"
@@ -303,7 +303,7 @@
             android:layout_height="52dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="16dp"
-            android:text="Thêm vào giỏ"
+            android:text="@string/auto_ui_them_vao_gio_1nuw82"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#1A1A1A"

@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Thanh toán"
+            android:text="@string/auto_ui_thanh_toan_hzpdns"
             android:textColor="#101820"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -83,7 +83,7 @@
                             android:id="@+id/tvAddressTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Nhà"
+                            android:text="@string/auto_ui_nha_65en"
                             android:textColor="#101820"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -93,7 +93,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội"
+                            android:text="@string/auto_ui_so_1_ai_co_viet_hai_ba_trung_ha_noi_1nn43p"
                             android:textColor="#68727D"
                             android:textSize="13sp" />
                     </LinearLayout>
@@ -102,7 +102,7 @@
                         android:id="@+id/tvChangeAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Đổi"
+                        android:text="@string/auto_ui_oi_fbh9"
                         android:textColor="@color/blue"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -114,7 +114,7 @@
                     android:layout_height="46dp"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_input_field"
-                    android:hint="Ghi chú cho quán hoặc tài xế"
+                    android:hint="@string/auto_ui_ghi_chu_cho_quan_hoac_tai_xe_6f0s3s"
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
                     android:singleLine="true"
@@ -137,7 +137,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Giao hàng tận cửa"
+                        android:text="@string/auto_ui_giao_hang_tan_cua_tgm6o6"
                         android:textColor="#101820"
                         android:textSize="15sp" />
 
@@ -145,7 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:text="5.000d"
+                        android:text="@string/auto_ui_5_000d_1lj83y"
                         android:textColor="#68727D"
                         android:textSize="15sp" />
 
@@ -183,7 +183,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Giao ngay"
+                        android:text="@string/auto_ui_giao_ngay_e502d6"
                         android:textColor="#101820"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -192,7 +192,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Giao sớm nhất có thể"
+                        android:text="@string/auto_ui_giao_som_nhat_co_the_1qtusr"
                         android:textColor="#68727D"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -201,7 +201,7 @@
                     android:id="@+id/tvSchedule"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hẹn giờ giao"
+                    android:text="@string/auto_ui_hen_gio_giao_1hdfp8"
                     android:textColor="@color/blue"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -229,7 +229,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1"
-                    android:text="Gửi tặng món ăn"
+                    android:text="@string/auto_ui_gui_tang_mon_an_14d78p"
                     android:textColor="#101820"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -261,7 +261,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Đơn hàng của bạn"
+                        android:text="@string/auto_ui_on_hang_cua_ban_nnjyx3"
                         android:textColor="#101820"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -270,7 +270,7 @@
                         android:id="@+id/tvAddMore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Thêm món"
+                        android:text="@string/auto_ui_them_mon_f5y7d2"
                         android:textColor="@color/blue"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -283,7 +283,7 @@
                     android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:padding="18dp"
-                    android:text="Giỏ hàng đang trống"
+                    android:text="@string/auto_ui_gio_hang_ang_trong_zs66ui"
                     android:textColor="#68727D"
                     android:textSize="14sp"
                     android:visibility="gone" />
@@ -311,7 +311,7 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:text="Thường hay đặt cùng"
+                    android:text="@string/auto_ui_thuong_hay_at_cung_1lmplg"
                     android:textColor="#101820"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -372,7 +372,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Ưu đãi"
+                    android:text="@string/auto_ui_uu_ai_oht0jo"
                     android:textColor="#101820"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -381,7 +381,7 @@
                     android:id="@+id/tvVoucherState"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chọn mã giảm giá"
+                    android:text="@string/auto_ui_chon_ma_giam_gia_rul3he"
                     android:textColor="#68727D"
                     android:textSize="14sp" />
 
@@ -408,7 +408,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Phương thức thanh toán"
+                    android:text="@string/auto_ui_phuong_thuc_thanh_toan_ssn6v0"
                     android:textColor="#101820"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -417,7 +417,7 @@
                     android:id="@+id/tvPaymentMethod"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Thanh toán khi nhận hàng"
+                    android:text="@string/auto_ui_thanh_toan_khi_nhan_hang_15g3mn"
                     android:textColor="#101820"
                     android:textSize="14sp" />
 
@@ -441,7 +441,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Chi tiết thanh toán"
+                    android:text="@string/auto_ui_chi_tiet_thanh_toan_1j79ij"
                     android:textColor="#101820"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -457,7 +457,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Tạm tính"
+                        android:text="@string/auto_ui_tam_tinh_8qevru"
                         android:textColor="#68727D"
                         android:textSize="14sp" />
 
@@ -465,7 +465,7 @@
                         android:id="@+id/tvSubtotal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0đ"
+                        android:text="@string/auto_ui_0_6js"
                         android:textColor="#101820"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -480,7 +480,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Phí giao hàng"
+                        android:text="@string/auto_ui_phi_giao_hang_j126bz"
                         android:textColor="#68727D"
                         android:textSize="14sp" />
 
@@ -488,7 +488,7 @@
                         android:id="@+id/tvDeliveryFee"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="15.000đ"
+                        android:text="@string/auto_ui_15_000_ndwp6s"
                         android:textColor="#101820"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -503,7 +503,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Phí dịch vụ"
+                        android:text="@string/auto_ui_phi_dich_vu_wqwwi9"
                         android:textColor="#68727D"
                         android:textSize="14sp" />
 
@@ -511,7 +511,7 @@
                         android:id="@+id/tvServiceFee"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0đ"
+                        android:text="@string/auto_ui_0_6js"
                         android:textColor="#101820"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -527,7 +527,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Giảm giá voucher"
+                        android:text="@string/auto_ui_giam_gia_voucher_ytt0tc"
                         android:textColor="#68727D"
                         android:textSize="14sp" />
 
@@ -535,7 +535,7 @@
                         android:id="@+id/tvVoucherDiscount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="-0đ"
+                        android:text="@string/auto_ui_0_5fmv"
                         android:textColor="#2EAD5B"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -556,7 +556,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Tổng thanh toán"
+                        android:text="@string/auto_ui_tong_thanh_toan_y7e3cw"
                         android:textColor="#101820"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -565,7 +565,7 @@
                         android:id="@+id/tvTotalPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0đ"
+                        android:text="@string/auto_ui_0_6js"
                         android:textColor="#101820"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -602,7 +602,7 @@
                     android:id="@+id/tvStickyTotal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0đ"
+                    android:text="@string/auto_ui_0_6js"
                     android:textColor="#101820"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -612,7 +612,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Thanh toán khi nhận hàng"
+                    android:text="@string/auto_ui_thanh_toan_khi_nhan_hang_15g3mn"
                     android:textColor="#68727D"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -622,7 +622,7 @@
                 android:layout_width="168dp"
                 android:layout_height="52dp"
                 android:background="@drawable/btn_yellow_rounded"
-                android:text="Đặt món"
+                android:text="@string/auto_ui_at_mon_ydhq9a"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="16sp"

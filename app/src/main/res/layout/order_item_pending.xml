@@ -27,7 +27,7 @@
                 android:layout_width="72dp"
                 android:layout_height="72dp"
                 android:background="@drawable/bg_image_rounded"
-                android:contentDescription="Ảnh món ăn"
+                android:contentDescription="@string/auto_ui_anh_mon_an_14akli"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_food_placeholder" />
 
@@ -75,7 +75,7 @@
                     <ImageView
                         android:layout_width="13dp"
                         android:layout_height="13dp"
-                        android:contentDescription="Thời gian"
+                        android:contentDescription="@string/auto_ui_thoi_gian_1qx355"
                         android:src="@drawable/ic_clock" />
 
                     <TextView
@@ -98,7 +98,7 @@
                 android:paddingTop="5dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="5dp"
-                android:text="Đang chờ"
+                android:text="@string/auto_ui_ang_cho_g1b7wp"
                 android:textColor="#888888"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -123,7 +123,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Xem chi tiết đơn"
+                android:text="@string/auto_ui_xem_chi_tiet_on_18v0ih"
                 android:textColor="#FF6B35"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -132,7 +132,7 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginStart="2dp"
-                android:contentDescription="Chi tiết"
+                android:contentDescription="@string/auto_ui_chi_tiet_v7psz1"
                 android:src="@drawable/ic_chevron_right"
                 app:tint="#FF6B35" />
         </LinearLayout>

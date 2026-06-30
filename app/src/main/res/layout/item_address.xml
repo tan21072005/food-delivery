@@ -41,7 +41,7 @@
                     android:id="@+id/tvAddressLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nha"
+                    android:text="@string/auto_ui_nha_65b4"
                     android:textColor="#1A1A1A"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
@@ -54,7 +54,7 @@
                     android:background="#FFF8E1"
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="2dp"
-                    android:text="Mac dinh"
+                    android:text="@string/auto_ui_mac_dinh_r5aaf"
                     android:textColor="#F5A623"
                     android:textSize="10sp"
                     android:visibility="gone"/>
@@ -67,7 +67,7 @@
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="72 Tran Dai Nghia..."
+                android:text="@string/auto_ui_72_tran_dai_nghia_10y2oo"
                 android:textColor="#666666"
                 android:textSize="14sp"/>
 
@@ -76,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Nguyen Van A - 0901234567"
+                android:text="@string/auto_ui_nguyen_van_a_0901234567_4oa5rj"
                 android:textColor="#888888"
                 android:textSize="13sp"/>
 
@@ -96,7 +96,7 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:paddingHorizontal="8dp"
-                    android:text="Mac dinh"
+                    android:text="@string/auto_ui_mac_dinh_r5aaf"
                     android:textColor="#F5A623"
                     android:textSize="12sp"
                     android:textStyle="bold"/>
@@ -111,7 +111,7 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:paddingHorizontal="8dp"
-                    android:text="Xoa"
+                    android:text="@string/auto_ui_xoa_6cw3"
                     android:textColor="#D32F2F"
                     android:textSize="12sp"
                     android:textStyle="bold"/>

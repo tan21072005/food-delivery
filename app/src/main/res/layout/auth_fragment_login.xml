@@ -42,7 +42,7 @@
                     android:contentDescription="@string/app_name"
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center"
-                    android:text="FG"
+                    android:text="@string/auto_ui_fg_6x4"
                     android:textColor="@color/white"
                     android:textSize="22sp"
                     android:textStyle="bold" />

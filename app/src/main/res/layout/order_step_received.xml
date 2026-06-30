@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="Nhận hàng"
+        android:text="@string/auto_ui_nhan_hang_11bt8i"
         android:textColor="#42485A"
         android:textSize="15sp"
         android:textStyle="bold" />
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:gravity="center"
-        android:text="11:50,\n13/06/2026"
+        android:text="@string/auto_ui_11_50_n13_06_2026_9xp6um"
         android:textColor="#42485A"
         android:textSize="14sp" />
 </LinearLayout>

@@ -101,7 +101,7 @@
                 android:id="@+id/btnDangKy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Đăng ký"
+                android:text="@string/auto_ui_ang_ky_1klj93"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"

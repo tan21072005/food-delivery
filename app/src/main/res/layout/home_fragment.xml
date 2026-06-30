@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
-                android:text="Giao den"
+                android:text="@string/auto_ui_giao_den_ghtqqs"
                 android:textColor="#8A6D3B"
                 android:textSize="11sp"
                 android:textStyle="bold" />
@@ -67,7 +67,7 @@
                         android:layout_marginStart="8dp"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:text="KTX Dai hoc Xay dung, 72 Tran Dai Nghia, ..."
+                        android:text="@string/auto_ui_ktx_dai_hoc_xay_dung_72_tran_dai_nghia_ucwixh"
                         android:textColor="#1A1A1A"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -109,7 +109,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_weight="1"
                         android:background="@null"
-                        android:hint="Tim mon, quan an"
+                        android:hint="@string/auto_ui_tim_mon_quan_an_y8jssr"
                         android:imeOptions="actionSearch"
                         android:inputType="text"
                         android:singleLine="true"
@@ -187,7 +187,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Menu"
+                        android:text="@string/auto_ui_menu_59vra"
                         android:textColor="#1A1A1A"
                         android:textSize="17sp"
                         android:textStyle="bold" />
@@ -195,7 +195,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=">"
+                        android:text="@string/auto_ui_symbol_7r"
                         android:textColor="#888888"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -236,7 +236,7 @@
                             android:id="@+id/tvSeeAll"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Xem tat ca"
+                            android:text="@string/auto_ui_xem_tat_ca_cny1ni"
                             android:textColor="#F5A623"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -246,7 +246,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginBottom="12dp"
-                        android:text="Top rating quan noi bat tuan nay"
+                        android:text="@string/auto_ui_top_rating_quan_noi_bat_tuan_nay_pk90dx"
                         android:textColor="#888888"
                         android:textSize="12sp" />
 
@@ -282,7 +282,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Quan moi do bo"
+                            android:text="@string/auto_ui_quan_moi_do_bo_wtyu0x"
                             android:textColor="#1A1A1A"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -291,7 +291,7 @@
                             android:id="@+id/tvSeeAllNearby"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Xem tren ban do"
+                            android:text="@string/auto_ui_xem_tren_ban_do_p4eeha"
                             android:textColor="#F5A623"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -321,7 +321,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Kham pha them"
+                        android:text="@string/auto_ui_kham_pha_them_1g2azs"
                         android:textColor="#1A1A1A"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -370,7 +370,7 @@
                 android:layout_gravity="top|end"
                 android:background="@drawable/badge_circle"
                 android:gravity="center"
-                android:text="1"
+                android:text="@string/auto_ui_1_7e"
                 android:textColor="@color/white"
                 android:textSize="10sp"
                 android:textStyle="bold" />
@@ -381,7 +381,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
-            android:text="Xem gio hang"
+            android:text="@string/auto_ui_xem_gio_hang_1dey83"
             android:textColor="#111111"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -391,7 +391,7 @@
             android:id="@+id/tvStickyCartTotal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="0d"
+            android:text="@string/auto_ui_0d_6ez"
             android:textColor="#111111"
             android:textSize="16sp"
             android:textStyle="bold"

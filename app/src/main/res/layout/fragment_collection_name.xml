@@ -4,22 +4,22 @@
     android:layout_height="match_parent" android:background="#FFFFFF" android:padding="20dp">
     <ImageButton android:id="@+id/backButton" android:layout_width="48dp" android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_arrow_back"
-        android:contentDescription="Quay lại" app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/auto_ui_quay_lai_1itst6" app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView android:id="@+id/title" android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Thêm bộ sưu tập mới" android:textSize="24sp" android:textStyle="bold"
+        android:text="@string/auto_ui_them_bo_suu_tap_moi_1o3h54" android:textSize="24sp" android:textStyle="bold"
         android:textColor="#111314" app:layout_constraintTop_toTopOf="@id/backButton"
         app:layout_constraintBottom_toBottomOf="@id/backButton" app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
     <EditText android:id="@+id/nameInput" android:layout_width="0dp" android:layout_height="64dp"
         android:layout_marginTop="28dp" android:background="@drawable/favorite_outline"
-        android:hint="Nhập tên bộ sưu tập" android:paddingStart="16dp" android:paddingEnd="52dp"
+        android:hint="@string/auto_ui_nhap_ten_bo_suu_tap_nxecju" android:paddingStart="16dp" android:paddingEnd="52dp"
         android:singleLine="true" android:maxLength="61" android:textSize="18sp" android:textColor="#343A3D"
         android:textColorHint="#9AA0A2" app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" />
     <ImageButton android:id="@+id/clearButton" android:layout_width="48dp" android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_close"
-        android:contentDescription="Xóa tên" app:layout_constraintEnd_toEndOf="@id/nameInput"
+        android:contentDescription="@string/auto_ui_xoa_ten_1b9qa8" app:layout_constraintEnd_toEndOf="@id/nameInput"
         app:layout_constraintTop_toTopOf="@id/nameInput" app:layout_constraintBottom_toBottomOf="@id/nameInput" />
     <com.google.android.material.chip.ChipGroup android:id="@+id/suggestions"
         android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="16dp"
@@ -27,22 +27,22 @@
         app:layout_constraintTop_toBottomOf="@id/nameInput" app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
         <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bữa sáng năng lượng 🌅" />
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_bua_sang_nang_luong_1qhlza" />
         <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bữa trưa no nê ☀️" />
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_bua_trua_no_ne_1kyn3w" />
         <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Lót dạ xế chiều 🍩" />
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_lot_da_xe_chieu_d9kpxt" />
         <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bữa tối đủ vị 🌙" />
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_bua_toi_u_vi_1ydwaf" />
         <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ăn chay nhẹ nhàng 🌱" />
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_an_chay_nhe_nhang_o7r6h" />
         <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Healthy sống khỏe 🥑" />
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_healthy_song_khoe_wvwrer" />
         <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cà phê &amp; Trà sữa chill 🧋" />
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_ca_phe_and_tra_sua_chill_1ykbyf" />
     </com.google.android.material.chip.ChipGroup>
     <Button android:id="@+id/continueButton" android:layout_width="0dp" android:layout_height="64dp"
-        android:background="@drawable/favorite_button" android:text="Quán yêu thích"
+        android:background="@drawable/favorite_button" android:text="@string/auto_ui_quan_yeu_thich_1aecc4"
         android:textAllCaps="false" android:textColor="#FFFFFF" android:textSize="20sp"
         android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" />

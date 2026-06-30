@@ -52,7 +52,7 @@
                     android:background="@drawable/circle_white_bg"
                     android:src="@drawable/ic_arrow_back"
                     android:padding="8dp"
-                    android:contentDescription="Back" />
+                    android:contentDescription="@string/auto_ui_back_52rny" />
 
                 <ImageButton
                     android:id="@+id/btnFavorite"
@@ -63,7 +63,7 @@
                     android:background="@drawable/circle_white_bg"
                     android:src="@drawable/ic_favorite_border"
                     android:padding="8dp"
-                    android:contentDescription="Favorite" />
+                    android:contentDescription="@string/auto_ui_favorite_mann43" />
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -88,7 +88,7 @@
                 android:id="@+id/tvCategoryTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Các loại bún"
+                android:text="@string/auto_ui_cac_loai_bun_w4wvk3"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"

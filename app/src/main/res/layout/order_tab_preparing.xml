@@ -14,7 +14,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="Đang chuẩn bị"
+        android:text="@string/auto_ui_ang_chuan_bi_v7j9qb"
         android:textColor="#999999"
         android:textSize="13sp" />
 

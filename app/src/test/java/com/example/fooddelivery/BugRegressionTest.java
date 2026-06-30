@@ -12,6 +12,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import java.lang.reflect.Method;
+import java.util.stream.Stream;
 import java.util.Arrays;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -220,6 +221,24 @@ public class BugRegressionTest {
     }
 
     @Test
+    public void visibleXmlCopyUsesResourcesSoLocaleSwitchCanTranslateWholeApp() throws Exception {
+        try (Stream<Path> files = Stream.of(
+                projectPath("src/main/res/layout"),
+                projectPath("src/main/res/menu"))
+                .flatMap(this::xmlFilesIn)) {
+            files.forEach(path -> {
+                try {
+                    String source = readFile(path);
+                    assertFalse("Hardcoded visible copy blocks locale switching in " + path,
+                            source.matches("(?s).*android:(text|hint|contentDescription|title)=\"(?!@string/|@\\{|@null)[^\"]+\".*"));
+                } catch (Exception exception) {
+                    throw new AssertionError("Could not inspect " + path, exception);
+                }
+            });
+        }
+    }
+
+    @Test
     public void mainNavigationGraphInflatesAuthBeforeGraphsThatReferenceIt() throws Exception {
         String navMain = readFile(projectPath("src/main/res/navigation/nav_main.xml"));
         int authInclude = navMain.indexOf("@navigation/nav_auth");
@@ -339,6 +358,18 @@ public class BugRegressionTest {
             return moduleRelative;
         }
         return Paths.get("app").resolve(path);
+    }
+
+    private Stream<Path> xmlFilesIn(Path directory) {
+        try {
+            if (!Files.exists(directory)) {
+                return Stream.empty();
+            }
+            return Files.walk(directory)
+                    .filter(path -> path.toString().endsWith(".xml"));
+        } catch (Exception exception) {
+            throw new AssertionError("Could not list XML files in " + directory, exception);
+        }
     }
 
     private String readFile(Path path) throws Exception {

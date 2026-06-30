@@ -7,12 +7,12 @@
     <ImageView android:id="@+id/collectionImage" android:layout_width="0dp"
         android:layout_height="132dp" android:scaleType="centerCrop"
         android:background="@drawable/favorite_card_teal" android:clipToOutline="true"
-        android:contentDescription="Ảnh bộ sưu tập"
+        android:contentDescription="@string/auto_ui_anh_bo_suu_tap_xeyes1"
         app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
     <ImageButton android:id="@+id/collectionMenu" android:layout_width="48dp" android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/more_vert_24dp"
-        android:contentDescription="Tùy chọn bộ sưu tập" app:layout_constraintTop_toBottomOf="@id/collectionImage"
+        android:contentDescription="@string/auto_ui_tuy_chon_bo_suu_tap_1xk7p6" app:layout_constraintTop_toBottomOf="@id/collectionImage"
         app:layout_constraintEnd_toEndOf="parent" />
     <TextView android:id="@+id/collectionName" android:layout_width="0dp"
         android:layout_height="wrap_content" android:layout_marginTop="10dp"
