@@ -217,10 +217,11 @@ public class CartUiFlowRegressionTest {
                 "selectedOptionIds",
                 "orderRepository.addToCartV3(item.getId(), quantity, safeNote, selectedOptionIds)",
                 "setFragmentResult(\"cart_changed\"",
-                "popBackStack(R.id.homeFragment, false)");
+                "Navigation.findNavController(requireView()).navigateUp()");
         assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
                 "new ToppingBottomSheet",
                 "toppingSheet.show",
+                "popBackStack(R.id.homeFragment, false)",
                 "addToCartV3(item.getId(), quantity, null",
                 "addToCartV3(item.getId(), quantity, safeNote, Collections.emptyList())");
     }

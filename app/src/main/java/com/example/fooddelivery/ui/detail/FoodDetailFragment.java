@@ -128,11 +128,7 @@ public class FoodDetailFragment extends Fragment {
                             result.putLong("restaurant_id", item.getRestaurantId());
                             getParentFragmentManager().setFragmentResult("cart_changed", result);
                             Toast.makeText(requireContext(), "Da them vao gio hang", Toast.LENGTH_SHORT).show();
-                            boolean returnedHome = Navigation.findNavController(requireView())
-                                    .popBackStack(R.id.homeFragment, false);
-                            if (!returnedHome) {
-                                Navigation.findNavController(requireView()).navigateUp();
-                            }
+                            Navigation.findNavController(requireView()).navigateUp();
                             return;
                         }
                         Toast.makeText(requireContext(), "Khong the them mon vao gio", Toast.LENGTH_SHORT).show();
