@@ -15,11 +15,17 @@ public class LocalCart {
 
     public static class CartEntry {
         public final FoodItem item;
+        public final long cartItemId;
         public int quantity;
 
         public CartEntry(FoodItem item, int quantity) {
+            this(item, quantity, -1L);
+        }
+
+        public CartEntry(FoodItem item, int quantity, long cartItemId) {
             this.item = item;
             this.quantity = quantity;
+            this.cartItemId = cartItemId;
         }
 
         public double subtotal() {

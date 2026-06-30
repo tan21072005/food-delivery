@@ -32,7 +32,7 @@ public class CartBottomSheetsInstrumentedTest {
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
                 FoodItem item = food(101, 1, "Tra sua oolong nuong", 45_000);
-                ToppingBottomSheet sheet = new ToppingBottomSheet(item, selected -> {});
+                ToppingBottomSheet sheet = new ToppingBottomSheet(item, (selected, note, sheetRef) -> {});
                 sheet.show(activity.getSupportFragmentManager(), ToppingBottomSheet.TAG);
                 activity.getSupportFragmentManager().executePendingTransactions();
             });

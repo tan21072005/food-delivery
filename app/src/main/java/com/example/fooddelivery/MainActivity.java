@@ -61,5 +61,13 @@ public class MainActivity extends AppCompatActivity {
             // Chuyển bottom nav sang tab Đơn hàng
             binding.bottomNav.setSelectedItemId(R.id.nav_ordes);
         }
+        if (intent != null && "checkout".equals(intent.getStringExtra("open_address_source"))) {
+            Bundle args = new Bundle();
+            args.putString("source", "checkout");
+            args.putLong("cart_id", intent.getLongExtra("cart_id", -1L));
+            args.putLong("restaurant_id", intent.getLongExtra("restaurant_id", -1L));
+            binding.bottomNav.setSelectedItemId(R.id.nav_home);
+            navController.navigate(R.id.addressListFragment, args);
+        }
     }
 }

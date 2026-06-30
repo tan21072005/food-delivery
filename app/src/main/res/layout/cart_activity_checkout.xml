@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F4F5F7"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:id="@+id/checkoutContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -116,6 +121,40 @@
                     android:textColor="#101820"
                     android:textColorHint="#99A1AA"
                     android:textSize="14sp" />
+
+                <LinearLayout
+                    android:id="@+id/rowDoorDelivery"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_rounded_gray"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Giao hàng tận cửa"
+                        android:textColor="#101820"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:text="5.000d"
+                        android:textColor="#68727D"
+                        android:textSize="15sp" />
+
+                    <Switch
+                        android:id="@+id/switchDoorDelivery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -166,6 +205,40 @@
                     android:textColor="@color/blue"
                     android:textSize="14sp"
                     android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sectionGift"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_gift"
+                    app:tint="#68727D" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:text="Gửi tặng món ăn"
+                    android:textColor="#101820"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="#99A1AA" />
             </LinearLayout>
 
             <LinearLayout
@@ -221,6 +294,67 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:nestedScrollingEnabled="false" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sectionRecommendations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="Thường hay đặt cùng"
+                    android:textColor="#101820"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:clipToPadding="false"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="104dp"
+                            android:layout_height="104dp"
+                            android:layout_marginEnd="12dp"
+                            android:background="@drawable/bg_rounded_gray"
+                            android:padding="24dp"
+                            android:src="@drawable/ic_food_placeholder" />
+
+                        <ImageView
+                            android:layout_width="104dp"
+                            android:layout_height="104dp"
+                            android:layout_marginEnd="12dp"
+                            android:background="@drawable/bg_rounded_gray"
+                            android:padding="24dp"
+                            android:src="@drawable/ic_food_placeholder" />
+
+                        <ImageView
+                            android:layout_width="104dp"
+                            android:layout_height="104dp"
+                            android:layout_marginEnd="12dp"
+                            android:background="@drawable/bg_rounded_gray"
+                            android:padding="24dp"
+                            android:src="@drawable/ic_food_placeholder" />
+                    </LinearLayout>
+                </HorizontalScrollView>
             </LinearLayout>
 
             <LinearLayout
@@ -495,4 +629,22 @@
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:indeterminateTint="#FFCC00" />
+    </FrameLayout>
+</FrameLayout>

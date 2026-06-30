@@ -22,19 +22,23 @@ public class VerifyOtpFragment extends Fragment {
     private CountDownTimer timer;
     private boolean requestLoading;
 
-    @Nullable @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
                              @Nullable Bundle state) {
         return inflater.inflate(R.layout.auth_fragment_verify_otp, container, false);
     }
 
-    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle state) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle state) {
         PasswordRecoveryViewModel vm =
                 new ViewModelProvider(requireActivity()).get(PasswordRecoveryViewModel.class);
         if (vm.getEmail() == null) {
             Navigation.findNavController(view).popBackStack();
             return;
         }
+
         EditText otpInput = view.findViewById(R.id.edOtp);
         Button submit = view.findViewById(R.id.btnSubmitOtp);
         TextView resend = view.findViewById(R.id.tvResendCode);
@@ -86,20 +90,24 @@ public class VerifyOtpFragment extends Fragment {
     private void startCooldown(TextView resend, PasswordRecoveryViewModel vm) {
         if (timer != null) timer.cancel();
         timer = new CountDownTimer(Math.max(1, vm.getResendSecondsRemaining()) * 1000, 1000) {
-            @Override public void onTick(long ignored) {
+            @Override
+            public void onTick(long ignored) {
                 long remaining = vm.getResendSecondsRemaining();
                 resend.setEnabled(!requestLoading && remaining == 0);
                 resend.setText(remaining == 0 ? getString(R.string.btn_resend_otp)
                         : getString(R.string.btn_resend_otp_countdown, remaining));
             }
-            @Override public void onFinish() {
+
+            @Override
+            public void onFinish() {
                 resend.setEnabled(!requestLoading);
                 resend.setText(R.string.btn_resend_otp);
             }
         }.start();
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         if (timer != null) timer.cancel();
         super.onDestroyView();
     }

@@ -108,6 +108,9 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.FoodViewHolder
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onFoodClick(item);
         });
+        holder.imgFood.setOnClickListener(v -> {
+            if (listener != null) listener.onFoodClick(item);
+        });
         holder.btnAddToCart.setOnClickListener(v -> {
             if (listener != null) listener.onAddToCartClick(item);
             // Quick scale animation feedback

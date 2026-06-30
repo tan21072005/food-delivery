@@ -44,7 +44,7 @@ public class BugRegressionTest {
     @Test
     public void orderingSurfacesAddToPerRestaurantDraftCartWithoutClearingOtherCarts() throws Exception {
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
-                "LocalCart.getInstance().add");
+                "orderRepository.addToCartV3");
         assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
                 "hasDifferentRestaurant",
                 "Xoa va them mon moi",
@@ -53,16 +53,22 @@ public class BugRegressionTest {
                 "new Intent(requireContext(), Checkout.class)");
 
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
-                "ToppingBottomSheet",
+                "action_restaurantDetail_to_foodDetail",
                 "CartBottomSheet",
                 "layoutStickyCart");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
+                "new ToppingBottomSheet",
+                "toppingSheet.show");
         assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
                 "Xoa va them mon moi",
                 "cart.clear()");
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
-                "ToppingBottomSheet",
+                "action_menu_to_foodDetail",
                 "CartBottomSheet",
                 "layoutStickyCart");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
+                "new ToppingBottomSheet",
+                "toppingSheet.show");
         assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
                 "Xoa va them mon moi",
                 "cart.clear()");
@@ -97,12 +103,12 @@ public class BugRegressionTest {
     }
 
     @Test
-    public void homeDiscoveryDoesNotAddDirectlyToCart() throws Exception {
+    public void homeCardsOpenRestaurantWithoutPlusAndCartOpensDraftOrders() throws Exception {
         String homeFragment = readFile(projectPath("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java"));
         String homeViewModel = readFile(projectPath("src/main/java/com/example/fooddelivery/ui/home/HomeViewModel.java"));
         String homeLayout = readFile(projectPath("src/main/res/layout/home_fragment.xml"));
 
-        assertFalse("HomeFragment must browse to Restaurant detail instead of opening a topping/cart flow",
+        assertFalse("HomeFragment must not open a topping/cart shortcut flow",
                 homeFragment.contains("ToppingBottomSheet"));
         assertFalse("HomeFragment must not mutate the local Cart",
                 homeFragment.contains("LocalCart.getInstance().add"));
@@ -110,12 +116,19 @@ public class BugRegressionTest {
                 homeFragment.contains("getCartAddedEvent().observe"));
         assertFalse("HomeViewModel must not expose Home add-to-cart behavior",
                 homeViewModel.contains("addToCart("));
-        assertFalse("Home must not show a sticky Cart; Cart belongs on Restaurant/Menu surfaces",
+        assertTrue("Home should show sticky cart after restaurant/cart changes",
                 homeLayout.contains("layoutStickyCart"));
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java",
                 "navigateToRestaurantDetail",
-                "showAddButton",
-                "false");
+                "action_home_to_restaurantDetail",
+                "args.putLong(\"restaurant_id\", item.getRestaurantId())",
+                "setFragmentResultListener(\"cart_changed\"",
+                "getDraftCartsV3()",
+                "this::navigateToRestaurantDetail",
+                "null,",
+                "false",
+                "putExtra(\"orders_tab\", \"draft\")",
+                "setSelectedItemId(R.id.nav_ordes)");
     }
 
     @Test
@@ -139,9 +152,8 @@ public class BugRegressionTest {
         assertTrue(menuLayout.contains("RecyclerView"));
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
                 "MenuAdapter",
-                "action_menu_to_restaurantDetail",
-                "ToppingBottomSheet",
-                "addItemToCartWithRestaurantGuard");
+                "action_menu_to_foodDetail",
+                "openFoodDetail");
     }
 
     @Test

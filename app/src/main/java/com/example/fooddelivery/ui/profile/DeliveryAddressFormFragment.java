@@ -1,5 +1,6 @@
 package com.example.fooddelivery.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,6 +22,7 @@ import androidx.navigation.Navigation;
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.data.model.DeliveryAddress;
 import com.example.fooddelivery.data.repository.DeliveryAddressRepository;
+import com.example.fooddelivery.ui.cart.Checkout;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.Map;
@@ -40,6 +42,8 @@ public class DeliveryAddressFormFragment extends Fragment {
     private MaterialButton btnSaveAddress;
     private View groupCustomName;
     private String source = "profile";
+    private long checkoutCartId = -1L;
+    private long checkoutRestaurantId = -1L;
     private String addressId;
     private boolean editingDefault;
 
@@ -56,6 +60,11 @@ public class DeliveryAddressFormFragment extends Fragment {
         if (getArguments() != null) {
             source = getArguments().getString("source", "profile");
             addressId = getArguments().getString("addressId");
+            checkoutCartId = getArguments().getLong("cart_id", -1L);
+            checkoutRestaurantId = getArguments().getLong("restaurant_id", -1L);
+            if (addressId != null && addressId.trim().isEmpty()) {
+                addressId = null;
+            }
         }
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -150,6 +159,8 @@ public class DeliveryAddressFormFragment extends Fragment {
 
             if ("home".equals(source)) {
                 Navigation.findNavController(requireView()).popBackStack(R.id.homeFragment, false);
+            } else if ("checkout".equals(source)) {
+                returnToCheckout();
             } else {
                 Navigation.findNavController(requireView()).popBackStack(R.id.addressListFragment, false);
             }
@@ -195,5 +206,13 @@ public class DeliveryAddressFormFragment extends Fragment {
 
     private String text(EditText editText) {
         return editText.getText() == null ? "" : editText.getText().toString().trim();
+    }
+
+    private void returnToCheckout() {
+        Intent intent = new Intent(requireContext(), Checkout.class);
+        intent.putExtra("cart_id", checkoutCartId);
+        intent.putExtra("restaurant_id", checkoutRestaurantId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
     }
 }

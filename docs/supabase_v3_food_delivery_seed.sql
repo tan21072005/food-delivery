@@ -500,15 +500,15 @@ where not exists (
 );
 
 -- ============================================================
--- 8. ACTIVE DRAFT CART
+-- 8. DRAFT CART
 -- ============================================================
 insert into public.carts (customer_id, restaurant_id, status)
 values (
   (select id from public.users where email = 'minhanh@food.local'),
   (select id from public.restaurants where name = 'Bun Bo Hue Dong Ba'),
-  'active'
+  'draft'
 )
-on conflict (customer_id, restaurant_id) where status = 'active'
+on conflict (customer_id, restaurant_id) where status = 'draft'
 do update set updated_at = now();
 
 insert into public.cart_items (cart_id, menu_item_id, quantity, last_known_unit_price, note)
@@ -524,7 +524,7 @@ join public.restaurants r on r.id = c.restaurant_id
 join public.menu_items mi on mi.restaurant_id = r.id and mi.name = 'Bun bo dac biet'
 where u.email = 'minhanh@food.local'
   and r.name = 'Bun Bo Hue Dong Ba'
-  and c.status = 'active'
+  and c.status = 'draft'
   and not exists (
     select 1
     from public.cart_items existing
@@ -542,7 +542,7 @@ with seeded_cart_item as (
   join public.menu_items mi on mi.id = ci.menu_item_id
   where u.email = 'minhanh@food.local'
     and r.name = 'Bun Bo Hue Dong Ba'
-    and c.status = 'active'
+    and c.status = 'draft'
     and mi.name = 'Bun bo dac biet'
     and coalesce(ci.note, '') = 'It cay, it hanh'
   order by ci.id
