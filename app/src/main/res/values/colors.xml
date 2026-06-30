@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="foodgo_coral">#F2644B</color>
+
     ------------- Brand --------------
     <color name="brand_primary">#F5A623</color>
     <color name="brand_light">#FFD580</color>

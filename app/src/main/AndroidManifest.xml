@@ -38,21 +38,31 @@
 <!--            android:exported="false" />-->
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
 
 
         <activity
             android:name=".ui.menu.MenuActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
             android:name=".ui.cart.Checkout"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
             android:name=".ui.auth.AuthActivity"
-            android:exported="true">
+            android:screenOrientation="portrait"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.FoodGo.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
