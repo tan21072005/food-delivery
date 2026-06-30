@@ -149,7 +149,7 @@ public class FoodDetailFragment extends Fragment {
         if (item == null) return;
 
         double total = item.getPrice() * quantity;
-        binding.tvTotalPrice.setText("Tong: " + MoneyFormatter.format(total));
+        binding.tvTotalPrice.setText(MoneyFormatter.format(total));
     }
 
     @Override

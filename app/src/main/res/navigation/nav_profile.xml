@@ -32,6 +32,14 @@
             android:name="source"
             android:defaultValue="profile"
             app:argType="string" />
+        <argument
+            android:name="cart_id"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <argument
+            android:name="restaurant_id"
+            android:defaultValue="-1L"
+            app:argType="long" />
         <action
             android:id="@+id/action_addressList_to_deliveryAddressForm"
             app:destination="@id/deliveryAddressFormFragment" />
@@ -53,6 +61,14 @@
             android:name="prefillType"
             android:defaultValue=""
             app:argType="string" />
+        <argument
+            android:name="cart_id"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <argument
+            android:name="restaurant_id"
+            android:defaultValue="-1L"
+            app:argType="long" />
     </fragment>
 
     <fragment

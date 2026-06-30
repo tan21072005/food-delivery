@@ -28,7 +28,6 @@ import com.example.fooddelivery.data.model.FoodItem;
 import com.example.fooddelivery.data.repository.DeliveryAddressRepository;
 import com.example.fooddelivery.data.repository.OrderRepository;
 import com.example.fooddelivery.databinding.HomeFragmentBinding;
-import com.example.fooddelivery.ui.cart.CartBottomSheet;
 import com.example.fooddelivery.ui.cart.RpcCartUiState;
 import com.example.fooddelivery.ui.home.adapters.BannerAdapter;
 import com.example.fooddelivery.ui.home.adapters.CategoryAdapter;
@@ -36,6 +35,7 @@ import com.example.fooddelivery.ui.home.adapters.FoodVerticalAdapter;
 import com.example.fooddelivery.ui.home.adapters.NearbyRestaurantAdapter;
 import com.example.fooddelivery.ui.home.adapters.TopSellingAdapter;
 import com.example.fooddelivery.utils.MoneyFormatter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -206,7 +206,7 @@ public class HomeFragment extends Fragment {
     private void setupTopSelling() {
         topSellingAdapter = new TopSellingAdapter(
                 requireContext(),
-                this::navigateToFoodDetail,
+                this::navigateToRestaurantDetail,
                 null,
                 false
         );
@@ -220,7 +220,7 @@ public class HomeFragment extends Fragment {
     private void setupAllFoods() {
         foodVerticalAdapter = new FoodVerticalAdapter(
                 requireContext(),
-                this::navigateToFoodDetail,
+                this::navigateToRestaurantDetail,
                 null,
                 false
         );
@@ -406,16 +406,11 @@ public class HomeFragment extends Fragment {
         }
 
         stickyCart.setOnClickListener(v -> {
-            LocalCart.getInstance().setActiveRestaurantId(stickyRestaurantId);
-            CartBottomSheet sheet = new CartBottomSheet(() ->
-                    refreshDraftCartState(view, stickyRestaurantId, activeCartId));
-            if (activeCartId > 0) {
-                Bundle args = new Bundle();
-                args.putLong("cart_id", activeCartId);
-                args.putLong("restaurant_id", stickyRestaurantId);
-                sheet.setArguments(args);
+            requireActivity().getIntent().putExtra("orders_tab", "draft");
+            BottomNavigationView bottomNav = requireActivity().findViewById(R.id.bottomNav);
+            if (bottomNav != null) {
+                bottomNav.setSelectedItemId(R.id.nav_ordes);
             }
-            sheet.show(getParentFragmentManager(), CartBottomSheet.TAG);
         });
     }
 

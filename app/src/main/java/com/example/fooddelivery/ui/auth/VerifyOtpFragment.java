@@ -43,14 +43,14 @@ public class VerifyOtpFragment extends Fragment {
 
         btnSubmitOtp.setOnClickListener(v -> {
             String otp = edOtp.getText().toString().trim();
-//            if (otp.isEmpty()) {
-//                edOtp.setError("Vui lòng nhập mã xác minh");
-//                edOtp.requestFocus();
-//            } else if (otp.length() < 6) {
-//                edOtp.setError("Mã phải gồm 6 chữ số");
-//                edOtp.requestFocus();
-//            } else if (otp.equals(CORRECT_OTP)) {
-           if (otp.equals(CORRECT_OTP)) {
+           if (otp.isEmpty()) {
+               edOtp.setError("Vui lòng nhập mã xác minh");
+               edOtp.requestFocus();
+           } else if (otp.length() < 6) {
+               edOtp.setError("Mã phải gồm 6 chữ số");
+               edOtp.requestFocus();
+           } else if (otp.equals(CORRECT_OTP)) {
+         
                 Toast.makeText(requireContext(), "Mã chính xác", Toast.LENGTH_SHORT).show();
                 navController.navigate(R.id.action_otp_to_reset);
             } else {

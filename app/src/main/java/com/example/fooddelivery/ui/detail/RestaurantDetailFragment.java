@@ -141,9 +141,9 @@ public class RestaurantDetailFragment extends Fragment {
                                    @NonNull Response<List<DraftCartV3Response>> response) {
                 if (!isAdded()) return;
                 if (response.isSuccessful()) {
-                    DraftCartV3Response draft = RpcCartUiState.selectActiveDraft(
+                    DraftCartV3Response draft = RpcCartUiState.selectDraftForRestaurant(
                             response.body(),
-                            preferredRestaurantId
+                            restaurantId
                     );
                     if (draft != null) {
                         activeCartId = draft.getCartId();
@@ -159,6 +159,7 @@ public class RestaurantDetailFragment extends Fragment {
                     refreshStickyFromSummary(view, preferredRestaurantId, fallbackCartId, showAddedToast);
                     return;
                 }
+                clearActiveCartState();
                 updateStickyCart(view);
             }
 
@@ -208,6 +209,13 @@ public class RestaurantDetailFragment extends Fragment {
         if (showAddedToast) {
             Toast.makeText(requireContext(), "Da them mon vao gio", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void clearActiveCartState() {
+        activeCartId = -1L;
+        activeCartRestaurantId = -1L;
+        activeCartItemCount = 0;
+        activeCartTotal = 0;
     }
 
     private void observeViewModel() {

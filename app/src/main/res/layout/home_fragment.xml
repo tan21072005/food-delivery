@@ -226,7 +226,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text='Top "ban chay"'
+                            android:text='Top quan "5 sao"'
                             android:textColor="#1A1A1A"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -245,7 +245,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginBottom="12dp"
-                        android:text="Nhung mon co luot ban cao nhat thang"
+                        android:text="Top rating quan noi bat tuan nay"
                         android:textColor="#888888"
                         android:textSize="12sp" />
 
@@ -281,7 +281,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Quan gan day"
+                            android:text="Quan moi do bo"
                             android:textColor="#1A1A1A"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -320,7 +320,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Tat ca mon an"
+                        android:text="Kham pha them"
                         android:textColor="#1A1A1A"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -341,18 +341,15 @@
 
     <LinearLayout
         android:id="@+id/layoutStickyCart"
-        android:layout_width="match_parent"
+        android:layout_width="72dp"
         android:layout_height="64dp"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="18dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/bg_cart_sticky"
-        android:elevation="4dp"
-        android:gravity="center_vertical"
+        android:background="@drawable/bg_rounded_white"
+        android:elevation="8dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
         android:visibility="gone">
 
         <FrameLayout
@@ -386,16 +383,18 @@
             android:text="Xem gio hang"
             android:textColor="#111111"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvStickyCartTotal"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="0d"
             android:textColor="#111111"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

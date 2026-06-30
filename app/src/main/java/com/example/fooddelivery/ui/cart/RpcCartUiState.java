@@ -31,6 +31,19 @@ public final class RpcCartUiState {
         return firstNonEmpty;
     }
 
+    public static DraftCartV3Response selectDraftForRestaurant(List<DraftCartV3Response> drafts,
+                                                               long restaurantId) {
+        if (restaurantId <= 0 || drafts == null || drafts.isEmpty()) return null;
+
+        for (DraftCartV3Response draft : drafts) {
+            if (draft == null || draft.getCartId() <= 0) continue;
+            if (draft.getRestaurantId() == restaurantId) {
+                return draft;
+            }
+        }
+        return null;
+    }
+
     public static int itemCount(DraftCartV3Response draft) {
         return draft == null ? 0 : Math.max(0, draft.getItemCount());
     }

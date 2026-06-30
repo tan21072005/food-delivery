@@ -10,8 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.data.local.LocalCart;
+import com.example.fooddelivery.utils.MoneyFormatter;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class CartBottomSheetAdapter
     public interface Listener {
         void onIncrease(LocalCart.CartEntry entry);
         void onDecrease(LocalCart.CartEntry entry);
+        void onEdit(LocalCart.CartEntry entry);
     }
 
     private final Context context;
@@ -54,11 +57,16 @@ public class CartBottomSheetAdapter
         holder.tvName.setText(entry.item.getName());
         holder.tvDesc.setText(entry.item.getDescription() != null
                 ? entry.item.getDescription()
-                : "Tùy chọn mặc định");
-        holder.tvPrice.setText(entry.item.getFormattedPrice());
+                : "Tuy chon mac dinh");
+        holder.tvPrice.setText(MoneyFormatter.format(entry.item.getPrice()));
         holder.tvQty.setText(String.valueOf(entry.quantity));
 
-        if (entry.item.getImageResId() != 0) {
+        if (entry.item.getImageUrl() != null && !entry.item.getImageUrl().trim().isEmpty()) {
+            Glide.with(context)
+                    .load(entry.item.getImageUrl())
+                    .placeholder(R.drawable.placeholder_food)
+                    .into(holder.ivItemImage);
+        } else if (entry.item.getImageResId() != 0) {
             holder.ivItemImage.setImageResource(entry.item.getImageResId());
         } else {
             holder.ivItemImage.setImageResource(R.drawable.placeholder_food);
@@ -66,6 +74,7 @@ public class CartBottomSheetAdapter
 
         holder.btnIncrease.setOnClickListener(v -> listener.onIncrease(entry));
         holder.btnDecrease.setOnClickListener(v -> listener.onDecrease(entry));
+        holder.tvEdit.setOnClickListener(v -> listener.onEdit(entry));
     }
 
     @Override
@@ -77,6 +86,7 @@ public class CartBottomSheetAdapter
         ImageView ivItemImage;
         TextView tvName;
         TextView tvDesc;
+        TextView tvEdit;
         TextView tvPrice;
         TextView tvQty;
         TextView btnIncrease;
@@ -87,6 +97,7 @@ public class CartBottomSheetAdapter
             ivItemImage = itemView.findViewById(R.id.ivItemImage);
             tvName = itemView.findViewById(R.id.tvItemName);
             tvDesc = itemView.findViewById(R.id.tvItemDesc);
+            tvEdit = itemView.findViewById(R.id.tvEditItem);
             tvPrice = itemView.findViewById(R.id.tvItemPrice);
             tvQty = itemView.findViewById(R.id.tvQty);
             btnIncrease = itemView.findViewById(R.id.btnIncrease);

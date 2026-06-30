@@ -136,6 +136,11 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
                         }
                         refreshCart();
                     }
+
+                    @Override
+                    public void onEdit(LocalCart.CartEntry entry) {
+                        // Cart sheet already exposes the editable quantity controls inline.
+                    }
                 });
         rv.setAdapter(adapter);
 
@@ -196,7 +201,7 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
         boolean canViewOrder = count > 0;
         btnViewOrder.setEnabled(count > 0);
         btnViewOrder.setAlpha(canViewOrder ? 1f : 0.55f);
-        btnViewOrder.setText("Xem don hang - " + MoneyFormatter.format(cart.getTotalPrice(restaurantId)));
+        btnViewOrder.setText("Xem don hang • " + MoneyFormatter.format(cart.getTotalPrice(restaurantId)));
     }
 
     private void loadCartSummaryV3() {
@@ -231,7 +236,7 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
         boolean canViewOrder = count > 0;
         btnViewOrder.setEnabled(count > 0);
         btnViewOrder.setAlpha(canViewOrder ? 1f : 0.55f);
-        btnViewOrder.setText("Xem don hang - " + MoneyFormatter.format(RpcCartUiState.totalAmount(rpcSummary)));
+        btnViewOrder.setText("Xem don hang • " + MoneyFormatter.format(RpcCartUiState.totalAmount(rpcSummary)));
     }
 
     private void updateRpcCartItemQuantity(LocalCart.CartEntry entry, int quantity) {

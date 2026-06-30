@@ -1,5 +1,6 @@
 package com.example.fooddelivery.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.data.model.DeliveryAddress;
 import com.example.fooddelivery.data.repository.DeliveryAddressRepository;
+import com.example.fooddelivery.ui.cart.Checkout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,8 @@ public class AddressListFragment extends Fragment {
     private LinearLayout llEmptyShortcuts;
     private View llCurrentLocation;
     private String source = "profile";
+    private long checkoutCartId = -1L;
+    private long checkoutRestaurantId = -1L;
     private final List<DeliveryAddress> allAddresses = new ArrayList<>();
 
     @Override
@@ -51,6 +55,8 @@ public class AddressListFragment extends Fragment {
         repository = new DeliveryAddressRepository(requireContext());
         if (getArguments() != null) {
             source = getArguments().getString("source", "profile");
+            checkoutCartId = getArguments().getLong("cart_id", -1L);
+            checkoutRestaurantId = getArguments().getLong("restaurant_id", -1L);
         }
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -72,6 +78,9 @@ public class AddressListFragment extends Fragment {
             if ("home".equals(source)) {
                 repository.select(item.getId());
                 Navigation.findNavController(requireView()).popBackStack(R.id.homeFragment, false);
+            } else if ("checkout".equals(source)) {
+                repository.select(item.getId());
+                returnToCheckout();
             } else {
                 openForm(item.getId(), null);
             }
@@ -195,6 +204,8 @@ public class AddressListFragment extends Fragment {
                 Toast.makeText(requireContext(), "Da chon dia chi hien tai", Toast.LENGTH_SHORT).show();
                 if ("home".equals(source)) {
                     Navigation.findNavController(requireView()).popBackStack(R.id.homeFragment, false);
+                } else if ("checkout".equals(source)) {
+                    returnToCheckout();
                 }
             }
 
@@ -208,8 +219,18 @@ public class AddressListFragment extends Fragment {
     private void openForm(@Nullable String addressId, @Nullable String type) {
         Bundle args = new Bundle();
         args.putString("source", source);
+        args.putLong("cart_id", checkoutCartId);
+        args.putLong("restaurant_id", checkoutRestaurantId);
         if (addressId != null) args.putString("addressId", addressId);
         if (type != null) args.putString("prefillType", type);
         Navigation.findNavController(requireView()).navigate(R.id.action_addressList_to_deliveryAddressForm, args);
+    }
+
+    private void returnToCheckout() {
+        Intent intent = new Intent(requireContext(), Checkout.class);
+        intent.putExtra("cart_id", checkoutCartId);
+        intent.putExtra("restaurant_id", checkoutRestaurantId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
     }
 }
