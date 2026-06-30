@@ -7,11 +7,14 @@ import com.example.fooddelivery.data.model.CartSummaryV3Request;
 import com.example.fooddelivery.data.model.CheckoutCartV3Request;
 import com.example.fooddelivery.data.model.ClearCartV3Request;
 import com.example.fooddelivery.data.model.CartRequest;
+import com.example.fooddelivery.data.model.GetMenuItemDetailV3Request;
+import com.example.fooddelivery.data.model.GetOrderDetailV3Request;
 import com.example.fooddelivery.data.model.GetMyOrdersV3Request;
 import com.example.fooddelivery.data.model.MyOrderV3Response;
 import com.example.fooddelivery.data.model.RemoveCartItemV3Request;
 import com.example.fooddelivery.data.model.UpdateCartItemQuantityV3Request;
 import com.example.fooddelivery.data.model.User;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 import java.util.Map;
@@ -167,6 +170,12 @@ public interface ApiService {
 
     @POST("rest/v1/rpc/get_my_orders_v3")
     Call<List<MyOrderV3Response>> getMyOrdersV3(@Body GetMyOrdersV3Request request);
+
+    @POST("rest/v1/rpc/get_order_detail_v3")
+    Call<JsonObject> getOrderDetailV3(@Body GetOrderDetailV3Request request);
+
+    @POST("rest/v1/rpc/get_menu_item_detail_v3")
+    Call<JsonObject> getMenuItemDetailV3(@Body GetMenuItemDetailV3Request request);
 
     @POST("rest/v1/rpc/get_cart_summary_v3")
     Call<com.example.fooddelivery.data.model.CartSummaryResponse> getCartSummary();

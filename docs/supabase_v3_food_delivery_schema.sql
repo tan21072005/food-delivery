@@ -582,9 +582,9 @@ grant insert, update, delete on public.menu_option_choices to authenticated;
 
 grant select, update on public.users to authenticated;
 grant select, insert, update, delete on public.delivery_addresses to authenticated;
-grant select, insert, update, delete on public.carts to authenticated;
-grant select, insert, update, delete on public.cart_items to authenticated;
-grant select, insert, update, delete on public.cart_item_options to authenticated;
+grant select on public.carts to authenticated;
+grant select on public.cart_items to authenticated;
+grant select on public.cart_item_options to authenticated;
 grant select on public.orders to authenticated;
 grant select on public.order_lines to authenticated;
 grant select on public.order_status_history to authenticated;
@@ -775,24 +775,18 @@ using (customer_id = (select public.current_app_user_id()))
 with check (customer_id = (select public.current_app_user_id()));
 
 drop policy if exists "customers manage own carts" on public.carts;
-create policy "customers manage own carts"
-on public.carts for all
+drop policy if exists "customers read own carts" on public.carts;
+create policy "customers read own carts"
+on public.carts for select
 to authenticated
-using (customer_id = (select public.current_app_user_id()))
-with check (customer_id = (select public.current_app_user_id()));
+using (customer_id = (select public.current_app_user_id()));
 
 drop policy if exists "customers manage own cart items" on public.cart_items;
-create policy "customers manage own cart items"
-on public.cart_items for all
+drop policy if exists "customers read own cart items" on public.cart_items;
+create policy "customers read own cart items"
+on public.cart_items for select
 to authenticated
 using (
-  exists (
-    select 1 from public.carts c
-    where c.id = cart_items.cart_id
-      and c.customer_id = (select public.current_app_user_id())
-  )
-)
-with check (
   exists (
     select 1 from public.carts c
     where c.id = cart_items.cart_id
@@ -801,19 +795,11 @@ with check (
 );
 
 drop policy if exists "customers manage own cart item options" on public.cart_item_options;
-create policy "customers manage own cart item options"
-on public.cart_item_options for all
+drop policy if exists "customers read own cart item options" on public.cart_item_options;
+create policy "customers read own cart item options"
+on public.cart_item_options for select
 to authenticated
 using (
-  exists (
-    select 1
-    from public.cart_items ci
-    join public.carts c on c.id = ci.cart_id
-    where ci.id = cart_item_options.cart_item_id
-      and c.customer_id = (select public.current_app_user_id())
-  )
-)
-with check (
   exists (
     select 1
     from public.cart_items ci
