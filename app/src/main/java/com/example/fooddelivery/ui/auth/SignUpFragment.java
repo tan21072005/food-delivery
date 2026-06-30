@@ -1,10 +1,5 @@
 package com.example.fooddelivery.ui.auth;
 
-import com.example.fooddelivery.MainActivity;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.example.fooddelivery.R;
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,13 +13,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-
+import com.example.fooddelivery.R;
 
 public class SignUpFragment extends Fragment {
 
-    private EditText edEmail, edPassword, edAgainPassword;
+    private EditText edEmail;
+    private EditText edPassword;
+    private EditText edAgainPassword;
     private Button btnSignUp;
     private TextView tvSignIn;
     private AuthViewModel authViewModel;
@@ -41,11 +39,11 @@ public class SignUpFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        edEmail        = view.findViewById(R.id.edUsername);      // field email
-        edPassword     = view.findViewById(R.id.edPassword);
-        edAgainPassword = view.findViewById(R.id.edAgianPassword); // lưu ý typo "Agian"
-        btnSignUp      = view.findViewById(R.id.btnSignUp);
-        tvSignIn       = view.findViewById(R.id.tvSignIn);
+        edEmail = view.findViewById(R.id.edUsername);
+        edPassword = view.findViewById(R.id.edPassword);
+        edAgainPassword = view.findViewById(R.id.edAgianPassword);
+        btnSignUp = view.findViewById(R.id.btnSignUp);
+        tvSignIn = view.findViewById(R.id.tvSignIn);
 
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
@@ -61,34 +59,33 @@ public class SignUpFragment extends Fragment {
 
         authViewModel.getSignupSuccess().observe(getViewLifecycleOwner(), success -> {
             if (success != null && success) {
-                Toast.makeText(getContext(), "Đăng ký thành công! Hãy đăng nhập.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "\u0110\u0103ng k\u00fd th\u00e0nh c\u00f4ng! Vui l\u00f2ng \u0111\u0103ng nh\u1eadp.", Toast.LENGTH_LONG).show();
                 Navigation.findNavController(requireView()).popBackStack();
             }
         });
 
         btnSignUp.setOnClickListener(v -> {
-            String email    = edEmail.getText().toString().trim();
+            String email = edEmail.getText().toString().trim();
             String password = edPassword.getText().toString().trim();
-            String confirm  = edAgainPassword.getText().toString().trim();
+            String confirm = edAgainPassword.getText().toString().trim();
 
-            // Validate
             if (TextUtils.isEmpty(email)) {
-                edEmail.setError("Email không được trống");
+                edEmail.setError("Email kh\u00f4ng \u0111\u01b0\u1ee3c tr\u1ed1ng");
                 edEmail.requestFocus();
                 return;
             }
             if (TextUtils.isEmpty(password)) {
-                edPassword.setError("Mật khẩu không được trống");
+                edPassword.setError("M\u1eadt kh\u1ea9u kh\u00f4ng \u0111\u01b0\u1ee3c tr\u1ed1ng");
                 edPassword.requestFocus();
                 return;
             }
             if (password.length() < 6) {
-                edPassword.setError("Mật khẩu tối thiểu 6 ký tự");
+                edPassword.setError("M\u1eadt kh\u1ea9u t\u1ed1i thi\u1ec3u 6 k\u00fd t\u1ef1");
                 edPassword.requestFocus();
                 return;
             }
             if (!password.equals(confirm)) {
-                edAgainPassword.setError("Mật khẩu không khớp");
+                edAgainPassword.setError("M\u1eadt kh\u1ea9u kh\u00f4ng kh\u1edbp");
                 edAgainPassword.requestFocus();
                 return;
             }
@@ -96,11 +93,9 @@ public class SignUpFragment extends Fragment {
             authViewModel.signUp(email, password);
         });
 
-        // Bấm "Đăng nhập" → quay lại Login
         tvSignIn.setOnClickListener(v ->
                 Navigation.findNavController(v).popBackStack()
         );
     }
+
 }
-
-
