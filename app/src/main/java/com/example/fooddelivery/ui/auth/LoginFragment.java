@@ -90,11 +90,9 @@ public class LoginFragment extends Fragment {
         edUsername    = view.findViewById(R.id.edUsername);
         edPassword    = view.findViewById(R.id.edPassword);
         tvSignup      = view.findViewById(R.id.tvSignup);
-        fbLoginButton = view.findViewById(R.id.login_button);
         tvForgetpass  = view.findViewById(R.id.tvForgetpass);
 
         setupGoogle(view);
-        setupFacebook();
         setupLogin();
         setupSignup();
         setupForgotPassword();
@@ -222,7 +220,9 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        if (callbackManager != null) {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
