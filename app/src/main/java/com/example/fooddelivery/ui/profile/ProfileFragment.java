@@ -15,15 +15,18 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.fooddelivery.R;
+import com.example.fooddelivery.data.local.prefs.LocaleStore;
 import com.example.fooddelivery.data.local.prefs.SessionManager;
 import com.example.fooddelivery.data.model.User;
 import com.example.fooddelivery.ui.auth.AuthActivity;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -166,6 +169,28 @@ public class ProfileFragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.action_profile_to_addressList, args);
             });
         }
+
+        TextView languageValue = view.findViewById(R.id.tvLanguageValue);
+        String currentLanguage = AppCompatDelegate.getApplicationLocales().toLanguageTags();
+        languageValue.setText(currentLanguage.startsWith("en")
+                ? R.string.language_english
+                : R.string.language_vietnamese);
+        view.findViewById(R.id.btnLanguageItem).setOnClickListener(v -> {
+            String[] languageTags = {"vi", "en"};
+            int selectedLanguage = AppCompatDelegate.getApplicationLocales()
+                    .toLanguageTags().startsWith("en") ? 1 : 0;
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.profile_language)
+                    .setSingleChoiceItems(
+                            R.array.supported_languages,
+                            selectedLanguage,
+                            (dialog, which) -> {
+                                LocaleStore.apply(languageTags[which]);
+                                dialog.dismiss();
+                            })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show();
+        });
     }
 
     private void uploadAvatar(Uri imageUri) {

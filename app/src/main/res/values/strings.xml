@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Food Delivery</string>
+    <string name="app_name">FoodGo</string>
     <string name="app_tagline">Đặt đồ ăn - Giao tận nơi</string>
 
 
@@ -332,4 +332,12 @@
     <string name="recovery_email_hint">Nhập email</string>
     <string name="recovery_email_note">Nếu email khớp với tài khoản hiện có, chúng tôi sẽ gửi mã xác minh.</string>
     <string name="recovery_password_rules">• 8–20 ký tự\n• Có chữ cái, chữ số và ký tự đặc biệt</string>
+    <string name="profile_preferences">Tùy chọn</string>
+    <string name="profile_language">Ngôn ngữ</string>
+    <string name="language_vietnamese">Tiếng Việt</string>
+    <string name="language_english">English</string>
+    <string-array name="supported_languages">
+        <item>Tiếng Việt</item>
+        <item>English</item>
+    </string-array>
 </resources>

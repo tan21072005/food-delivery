@@ -299,4 +299,13 @@
     <string name="recovery_email_hint">Enter email</string>
     <string name="recovery_email_note">If the email matches an existing account, we will send a verification code.</string>
     <string name="recovery_password_rules">• 8–20 characters\n• Include a letter, number, and special character</string>
+    <string name="app_name">FoodGo</string>
+    <string name="profile_preferences">Preferences</string>
+    <string name="profile_language">Language</string>
+    <string name="language_vietnamese">Vietnamese</string>
+    <string name="language_english">English</string>
+    <string-array name="supported_languages">
+        <item>Vietnamese</item>
+        <item>English</item>
+    </string-array>
 </resources>
