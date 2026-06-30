@@ -2,10 +2,14 @@ package com.example.fooddelivery.data.remote.apis;
 
 import com.example.fooddelivery.data.model.FoodCategory;
 import com.example.fooddelivery.data.model.FoodItem;
+import com.example.fooddelivery.data.model.AddToCartV3Request;
+import com.example.fooddelivery.data.model.CartSummaryV3Request;
+import com.example.fooddelivery.data.model.CheckoutCartV3Request;
 import com.example.fooddelivery.data.model.CartRequest;
 import com.example.fooddelivery.data.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -135,10 +139,22 @@ public interface ApiService {
     // CART & ORDER ENDPOINTS
     // --------------------------------------------------------
 
-    @POST("rest/v1/rpc/get_cart_summary")
+    @POST("rest/v1/rpc/add_to_cart_v3")
+    Call<Long> addToCartV3(@Body AddToCartV3Request request);
+
+    @POST("rest/v1/rpc/get_draft_carts_v3")
+    Call<List<com.example.fooddelivery.data.model.DraftCartV3Response>> getDraftCartsV3(@Body Map<String, Object> emptyBody);
+
+    @POST("rest/v1/rpc/get_cart_summary_v3")
+    Call<com.example.fooddelivery.data.model.CartSummaryV3Response> getCartSummaryV3(@Body CartSummaryV3Request request);
+
+    @POST("rest/v1/rpc/checkout_cart_v3")
+    Call<Long> checkoutCartV3(@Body CheckoutCartV3Request request);
+
+    @POST("rest/v1/rpc/get_cart_summary_v3")
     Call<com.example.fooddelivery.data.model.CartSummaryResponse> getCartSummary();
 
-    @POST("rest/v1/rpc/checkout_cart")
+    @POST("rest/v1/rpc/checkout_cart_v3")
     Call<List<Long>> checkoutCart(@Body com.example.fooddelivery.data.model.CheckoutRequest request);
 
     @retrofit2.http.Headers("Prefer: resolution=merge-duplicates,return=minimal")
