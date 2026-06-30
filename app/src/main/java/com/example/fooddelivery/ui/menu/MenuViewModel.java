@@ -7,11 +7,12 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.fooddelivery.data.local.LocalCart;
 import com.example.fooddelivery.data.model.FoodItem;
 import com.example.fooddelivery.data.repository.FoodRepository;
+import com.example.fooddelivery.data.repository.OrderRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,12 +29,16 @@ public class MenuViewModel extends AndroidViewModel {
     private final MutableLiveData<String> errorMsg = new MutableLiveData<>();
     private final MutableLiveData<String> cartMessage = new MutableLiveData<>();
     private final MutableLiveData<Boolean> cartAddedEvent = new MutableLiveData<>(false);
+    private final MutableLiveData<Long> addedCartId = new MutableLiveData<>(-1L);
+    private final MutableLiveData<Long> addedRestaurantId = new MutableLiveData<>(-1L);
 
     private final FoodRepository foodRepository;
+    private final OrderRepository orderRepository;
 
     public MenuViewModel(@NonNull Application application) {
         super(application);
         foodRepository = new FoodRepository(application);
+        orderRepository = new OrderRepository(application);
     }
 
     public LiveData<Boolean> isLoading() { return isLoading; }
@@ -41,6 +46,8 @@ public class MenuViewModel extends AndroidViewModel {
     public LiveData<String> getErrorMsg() { return errorMsg; }
     public LiveData<String> getCartMessage() { return cartMessage; }
     public LiveData<Boolean> getCartAddedEvent() { return cartAddedEvent; }
+    public LiveData<Long> getAddedCartId() { return addedCartId; }
+    public LiveData<Long> getAddedRestaurantId() { return addedRestaurantId; }
 
     public void consumeCartAddedEvent() {
         cartAddedEvent.setValue(false);
@@ -54,9 +61,25 @@ public class MenuViewModel extends AndroidViewModel {
         }
         for (FoodItem item : current) {
             if (item.getId() == foodId) {
-                LocalCart.getInstance().add(item, quantity);
-                cartMessage.setValue("Da them vao gio hang");
-                cartAddedEvent.setValue(true);
+                orderRepository.addToCartV3(item.getId(), quantity, null, Collections.emptyList())
+                        .enqueue(new Callback<Long>() {
+                            @Override
+                            public void onResponse(Call<Long> call, Response<Long> response) {
+                                if (!response.isSuccessful()) {
+                                    cartMessage.setValue("Khong the them vao gio hang");
+                                    return;
+                                }
+                                addedCartId.setValue(response.body() == null ? -1L : response.body());
+                                addedRestaurantId.setValue(item.getRestaurantId());
+                                cartMessage.setValue("Da them vao gio hang");
+                                cartAddedEvent.setValue(true);
+                            }
+
+                            @Override
+                            public void onFailure(Call<Long> call, Throwable t) {
+                                cartMessage.setValue("Khong the them vao gio hang: " + t.getMessage());
+                            }
+                        });
                 return;
             }
         }

@@ -41,6 +41,7 @@ public class OrderReviewFragment extends Fragment {
 
         orderId = getArguments() != null ? getArguments().getLong("order_id", -1) : -1;
         if (orderId != -1) {
+            // TODO(order-rpc): Replace this local review lookup when Supabase exposes review state/details.
             order = com.example.fooddelivery.data.local.LocalOrderStore.getInstance().findOrderById(orderId);
         }
 
@@ -67,6 +68,7 @@ public class OrderReviewFragment extends Fragment {
 
             // Update order status
             if (orderId != -1) {
+                // TODO(order-rpc): Persist review status through Supabase once a review RPC exists.
                 com.example.fooddelivery.data.local.LocalOrderStore.getInstance().markAsReviewed(orderId);
             }
             

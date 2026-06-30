@@ -32,6 +32,10 @@
         android:id="@+id/orderDetailFragment"
         android:name="com.example.fooddelivery.ui.order.OrderDetailFragment"
         android:label="Chi tiết đơn hàng">
+        <argument
+            android:name="order_id"
+            app:argType="long"
+            android:defaultValue="-1L" />
         <action
             android:id="@+id/action_orderDetailFragment_to_orderReviewFragment"
             app:destination="@id/orderReviewFragment"
