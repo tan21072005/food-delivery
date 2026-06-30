@@ -291,4 +291,12 @@
         <string name="facebook_client_token">f152f3c57d7dfc074a0ba9c67764bc62</string>
 
 
+    <string name="title_reset_password">Reset password</string>
+    <string name="error_invalid_email">Invalid email</string>
+    <string name="error_email_domain_typo">Did you mean %1$s?</string>
+    <string name="msg_contact_support">Please contact support</string>
+    <string name="btn_resend_otp_countdown">Resend code (%1$d seconds)</string>
+    <string name="recovery_email_hint">Enter email</string>
+    <string name="recovery_email_note">If the email matches an existing account, we will send a verification code.</string>
+    <string name="recovery_password_rules">• 8–20 characters\n• Include a letter, number, and special character</string>
 </resources>

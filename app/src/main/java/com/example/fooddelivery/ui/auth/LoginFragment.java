@@ -68,6 +68,9 @@ public class LoginFragment extends Fragment {
 
         navController = Navigation.findNavController(view);
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        new ViewModelProvider(requireActivity())
+                .get(PasswordRecoveryViewModel.class)
+                .restart();
 
         authViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             btnLogin.setEnabled(isLoading == null || !isLoading);
