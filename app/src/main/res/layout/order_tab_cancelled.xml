@@ -15,7 +15,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="Đã hủy"
+        android:text="@string/auto_ui_a_huy_lxa5lg"
         android:textColor="#999999"
         android:textSize="13sp" />
 

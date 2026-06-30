@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20sp"
         android:gravity="center"
-        android:text="Sign Up"
+        android:text="@string/auto_ui_sign_up_1eqdvc"
         android:textColor="@color/black"
         android:textSize="25sp" />
 
@@ -49,7 +49,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="10dp"
         android:ems="10"
-        android:hint="Mật khẩu"
+        android:hint="@string/auto_ui_mat_khau_1lg51d"
         android:inputType="textPassword"
         android:minHeight="48dp" />
     <EditText
@@ -60,7 +60,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="10dp"
         android:ems="10"
-        android:hint="Nhập lại mật khẩu"
+        android:hint="@string/auto_ui_nhap_lai_mat_khau_1loaoq"
         android:inputType="textPassword"
         android:minHeight="48dp" />
 
@@ -72,7 +72,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="10dp"
         android:gravity="center"
-        android:text="Đăng ký"
+        android:text="@string/auto_ui_ang_ky_1klj93"
         android:textSize="30sp" />
 
     <LinearLayout
@@ -88,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:text="Đã có tài khoản"
+            android:text="@string/auto_ui_a_co_tai_khoan_15z7mh"
             android:textAllCaps="false" />
         <Space
             android:layout_width="0dp"
@@ -100,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="Đăng nhập"
+            android:text="@string/auto_ui_ang_nhap_1g7vml"
             android:textColor="@color/blue"
             android:textSize="15sp" />
     </LinearLayout>
@@ -127,7 +127,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="center"
-            android:text="Đăng nhập với"
+            android:text="@string/auto_ui_ang_nhap_voi_1bv47h"
             android:textColor="@color/black"
             android:textSize="20sp" />
 

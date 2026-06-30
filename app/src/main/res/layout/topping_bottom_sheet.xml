@@ -25,7 +25,7 @@
             android:layout_height="32dp"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:text="×"
+            android:text="@string/auto_ui_symbol_c0"
             android:textColor="#888888"
             android:textSize="28sp" />
 
@@ -36,7 +36,7 @@
             android:layout_centerInParent="true"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Chọn món"
+            android:text="@string/auto_ui_chon_mon_mdnxpx"
             android:textColor="#111111"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -67,7 +67,7 @@
                 android:id="@+id/tvNoOptionsMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Món này chưa có tuỳ chọn thêm."
+                android:text="@string/auto_ui_mon_nay_chua_co_tuy_chon_them_1pk3th"
                 android:textColor="#777777"
                 android:textSize="14sp" />
 
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
                 android:layout_marginBottom="8dp"
-                android:text="Ghi chú cho quán"
+                android:text="@string/auto_ui_ghi_chu_cho_quan_1d8lfa"
                 android:textColor="#111111"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -88,7 +88,7 @@
                 android:background="@drawable/bg_bottom_sheet"
                 android:backgroundTint="#F5F5F5"
                 android:gravity="top"
-                android:hint="Ghi chú thêm (không bắt buộc)"
+                android:hint="@string/auto_ui_ghi_chu_them_khong_bat_buoc_scusmy"
                 android:minLines="3"
                 android:padding="12dp" />
         </LinearLayout>
@@ -115,7 +115,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="0đ"
+            android:text="@string/auto_ui_0_6js"
             android:textColor="#111111"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -127,7 +127,7 @@
             android:backgroundTint="#FFCC00"
             android:paddingStart="24dp"
             android:paddingEnd="24dp"
-            android:text="THÊM VÀO GIỎ"
+            android:text="@string/auto_ui_them_vao_gio_ndohan"
             android:textColor="#111111"
             android:textStyle="bold" />
     </LinearLayout>

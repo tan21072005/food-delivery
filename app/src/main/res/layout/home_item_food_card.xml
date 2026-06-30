@@ -35,7 +35,7 @@
                 android:id="@+id/tvFoodName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Bún thập cẩm"
+                android:text="@string/auto_ui_bun_thap_cam_o7dcj3"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"
@@ -54,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="35.000đ"
+                    android:text="@string/auto_ui_35_000_1gqp9m"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:textColor="#F5A623" />
@@ -71,7 +71,7 @@
                     app:backgroundTint="#F5A623"
                     app:tint="@color/white"
                     app:elevation="2dp"
-                    android:contentDescription="Thêm" />
+                    android:contentDescription="@string/auto_ui_them_5ehum" />
 
             </RelativeLayout>
 

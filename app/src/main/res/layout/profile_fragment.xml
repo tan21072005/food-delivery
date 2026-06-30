@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/foodgo_screen_gutter"
     tools:context=".ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -11,18 +12,18 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Profile"
-        android:background="@color/white">
+        android:background="@color/foodgo_surface">
 
 
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#F3F3F3">
+            android:background="@color/foodgo_surface"
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <!-- ===== HEADER / PROFILE SECTION ===== -->
@@ -44,7 +45,7 @@
                         android:layout_marginEnd="16dp"
                         android:padding="4dp"
                         android:src="@drawable/ic_arrow_right"
-                        android:contentDescription="More" />
+                        android:contentDescription="@string/cd_more" />
 
                     <!-- Avatar image -->
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -56,7 +57,7 @@
                         app:civ_border_width="3dp"
                         app:civ_border_color="@color/white"
                         android:src="@drawable/ic_launcher_foreground"
-                        android:contentDescription="Avatar" />
+                        android:contentDescription="@string/cd_avatar" />
 
                     <!-- Name + chevron + edit -->
                     <LinearLayout
@@ -73,7 +74,7 @@
                             android:id="@+id/tvUserName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Food Delivery"
+                            android:text="@string/app_name"
                             android:textSize="17sp"
                             android:textStyle="bold" />
 
@@ -84,7 +85,7 @@
                             android:layout_height="20dp"
                             android:layout_marginStart="4dp"
                             android:src="@drawable/ic_chevron_down"
-                            android:contentDescription="Switch account" />
+                            android:contentDescription="@string/title_switch_account" />
 
                         <!-- Edit icon -->
                         <ImageView
@@ -93,7 +94,7 @@
                             android:layout_height="20dp"
                             android:layout_marginStart="8dp"
                             android:src="@drawable/ic_edit"
-                            android:contentDescription="Edit profile" />
+                            android:contentDescription="@string/cd_btn_edit" />
                     </LinearLayout>
 
                     <!-- Member badge -->
@@ -105,7 +106,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="6dp"
                         android:background="@drawable/bg_badge_member"
-                        android:text="● Thành viên"
+                        android:text="@string/profile_member_badge"
                         android:textColor="@color/white"
                         android:textSize="11sp"
                         android:paddingStart="10dp"
@@ -118,7 +119,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tài khoản"
+                    android:text="@string/profile_section_account"
                     android:textColor="#888"
                     android:textStyle="bold"
                     android:layout_marginStart="16dp"
@@ -148,7 +149,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Tài khoản"
+                            android:text="@string/profile_item_account_info"
                             android:textSize="16sp"
                             android:layout_marginStart="16dp"/>
 
@@ -182,7 +183,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Dia chi giao hang"
+                            android:text="@string/profile_item_delivery_address"
                             android:textSize="16sp"
                             android:layout_marginStart="16dp"/>
 
@@ -213,7 +214,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Quyền riêng tư"
+                            android:text="@string/profile_item_privacy"
                             android:textSize="16sp"
                             android:layout_marginStart="16dp"/>
 
@@ -244,7 +245,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Bảo mật &amp; quyền"
+                            android:text="@string/profile_item_security"
                             android:textSize="16sp"
                             android:layout_marginStart="16dp"/>
 
@@ -274,7 +275,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Chia sẻ hồ sơ"
+                            android:text="@string/profile_item_share_profile"
                             android:textSize="16sp"
                             android:layout_marginStart="16dp"/>
 
@@ -292,7 +293,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Khuyến mãi"
+                    android:text="@string/profile_section_promotion"
                     android:textColor="#888"
                     android:textStyle="bold"
                     android:layout_marginStart="16dp"/>
@@ -323,7 +324,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Khuyến mãi"
+                            android:text="@string/profile_item_promotions"
                             android:textSize="16sp"
                             android:layout_marginStart="16dp"/>
 
@@ -353,7 +354,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Gói tiết kiệm"
+                            android:text="@string/profile_item_savings_plan"
                             android:textSize="16sp"
                             android:layout_marginStart="16dp"/>
 
@@ -382,7 +383,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Thanh toán"
+                            android:text="@string/profile_item_payment"
                             android:textSize="16sp"
                             android:layout_marginStart="16dp"/>
 
@@ -396,7 +397,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hỗ trợ"
+                        android:text="@string/profile_section_support"
                         android:textColor="#888"
                         android:textStyle="bold"
                         android:layout_marginStart="16dp"/>
@@ -424,7 +425,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Hỗ trợ"
+                            android:text="@string/profile_item_support"
                             android:textSize="16sp"
                             android:layout_marginStart="16dp"/>
 
@@ -453,7 +454,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Điều khoản chính sách"
+                            android:text="@string/profile_item_terms"
                             android:textSize="16sp"
                             android:layout_marginStart="16dp"/>
 
@@ -472,7 +473,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Dăng nhập"
+                        android:text="@string/profile_action_login"
                         android:textColor="#888"
                         android:textStyle="bold"
                         android:layout_marginStart="16dp"/>
@@ -485,6 +486,44 @@
                     android:paddingHorizontal="16dp"
                     android:orientation="vertical"
                     android:layout_margin="16dp">
+                    <LinearLayout
+                        android:id="@+id/btnLanguageItem"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@string/profile_language"
+                            android:src="@drawable/ic_language" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:text="@string/profile_language"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvLanguageValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/language_vietnamese"
+                            android:textColor="#888888"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE" />
+
                     <LinearLayout
                         android:id="@+id/btnSwitchAccountItem"
                         android:layout_width="match_parent"
@@ -504,7 +543,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Chuyển đổi tài khoản"
+                            android:text="@string/profile_item_switch_account"
                             android:textSize="16sp"
                             android:layout_marginStart="16dp"/>
 
@@ -536,7 +575,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Đăng xuất"
+                            android:text="@string/btn_logout"
                             android:textSize="16sp"
                             android:layout_marginStart="16dp"/>
 

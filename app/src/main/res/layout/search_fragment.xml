@@ -19,7 +19,7 @@
             app:cardBackgroundColor="#F5F5F5">
             <EditText android:id="@+id/etSearch"
                 android:layout_width="match_parent" android:layout_height="match_parent"
-                android:hint="Tìm kiếm món ăn..." android:textSize="14sp"
+                android:hint="@string/auto_ui_tim_kiem_mon_an_fds6zt" android:textSize="14sp"
                 android:paddingStart="14dp" android:paddingEnd="14dp"
                 android:background="@null" android:inputType="text"
                 android:imeOptions="actionSearch" android:singleLine="true" />
@@ -43,7 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lọc"
+                android:text="@string/auto_ui_loc_b9y3"
                 android:textSize="13sp"
                 android:textColor="#1A1A1A"
                 android:background="@drawable/bg_rounded_border"
@@ -56,7 +56,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gần tôi"
+                android:text="@string/auto_ui_gan_toi_1nsgdq"
                 android:textSize="13sp"
                 android:textColor="#1A1A1A"
                 android:background="@drawable/bg_rounded_border"
@@ -67,7 +67,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bán chạy"
+                android:text="@string/auto_ui_ban_chay_4z7j91"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="#F5A623"
@@ -79,7 +79,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Đánh giá"
+                android:text="@string/auto_ui_anh_gia_1bzpur"
                 android:textSize="13sp"
                 android:textColor="#1A1A1A"
                 android:background="@drawable/bg_rounded_border"
@@ -90,7 +90,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Giá"
+                android:text="@string/auto_ui_gia_608o"
                 android:textSize="13sp"
                 android:textColor="#1A1A1A"
                 android:background="@drawable/bg_rounded_border"
@@ -109,7 +109,7 @@
 
     <TextView android:id="@+id/tvEmpty"
         android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="Nhập tên món bạn muốn tìm..." android:gravity="center"
+        android:text="@string/auto_ui_nhap_ten_mon_ban_muon_tim_1pixhd" android:gravity="center"
         android:textSize="14sp" android:textColor="#AAAAAA"
         android:layout_marginTop="60dp" />
 

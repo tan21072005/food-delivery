@@ -5,16 +5,16 @@
     android:paddingEnd="20dp">
     <ImageButton android:id="@+id/backButton" android:layout_width="48dp" android:layout_height="48dp"
         android:layout_marginTop="20dp" android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_arrow_back" android:contentDescription="Quay lại"
+        android:src="@drawable/ic_arrow_back" android:contentDescription="@string/auto_ui_quay_lai_1itst6"
         app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
     <TextView android:id="@+id/title" android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Thêm quán vào bộ sưu tập" android:textSize="23sp" android:textStyle="bold"
+        android:text="@string/auto_ui_them_quan_vao_bo_suu_tap_1lec6m" android:textSize="23sp" android:textStyle="bold"
         android:textColor="#111314" app:layout_constraintTop_toTopOf="@id/backButton"
         app:layout_constraintBottom_toBottomOf="@id/backButton" app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
     <TextView android:id="@+id/suggestionBanner" android:layout_width="0dp" android:layout_height="wrap_content"
         android:layout_marginTop="20dp" android:background="@drawable/favorite_banner" android:padding="16dp"
-        android:text="✦  Các quán được gợi ý dựa trên lịch sử đặt món của bạn."
+        android:text="@string/auto_ui_cac_quan_uoc_goi_y_dua_tren_lich_su_at_mon_1g6qgl"
         android:textColor="#343A3D" android:textSize="17sp" android:lineSpacingExtra="3dp"
         app:layout_constraintTop_toBottomOf="@id/backButton" app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -29,20 +29,20 @@
         app:layout_constraintTop_toBottomOf="@id/backButton" app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent">
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="Bạn chưa có quán từng đặt" android:textColor="#111314"
+            android:text="@string/auto_ui_ban_chua_co_quan_tung_at_r0yd2n" android:textColor="#111314"
             android:textSize="22sp" android:textStyle="bold" />
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:layout_marginTop="8dp" android:gravity="center"
-            android:text="Hoàn thành một đơn để nhận gợi ý phù hợp với bạn."
+            android:text="@string/auto_ui_hoan_thanh_mot_on_e_nhan_goi_y_phu_hop_voi_145pcy"
             android:textColor="#8A9294" android:textSize="16sp" />
         <Button android:id="@+id/exploreButton" android:layout_width="220dp" android:layout_height="56dp"
             android:layout_marginTop="20dp" android:background="@drawable/favorite_button"
-            android:text="Khám phá quán ăn" android:textAllCaps="false" android:textColor="#FFFFFF"
+            android:text="@string/auto_ui_kham_pha_quan_an_1cow04" android:textAllCaps="false" android:textColor="#FFFFFF"
             android:textSize="17sp" android:textStyle="bold" />
     </LinearLayout>
     <Button android:id="@+id/completeButton" android:layout_width="0dp" android:layout_height="64dp"
         android:layout_marginTop="10dp" android:layout_marginBottom="18dp"
-        android:background="@drawable/favorite_button" android:text="Hoàn thành"
+        android:background="@drawable/favorite_button" android:text="@string/auto_ui_hoan_thanh_1tykw7"
         android:textAllCaps="false" android:textColor="#FFFFFF" android:textSize="20sp"
         android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" />

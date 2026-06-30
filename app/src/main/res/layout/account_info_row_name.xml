@@ -15,7 +15,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Tên"
+        android:text="@string/auto_ui_ten_6cvl"
         android:textColor="#222222"
         android:textSize="12sp" />
 
@@ -27,7 +27,7 @@
         android:ellipsize="end"
         android:gravity="end"
         android:maxLines="1"
-        android:text="không có"
+        android:text="@string/auto_ui_khong_co_17lia5"
         android:textColor="#111111"
         android:textSize="12sp" />
 

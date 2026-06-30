@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Menu"
+            android:text="@string/auto_ui_menu_59vra"
             android:textColor="#111111"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -29,7 +29,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:text="✕"
+            android:text="@string/auto_ui_symbol_7vy"
             android:textColor="#111111"
             android:textSize="18sp" />
     </RelativeLayout>
@@ -57,14 +57,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Bún"
+            android:text="@string/auto_ui_bun_5zwv"
             android:textColor="#333333"
             android:textSize="15sp" />
             
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="15"
+            android:text="@string/auto_ui_15_6ej"
             android:textColor="#666666"
             android:textSize="14sp"
             android:layout_marginEnd="8dp" />
@@ -72,7 +72,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="›"
+            android:text="@string/auto_ui_symbol_6j7"
             android:textColor="#888888"
             android:textSize="20sp" />
     </LinearLayout>
@@ -95,14 +95,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Đồ ăn nhanh"
+            android:text="@string/auto_ui_o_an_nhanh_1w72tu"
             android:textColor="#333333"
             android:textSize="15sp" />
             
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="25"
+            android:text="@string/auto_ui_25_6fe"
             android:textColor="#666666"
             android:textSize="14sp"
             android:layout_marginEnd="8dp" />
@@ -110,7 +110,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="›"
+            android:text="@string/auto_ui_symbol_6j7"
             android:textColor="#888888"
             android:textSize="20sp" />
     </LinearLayout>
@@ -124,8 +124,8 @@
         android:orientation="horizontal"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Nước" android:textColor="#333333" android:textSize="15sp" />
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="5 ›" android:textColor="#666666" android:textSize="16sp" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/auto_ui_nuoc_5mihd" android:textColor="#333333" android:textSize="15sp" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_5_5rc8" android:textColor="#666666" android:textSize="16sp" />
     </LinearLayout>
     <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F5F5F5" />
 
@@ -137,8 +137,8 @@
         android:orientation="horizontal"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Bánh Mỳ" android:textColor="#333333" android:textSize="15sp" />
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="10 ›" android:textColor="#666666" android:textSize="16sp" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/auto_ui_banh_my_70ow6" android:textColor="#333333" android:textSize="15sp" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_10_4r18g" android:textColor="#666666" android:textSize="16sp" />
     </LinearLayout>
     <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F5F5F5" />
 
@@ -150,8 +150,8 @@
         android:orientation="horizontal"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Lẩu" android:textColor="#333333" android:textSize="15sp" />
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="20 ›" android:textColor="#666666" android:textSize="16sp" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/auto_ui_lau_b93l" android:textColor="#333333" android:textSize="15sp" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_20_4ro7z" android:textColor="#666666" android:textSize="16sp" />
     </LinearLayout>
     <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F5F5F5" />
 
@@ -163,8 +163,8 @@
         android:orientation="horizontal"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Tráng miệng" android:textColor="#333333" android:textSize="15sp" />
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="12 ›" android:textColor="#666666" android:textSize="16sp" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/auto_ui_trang_mieng_muvuop" android:textColor="#333333" android:textSize="15sp" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/auto_ui_12_4r2pu" android:textColor="#666666" android:textSize="16sp" />
     </LinearLayout>
 
 </LinearLayout>

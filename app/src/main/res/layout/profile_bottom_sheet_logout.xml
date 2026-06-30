@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingBottom="16dp"
-        android:text="Bạn có chắc chắn muốn đăng xuất ?"
+        android:text="@string/auto_ui_ban_co_chac_chan_muon_ang_xuat_12mbjb"
         android:textColor="@color/text_secondary"
         android:textSize="13sp"
         android:paddingStart="24dp"

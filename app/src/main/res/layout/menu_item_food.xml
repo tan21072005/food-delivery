@@ -42,7 +42,7 @@
                 android:id="@+id/tvFoodName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bún thập cẩm"
+                android:text="@string/auto_ui_bun_thap_cam_o7dcj3"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"
@@ -54,7 +54,7 @@
                 android:id="@+id/tvFoodDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sợi bún tươi, tôm sông, gà đôi"
+                android:text="@string/auto_ui_soi_bun_tuoi_tom_song_ga_oi_1oszbo"
                 android:textSize="12sp"
                 android:textColor="#888888"
                 android:layout_marginTop="2dp"
@@ -79,7 +79,7 @@
                     android:id="@+id/tvSoldCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="14 đã bán"
+                    android:text="@string/auto_ui_14_a_ban_19ij6c"
                     android:textSize="11sp"
                     android:textColor="#AAAAAA"
                     android:layout_marginStart="4dp" />
@@ -91,7 +91,7 @@
                 android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="35.000đ"
+                android:text="@string/auto_ui_35_000_1gqp9m"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"
@@ -109,7 +109,7 @@
             app:backgroundTint="#F5A623"
             app:tint="@color/white"
             app:elevation="2dp"
-            android:contentDescription="Thêm vào giỏ" />
+            android:contentDescription="@string/auto_ui_them_vao_gio_1nuw82" />
 
     </LinearLayout>
 

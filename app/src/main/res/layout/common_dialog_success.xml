@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:maxWidth="170dp"
         android:gravity="center"
-        android:text="Đổi mật khẩu thành công"
+        android:text="@string/auto_ui_oi_mat_khau_thanh_cong_dv8fyk"
         android:textSize="18sp"
         android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"

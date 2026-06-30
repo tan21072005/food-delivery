@@ -6,7 +6,7 @@
     android:foreground="?attr/selectableItemBackground">
     <ImageView android:id="@+id/restaurantImage" android:layout_width="128dp" android:layout_height="128dp"
         android:scaleType="centerCrop" android:background="@drawable/favorite_card_teal"
-        android:clipToOutline="true" android:contentDescription="Ảnh nhà hàng"
+        android:clipToOutline="true" android:contentDescription="@string/auto_ui_anh_nha_hang_15rjdv"
         app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
     <TextView android:id="@+id/restaurantName" android:layout_width="0dp" android:layout_height="wrap_content"
         android:layout_marginStart="14dp" android:textColor="#343A3D" android:textSize="18sp"

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="foodgo_coral">#F2644B</color>
+    <color name="foodgo_brick">#B9362B</color>
+    <color name="foodgo_surface">#FFF8F5</color>
+    <color name="foodgo_surface_container">#FFFFFFFF</color>
+    <color name="foodgo_text_primary">#FF241815</color>
+    <color name="foodgo_text_secondary">#FF6F5A54</color>
+    <color name="foodgo_outline">#FFDCC7C0</color>
+    <color name="foodgo_error">#FFB3261E</color>
+
     ------------- Brand --------------
     <color name="brand_primary">#F5A623</color>
     <color name="brand_light">#FFD580</color>
@@ -24,11 +33,11 @@
     <color name="status_info">#E0E0E0</color>
 
     ------------Bottom  Nav ----------
-    <color name="nav_selected">#F5A623</color>
+    <color name="nav_selected">#F2644B</color>
     <color name="nav_unselected">#AAAAAA</color>
 
     <!-- Alias cho bottom nav (bottom_nav_color.xml đang dùng) -->
-    <color name="orange_primary">#F5A623</color>
+    <color name="orange_primary">#F2644B</color>
     <color name="bottom_nav_unselected">#AAAAAA</color>
     <!-- Màu xanh dùng trong login/signup -->
     <color name="blue">#0D51EF</color>
@@ -42,25 +51,25 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- trang tài khoản-->
-    <color name="primary_purple">#7B61FF</color>
-    <color name="light_purple">#F0EEFF</color>
-    <color name="bg_profile">#F5F3FF</color>
+    <color name="primary_purple">#F2644B</color>
+    <color name="light_purple">#FFF0EA</color>
+    <color name="bg_profile">#FFF0EA</color>
 
 
 
     <color name="divider">#F0F0F0</color>
 
     <color name="red_logout">#FF4444</color>
-    <color name="badge_bg">#7B61FF</color>
+    <color name="badge_bg">#B9362B</color>
     <color name="badge_text">#FFFFFF</color>
     <color name="icon_tint">#555555</color>
-    <color name="nav_active">#7B61FF</color>
+    <color name="nav_active">#F2644B</color>
     <color name="nav_inactive">#BBBBBB</color>
     <color name="arrow_color">#CCCCCC</color>
     <color name="section_header">#999999</color>
     <color name="overlay_bg">#80000000</color>
     <color name="green_check">#2ECC71</color>
-    <color name="button_disabled">#D0CCFF</color>
+    <color name="button_disabled">#E8B8AE</color>
     <color name="input_border">#E8E8E8</color>
     <color name="input_bg">#FAFAFA</color>
 </resources>

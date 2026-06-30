@@ -23,7 +23,7 @@
             android:id="@+id/ivBack"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:contentDescription="Quay lại"
+            android:contentDescription="@string/auto_ui_quay_lai_1itst6"
             android:src="@drawable/ic_chevron_left"
             app:tint="#000000" />
 
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Chi tiết đơn hàng"
+            android:text="@string/auto_ui_chi_tiet_on_hang_hg5tly"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -40,7 +40,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Trợ giúp"
+            android:text="@string/auto_ui_tro_giup_t4lbve"
             android:textColor="#0052CC"
             android:textSize="14sp" />
     </LinearLayout>
@@ -81,7 +81,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Đang giao"
+                        android:text="@string/auto_ui_ang_giao_1yxwve"
                         android:textColor="#1A7A4A"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -89,7 +89,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tài xế đang giao đơn đến bạn"
+                        android:text="@string/auto_ui_tai_xe_ang_giao_on_en_ban_lthm6d"
                         android:textColor="#1A7A4A"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -147,7 +147,7 @@
                     <TextView
                         android:layout_width="82dp"
                         android:layout_height="wrap_content"
-                        android:text="GrabExpress"
+                        android:text="@string/auto_ui_grabexpress_mka3nh"
                         android:textColor="#00B14F"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -161,7 +161,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Phan Thạch Tú"
+                            android:text="@string/auto_ui_phan_thach_tu_17venu"
                             android:textColor="#09122D"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -170,7 +170,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="0931 865 992"
+                            android:text="@string/auto_ui_0931_865_992_6fiayf"
                             android:textColor="#7A8791"
                             android:textSize="17sp" />
                     </LinearLayout>
@@ -192,7 +192,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:text="Gọi tài xế"
+                            android:text="@string/auto_ui_goi_tai_xe_17kjqm"
                             android:textColor="#0067D8"
                             android:textSize="17sp"
                             android:textStyle="bold" />
@@ -213,7 +213,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="Giao hàng"
+                    android:text="@string/auto_ui_giao_hang_e4yqgq"
                     android:textColor="#000000"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -225,7 +225,7 @@
                     android:drawableStart="@drawable/ic_location_pin"
                     android:drawablePadding="8dp"
                     android:drawableTint="#FF6B35"
-                    android:text="Từ: Lotteria - Bách Mai"
+                    android:text="@string/auto_ui_tu_lotteria_bach_mai_52qusg"
                     android:textColor="#000000"
                     android:textSize="14sp" />
 
@@ -236,7 +236,7 @@
                     android:drawableStart="@drawable/ic_location_pin"
                     android:drawablePadding="8dp"
                     android:drawableTint="#1A7A4A"
-                    android:text="Đến: Bách Khoa"
+                    android:text="@string/auto_ui_en_bach_khoa_ehnrh"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -254,7 +254,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="Tóm tắt đơn hàng"
+                    android:text="@string/auto_ui_tom_tat_on_hang_y4uv5f"
                     android:textColor="#000000"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -264,7 +264,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="Lotteria - Bách Mai"
+                    android:text="@string/auto_ui_lotteria_bach_mai_eebe65"
                     android:textColor="#000000"
                     android:textSize="14sp" />
 
@@ -277,7 +277,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:text="1x"
+                        android:text="@string/auto_ui_1x_6ge"
                         android:textColor="#000000"
                         android:textStyle="bold" />
 
@@ -286,14 +286,14 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Hè Rực Rỡ"
+                        android:text="@string/auto_ui_he_ruc_ro_r956jo"
                         android:textColor="#000000" />
 
                     <TextView
                         android:id="@+id/tvFoodPriceLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="78.000đ"
+                        android:text="@string/auto_ui_78_000_15ub7q"
                         android:textColor="#000000" />
                 </LinearLayout>
 
@@ -312,7 +312,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:text="Tiền mặt"
+                        android:text="@string/auto_ui_tien_mat_o5hhoz"
                         android:textColor="#000000"
                         android:textStyle="bold" />
 
@@ -321,7 +321,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="78.000đ"
+                        android:text="@string/auto_ui_78_000_15ub7q"
                         android:textColor="#000000"
                         android:textStyle="bold" />
                 </RelativeLayout>
@@ -346,13 +346,13 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Mã đơn hàng"
+                        android:text="@string/auto_ui_ma_on_hang_1mv15e"
                         android:textColor="#666666" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2405H2492K2"
+                        android:text="@string/auto_ui_2405h2492k2_vc25r0"
                         android:textColor="#000000" />
                 </LinearLayout>
 
@@ -366,14 +366,14 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Thời gian đặt"
+                        android:text="@string/auto_ui_thoi_gian_at_1kbgx7"
                         android:textColor="#666666" />
 
                     <TextView
                         android:id="@+id/tvOrderTimeLong"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="13/06/2026 11:15"
+                        android:text="@string/auto_ui_13_06_2026_11_15_17lkrk"
                         android:textColor="#000000" />
                 </LinearLayout>
             </LinearLayout>
@@ -397,7 +397,7 @@
             android:layout_marginBottom="12dp"
             android:background="@drawable/bg_btn_orange"
             android:gravity="center"
-            android:text="Đánh giá đơn hàng"
+            android:text="@string/auto_ui_anh_gia_on_hang_176lgg"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -408,7 +408,7 @@
             android:layout_height="48dp"
             android:background="@drawable/bg_btn_outline_orange"
             android:gravity="center"
-            android:text="Đặt lại món"
+            android:text="@string/auto_ui_at_lai_mon_tnc1nm"
             android:textColor="#FF6B35"
             android:textSize="16sp"
             android:textStyle="bold" />

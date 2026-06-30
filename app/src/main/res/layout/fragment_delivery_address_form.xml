@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Them dia chi moi"
+                android:text="@string/auto_ui_them_dia_chi_moi_3c33ey"
                 android:textColor="#1A1A1A"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:background="@drawable/bg_rounded_white"
-                android:hint="Ten nguoi nhan"
+                android:hint="@string/auto_ui_ten_nguoi_nhan_nelisb"
                 android:inputType="textPersonName"
                 android:paddingHorizontal="14dp"
                 android:textSize="15sp"/>
@@ -60,7 +60,7 @@
                 android:layout_height="52dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_rounded_white"
-                android:hint="So dien thoai nguoi nhan"
+                android:hint="@string/auto_ui_so_dien_thoai_nguoi_nhan_w4gz0j"
                 android:inputType="phone"
                 android:paddingHorizontal="14dp"
                 android:textSize="15sp"/>
@@ -72,7 +72,7 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_rounded_white"
                 android:gravity="top"
-                android:hint="Dia chi bat buoc"
+                android:hint="@string/auto_ui_dia_chi_bat_buoc_b7mspl"
                 android:inputType="textMultiLine"
                 android:minLines="2"
                 android:padding="14dp"
@@ -84,7 +84,7 @@
                 android:layout_height="52dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_rounded_white"
-                android:hint="Toa nha / tang (tuy chon)"
+                android:hint="@string/auto_ui_toa_nha_tang_tuy_chon_e4vqzo"
                 android:paddingHorizontal="14dp"
                 android:textSize="15sp"/>
 
@@ -94,7 +94,7 @@
                 android:layout_height="52dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_rounded_white"
-                android:hint="Cong vao (tuy chon)"
+                android:hint="@string/auto_ui_cong_vao_tuy_chon_12dqnd"
                 android:paddingHorizontal="14dp"
                 android:textSize="15sp"/>
 
@@ -110,21 +110,21 @@
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:text="Nha"/>
+                    android:text="@string/auto_ui_nha_65b4"/>
 
                 <RadioButton
                     android:id="@+id/rbWork"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:text="Cong ty"/>
+                    android:text="@string/auto_ui_cong_ty_vxdc2h"/>
 
                 <RadioButton
                     android:id="@+id/rbOther"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:text="Khac"/>
+                    android:text="@string/auto_ui_khac_58nom"/>
             </RadioGroup>
 
             <EditText
@@ -133,7 +133,7 @@
                 android:layout_height="52dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_rounded_white"
-                android:hint="Ten dia chi"
+                android:hint="@string/auto_ui_ten_dia_chi_115v79"
                 android:paddingHorizontal="14dp"
                 android:textSize="15sp"
                 android:visibility="gone"/>
@@ -145,7 +145,7 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_rounded_white"
                 android:gravity="top"
-                android:hint="Ghi chu cho tai xe (tuy chon)"
+                android:hint="@string/auto_ui_ghi_chu_cho_tai_xe_tuy_chon_17ok0g"
                 android:inputType="textMultiLine"
                 android:minLines="2"
                 android:padding="14dp"
@@ -165,7 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:enabled="false"
-            android:text="Luu dia chi"
+            android:text="@string/auto_ui_luu_dia_chi_dnytet"
             android:textColor="#1A1A1A"
             android:textSize="16sp"
             android:textStyle="bold"

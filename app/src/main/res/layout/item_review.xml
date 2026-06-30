@@ -69,7 +69,7 @@
                     android:id="@+id/tvReviewTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2 ngày trước"
+                    android:text="@string/auto_ui_2_ngay_truoc_s190ch"
                     android:textSize="12sp"
                     android:textColor="#999999"
                     android:layout_marginStart="6dp"/>

@@ -21,7 +21,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Quay lại"
+            android:contentDescription="@string/auto_ui_quay_lai_1itst6"
             android:padding="8dp"
             android:src="@drawable/ic_arrow_back" />
 
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="Tài khoản"
+            android:text="@string/auto_ui_tai_khoan_b9rxv7"
             android:textColor="#111111"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -62,7 +62,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Thông tin tài khoản"
+                android:text="@string/auto_ui_thong_tin_tai_khoan_18ejdo"
                 android:textColor="#222222"
                 android:textSize="13sp" />
 
@@ -89,7 +89,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Mật khẩu"
+                android:text="@string/auto_ui_mat_khau_1lg51d"
                 android:textColor="#222222"
                 android:textSize="13sp" />
 
@@ -113,7 +113,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Tải về dữ liệu cá nhân"
+                android:text="@string/auto_ui_tai_ve_du_lieu_ca_nhan_1aarqo"
                 android:textColor="#222222"
                 android:textSize="13sp" />
 
@@ -137,7 +137,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Hủy kích hoạt hoặc xóa tài khoản"
+                android:text="@string/auto_ui_huy_kich_hoat_hoac_xoa_tai_khoan_fdgdxp"
                 android:textColor="#222222"
                 android:textSize="13sp" />
 

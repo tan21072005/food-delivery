@@ -49,7 +49,7 @@
                 android:id="@+id/tvOverallRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4.5"
+                android:text="@string/auto_ui_4_5_5klw"
                 android:textSize="48sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"/>
@@ -70,7 +70,7 @@
                 android:id="@+id/tvTotalReviews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="28 đánh giá"
+                android:text="@string/auto_ui_28_anh_gia_kkd3wc"
                 android:textSize="12sp"
                 android:textColor="#666666"
                 android:layout_marginTop="4dp"/>
@@ -84,23 +84,23 @@
             android:orientation="vertical">
 
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="5dp">
-                <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="5 (23)" android:textSize="11sp" android:textColor="#666666"/>
+                <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="@string/auto_ui_5_23_1lbdx9" android:textSize="11sp" android:textColor="#666666"/>
                 <ProgressBar android:id="@+id/ovBar5" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="7dp" android:max="100" android:progress="82" android:progressTint="#F5A623"/>
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="5dp">
-                <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="4 (1)" android:textSize="11sp" android:textColor="#666666"/>
+                <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="@string/auto_ui_4_1_44hy25" android:textSize="11sp" android:textColor="#666666"/>
                 <ProgressBar android:id="@+id/ovBar4" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="7dp" android:max="100" android:progress="4" android:progressTint="#F5A623"/>
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="5dp">
-                <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="3 (2)" android:textSize="11sp" android:textColor="#666666"/>
+                <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="@string/auto_ui_3_2_43y5hn" android:textSize="11sp" android:textColor="#666666"/>
                 <ProgressBar android:id="@+id/ovBar3" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="7dp" android:max="100" android:progress="7" android:progressTint="#F5A623"/>
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="5dp">
-                <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="2 (0)" android:textSize="11sp" android:textColor="#666666"/>
+                <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="@string/auto_ui_2_0_43ecuk" android:textSize="11sp" android:textColor="#666666"/>
                 <ProgressBar android:id="@+id/ovBar2" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="7dp" android:max="100" android:progress="0" android:progressTint="#F5A623"/>
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="1 (2)" android:textSize="11sp" android:textColor="#666666"/>
+                <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="@string/auto_ui_1_2_42ukax" android:textSize="11sp" android:textColor="#666666"/>
                 <ProgressBar android:id="@+id/ovBar1" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="7dp" android:max="100" android:progress="7" android:progressTint="#F5A623"/>
             </LinearLayout>
         </LinearLayout>
@@ -123,7 +123,7 @@
             android:id="@+id/chipPhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Có ảnh"
+            android:text="@string/auto_ui_co_anh_1vaco5"
             app:chipIcon="@drawable/ic_filter"
             app:chipIconVisible="true"
             app:chipIconSize="16dp"
@@ -141,7 +141,7 @@
             android:id="@+id/chipStar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⭐ Sao ▼"
+            android:text="@string/auto_ui_sao_jjbequ"
             android:textSize="13sp"
             app:chipBackgroundColor="@color/white"
             app:chipStrokeWidth="1dp"
@@ -158,7 +158,7 @@
             android:id="@+id/tvReset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đặt lại"
+            android:text="@string/auto_ui_at_lai_ydmr96"
             android:textSize="13sp"
             android:textStyle="bold"
             android:textColor="#00B5D8"
@@ -213,14 +213,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="🔍"
+                android:text="@string/auto_ui_symbol_2r52"
                 android:textSize="48sp"
                 android:layout_marginBottom="12dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Không có kết quả phù hợp"
+                android:text="@string/auto_ui_khong_co_ket_qua_phu_hop_1bqa46"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"
@@ -229,7 +229,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Không tìm thấy đánh giá theo bộ lọc đã chọn"
+                android:text="@string/auto_ui_khong_tim_thay_anh_gia_theo_bo_loc_a_chon_yy62su"
                 android:textSize="13sp"
                 android:textColor="#999999"
                 android:gravity="center"
@@ -239,7 +239,7 @@
                 android:id="@+id/btnResetFilter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Đặt lại bộ lọc"
+                android:text="@string/auto_ui_at_lai_bo_loc_kcgzz3"
                 android:textColor="@color/white"
                 android:background="@drawable/bg_primary_button"
                 android:paddingHorizontal="24dp"

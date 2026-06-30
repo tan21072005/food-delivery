@@ -239,7 +239,7 @@ public class CartUiFlowRegressionTest {
                 "holder.tvEdit.setOnClickListener");
         assertSourceContains("src/main/res/layout/cart_bottom_sheet_item.xml",
                 "android:id=\"@+id/tvEditItem\"",
-                "android:text=\"Sửa\"");
+                "android:text=\"@string/");
     }
 
     @Test

@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
-        android:text="Nhập mã gồm 6 số"
+        android:text="@string/auto_ui_nhap_ma_gom_6_so_22p3at"
         android:textColor="@color/black"
         android:textSize="28sp"
         android:textStyle="bold" />
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="Kiểm tra hoc****@gmail.com để lấy mã xác minh"
+        android:text="@string/auto_ui_kiem_tra_hoc_gmail_com_e_lay_ma_xac_minh_s333sp"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:lineSpacingExtra="2dp" />
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="Thay đổi email ?"
+        android:text="@string/auto_ui_thay_oi_email_4cafrn"
         android:textColor="@color/blue"
         android:textSize="14sp" />
 
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="32dp"
-        android:hint="Nhập mã gồm 6  chữ số"
+        android:hint="@string/auto_ui_nhap_ma_gom_6_chu_so_j7bfel"
         android:inputType="numberPassword"
         android:maxLength="6"
         android:paddingStart="16dp"
@@ -61,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Gửi lại mã"
+        android:text="@string/auto_ui_gui_lai_ma_1fy3fe"
         android:textColor="@color/blue"
         android:textSize="14sp" />
 
@@ -72,7 +72,7 @@
         android:layout_height="56dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/cr50b131313"
-        android:text="Gửi"
+        android:text="@string/auto_ui_gui_b70c"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="20sp"
@@ -84,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Nếu bạn không thấy email trong hộp thư đến, hãy kiểm tra thư mục thư rác. Nếu không thấy, địa chỉ email có thể chưa được xác nhận hoặc không khớp với tài khoản  hiện có."
+        android:text="@string/auto_ui_neu_ban_khong_thay_email_trong_hop_thu_en__1ep2k3"
         android:textColor="@color/black"
         android:textSize="13sp"
         android:lineSpacingExtra="3dp" />
@@ -95,7 +95,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Không thể truy cập được email này ?"
+        android:text="@string/auto_ui_khong_the_truy_cap_uoc_email_nay_15rd0v"
         android:textColor="@color/blue"
         android:textSize="14sp" />
 

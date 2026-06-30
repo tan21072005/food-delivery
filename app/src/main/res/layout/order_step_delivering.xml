@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="Đang giao"
+        android:text="@string/auto_ui_ang_giao_1yxwve"
         android:textColor="#42485A"
         android:textSize="15sp"
         android:textStyle="bold" />
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:gravity="center"
-        android:text="11:31,\n13/06/2026"
+        android:text="@string/auto_ui_11_31_n13_06_2026_mqp8gb"
         android:textColor="#42485A"
         android:textSize="14sp" />
 </LinearLayout>

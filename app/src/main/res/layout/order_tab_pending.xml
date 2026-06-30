@@ -15,7 +15,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="Đang xử lý"
+        android:text="@string/auto_ui_ang_xu_ly_1conwt"
         android:textColor="#FF6B35"
         android:textSize="13sp"
         android:textStyle="bold" />

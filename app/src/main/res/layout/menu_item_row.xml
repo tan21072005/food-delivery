@@ -21,7 +21,7 @@
         android:layout_height="22dp"
         android:src="@android:drawable/ic_menu_preferences"
         android:tint="@color/icon_tint"
-        android:contentDescription="Menu icon" />
+        android:contentDescription="@string/auto_ui_menu_icon_1j7eb0" />
 
     <!-- Label -->
     <TextView
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginStart="14dp"
-        android:text="Menu Item"
+        android:text="@string/auto_ui_menu_item_1j6u7t"
         style="@style/MenuItemText" />
 
     <!-- Arrow right -->
@@ -39,5 +39,5 @@
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:src="@drawable/ic_arrow_right"
-        android:contentDescription="Navigate" />
+        android:contentDescription="@string/auto_ui_navigate_13otbb" />
 </LinearLayout>

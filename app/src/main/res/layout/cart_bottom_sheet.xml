@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Giỏ hàng"
+            android:text="@string/auto_ui_gio_hang_a2vjvv"
             android:textColor="#111111"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -44,7 +44,7 @@
                 android:id="@+id/tvClearAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Xoá hết"
+                android:text="@string/auto_ui_xoa_het_1lrepw"
                 android:textColor="#FF4444"
                 android:textSize="14sp"
                 android:paddingEnd="12dp" />
@@ -54,7 +54,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:gravity="center"
-                android:text="✕"
+                android:text="@string/auto_ui_symbol_7vy"
                 android:textColor="#888888"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -109,7 +109,7 @@
                 android:layout_gravity="top|end"
                 android:background="@drawable/badge_circle"
                 android:gravity="center"
-                android:text="0"
+                android:text="@string/auto_ui_0_7d"
                 android:textColor="@color/white"
                 android:textSize="10sp"
                 android:textStyle="bold" />
@@ -125,7 +125,7 @@
             android:backgroundTint="#FFCC00"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
-            android:text="Xem đơn hàng • 0đ"
+            android:text="@string/auto_ui_xem_on_hang_0_16bdjw"
             android:textColor="#111111"
             android:textSize="14sp"
             android:textStyle="bold"

@@ -27,7 +27,7 @@
             android:id="@+id/tvItemName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tên món"
+            android:text="@string/auto_ui_ten_mon_1jizsi"
             android:textColor="#111111"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -49,7 +49,7 @@
             android:id="@+id/tvItemDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nhiều bún, không thịt"
+                android:text="@string/auto_ui_nhieu_bun_khong_thit_yozl3n"
                 android:textColor="#888888"
                 android:textSize="12sp"
                 android:layout_marginStart="4dp" />
@@ -60,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Sửa"
+            android:text="@string/auto_ui_sua_bfwg"
             android:textColor="@color/blue"
             android:textSize="13sp"
             android:textStyle="bold" />
@@ -69,7 +69,7 @@
             android:id="@+id/tvItemPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="35.000đ"
+            android:text="@string/auto_ui_35_000_1gqp9m"
             android:textColor="#111111"
             android:textSize="14sp"
             android:layout_marginTop="4dp" />
@@ -87,7 +87,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:gravity="center"
-            android:text="−"
+            android:text="@string/auto_ui_symbol_6wb"
             android:textSize="20sp"
             android:textColor="@color/white"
             android:background="@drawable/btn_qty_yellow"
@@ -98,7 +98,7 @@
             android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="1"
+            android:text="@string/auto_ui_1_7e"
             android:textColor="#111111"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -108,7 +108,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:gravity="center"
-            android:text="+"
+            android:text="@string/auto_ui_symbol_78"
             android:textSize="20sp"
             android:textColor="@color/white"
             android:background="@drawable/btn_qty_yellow"
