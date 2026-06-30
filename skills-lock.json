@@ -253,6 +253,24 @@
       "skillPath": "skills/pdf/SKILL.md",
       "computedHash": "37226d4220d844377e6b2a386c51a011df4cd130855ff0b80bcc22f9c28abd57"
     },
+    "plantuml-ascii": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/plantuml-ascii/SKILL.md",
+      "computedHash": "8bfd83efc42a70cdb9d1e3d64ec305bd4d6f09e1753a03bbb7d3805d9bd13e53"
+    },
+    "plantuml-renderer": {
+      "source": "a5c-ai/babysitter",
+      "sourceType": "github",
+      "skillPath": "library/specializations/software-architecture/skills/plantuml-renderer/SKILL.md",
+      "computedHash": "e854090321cedc0a7a8a2336477de17fd94b9bf991d692a9c20f19b7e22ee559"
+    },
+    "plantuml-skill": {
+      "source": "Agents365-ai/365-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/plantuml/skills/plantuml-skill/SKILL.md",
+      "computedHash": "77d383c6aeecf92568ec2ed123050c764de11541314ed2b6f7642c94d1b70561"
+    },
     "pptx": {
       "source": "anthropics/skills",
       "sourceType": "github",
