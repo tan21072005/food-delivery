@@ -384,13 +384,13 @@ public class CartUiFlowRegressionTest {
     }
 
     @Test
-    public void orderManagementDefaultsToDraftTabWhenNoTabRequested() throws Exception {
+    public void orderManagementKeepsDevDefaultProcessingAndAllowsExplicitDraftTab() throws Exception {
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/OrderManagementFragment.java",
-                "int initialTab = 0",
+                "int initialTab = 1",
+                "\"draft\".equals(requestedTab)",
+                "initialTab = 0",
                 "\"processing\".equals(requestedTab)",
                 "initialTab = 1");
-        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/order/OrderManagementFragment.java",
-                "int initialTab = 1;");
     }
 
     @Test

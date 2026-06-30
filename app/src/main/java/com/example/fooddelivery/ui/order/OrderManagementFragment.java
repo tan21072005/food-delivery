@@ -107,7 +107,7 @@ public class OrderManagementFragment extends Fragment {
     }
 
     private void openRequestedTabIfAny() {
-        int initialTab = 0;
+        int initialTab = 1;
         Intent intent = requireActivity().getIntent();
         if (intent != null) {
             String requestedTab = intent.getStringExtra(EXTRA_ORDERS_TAB);
