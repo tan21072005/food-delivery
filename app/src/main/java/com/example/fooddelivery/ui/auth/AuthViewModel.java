@@ -85,19 +85,9 @@ public class AuthViewModel extends AndroidViewModel {
         authRepository.signUp(email, password).enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
-                AuthResponse authResponse = response.body();
-                if (response.isSuccessful() && authResponse != null) {
-                    if (hasAuthenticatedSession(authResponse)) {
-                        completeAuthenticatedSession(
-                                authResponse.accessToken,
-                                authResponse.user.id,
-                                resolveEmail(authResponse, email),
-                                () -> signupSuccess.setValue(true)
-                        );
-                    } else {
-                        isLoading.setValue(false);
-                        error.setValue(AuthErrorParser.EMAIL_CONFIRMATION_REQUIRED);
-                    }
+                if (response.isSuccessful() && response.body() != null) {
+                    isLoading.setValue(false);
+                    signupSuccess.setValue(true);
                 } else {
                     isLoading.setValue(false);
                     error.setValue(AuthErrorParser.parse(response));

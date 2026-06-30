@@ -1,6 +1,5 @@
 package com.example.fooddelivery.ui.auth;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import com.example.fooddelivery.MainActivity;
 import com.example.fooddelivery.R;
 
 public class SignUpFragment extends Fragment {
@@ -61,8 +59,8 @@ public class SignUpFragment extends Fragment {
 
         authViewModel.getSignupSuccess().observe(getViewLifecycleOwner(), success -> {
             if (success != null && success) {
-                Toast.makeText(getContext(), "\u0110\u0103ng k\u00fd th\u00e0nh c\u00f4ng!", Toast.LENGTH_LONG).show();
-                goToMain();
+                Toast.makeText(getContext(), "\u0110\u0103ng k\u00fd th\u00e0nh c\u00f4ng! Vui l\u00f2ng \u0111\u0103ng nh\u1eadp.", Toast.LENGTH_LONG).show();
+                Navigation.findNavController(requireView()).popBackStack();
             }
         });
 
@@ -100,9 +98,4 @@ public class SignUpFragment extends Fragment {
         );
     }
 
-    private void goToMain() {
-        Intent intent = new Intent(requireActivity(), MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-    }
 }
