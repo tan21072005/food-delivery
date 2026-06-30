@@ -61,14 +61,14 @@ public class CartUiFlowRegressionTest {
     public void stickyCartSurfacesUseSharedMoneyFormatter() throws Exception {
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
                 "MoneyFormatter.format",
-                "new CartBottomSheet(() -> updateStickyCart(view))");
+                "refreshDraftCartState(view, stickyRestaurantId, activeCartId, false)");
         assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
                 "DecimalFormat(\"#,###\")",
                 "+ \"d\"");
 
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
                 "MoneyFormatter.format",
-                "new CartBottomSheet(() -> updateStickyCart(view))");
+                "refreshDraftCartState(view, stickyRestaurantId, activeCartId, false)");
         assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
                 "DecimalFormat(\"#,###\")");
     }
@@ -109,15 +109,22 @@ public class CartUiFlowRegressionTest {
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java",
                 "navigateToFoodDetail",
                 "action_home_to_foodDetail",
-                "args.putLong(\"food_id\", item.getId())");
+                "args.putLong(\"food_id\", item.getId())",
+                "layoutStickyCart",
+                "getDraftCartsV3()",
+                "new CartBottomSheet(() ->",
+                "refreshDraftCartState(view, stickyRestaurantId, activeCartId)");
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/adapters/TopSellingAdapter.java",
                 "h.itemView.setOnClickListener",
                 "h.imgFood.setOnClickListener",
-                "onAddCart.onAdd(item)");
+                "h.btnAdd.setVisibility(showAddButton ? View.VISIBLE : View.GONE)");
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/adapters/FoodVerticalAdapter.java",
                 "h.itemView.setOnClickListener",
                 "h.imgFood.setOnClickListener",
-                "onAddCart.onAdd(item)");
+                "h.btnAdd.setVisibility(showAddButton ? View.VISIBLE : View.GONE)");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java",
+                "null,",
+                "false");
 
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
                 "openFoodDetail(view, item)",
@@ -167,6 +174,19 @@ public class CartUiFlowRegressionTest {
                 "android:id=\"@+id/cartSheetFooter\"",
                 "android:layout_height=\"0dp\"",
                 "android:layout_weight=\"1\"");
+    }
+
+    @Test
+    public void stickyCartCallbacksRefreshRpcStateAfterSheetMutations() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
+                "new CartBottomSheet(() ->",
+                "refreshDraftCartState(view, stickyRestaurantId, activeCartId, false)");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
+                "new CartBottomSheet(() ->",
+                "refreshDraftCartState(view, stickyRestaurantId, activeCartId, false)");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java",
+                "new CartBottomSheet(() ->",
+                "refreshDraftCartState(view, stickyRestaurantId, activeCartId)");
     }
 
     private void assertSourceContains(String path, String... snippets) throws Exception {

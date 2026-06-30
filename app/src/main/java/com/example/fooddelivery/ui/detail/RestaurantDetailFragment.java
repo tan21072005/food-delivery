@@ -252,7 +252,8 @@ public class RestaurantDetailFragment extends Fragment {
 
         stickyCart.setOnClickListener(v -> {
             LocalCart.getInstance().setActiveRestaurantId(stickyRestaurantId);
-            CartBottomSheet sheet = new CartBottomSheet(() -> updateStickyCart(view));
+            CartBottomSheet sheet = new CartBottomSheet(() ->
+                    refreshDraftCartState(view, stickyRestaurantId, activeCartId, false));
             if (activeCartId > 0) {
                 Bundle args = new Bundle();
                 args.putLong("cart_id", activeCartId);

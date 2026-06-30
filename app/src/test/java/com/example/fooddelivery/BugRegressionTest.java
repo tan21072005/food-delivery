@@ -116,14 +116,16 @@ public class BugRegressionTest {
                 homeFragment.contains("getCartAddedEvent().observe"));
         assertFalse("HomeViewModel must not expose Home add-to-cart behavior",
                 homeViewModel.contains("addToCart("));
-        assertFalse("Home must not show a sticky Cart; Cart belongs on Restaurant/Menu surfaces",
+        assertTrue("Home should show sticky cart after FoodDetail add success",
                 homeLayout.contains("layoutStickyCart"));
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java",
                 "navigateToFoodDetail",
                 "action_home_to_foodDetail",
                 "args.putLong(\"food_id\", item.getId())",
+                "setFragmentResultListener(\"cart_changed\"",
+                "getDraftCartsV3()",
                 "this::navigateToFoodDetail",
-                "true");
+                "false");
     }
 
     @Test
