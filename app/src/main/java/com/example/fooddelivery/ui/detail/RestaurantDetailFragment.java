@@ -82,9 +82,11 @@ public class RestaurantDetailFragment extends Fragment {
     private void setupHeaderActions(View view) {
         View tvRestaurantName = view.findViewById(R.id.tvRestaurantName);
         if (tvRestaurantName != null) {
-            tvRestaurantName.setOnClickListener(v ->
-                    Navigation.findNavController(v).navigate(R.id.action_restaurantDetail_to_info)
-            );
+            tvRestaurantName.setOnClickListener(v -> {
+                Bundle bundle = new Bundle();
+                bundle.putLong("restaurant_id", restaurantId);
+                Navigation.findNavController(v).navigate(R.id.action_restaurantDetail_to_info, bundle);
+            });
         }
 
         View promoSection = view.findViewById(R.id.promoSection);

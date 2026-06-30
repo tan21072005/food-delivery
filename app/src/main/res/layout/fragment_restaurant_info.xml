@@ -20,7 +20,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:title="Thông tin quán"
+            app:title="@string/restaurant_info_title"
             app:titleTextColor="#1A1A1A"
             app:titleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
 
@@ -38,6 +38,14 @@
             android:orientation="vertical"
             android:paddingBottom="24dp">
 
+            <ImageView
+                android:id="@+id/ivRestaurantCover"
+                android:layout_width="match_parent"
+                android:layout_height="176dp"
+                android:contentDescription="@string/cd_banner"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder_banner" />
+
             <!-- Restaurant name + address + Đặt xe -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,11 +59,20 @@
                     android:id="@+id/tvInfoName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/auto_ui_tiem_an_phanh_phanh_1en0z0"
+                    android:text="@string/restaurant_info_loading"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A1A"
                     android:layout_marginBottom="6dp"/>
+
+                <TextView
+                    android:id="@+id/tvInfoDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="#555555"
+                    android:lineSpacingMultiplier="1.35"
+                    android:layout_marginBottom="8dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -68,7 +85,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="@string/auto_ui_90a_van_ho_3_hai_ba_trung_ha_noi_o5jprl"
+                        android:text="@string/restaurant_info_no_address"
                         android:textSize="13sp"
                         android:textColor="#666666"
                         android:lineSpacingMultiplier="1.4"/>
@@ -77,7 +94,7 @@
                         android:id="@+id/btnDatXe"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/auto_ui_at_xe_1yxjks"
+                        android:text="@string/restaurant_info_ride_action"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         android:textColor="#00B5D8"
@@ -88,6 +105,15 @@
                         android:clickable="true"
                         android:focusable="true"/>
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvInfoOpenStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#00B14F"
+                    android:layout_marginTop="10dp"/>
             </LinearLayout>
 
             <!-- Divider -->
@@ -117,7 +143,7 @@
                         android:id="@+id/tvBigRating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/auto_ui_4_3_5klu"
+                        android:text="@string/restaurant_info_rating_zero"
                         android:textSize="52sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A1A"
@@ -141,7 +167,7 @@
                         android:id="@+id/tvRatingCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/auto_ui_2646_anh_gia_1exyjp"
+                        android:text="@string/restaurant_info_review_count_zero"
                         android:textSize="11sp"
                         android:textColor="#00B14F"
                         android:layout_marginTop="4dp"/>
@@ -156,42 +182,42 @@
 
                     <!-- 5 stars -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="6dp">
-                        <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="@string/auto_ui_5_7i" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
+                        <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="@string/restaurant_info_star_5" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
                         <ImageView android:layout_width="11dp" android:layout_height="11dp" android:src="@drawable/ic_star" app:tint="#F5A623" android:layout_marginHorizontal="4dp"/>
-                        <ProgressBar android:id="@+id/bar5" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="6dp" android:max="100" android:progress="86" android:progressTint="#F5A623" android:layout_marginEnd="6dp"/>
-                        <TextView android:layout_width="28dp" android:layout_height="wrap_content" android:text="@string/auto_ui_1917_4r1zp" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
+                        <ProgressBar android:id="@+id/bar5" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="6dp" android:max="100" android:progress="0" android:progressTint="#F5A623" android:layout_marginEnd="6dp"/>
+                        <TextView android:id="@+id/tvBar5Count" android:layout_width="28dp" android:layout_height="wrap_content" android:text="@string/restaurant_info_count_zero" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
                     </LinearLayout>
 
                     <!-- 4 stars -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="6dp">
-                        <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="@string/auto_ui_4_7h" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
+                        <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="@string/restaurant_info_star_4" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
                         <ImageView android:layout_width="11dp" android:layout_height="11dp" android:src="@drawable/ic_star" app:tint="#F5A623" android:layout_marginHorizontal="4dp"/>
-                        <ProgressBar android:id="@+id/bar4" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="6dp" android:max="100" android:progress="8" android:progressTint="#F5A623" android:layout_marginEnd="6dp"/>
-                        <TextView android:layout_width="28dp" android:layout_height="wrap_content" android:text="@string/auto_ui_178_5iln" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
+                        <ProgressBar android:id="@+id/bar4" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="6dp" android:max="100" android:progress="0" android:progressTint="#F5A623" android:layout_marginEnd="6dp"/>
+                        <TextView android:id="@+id/tvBar4Count" android:layout_width="28dp" android:layout_height="wrap_content" android:text="@string/restaurant_info_count_zero" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
                     </LinearLayout>
 
                     <!-- 3 stars -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="6dp">
-                        <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="@string/auto_ui_3_7g" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
+                        <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="@string/restaurant_info_star_3" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
                         <ImageView android:layout_width="11dp" android:layout_height="11dp" android:src="@drawable/ic_star" app:tint="#F5A623" android:layout_marginHorizontal="4dp"/>
-                        <ProgressBar android:id="@+id/bar3" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="6dp" android:max="100" android:progress="7" android:progressTint="#F5A623" android:layout_marginEnd="6dp"/>
-                        <TextView android:layout_width="28dp" android:layout_height="wrap_content" android:text="@string/auto_ui_152_5ijr" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
+                        <ProgressBar android:id="@+id/bar3" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="6dp" android:max="100" android:progress="0" android:progressTint="#F5A623" android:layout_marginEnd="6dp"/>
+                        <TextView android:id="@+id/tvBar3Count" android:layout_width="28dp" android:layout_height="wrap_content" android:text="@string/restaurant_info_count_zero" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
                     </LinearLayout>
 
                     <!-- 2 stars -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="6dp">
-                        <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="@string/auto_ui_2_7f" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
+                        <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="@string/restaurant_info_star_2" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
                         <ImageView android:layout_width="11dp" android:layout_height="11dp" android:src="@drawable/ic_star" app:tint="#F5A623" android:layout_marginHorizontal="4dp"/>
-                        <ProgressBar android:id="@+id/bar2" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="6dp" android:max="100" android:progress="5" android:progressTint="#F5A623" android:layout_marginEnd="6dp"/>
-                        <TextView android:layout_width="28dp" android:layout_height="wrap_content" android:text="@string/auto_ui_109_5ifn" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
+                        <ProgressBar android:id="@+id/bar2" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="6dp" android:max="100" android:progress="0" android:progressTint="#F5A623" android:layout_marginEnd="6dp"/>
+                        <TextView android:id="@+id/tvBar2Count" android:layout_width="28dp" android:layout_height="wrap_content" android:text="@string/restaurant_info_count_zero" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
                     </LinearLayout>
 
                     <!-- 1 star -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                        <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="@string/auto_ui_1_7e" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
+                        <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="@string/restaurant_info_star_1" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
                         <ImageView android:layout_width="11dp" android:layout_height="11dp" android:src="@drawable/ic_star" app:tint="#F5A623" android:layout_marginHorizontal="4dp"/>
-                        <ProgressBar android:id="@+id/bar1" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="6dp" android:max="100" android:progress="12" android:progressTint="#F5A623" android:layout_marginEnd="6dp"/>
-                        <TextView android:layout_width="28dp" android:layout_height="wrap_content" android:text="@string/auto_ui_277_5jcb" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
+                        <ProgressBar android:id="@+id/bar1" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="6dp" android:max="100" android:progress="0" android:progressTint="#F5A623" android:layout_marginEnd="6dp"/>
+                        <TextView android:id="@+id/tvBar1Count" android:layout_width="28dp" android:layout_height="wrap_content" android:text="@string/restaurant_info_count_zero" android:textSize="11sp" android:textColor="#666666" android:gravity="end"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -203,7 +229,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/auto_ui_gio_hoat_ong_1b2iq1"
+                android:text="@string/restaurant_info_opening_hours_title"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"
@@ -211,63 +237,23 @@
                 android:paddingTop="20dp"
                 android:paddingBottom="12dp"/>
 
-            <!-- Chủ nhật -->
-            <LinearLayout style="@style/HoursRow">
-                <ImageView style="@style/HoursIcon" android:src="@drawable/ic_access_time"/>
-                <TextView style="@style/HoursDay" android:text="@string/auto_ui_chu_nhat_xjgwzq"/>
-                <TextView style="@style/HoursTime" android:text="@string/auto_ui_07_30_21_00_icnp75"/>
-            </LinearLayout>
-
-            <!-- Thứ hai -->
-            <LinearLayout style="@style/HoursRow">
-                <ImageView style="@style/HoursIcon" android:src="@drawable/ic_access_time"/>
-                <TextView style="@style/HoursDay" android:text="@string/auto_ui_thu_hai_164fa3"/>
-                <TextView style="@style/HoursTime" android:text="@string/auto_ui_07_30_21_00_icnp75"/>
-            </LinearLayout>
-
-            <!-- Thứ ba -->
-            <LinearLayout style="@style/HoursRow">
-                <ImageView style="@style/HoursIcon" android:src="@drawable/ic_access_time"/>
-                <TextView style="@style/HoursDay" android:text="@string/auto_ui_thu_ba_5xw3sh"/>
-                <TextView style="@style/HoursTime" android:text="@string/auto_ui_07_30_21_00_icnp75"/>
-            </LinearLayout>
-
-            <!-- Thứ tư -->
-            <LinearLayout style="@style/HoursRow">
-                <ImageView style="@style/HoursIcon" android:src="@drawable/ic_access_time"/>
-                <TextView style="@style/HoursDay" android:text="@string/auto_ui_thu_tu_5xw4ha"/>
-                <TextView style="@style/HoursTime" android:text="@string/auto_ui_07_30_21_00_icnp75"/>
-            </LinearLayout>
-
-            <!-- Thứ năm -->
-            <LinearLayout style="@style/HoursRow">
-                <ImageView style="@style/HoursIcon" android:src="@drawable/ic_access_time"/>
-                <TextView style="@style/HoursDay" android:text="@string/auto_ui_thu_nam_164fif"/>
-                <TextView style="@style/HoursTime" android:text="@string/auto_ui_07_30_21_00_icnp75"/>
-            </LinearLayout>
-
-            <!-- Thứ sáu - TODAY highlighted -->
             <LinearLayout
-                android:id="@+id/rowToday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:paddingHorizontal="16dp"
-                android:paddingVertical="13dp"
-                android:background="#FFFDE7">
-                <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/ic_access_time" app:tint="#AAAAAA" android:layout_marginEnd="10dp"/>
-                <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
-                    android:text="@string/auto_ui_thu_sau_164flb" android:textSize="14sp" android:textStyle="bold" android:textColor="#1A1A1A"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="@string/auto_ui_07_30_21_00_icnp75" android:textSize="14sp" android:textStyle="bold" android:textColor="#1A1A1A"/>
-            </LinearLayout>
-
-            <!-- Thứ bảy -->
-            <LinearLayout style="@style/HoursRow">
-                <ImageView style="@style/HoursIcon" android:src="@drawable/ic_access_time"/>
-                <TextView style="@style/HoursDay" android:text="@string/auto_ui_thu_bay_164kax"/>
-                <TextView style="@style/HoursTime" android:text="@string/auto_ui_07_30_21_00_icnp75"/>
+                android:paddingVertical="13dp">
+                <ImageView
+                    style="@style/HoursIcon"
+                    android:src="@drawable/ic_access_time"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/restaurant_info_no_opening_hours"
+                    android:textSize="14sp"
+                    android:textColor="#666666"/>
             </LinearLayout>
 
         </LinearLayout>
