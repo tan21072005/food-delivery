@@ -231,7 +231,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Giờ hoạt động"
+                android:text="@string/restaurant_info_opening_hours_title"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A1A"
@@ -239,63 +239,23 @@
                 android:paddingTop="20dp"
                 android:paddingBottom="12dp"/>
 
-            <!-- Chủ nhật -->
-            <LinearLayout style="@style/HoursRow">
-                <ImageView style="@style/HoursIcon" android:src="@drawable/ic_access_time"/>
-                <TextView style="@style/HoursDay" android:text="Chủ nhật"/>
-                <TextView style="@style/HoursTime" android:text="07:30 - 21:00"/>
-            </LinearLayout>
-
-            <!-- Thứ hai -->
-            <LinearLayout style="@style/HoursRow">
-                <ImageView style="@style/HoursIcon" android:src="@drawable/ic_access_time"/>
-                <TextView style="@style/HoursDay" android:text="Thứ hai"/>
-                <TextView style="@style/HoursTime" android:text="07:30 - 21:00"/>
-            </LinearLayout>
-
-            <!-- Thứ ba -->
-            <LinearLayout style="@style/HoursRow">
-                <ImageView style="@style/HoursIcon" android:src="@drawable/ic_access_time"/>
-                <TextView style="@style/HoursDay" android:text="Thứ ba"/>
-                <TextView style="@style/HoursTime" android:text="07:30 - 21:00"/>
-            </LinearLayout>
-
-            <!-- Thứ tư -->
-            <LinearLayout style="@style/HoursRow">
-                <ImageView style="@style/HoursIcon" android:src="@drawable/ic_access_time"/>
-                <TextView style="@style/HoursDay" android:text="Thứ tư"/>
-                <TextView style="@style/HoursTime" android:text="07:30 - 21:00"/>
-            </LinearLayout>
-
-            <!-- Thứ năm -->
-            <LinearLayout style="@style/HoursRow">
-                <ImageView style="@style/HoursIcon" android:src="@drawable/ic_access_time"/>
-                <TextView style="@style/HoursDay" android:text="Thứ năm"/>
-                <TextView style="@style/HoursTime" android:text="07:30 - 21:00"/>
-            </LinearLayout>
-
-            <!-- Thứ sáu - TODAY highlighted -->
             <LinearLayout
-                android:id="@+id/rowToday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:paddingHorizontal="16dp"
-                android:paddingVertical="13dp"
-                android:background="#FFFDE7">
-                <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/ic_access_time" app:tint="#AAAAAA" android:layout_marginEnd="10dp"/>
-                <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
-                    android:text="Thứ sáu" android:textSize="14sp" android:textStyle="bold" android:textColor="#1A1A1A"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="07:30 - 21:00" android:textSize="14sp" android:textStyle="bold" android:textColor="#1A1A1A"/>
-            </LinearLayout>
-
-            <!-- Thứ bảy -->
-            <LinearLayout style="@style/HoursRow">
-                <ImageView style="@style/HoursIcon" android:src="@drawable/ic_access_time"/>
-                <TextView style="@style/HoursDay" android:text="Thứ bảy"/>
-                <TextView style="@style/HoursTime" android:text="07:30 - 21:00"/>
+                android:paddingVertical="13dp">
+                <ImageView
+                    style="@style/HoursIcon"
+                    android:src="@drawable/ic_access_time"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/restaurant_info_no_opening_hours"
+                    android:textSize="14sp"
+                    android:textColor="#666666"/>
             </LinearLayout>
 
         </LinearLayout>
