@@ -1022,10 +1022,13 @@ begin
   returning id into v_cart_item_id;
 
   for v_choice in
-    select moc.id, moc.name, moc.price_delta
+    select distinct on (moc.id) moc.id, moc.name, moc.price_delta
     from public.menu_option_choices moc
+    join public.menu_option_groups mog on mog.id = moc.option_group_id
     where moc.id = any(p_option_choice_ids)
+      and mog.menu_item_id = p_menu_item_id
       and moc.is_available = true
+    order by moc.id
   loop
     insert into public.cart_item_options (
       cart_item_id,
@@ -1047,6 +1050,118 @@ $$;
 
 revoke all on function public.add_to_cart_v3(bigint, int, text, bigint[]) from public;
 grant execute on function public.add_to_cart_v3(bigint, int, text, bigint[]) to authenticated;
+
+create or replace function public.get_draft_carts_v3()
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_customer_id bigint;
+  v_delivery_fee numeric(12, 2) := 15000;
+  v_result jsonb;
+begin
+  select public.current_app_user_id() into v_customer_id;
+  if v_customer_id is null then
+    raise exception 'Authenticated user profile not found';
+  end if;
+
+  select coalesce(
+    jsonb_agg(
+      jsonb_build_object(
+        'cart_id', c.id,
+        'restaurant_id', r.id,
+        'restaurant_name', r.name,
+        'restaurant_logo_url', r.logo_url,
+        'restaurant_cover_url', r.cover_url,
+        'restaurant_rating', r.avg_rating,
+        'restaurant_is_open', r.is_open,
+        'item_count', totals.item_count,
+        'line_count', totals.line_count,
+        'subtotal', totals.subtotal,
+        'delivery_fee', v_delivery_fee,
+        'discount_amount', 0,
+        'total_amount', totals.subtotal + v_delivery_fee,
+        'updated_at', c.updated_at,
+        'preview_items', coalesce(preview.items, '[]'::jsonb)
+      )
+      order by c.updated_at desc
+    ),
+    '[]'::jsonb
+  )
+  into v_result
+  from public.carts c
+  join public.restaurants r on r.id = c.restaurant_id
+  join lateral (
+    select
+      count(*)::int as line_count,
+      coalesce(sum(ci.quantity), 0)::int as item_count,
+      coalesce(sum((mi.base_price + coalesce(opt.option_total, 0)) * ci.quantity), 0) as subtotal
+    from public.cart_items ci
+    join public.menu_items mi on mi.id = ci.menu_item_id
+    left join lateral (
+      select sum(cio.price_delta_snapshot) as option_total
+      from public.cart_item_options cio
+      where cio.cart_item_id = ci.id
+    ) opt on true
+    where ci.cart_id = c.id
+  ) totals on true
+  left join lateral (
+    select jsonb_agg(
+      jsonb_build_object(
+        'cart_item_id', pi.cart_item_id,
+        'menu_item_id', pi.menu_item_id,
+        'item_name', pi.item_name,
+        'image_url', pi.image_url,
+        'quantity', pi.quantity,
+        'unit_price', pi.unit_price,
+        'options', pi.options
+      )
+      order by pi.created_at, pi.cart_item_id
+    ) as items
+    from (
+      select
+        ci.id as cart_item_id,
+        mi.id as menu_item_id,
+        mi.name as item_name,
+        mi.image_url,
+        ci.quantity,
+        mi.base_price + coalesce(opt.option_total, 0) as unit_price,
+        ci.created_at,
+        coalesce(opt.options_json, '[]'::jsonb) as options
+      from public.cart_items ci
+      join public.menu_items mi on mi.id = ci.menu_item_id
+      left join lateral (
+        select
+          sum(cio.price_delta_snapshot) as option_total,
+          jsonb_agg(
+            jsonb_build_object(
+              'option_choice_id', cio.option_choice_id,
+              'name', cio.option_name_snapshot,
+              'price_delta', cio.price_delta_snapshot
+            )
+            order by cio.id
+          ) as options_json
+        from public.cart_item_options cio
+        where cio.cart_item_id = ci.id
+      ) opt on true
+      where ci.cart_id = c.id
+      order by ci.created_at, ci.id
+      limit 3
+    ) pi
+  ) preview on true
+  where c.customer_id = v_customer_id
+    and c.status = 'active'
+    and totals.line_count > 0
+    and r.deleted_at is null;
+
+  return v_result;
+end;
+$$;
+
+revoke all on function public.get_draft_carts_v3() from public;
+grant execute on function public.get_draft_carts_v3() to authenticated;
 
 create or replace function public.get_cart_summary_v3(p_cart_id bigint)
 returns jsonb
@@ -1226,7 +1341,7 @@ begin
     0,
     v_total,
     p_payment_method,
-    case when p_payment_method = 'COD' then 'pending' else 'pending' end,
+    'pending'::public.app_payment_status,
     p_note
   )
   returning id into v_order_id;
