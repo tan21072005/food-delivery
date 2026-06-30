@@ -19,17 +19,29 @@ import com.example.fooddelivery.MainActivity;
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.data.local.LocalCart;
 import com.example.fooddelivery.data.local.LocalOrderStore;
+import com.example.fooddelivery.data.model.CartOptionV3Response;
+import com.example.fooddelivery.data.model.CartSummaryV3Response;
+import com.example.fooddelivery.data.model.DeliveryAddress;
+import com.example.fooddelivery.data.model.FoodItem;
+import com.example.fooddelivery.data.repository.DeliveryAddressRepository;
+import com.example.fooddelivery.data.repository.OrderRepository;
 import com.example.fooddelivery.ui.cart.adapters.CartBottomSheetAdapter;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Checkout extends AppCompatActivity {
 
-    private static final String FALLBACK_ADDRESS_LABEL = "Nhà";
-    private static final String FALLBACK_ADDRESS_DETAIL = "Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội";
-    private static final String PAYMENT_COD = "Thanh toán khi nhận hàng";
+    private static final String FALLBACK_ADDRESS_LABEL = "Nha";
+    private static final String FALLBACK_ADDRESS_DETAIL = "So 1 Dai Co Viet, Hai Ba Trung, Ha Noi";
+    private static final String PAYMENT_COD = "Thanh toan khi nhan hang";
 
     private CartBottomSheetAdapter adapter;
     private TextView tvAddressTitle;
@@ -48,7 +60,12 @@ public class Checkout extends AppCompatActivity {
     private Button btnOrder;
     private EditText edNote;
 
+    private OrderRepository orderRepository;
+    private DeliveryAddressRepository deliveryAddressRepository;
     private long restaurantId = -1L;
+    private long cartId = -1L;
+    private long deliveryAddressId = -1L;
+    private CartSummaryV3Response rpcSummary;
     private boolean isSubmitting = false;
     private boolean hasDeliveryAddress = true;
     private String selectedPaymentMethod = PAYMENT_COD;
@@ -57,9 +74,19 @@ public class Checkout extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart_activity_checkout);
+
+        orderRepository = new OrderRepository(this);
+        deliveryAddressRepository = new DeliveryAddressRepository(this);
+        cartId = getIntent().getLongExtra("cart_id", -1L);
         restaurantId = getIntent().getLongExtra("restaurant_id", LocalCart.getInstance().getRestaurantId());
-        LocalCart.getInstance().setActiveRestaurantId(restaurantId);
+        if (isRpcCheckout()) {
+            hasDeliveryAddress = false;
+        } else {
+            LocalCart.getInstance().setActiveRestaurantId(restaurantId);
+        }
+
         initViews();
+        loadCurrentDeliveryAddress();
         renderCart();
     }
 
@@ -90,11 +117,11 @@ public class Checkout extends AppCompatActivity {
         ivBack.setOnClickListener(v -> finish());
         tvAddMore.setOnClickListener(v -> finish());
         tvSchedule.setOnClickListener(v ->
-                Toast.makeText(this, "Sắp hỗ trợ hẹn giờ giao", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, "Sap ho tro hen gio giao", Toast.LENGTH_SHORT).show());
         tvChangeAddress.setOnClickListener(v ->
-                Toast.makeText(this, "Đang dùng địa chỉ giao hàng local demo", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, "Dang dung dia chi giao hang hien tai", Toast.LENGTH_SHORT).show());
         sectionVoucher.setOnClickListener(v ->
-                Toast.makeText(this, "Voucher sẽ được hỗ trợ khi backend sẵn sàng", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, "Voucher se duoc ho tro khi backend san sang", Toast.LENGTH_SHORT).show());
         sectionPayment.setOnClickListener(v -> showPaymentMethodSheet());
         btnOrder.setOnClickListener(v -> placeOrder());
 
@@ -109,27 +136,38 @@ public class Checkout extends AppCompatActivity {
         rvCartItems.setLayoutManager(new LinearLayoutManager(this));
         adapter = new CartBottomSheetAdapter(
                 this,
-                LocalCart.getInstance().getEntries(restaurantId),
+                isRpcCheckout() ? new ArrayList<>() : LocalCart.getInstance().getEntries(restaurantId),
                 new CartBottomSheetAdapter.Listener() {
                     @Override
                     public void onIncrease(LocalCart.CartEntry entry) {
+                        if (isRpcCheckout()) return;
                         LocalCart.getInstance().increase(restaurantId, entry.item.getId());
                         refreshCartUi();
                     }
 
                     @Override
                     public void onDecrease(LocalCart.CartEntry entry) {
+                        if (isRpcCheckout()) return;
                         LocalCart.getInstance().decrease(restaurantId, entry.item.getId());
                         refreshCartUi();
                     }
                 });
         rvCartItems.setAdapter(adapter);
 
-        tvRestaurantName.setText("Đơn hàng của bạn");
-        refreshCartUi();
+        tvRestaurantName.setText("Don hang cua ban");
+        if (isRpcCheckout()) {
+            loadCartSummaryV3();
+        } else {
+            refreshCartUi();
+        }
     }
 
     private void refreshCartUi() {
+        if (isRpcCheckout()) {
+            refreshRpcCartUi();
+            return;
+        }
+
         LocalCart cart = LocalCart.getInstance();
         if (adapter != null) {
             adapter.updateData(cart.getEntries(restaurantId));
@@ -139,7 +177,7 @@ public class Checkout extends AppCompatActivity {
         tvEmptyCart.setVisibility(cartEmpty ? View.VISIBLE : View.GONE);
         CheckoutSummary summary = buildSummary(cart);
 
-        tvSubtotalLabel.setText("Tạm tính (" + cart.getTotalCount(restaurantId) + " phần)");
+        tvSubtotalLabel.setText("Tam tinh (" + cart.getTotalCount(restaurantId) + " phan)");
         tvSubtotal.setText(formatPrice(summary.getSubtotal()));
         tvDeliveryFee.setText(formatPrice(summary.getDeliveryFee()));
         tvServiceFee.setText(formatPrice(summary.getServiceFee()));
@@ -158,13 +196,79 @@ public class Checkout extends AppCompatActivity {
         btnOrder.setEnabled(canPlaceOrder);
         btnOrder.setAlpha(canPlaceOrder ? 1f : 0.55f);
         if (isSubmitting) {
-            btnOrder.setText("Đang đặt món...");
+            btnOrder.setText("Dang dat mon...");
         } else if (cartEmpty) {
-            btnOrder.setText("Giỏ hàng trống");
+            btnOrder.setText("Gio hang trong");
         } else if (!hasDeliveryAddress) {
-            btnOrder.setText("Chọn địa chỉ");
+            btnOrder.setText("Chon dia chi");
         } else {
-            btnOrder.setText("Đặt món");
+            btnOrder.setText("Dat mon");
+        }
+    }
+
+    private void loadCartSummaryV3() {
+        orderRepository.getCartSummaryV3(cartId).enqueue(new Callback<CartSummaryV3Response>() {
+            @Override
+            public void onResponse(Call<CartSummaryV3Response> call, Response<CartSummaryV3Response> response) {
+                if (!response.isSuccessful() || response.body() == null) {
+                    tvEmptyCart.setVisibility(View.VISIBLE);
+                    Toast.makeText(Checkout.this, "Khong the tai gio hang", Toast.LENGTH_SHORT).show();
+                    refreshRpcCartUi();
+                    return;
+                }
+                rpcSummary = response.body();
+                refreshRpcCartUi();
+            }
+
+            @Override
+            public void onFailure(Call<CartSummaryV3Response> call, Throwable t) {
+                tvEmptyCart.setVisibility(View.VISIBLE);
+                Toast.makeText(Checkout.this,
+                        "Khong the tai gio hang: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                refreshRpcCartUi();
+            }
+        });
+    }
+
+    private void refreshRpcCartUi() {
+        boolean cartEmpty = rpcSummary == null
+                || rpcSummary.getItems() == null
+                || rpcSummary.getItems().isEmpty();
+
+        if (adapter != null) {
+            adapter.updateData(cartEmpty ? new ArrayList<>() : mapRpcItems(rpcSummary.getItems()));
+        }
+
+        tvEmptyCart.setVisibility(cartEmpty ? View.VISIBLE : View.GONE);
+        CheckoutSummary summary = buildSummary(rpcSummary);
+        int itemCount = cartEmpty ? 0 : rpcSummary.getItems().size();
+
+        tvSubtotalLabel.setText("Tam tinh (" + itemCount + " phan)");
+        tvSubtotal.setText(formatPrice(summary.getSubtotal()));
+        tvDeliveryFee.setText(formatPrice(summary.getDeliveryFee()));
+        tvServiceFee.setText(formatPrice(summary.getServiceFee()));
+        tvVoucherDiscount.setText("-" + formatPrice(summary.getVoucherDiscount()));
+        tvTotalPrice.setText(formatPrice(summary.getTotal()));
+        tvStickyTotal.setText(formatPrice(summary.getTotal()));
+        tvPaymentMethod.setText(selectedPaymentMethod);
+        tvStickyPayment.setText(selectedPaymentMethod);
+
+        boolean canPlaceOrder = CheckoutSummary.canPlaceOrder(
+                cartEmpty,
+                hasDeliveryAddress,
+                selectedPaymentMethod != null && !selectedPaymentMethod.trim().isEmpty(),
+                isSubmitting
+        );
+        btnOrder.setEnabled(canPlaceOrder);
+        btnOrder.setAlpha(canPlaceOrder ? 1f : 0.55f);
+        if (isSubmitting) {
+            btnOrder.setText("Dang dat mon...");
+        } else if (cartEmpty) {
+            btnOrder.setText("Gio hang trong");
+        } else if (!hasDeliveryAddress) {
+            btnOrder.setText("Chon dia chi");
+        } else {
+            btnOrder.setText("Dat mon");
         }
     }
 
@@ -179,6 +283,18 @@ public class Checkout extends AppCompatActivity {
         );
     }
 
+    private CheckoutSummary buildSummary(CartSummaryV3Response summary) {
+        if (summary == null) {
+            return new CheckoutSummary(0, 0, 0, 0);
+        }
+        return new CheckoutSummary(
+                Math.round(summary.getSubtotal()),
+                Math.round(summary.getDeliveryFee()),
+                CheckoutSummary.DEFAULT_SERVICE_FEE,
+                Math.round(summary.getDiscountAmount())
+        );
+    }
+
     private void showPaymentMethodSheet() {
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         LinearLayout content = new LinearLayout(this);
@@ -186,17 +302,17 @@ public class Checkout extends AppCompatActivity {
         content.setPadding(24, 18, 24, 24);
 
         TextView title = new TextView(this);
-        title.setText("Phương thức thanh toán");
+        title.setText("Phuong thuc thanh toan");
         title.setTextColor(getColor(android.R.color.black));
         title.setTextSize(18);
         title.setTypeface(title.getTypeface(), android.graphics.Typeface.BOLD);
         content.addView(title);
 
         addPaymentOption(content, dialog, PAYMENT_COD, true, true);
-        addPaymentOption(content, dialog, "QR ngân hàng", false, false);
+        addPaymentOption(content, dialog, "QR ngan hang", false, false);
         addPaymentOption(content, dialog, "MoMo", false, false);
         addPaymentOption(content, dialog, "ZaloPay", false, false);
-        addPaymentOption(content, dialog, "Thẻ ngân hàng", false, false);
+        addPaymentOption(content, dialog, "The ngan hang", false, false);
 
         dialog.setContentView(content);
         dialog.show();
@@ -215,12 +331,12 @@ public class Checkout extends AppCompatActivity {
 
         TextView labelView = new TextView(this);
         labelView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-        labelView.setText(enabled ? label : label + " · Sắp hỗ trợ");
+        labelView.setText(enabled ? label : label + " - Sap ho tro");
         labelView.setTextColor(getColor(android.R.color.black));
         labelView.setTextSize(16);
 
         TextView stateView = new TextView(this);
-        stateView.setText(selected ? "✓" : "›");
+        stateView.setText(selected ? "*" : ">");
         stateView.setTextColor(getColor(android.R.color.black));
         stateView.setTextSize(20);
 
@@ -228,7 +344,7 @@ public class Checkout extends AppCompatActivity {
         row.addView(stateView);
         row.setOnClickListener(v -> {
             if (!enabled) {
-                Toast.makeText(this, "Sắp hỗ trợ " + label, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Sap ho tro " + label, Toast.LENGTH_SHORT).show();
                 return;
             }
             selectedPaymentMethod = label;
@@ -239,6 +355,11 @@ public class Checkout extends AppCompatActivity {
     }
 
     private void placeOrder() {
+        if (isRpcCheckout()) {
+            placeRpcOrder();
+            return;
+        }
+
         LocalCart cart = LocalCart.getInstance();
         if (!CheckoutSummary.canPlaceOrder(
                 cart.isEmpty(restaurantId),
@@ -256,18 +377,60 @@ public class Checkout extends AppCompatActivity {
         if (LocalOrderStore.getInstance().createFromCart(cart, restaurantId, deliveryAddress) == null) {
             isSubmitting = false;
             refreshCartUi();
-            Toast.makeText(this, "Không thể tạo đơn từ giỏ hàng trống", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Khong the tao don tu gio hang trong", Toast.LENGTH_SHORT).show();
             return;
         }
 
         cart.clearRestaurant(restaurantId);
-        showSuccessDialog();
+        showSuccessDialog(-1L);
     }
 
-    private void showSuccessDialog() {
+    private void placeRpcOrder() {
+        boolean cartEmpty = rpcSummary == null
+                || rpcSummary.getItems() == null
+                || rpcSummary.getItems().isEmpty();
+        if (!CheckoutSummary.canPlaceOrder(
+                cartEmpty,
+                hasDeliveryAddress,
+                selectedPaymentMethod != null && !selectedPaymentMethod.trim().isEmpty(),
+                isSubmitting)) {
+            refreshRpcCartUi();
+            return;
+        }
+
+        isSubmitting = true;
+        refreshRpcCartUi();
+        String note = edNote == null ? null : edNote.getText().toString();
+        orderRepository.checkoutCartV3(cartId, deliveryAddressId, "COD", note)
+                .enqueue(new Callback<Long>() {
+                    @Override
+                    public void onResponse(Call<Long> call, Response<Long> response) {
+                        isSubmitting = false;
+                        if (!response.isSuccessful() || response.body() == null) {
+                            refreshRpcCartUi();
+                            Toast.makeText(Checkout.this, "Khong the dat mon", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        showSuccessDialog(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<Long> call, Throwable t) {
+                        isSubmitting = false;
+                        refreshRpcCartUi();
+                        Toast.makeText(Checkout.this,
+                                "Khong the dat mon: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void showSuccessDialog(long orderId) {
+        String message = orderId > 0
+                ? "Dat mon thanh cong! Ma don hang: " + orderId
+                : "Dat mon thanh cong!";
         new AlertDialog.Builder(this)
-                .setTitle("Thông báo")
-                .setMessage("Đặt món thành công!")
+                .setTitle("Thong bao")
+                .setMessage(message)
                 .setPositiveButton("OK", (dialog, which) -> {
                     dialog.dismiss();
                     Intent intent = new Intent(Checkout.this, MainActivity.class);
@@ -280,8 +443,86 @@ public class Checkout extends AppCompatActivity {
                 .show();
     }
 
+    private boolean isRpcCheckout() {
+        return cartId > 0;
+    }
+
+    private List<LocalCart.CartEntry> mapRpcItems(List<CartSummaryV3Response.Item> items) {
+        List<LocalCart.CartEntry> entries = new ArrayList<>();
+        if (items == null) return entries;
+
+        for (CartSummaryV3Response.Item item : items) {
+            if (item == null) continue;
+            FoodItem foodItem = new FoodItem(
+                    item.getMenuItemId(),
+                    item.getItemName(),
+                    optionSummary(item.getOptions(), item.getNote()),
+                    0,
+                    item.getBasePrice(),
+                    item.getImageUrl()
+            );
+            entries.add(new LocalCart.CartEntry(foodItem, item.getQuantity()));
+        }
+        return entries;
+    }
+
+    private String optionSummary(List<CartOptionV3Response> options, String note) {
+        StringBuilder builder = new StringBuilder();
+        if (options != null) {
+            for (CartOptionV3Response option : options) {
+                if (option == null || option.getName() == null || option.getName().trim().isEmpty()) {
+                    continue;
+                }
+                if (builder.length() > 0) builder.append(", ");
+                builder.append(option.getName().trim());
+            }
+        }
+        if (note != null && !note.trim().isEmpty()) {
+            if (builder.length() > 0) builder.append(", ");
+            builder.append(note.trim());
+        }
+        return builder.length() == 0 ? "Tuy chon mac dinh" : builder.toString();
+    }
+
+    private void loadCurrentDeliveryAddress() {
+        deliveryAddressRepository.getCurrentAddress(new DeliveryAddressRepository.ResultCallback<DeliveryAddress>() {
+            @Override
+            public void onSuccess(DeliveryAddress address) {
+                if (address == null) {
+                    hasDeliveryAddress = !isRpcCheckout();
+                    refreshCartUi();
+                    return;
+                }
+
+                tvAddressTitle.setText(address.getDisplayLabel());
+                tvAddressSubtitle.setText(address.getFullAddress() == null
+                        || address.getFullAddress().trim().isEmpty()
+                        ? FALLBACK_ADDRESS_DETAIL
+                        : address.getFullAddress());
+                deliveryAddressId = parseAddressId(address.getId());
+                hasDeliveryAddress = !isRpcCheckout() || deliveryAddressId > 0;
+                refreshCartUi();
+            }
+
+            @Override
+            public void onError(String message) {
+                hasDeliveryAddress = !isRpcCheckout();
+                refreshCartUi();
+            }
+        });
+    }
+
+    private long parseAddressId(String value) {
+        if (value == null || value.trim().isEmpty()) return -1L;
+        try {
+            return Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            return -1L;
+        }
+    }
+
     private String formatPrice(long price) {
         NumberFormat formatter = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
-        return formatter.format(price) + "đ";
+        return formatter.format(price) + "d";
     }
 }

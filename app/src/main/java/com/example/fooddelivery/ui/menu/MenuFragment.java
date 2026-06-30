@@ -19,16 +19,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.data.local.LocalCart;
 import com.example.fooddelivery.data.model.FoodItem;
+import com.example.fooddelivery.data.repository.OrderRepository;
 import com.example.fooddelivery.ui.cart.CartBottomSheet;
 import com.example.fooddelivery.ui.home.ToppingBottomSheet;
 import com.example.fooddelivery.ui.menu.adapters.MenuAdapter;
 import com.example.fooddelivery.utils.MoneyFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MenuFragment extends Fragment {
 
     private MenuViewModel viewModel;
+    private OrderRepository orderRepository;
     private MenuAdapter adapter;
     private ProgressBar progressBar;
 
@@ -44,6 +51,7 @@ public class MenuFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = new ViewModelProvider(this).get(MenuViewModel.class);
+        orderRepository = new OrderRepository(requireContext());
         progressBar = view.findViewById(R.id.progressBar);
 
         setupHeader(view);
@@ -112,10 +120,27 @@ public class MenuFragment extends Fragment {
     }
 
     private void addItemToCart(FoodItem item, int quantity, View view) {
-        LocalCart.getInstance().add(item, quantity);
-        updateStickyCart(view);
-        Toast.makeText(requireContext(),
-                "Đã thêm " + item.getName() + " vào giỏ", Toast.LENGTH_SHORT).show();
+        orderRepository.addToCartV3(item.getId(), quantity, null, Collections.emptyList())
+                .enqueue(new Callback<Long>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Long> call, @NonNull Response<Long> response) {
+                        if (!isAdded()) return;
+                        if (response.isSuccessful()) {
+                            Toast.makeText(requireContext(),
+                                    "Da them " + item.getName() + " vao gio", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Toast.makeText(requireContext(),
+                                "Khong the them mon vao gio", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Long> call, @NonNull Throwable t) {
+                        if (!isAdded()) return;
+                        Toast.makeText(requireContext(),
+                                "Khong the them mon vao gio: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void updateStickyCart(View view) {

@@ -14,6 +14,7 @@ public class Order {
     private long   completedAt;
     private boolean isReviewed;
     private String orderDate;
+    private long rpcCartId = -1L;
 
     public Order(int id, String foodName, String tableInfo,
                  int quantity, long totalPrice, int timeMinutes,
@@ -73,6 +74,8 @@ public class Order {
     public boolean isReviewed()       { return isReviewed; }
     public void setReviewed(boolean reviewed) { this.isReviewed = reviewed; }
     public String getOrderDate()      { return orderDate; }
+    public long getRpcCartId()        { return rpcCartId; }
+    public void setRpcCartId(long rpcCartId) { this.rpcCartId = rpcCartId; }
 
     public String getQuantityAndPrice() {
         return quantity + " phần - "

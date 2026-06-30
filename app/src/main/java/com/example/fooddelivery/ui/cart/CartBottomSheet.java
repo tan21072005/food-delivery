@@ -26,6 +26,7 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
     private CartBottomSheetAdapter adapter;
     private TextView tvCartCount;
     private long restaurantId;
+    private long cartId = -1L;
     private OnCartChangedListener onCartChangedListener;
 
     public interface OnCartChangedListener {
@@ -56,6 +57,9 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
         TextView tvClose = view.findViewById(R.id.tvClose);
         tvCartCount = view.findViewById(R.id.tvCartCount);
         restaurantId = LocalCart.getInstance().getRestaurantId();
+        if (getArguments() != null) {
+            cartId = getArguments().getLong("cart_id", -1L);
+        }
 
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new CartBottomSheetAdapter(
@@ -91,13 +95,16 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
         tvClose.setOnClickListener(v -> dismiss());
 
         btnViewOrder.setOnClickListener(v -> {
-            if (LocalCart.getInstance().isEmpty(restaurantId)) {
+            if (cartId <= 0 && LocalCart.getInstance().isEmpty(restaurantId)) {
                 refreshCart();
                 return;
             }
             dismiss();
             Intent intent = new Intent(requireContext(), Checkout.class);
             intent.putExtra("restaurant_id", restaurantId);
+            if (cartId > 0) {
+                intent.putExtra("cart_id", cartId);
+            }
             startActivity(intent);
         });
 
@@ -113,8 +120,9 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
         tvCartCount.setText(String.valueOf(count));
 
         Button btnViewOrder = requireView().findViewById(R.id.btnViewOrder);
-        btnViewOrder.setEnabled(count > 0);
-        btnViewOrder.setAlpha(count > 0 ? 1f : 0.55f);
+        boolean canViewOrder = count > 0 || cartId > 0;
+        btnViewOrder.setEnabled(canViewOrder);
+        btnViewOrder.setAlpha(canViewOrder ? 1f : 0.55f);
         btnViewOrder.setText("Xem đơn hàng  •  " + MoneyFormatter.format(cart.getTotalPrice(restaurantId)));
     }
 
