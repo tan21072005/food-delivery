@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="foodgo_content_max_width">600dp</dimen>
+    <dimen name="foodgo_screen_gutter">16dp</dimen>
+    <dimen name="foodgo_touch_target">48dp</dimen>
+    <dimen name="foodgo_card_radius">18dp</dimen>
+    <dimen name="foodgo_space_s">8dp</dimen>
+    <dimen name="foodgo_space_m">16dp</dimen>
+    <dimen name="foodgo_space_l">24dp</dimen>
     ------Spacing -----------
     <dimen name="space_xs">4dp</dimen>
     <dimen name="space_sm">8dp</dimen>
@@ -29,7 +36,7 @@
     <dimen name="icon_lg">32dp</dimen>
     <dimen name="avatar_sm">40dp</dimen>
     <dimen name="avatar_md">56dp</dimen>
-    <dimen name="avatar_lg">72dp</dimen>"
+    <dimen name="avatar_lg">72dp</dimen>
     <dimen name="btn_height">48dp</dimen>
     <dimen name="bottom_nav_height">60dp</dimen>
 <!--    <dimen name="banner_height">180dp</dimen>-->

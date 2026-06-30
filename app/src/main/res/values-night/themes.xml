@@ -2,19 +2,20 @@
     <!-- Base application theme. -->
     <style name="Theme.FoodDelivery" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/foodgo_coral</item>
+        <item name="colorPrimaryVariant">@color/foodgo_brick</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/foodgo_coral</item>
+        <item name="colorSecondaryVariant">@color/foodgo_brick</item>
+        <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:textColorPrimary">@color/text_primary</item>
-        <item name="android:textColorSecondary">@color/text_secondary</item>
-        <item name="colorControlNormal">@color/text_primary</item>
+        <item name="android:windowBackground">@color/foodgo_surface</item>
+        <item name="android:textColorPrimary">@color/foodgo_text_primary</item>
+        <item name="android:textColorSecondary">@color/foodgo_text_secondary</item>
+        <item name="colorControlNormal">@color/foodgo_text_primary</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>

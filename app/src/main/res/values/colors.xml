@@ -2,6 +2,13 @@
 <resources>
 
     <color name="foodgo_coral">#F2644B</color>
+    <color name="foodgo_brick">#B9362B</color>
+    <color name="foodgo_surface">#FFF8F5</color>
+    <color name="foodgo_surface_container">#FFFFFFFF</color>
+    <color name="foodgo_text_primary">#FF241815</color>
+    <color name="foodgo_text_secondary">#FF6F5A54</color>
+    <color name="foodgo_outline">#FFDCC7C0</color>
+    <color name="foodgo_error">#FFB3261E</color>
 
     ------------- Brand --------------
     <color name="brand_primary">#F5A623</color>

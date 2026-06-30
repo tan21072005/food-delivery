@@ -5,18 +5,20 @@
     <!-- ✅ THÀNH -->
     <style name="Theme.FoodDelivery" parent="Theme.MaterialComponents.Light.NoActionBar">
 
-        <item name="colorPrimary">@color/brand_primary</item>
-        <item name="colorPrimaryVariant">@color/brand_dark</item>
+        <item name="colorPrimary">@color/foodgo_coral</item>
+        <item name="colorPrimaryVariant">@color/foodgo_brick</item>
         <item name="colorOnPrimary">@color/text_on_brand</item>
 
-        <item name="colorSecondary">@color/brand_light</item>
-        <item name="colorSecondaryVariant">@color/brand_surface</item>
-        <item name="colorOnSecondary">@color/text_primary</item>
+        <item name="colorSecondary">@color/foodgo_coral</item>
+        <item name="colorSecondaryVariant">@color/foodgo_brick</item>
+        <item name="colorOnSecondary">@color/white</item>
 
-        <item name="android:statusBarColor">@color/brand_primary</item>
-        <item name="android:textColorPrimary">@color/text_primary</item>
-        <item name="android:textColorSecondary">@color/text_secondary</item>
-        <item name="colorControlNormal">@color/text_primary</item>
+        <item name="android:colorAccent">@color/foodgo_coral</item>
+        <item name="android:windowBackground">@color/foodgo_surface</item>
+        <item name="android:statusBarColor">@color/foodgo_brick</item>
+        <item name="android:textColorPrimary">@color/foodgo_text_primary</item>
+        <item name="android:textColorSecondary">@color/foodgo_text_secondary</item>
+        <item name="colorControlNormal">@color/foodgo_text_primary</item>
 
     </style>
 
