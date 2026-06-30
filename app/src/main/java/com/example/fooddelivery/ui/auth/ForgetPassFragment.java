@@ -45,13 +45,13 @@ public class ForgetPassFragment extends Fragment {
         });
         next.setOnClickListener(v -> {
             String email = emailInput.getText().toString().trim();
-            if (!PasswordRecoveryValidator.isValidEmail(email)) {
-                emailInput.setError(getString(R.string.error_invalid_email));
-                return;
-            }
             String suggestion = PasswordRecoveryValidator.suggestEmailCorrection(email);
             if (suggestion != null) {
                 emailInput.setError(getString(R.string.error_email_domain_typo, suggestion));
+                return;
+            }
+            if (!PasswordRecoveryValidator.isValidEmail(email)) {
+                emailInput.setError(getString(R.string.error_invalid_email));
                 return;
             }
             vm.requestCode(email);

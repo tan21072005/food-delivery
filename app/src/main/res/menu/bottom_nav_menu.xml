@@ -9,6 +9,12 @@
         android:title="@string/nav_orders">
     </item>
 
+    <item
+        android:id="@id/nav_chat"
+        android:icon="@drawable/ic_chat_assistant"
+        android:title="@string/nav_chat">
+    </item>
+
     <item android:id="@id/nav_favorites"
         android:icon="@drawable/ic_favorite"
         android:title="@string/nav_favorites">

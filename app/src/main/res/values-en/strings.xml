@@ -299,4 +299,27 @@
     <string name="recovery_email_hint">Enter email</string>
     <string name="recovery_email_note">If the email matches an existing account, we will send a verification code.</string>
     <string name="recovery_password_rules">• 8–20 characters\n• Include a letter, number, and special character</string>
+    <!-- Chatbot -->
+    <string name="nav_chat">AI Assistant</string>
+    <string name="chat_title">NGBT AI Assistant</string>
+    <string name="chat_history">Conversation history</string>
+    <string name="chat_new">New conversation</string>
+    <string name="chat_welcome">What would you like to eat today?</string>
+    <string name="chat_suggestion_lunch">Suggest a lunch dish</string>
+    <string name="chat_suggestion_restaurant">Which restaurants are open?</string>
+    <string name="chat_suggestion_order">What is the status of my latest order?</string>
+    <string name="chat_composer_hint">Ask about Dishes or Orders...</string>
+    <string name="chat_send">Send</string>
+    <string name="chat_feedback_prompt">Was this answer helpful?</string>
+    <string name="chat_feedback_yes">Yes</string>
+    <string name="chat_feedback_no">No</string>
+    <string name="chat_typing">Answering…</string>
+    <string name="chat_retry">Retry</string>
+    <string name="chat_more_options">Options</string>
+    <string name="chat_rename">Rename</string>
+    <string name="chat_delete">Delete conversation</string>
+    <string name="chat_rename_hint">Conversation name</string>
+    <string name="chat_delete_confirm">Delete this conversation and all of its messages?</string>
+    <string name="chat_today">Today</string>
+    <string name="chat_message_time">Sent time</string>
 </resources>

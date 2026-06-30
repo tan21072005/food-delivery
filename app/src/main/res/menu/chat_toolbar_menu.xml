@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_chat_history"
+        android:contentDescription="@string/chat_history"
+        android:icon="@drawable/ic_chat_history"
+        android:title="@string/chat_history"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_chat_new"
+        android:contentDescription="@string/chat_new"
+        android:icon="@drawable/ic_chat_new"
+        android:title="@string/chat_new"
+        app:showAsAction="always" />
+
+</menu>

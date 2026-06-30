@@ -145,4 +145,30 @@ public class MenuFragment extends Fragment {
             }
         }
     }
+<<<<<<< Updated upstream
+=======
+
+    private void addToCart(FoodItem item, int quantity) {
+        orderRepository.addToCartV3(item.getId(), quantity, null, Collections.emptyList())
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (!isAdded()) return;
+                        if (response.isSuccessful()) {
+                            com.example.fooddelivery.data.local.LocalCart.getInstance().addItem(item);
+                            Toast.makeText(requireContext(), "Da them vao gio", Toast.LENGTH_SHORT).show();
+                            updateStickyCart(getView());
+                        } else {
+                            Toast.makeText(requireContext(), "Khong the them vao gio", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        if (!isAdded()) return;
+                        Toast.makeText(requireContext(), "Khong the them vao gio: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+>>>>>>> Stashed changes
 }

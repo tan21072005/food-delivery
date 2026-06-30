@@ -10,7 +10,9 @@ public final class PasswordRecoveryValidator {
     private PasswordRecoveryValidator() {}
 
     public static boolean isValidEmail(String value) {
-        return value != null && EMAIL.matcher(value.trim()).matches();
+        return value != null
+                && EMAIL.matcher(value.trim()).matches()
+                && suggestEmailCorrection(value) == null;
     }
 
     public static String suggestEmailCorrection(String value) {

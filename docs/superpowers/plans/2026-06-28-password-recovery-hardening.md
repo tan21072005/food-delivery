@@ -77,3 +77,20 @@
 - [x] Bind all missing controls to loading state without changing create/change behavior.
 - [x] Clear the activity-scoped recovery ViewModel in `LoginFragment`.
 - [x] Run all unit tests and `:app:assembleDebug`.
+
+### Task 5: Reject known Gmail domain typos at the validation seam
+
+**Files:**
+- Modify: `app/src/test/java/com/example/fooddelivery/ui/auth/PasswordRecoveryViewModelTest.java`
+- Modify: `app/src/main/java/com/example/fooddelivery/ui/auth/PasswordRecoveryValidator.java`
+- Modify: `app/src/main/java/com/example/fooddelivery/ui/auth/ForgetPassFragment.java`
+
+**Interfaces:**
+- `PasswordRecoveryValidator.isValidEmail(String)` rejects `gmail.co`, `gmai.com`, and `gmial.com`.
+- `PasswordRecoveryValidator.suggestEmailCorrection(String)` continues returning the corresponding `gmail.com` correction.
+- `ForgetPassFragment` shows the specific correction before the generic invalid-email error.
+
+- [x] Add `assertFalse(PasswordRecoveryValidator.isValidEmail("user@gmail.co"))` and a ViewModel test proving no recovery request is issued for that address.
+- [x] Run the focused test and confirm it fails because the syntax-only validator accepts `gmail.co`.
+- [x] Make `isValidEmail` reject values for which `suggestEmailCorrection` returns a correction, and check the suggestion first in `ForgetPassFragment`.
+- [x] Run the focused test, all unit tests, and `:app:assembleDebug`; expect `BUILD SUCCESSFUL`.

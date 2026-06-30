@@ -26,6 +26,7 @@ public class PasswordRecoveryViewModelTest {
     public void validatesRecoveryInputs() {
         assertFalse(PasswordRecoveryValidator.isValidEmail("bad"));
         assertTrue(PasswordRecoveryValidator.isValidEmail("user@example.com"));
+        assertFalse(PasswordRecoveryValidator.isValidEmail("user@gmail.co"));
         assertFalse(PasswordRecoveryValidator.isValidOtp("12345"));
         assertTrue(PasswordRecoveryValidator.isValidOtp("123456"));
         assertFalse(PasswordRecoveryValidator.isStrongPassword("password"));
@@ -48,6 +49,17 @@ public class PasswordRecoveryViewModelTest {
         assertEquals("user@gmail.com",
                 PasswordRecoveryValidator.suggestEmailCorrection("user@gmial.com"));
         assertNull(PasswordRecoveryValidator.suggestEmailCorrection("user@yahoo.co"));
+    }
+
+    @Test
+    public void gmailDomainTypoDoesNotStartRecoveryRequest() {
+        FakeRepository repository = new FakeRepository();
+        PasswordRecoveryViewModel viewModel =
+                new PasswordRecoveryViewModel(new Application(), repository, new MutableClock());
+
+        viewModel.requestCode("user@gmail.co");
+
+        assertEquals(0, repository.sendCodeCount);
     }
 
     @Test

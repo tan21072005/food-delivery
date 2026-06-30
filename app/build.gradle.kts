@@ -1,9 +1,44 @@
 import java.util.Properties
 import java.io.FileInputStream
+import java.net.URI
 
 plugins {
     alias(libs.plugins.android.application)
 }
+
+fun requiredLocalProperty(properties: Properties, name: String): String {
+    val value = properties.getProperty(name)
+        ?.trim()
+        ?.trim('"')
+        ?.trim('\'')
+        ?.trim()
+        ?: ""
+    if (value.isBlank()) {
+        throw GradleException(
+            "Missing $name in local.properties. Copy local.properties.example, " +
+                "fill SUPABASE_URL and SUPABASE_ANON_KEY, then rebuild."
+        )
+    }
+    if (value.any { it.isWhitespace() }) {
+        throw GradleException("$name in local.properties must not contain whitespace.")
+    }
+    return value
+}
+
+fun normalizeSupabaseUrl(value: String): String {
+    val uri = try {
+        URI(value)
+    } catch (error: IllegalArgumentException) {
+        throw GradleException("SUPABASE_URL must be a valid http(s) URL.", error)
+    }
+    if ((uri.scheme != "https" && uri.scheme != "http") || uri.host.isNullOrBlank()) {
+        throw GradleException("SUPABASE_URL must be a valid http(s) URL.")
+    }
+    return if (value.endsWith("/")) value else "$value/"
+}
+
+fun javaStringLiteral(value: String): String =
+    "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 
 android {
     namespace = "com.example.fooddelivery"
@@ -30,11 +65,13 @@ android {
             localProperties.load(FileInputStream(localPropertiesFile))
         }
 
-        val supabaseUrl = localProperties.getProperty("SUPABASE_URL") ?: "\"\""
-        val supabaseAnonKey = localProperties.getProperty("SUPABASE_ANON_KEY") ?: "\"\""
+        val supabaseUrl = normalizeSupabaseUrl(
+            requiredLocalProperty(localProperties, "SUPABASE_URL")
+        )
+        val supabaseAnonKey = requiredLocalProperty(localProperties, "SUPABASE_ANON_KEY")
 
-        buildConfigField("String", "SUPABASE_URL", supabaseUrl)
-        buildConfigField("String", "SUPABASE_ANON_KEY", supabaseAnonKey)
+        buildConfigField("String", "SUPABASE_URL", javaStringLiteral(supabaseUrl))
+        buildConfigField("String", "SUPABASE_ANON_KEY", javaStringLiteral(supabaseAnonKey))
     }
 
     buildTypes {
