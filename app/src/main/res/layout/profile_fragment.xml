@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/foodgo_screen_gutter"
     tools:context=".ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -12,17 +13,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Profile"
-        android:background="@color/white">
+        android:background="@color/foodgo_surface">
 
 
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#F3F3F3">
+            android:background="@color/foodgo_surface"
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <!-- ===== HEADER / PROFILE SECTION ===== -->

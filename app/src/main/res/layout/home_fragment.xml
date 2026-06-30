@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="#FAFAFA">
+    android:paddingHorizontal="@dimen/foodgo_screen_gutter"
+    android:background="@color/foodgo_surface">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFF4D6"
+        android:background="@color/foodgo_surface"
         app:elevation="0dp">
 
         <LinearLayout

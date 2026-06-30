@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="foodgo_content_max_width">640dp</dimen>
-    <dimen name="foodgo_screen_gutter">32dp</dimen>
+    <dimen name="foodgo_screen_gutter">48dp</dimen>
 </resources>

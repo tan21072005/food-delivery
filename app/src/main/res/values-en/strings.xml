@@ -301,6 +301,7 @@
     <string name="recovery_password_rules">• 8–20 characters\n• Include a letter, number, and special character</string>
     <string name="app_name">FoodGo</string>
     <string name="profile_preferences">Preferences</string>
+    <string name="foodgo_login_tagline">Good food, closer to you</string>
     <string name="profile_language">Language</string>
     <string name="language_vietnamese">Vietnamese</string>
     <string name="language_english">English</string>
