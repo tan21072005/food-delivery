@@ -44,7 +44,7 @@ public class BugRegressionTest {
     @Test
     public void orderingSurfacesAddToPerRestaurantDraftCartWithoutClearingOtherCarts() throws Exception {
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
-                "LocalCart.getInstance().add");
+                "orderRepository.addToCartV3");
         assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
                 "hasDifferentRestaurant",
                 "Xoa va them mon moi",
@@ -53,16 +53,22 @@ public class BugRegressionTest {
                 "new Intent(requireContext(), Checkout.class)");
 
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
-                "ToppingBottomSheet",
+                "action_restaurantDetail_to_foodDetail",
                 "CartBottomSheet",
                 "layoutStickyCart");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
+                "new ToppingBottomSheet",
+                "toppingSheet.show");
         assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
                 "Xoa va them mon moi",
                 "cart.clear()");
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
-                "ToppingBottomSheet",
+                "action_menu_to_foodDetail",
                 "CartBottomSheet",
                 "layoutStickyCart");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
+                "new ToppingBottomSheet",
+                "toppingSheet.show");
         assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
                 "Xoa va them mon moi",
                 "cart.clear()");
@@ -139,9 +145,8 @@ public class BugRegressionTest {
         assertTrue(menuLayout.contains("RecyclerView"));
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
                 "MenuAdapter",
-                "action_menu_to_restaurantDetail",
-                "ToppingBottomSheet",
-                "addItemToCartWithRestaurantGuard");
+                "action_menu_to_foodDetail",
+                "openFoodDetail");
     }
 
     @Test

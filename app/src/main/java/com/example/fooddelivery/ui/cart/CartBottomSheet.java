@@ -1,11 +1,13 @@
 package com.example.fooddelivery.ui.cart;
 
 import android.content.Intent;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,8 @@ import com.example.fooddelivery.data.model.CartSummaryV3Response;
 import com.example.fooddelivery.data.repository.OrderRepository;
 import com.example.fooddelivery.ui.cart.adapters.CartBottomSheetAdapter;
 import com.example.fooddelivery.utils.MoneyFormatter;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
@@ -33,11 +37,14 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
 
     private CartBottomSheetAdapter adapter;
     private TextView tvCartCount;
+    private TextView tvClearAll;
+    private Button btnViewOrder;
     private long restaurantId;
     private long cartId = -1L;
     private CartSummaryV3Response rpcSummary;
     private OrderRepository orderRepository;
     private OnCartChangedListener onCartChangedListener;
+    private boolean isMutating = false;
 
     public interface OnCartChangedListener {
         void onCartChanged();
@@ -59,12 +66,32 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (!(dialog instanceof BottomSheetDialog)) return;
+
+        BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialog;
+        FrameLayout bottomSheet = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+        if (bottomSheet == null) return;
+
+        ViewGroup.LayoutParams params = bottomSheet.getLayoutParams();
+        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        bottomSheet.setLayoutParams(params);
+
+        BottomSheetBehavior<FrameLayout> behavior = BottomSheetBehavior.from(bottomSheet);
+        behavior.setSkipCollapsed(true);
+        behavior.setPeekHeight(getResources().getDisplayMetrics().heightPixels);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         RecyclerView rv = view.findViewById(R.id.rvCartItems);
-        Button btnViewOrder = view.findViewById(R.id.btnViewOrder);
-        TextView tvClearAll = view.findViewById(R.id.tvClearAll);
+        btnViewOrder = view.findViewById(R.id.btnViewOrder);
+        tvClearAll = view.findViewById(R.id.tvClearAll);
         TextView tvClose = view.findViewById(R.id.tvClose);
         tvCartCount = view.findViewById(R.id.tvCartCount);
         orderRepository = new OrderRepository(requireContext());
@@ -82,7 +109,10 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
                 new CartBottomSheetAdapter.Listener() {
                     @Override
                     public void onIncrease(LocalCart.CartEntry entry) {
-                        if (isRpcCart()) return;
+                        if (isRpcCart()) {
+                            updateRpcCartItemQuantity(entry, entry.quantity + 1);
+                            return;
+                        }
                         LocalCart.getInstance().increase(restaurantId, entry.item.getId());
                         notifyCartChanged();
                         refreshCart();
@@ -90,7 +120,14 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
 
                     @Override
                     public void onDecrease(LocalCart.CartEntry entry) {
-                        if (isRpcCart()) return;
+                        if (isRpcCart()) {
+                            if (entry.quantity > 1) {
+                                updateRpcCartItemQuantity(entry, entry.quantity - 1);
+                            } else {
+                                removeRpcCartItem(entry);
+                            }
+                            return;
+                        }
                         LocalCart.getInstance().decrease(restaurantId, entry.item.getId());
                         notifyCartChanged();
                         if (LocalCart.getInstance().isEmpty(restaurantId)) {
@@ -102,9 +139,14 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
                 });
         rv.setAdapter(adapter);
 
-        tvClearAll.setVisibility(isRpcCart() ? View.GONE : View.VISIBLE);
+        tvClearAll.setVisibility(isRpcCart() || !LocalCart.getInstance().isEmpty(restaurantId)
+                ? View.VISIBLE
+                : View.GONE);
         tvClearAll.setOnClickListener(v -> {
-            if (isRpcCart()) return;
+            if (isRpcCart()) {
+                clearRpcCart();
+                return;
+            }
             LocalCart.getInstance().clearRestaurant(restaurantId);
             notifyCartChanged();
             dismiss();
@@ -152,7 +194,7 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
 
         Button btnViewOrder = requireView().findViewById(R.id.btnViewOrder);
         boolean canViewOrder = count > 0;
-        btnViewOrder.setEnabled(canViewOrder);
+        btnViewOrder.setEnabled(count > 0);
         btnViewOrder.setAlpha(canViewOrder ? 1f : 0.55f);
         btnViewOrder.setText("Xem don hang - " + MoneyFormatter.format(cart.getTotalPrice(restaurantId)));
     }
@@ -187,9 +229,104 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
 
         Button btnViewOrder = requireView().findViewById(R.id.btnViewOrder);
         boolean canViewOrder = count > 0;
-        btnViewOrder.setEnabled(canViewOrder);
+        btnViewOrder.setEnabled(count > 0);
         btnViewOrder.setAlpha(canViewOrder ? 1f : 0.55f);
         btnViewOrder.setText("Xem don hang - " + MoneyFormatter.format(RpcCartUiState.totalAmount(rpcSummary)));
+    }
+
+    private void updateRpcCartItemQuantity(LocalCart.CartEntry entry, int quantity) {
+        if (isMutating || entry == null || entry.cartItemId <= 0 || quantity <= 0) return;
+        isMutating = true;
+        setCartActionsEnabled(false);
+        orderRepository.updateCartItemQuantityV3(entry.cartItemId, quantity).enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(@NonNull Call<Long> call, @NonNull Response<Long> response) {
+                if (!isAdded()) return;
+                isMutating = false;
+                setCartActionsEnabled(true);
+                if (response.isSuccessful()) {
+                    notifyCartChanged();
+                    loadCartSummaryV3();
+                } else {
+                    refreshRpcCart();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Long> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                isMutating = false;
+                setCartActionsEnabled(true);
+                refreshRpcCart();
+            }
+        });
+    }
+
+    private void removeRpcCartItem(LocalCart.CartEntry entry) {
+        if (isMutating || entry == null || entry.cartItemId <= 0) return;
+        isMutating = true;
+        setCartActionsEnabled(false);
+        orderRepository.removeCartItemV3(entry.cartItemId).enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(@NonNull Call<Long> call, @NonNull Response<Long> response) {
+                if (!isAdded()) return;
+                isMutating = false;
+                setCartActionsEnabled(true);
+                if (response.isSuccessful()) {
+                    notifyCartChanged();
+                    loadCartSummaryV3();
+                } else {
+                    refreshRpcCart();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Long> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                isMutating = false;
+                setCartActionsEnabled(true);
+                refreshRpcCart();
+            }
+        });
+    }
+
+    private void clearRpcCart() {
+        if (isMutating || cartId <= 0) return;
+        isMutating = true;
+        setCartActionsEnabled(false);
+        orderRepository.clearCartV3(cartId).enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(@NonNull Call<Long> call, @NonNull Response<Long> response) {
+                if (!isAdded()) return;
+                isMutating = false;
+                setCartActionsEnabled(true);
+                if (response.isSuccessful()) {
+                    notifyCartChanged();
+                    dismiss();
+                } else {
+                    refreshRpcCart();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Long> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                isMutating = false;
+                setCartActionsEnabled(true);
+                refreshRpcCart();
+            }
+        });
+    }
+
+    private void setCartActionsEnabled(boolean enabled) {
+        if (btnViewOrder != null) {
+            btnViewOrder.setEnabled(enabled && RpcCartUiState.itemCount(rpcSummary) > 0);
+            btnViewOrder.setAlpha(enabled ? 1f : 0.55f);
+        }
+        if (tvClearAll != null) {
+            tvClearAll.setEnabled(enabled);
+            tvClearAll.setAlpha(enabled ? 1f : 0.45f);
+        }
     }
 
     private boolean isRpcCart() {

@@ -66,7 +66,7 @@ public final class RpcCartUiState {
                     item.getBasePrice(),
                     item.getImageUrl()
             );
-            entries.add(new LocalCart.CartEntry(foodItem, item.getQuantity()));
+            entries.add(new LocalCart.CartEntry(foodItem, item.getQuantity(), item.getCartItemId()));
         }
         return entries;
     }

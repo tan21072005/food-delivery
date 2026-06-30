@@ -26,7 +26,7 @@ begin
     create type public.option_selection_type as enum ('single', 'multiple');
   end if;
   if not exists (select 1 from pg_type where typname = 'cart_status') then
-    create type public.cart_status as enum ('active', 'checked_out', 'abandoned');
+    create type public.cart_status as enum ('draft', 'checked_out', 'abandoned');
   end if;
   if not exists (select 1 from pg_type where typname = 'app_order_status') then
     create type public.app_order_status as enum (
@@ -193,14 +193,14 @@ create table if not exists public.carts (
   id bigserial primary key,
   customer_id bigint not null references public.users(id) on delete cascade,
   restaurant_id bigint not null references public.restaurants(id) on delete cascade,
-  status public.cart_status not null default 'active',
+  status public.cart_status not null default 'draft',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
-create unique index if not exists carts_one_active_per_restaurant_idx
+create unique index if not exists carts_one_draft_per_restaurant_idx
   on public.carts (customer_id, restaurant_id)
-  where status = 'active';
+  where status = 'draft';
 
 create table if not exists public.cart_items (
   id bigserial primary key,
@@ -1012,8 +1012,8 @@ begin
   end if;
 
   insert into public.carts (customer_id, restaurant_id, status)
-  values (v_customer_id, v_restaurant_id, 'active')
-  on conflict (customer_id, restaurant_id) where status = 'active'
+  values (v_customer_id, v_restaurant_id, 'draft')
+  on conflict (customer_id, restaurant_id) where status = 'draft'
   do update set updated_at = now()
   returning id into v_cart_id;
 
@@ -1152,7 +1152,7 @@ begin
     ) pi
   ) preview on true
   where c.customer_id = v_customer_id
-    and c.status = 'active'
+    and c.status = 'draft'
     and totals.line_count > 0
     and r.deleted_at is null;
 
@@ -1180,7 +1180,7 @@ begin
 
   select c.customer_id into v_cart_owner_id
   from public.carts c
-  where c.id = p_cart_id and c.status = 'active';
+  where c.id = p_cart_id and c.status = 'draft';
 
   if v_customer_id is null or v_cart_owner_id is distinct from v_customer_id then
     raise exception 'Cart not found';
@@ -1240,6 +1240,149 @@ $$;
 revoke all on function public.get_cart_summary_v3(bigint) from public;
 grant execute on function public.get_cart_summary_v3(bigint) to authenticated;
 
+create or replace function public.update_cart_item_quantity_v3(
+  p_cart_item_id bigint,
+  p_quantity int
+)
+returns bigint
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_customer_id bigint;
+  v_cart_id bigint;
+begin
+  if p_quantity is null or p_quantity <= 0 then
+    raise exception 'Quantity must be greater than 0';
+  end if;
+
+  select public.current_app_user_id() into v_customer_id;
+  if v_customer_id is null then
+    raise exception 'Authenticated user profile not found';
+  end if;
+
+  select c.id
+  into v_cart_id
+  from public.cart_items ci
+  join public.carts c on c.id = ci.cart_id
+  where ci.id = p_cart_item_id
+    and c.customer_id = v_customer_id
+    and c.status = 'draft';
+
+  if v_cart_id is null then
+    raise exception 'Draft cart item not found';
+  end if;
+
+  update public.cart_items
+  set quantity = p_quantity,
+      updated_at = now()
+  where id = p_cart_item_id
+    and cart_id = v_cart_id;
+
+  update public.carts
+  set updated_at = now()
+  where id = v_cart_id
+    and customer_id = v_customer_id
+    and status = 'draft';
+
+  return v_cart_id;
+end;
+$$;
+
+revoke all on function public.update_cart_item_quantity_v3(bigint, int) from public;
+grant execute on function public.update_cart_item_quantity_v3(bigint, int) to authenticated;
+
+create or replace function public.remove_cart_item_v3(
+  p_cart_item_id bigint
+)
+returns bigint
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_customer_id bigint;
+  v_cart_id bigint;
+begin
+  select public.current_app_user_id() into v_customer_id;
+  if v_customer_id is null then
+    raise exception 'Authenticated user profile not found';
+  end if;
+
+  select c.id
+  into v_cart_id
+  from public.cart_items ci
+  join public.carts c on c.id = ci.cart_id
+  where ci.id = p_cart_item_id
+    and c.customer_id = v_customer_id
+    and c.status = 'draft';
+
+  if v_cart_id is null then
+    raise exception 'Draft cart item not found';
+  end if;
+
+  delete from public.cart_items
+  where id = p_cart_item_id
+    and cart_id = v_cart_id;
+
+  update public.carts
+  set updated_at = now()
+  where id = v_cart_id
+    and customer_id = v_customer_id
+    and status = 'draft';
+
+  return v_cart_id;
+end;
+$$;
+
+revoke all on function public.remove_cart_item_v3(bigint) from public;
+grant execute on function public.remove_cart_item_v3(bigint) to authenticated;
+
+create or replace function public.clear_cart_v3(
+  p_cart_id bigint
+)
+returns bigint
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_customer_id bigint;
+  v_cart_id bigint;
+begin
+  select public.current_app_user_id() into v_customer_id;
+  if v_customer_id is null then
+    raise exception 'Authenticated user profile not found';
+  end if;
+
+  select c.id
+  into v_cart_id
+  from public.carts c
+  where c.id = p_cart_id
+    and c.customer_id = v_customer_id
+    and c.status = 'draft';
+
+  if v_cart_id is null then
+    raise exception 'Draft cart not found';
+  end if;
+
+  delete from public.cart_items
+  where cart_id = v_cart_id;
+
+  update public.carts
+  set updated_at = now()
+  where id = v_cart_id
+    and customer_id = v_customer_id
+    and status = 'draft';
+
+  return v_cart_id;
+end;
+$$;
+
+revoke all on function public.clear_cart_v3(bigint) from public;
+grant execute on function public.clear_cart_v3(bigint) to authenticated;
+
 create or replace function public.checkout_cart_v3(
   p_cart_id bigint,
   p_delivery_address_id bigint,
@@ -1270,10 +1413,10 @@ begin
   from public.carts
   where id = p_cart_id
     and customer_id = v_customer_id
-    and status = 'active';
+    and status = 'draft';
 
   if v_cart.id is null then
-    raise exception 'Active cart not found';
+    raise exception 'Draft cart not found';
   end if;
 
   select *
@@ -1403,6 +1546,269 @@ $$;
 
 revoke all on function public.checkout_cart_v3(bigint, bigint, public.app_payment_method, text) from public;
 grant execute on function public.checkout_cart_v3(bigint, bigint, public.app_payment_method, text) to authenticated;
+
+create or replace function public.get_my_orders_v3(
+  p_status text default null
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_customer_id bigint;
+  v_result jsonb;
+begin
+  select public.current_app_user_id() into v_customer_id;
+  if v_customer_id is null then
+    raise exception 'Authenticated user profile not found';
+  end if;
+
+  select coalesce(
+    jsonb_agg(
+      jsonb_build_object(
+        'order_id', o.id,
+        'cart_id', o.cart_id,
+        'restaurant_id', r.id,
+        'restaurant_name', r.name,
+        'restaurant_logo_url', r.logo_url,
+        'status', o.status::text,
+        'subtotal', o.subtotal,
+        'delivery_fee', o.delivery_fee,
+        'discount_amount', o.discount_amount,
+        'total_amount', o.total_amount,
+        'payment_method', o.payment_method::text,
+        'payment_status', o.payment_status::text,
+        'created_at', o.created_at,
+        'updated_at', o.updated_at,
+        'item_count', coalesce(totals.item_count, 0),
+        'preview_items', coalesce(preview.items, '[]'::jsonb)
+      )
+      order by o.created_at desc
+    ),
+    '[]'::jsonb
+  )
+  into v_result
+  from public.orders o
+  join public.restaurants r on r.id = o.restaurant_id
+  left join lateral (
+    select coalesce(sum(ol.quantity), 0)::int as item_count
+    from public.order_lines ol
+    where ol.order_id = o.id
+  ) totals on true
+  left join lateral (
+    select jsonb_agg(
+      jsonb_build_object(
+        'item_name', pi.item_name_snapshot,
+        'quantity', pi.quantity,
+        'image_url', pi.item_image_snapshot
+      )
+      order by pi.id
+    ) as items
+    from (
+      select ol.id, ol.item_name_snapshot, ol.quantity, ol.item_image_snapshot
+      from public.order_lines ol
+      where ol.order_id = o.id
+      order by ol.id
+      limit 3
+    ) pi
+  ) preview on true
+  where o.customer_id = v_customer_id
+    and (p_status is null or o.status::text = p_status);
+
+  return v_result;
+end;
+$$;
+
+revoke all on function public.get_my_orders_v3(text) from public;
+grant execute on function public.get_my_orders_v3(text) to authenticated;
+
+create or replace function public.get_order_detail_v3(
+  p_order_id bigint
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_customer_id bigint;
+  v_order_id bigint;
+  v_result jsonb;
+begin
+  select public.current_app_user_id() into v_customer_id;
+  if v_customer_id is null then
+    raise exception 'Authenticated user profile not found';
+  end if;
+
+  select o.id
+  into v_order_id
+  from public.orders o
+  where o.id = p_order_id
+    and o.customer_id = v_customer_id;
+
+  if v_order_id is null then
+    raise exception 'Order not found';
+  end if;
+
+  select jsonb_build_object(
+    'order_id', o.id,
+    'cart_id', o.cart_id,
+    'status', o.status::text,
+    'subtotal', o.subtotal,
+    'delivery_fee', o.delivery_fee,
+    'discount_amount', o.discount_amount,
+    'total_amount', o.total_amount,
+    'payment_method', o.payment_method::text,
+    'payment_status', o.payment_status::text,
+    'note', o.note,
+    'cancelled_reason', o.cancelled_reason,
+    'cancelled_at', o.cancelled_at,
+    'created_at', o.created_at,
+    'updated_at', o.updated_at,
+    'restaurant', jsonb_build_object(
+      'restaurant_id', r.id,
+      'restaurant_name', r.name,
+      'restaurant_logo_url', r.logo_url,
+      'restaurant_cover_url', r.cover_url,
+      'address', r.address,
+      'phone_number', r.phone_number
+    ),
+    'delivery_address', coalesce(o.delivery_address_snapshot_json, '{}'::jsonb),
+    'payment', coalesce(payment.payment_json, '{}'::jsonb),
+    'status_history', coalesce(history.history_json, '[]'::jsonb),
+    'items', coalesce(items.items_json, '[]'::jsonb)
+  )
+  into v_result
+  from public.orders o
+  join public.restaurants r on r.id = o.restaurant_id
+  left join lateral (
+    select jsonb_build_object(
+      'payment_id', p.id,
+      'provider', p.provider::text,
+      'amount', p.amount,
+      'status', p.status::text,
+      'transaction_id', p.transaction_id,
+      'paid_at', p.paid_at,
+      'created_at', p.created_at,
+      'updated_at', p.updated_at
+    ) as payment_json
+    from public.payments p
+    where p.order_id = o.id
+    limit 1
+  ) payment on true
+  left join lateral (
+    select jsonb_agg(
+      jsonb_build_object(
+        'id', osh.id,
+        'from_status', osh.from_status::text,
+        'to_status', osh.to_status::text,
+        'changed_by_user_id', osh.changed_by_user_id,
+        'note', osh.note,
+        'created_at', osh.created_at
+      )
+      order by osh.created_at, osh.id
+    ) as history_json
+    from public.order_status_history osh
+    where osh.order_id = o.id
+  ) history on true
+  left join lateral (
+    select jsonb_agg(
+      jsonb_build_object(
+        'order_line_id', ol.id,
+        'menu_item_id', ol.menu_item_id,
+        'item_name', ol.item_name_snapshot,
+        'image_url', ol.item_image_snapshot,
+        'quantity', ol.quantity,
+        'unit_price', ol.unit_price_snapshot,
+        'subtotal', ol.subtotal,
+        'options', coalesce(ol.options_snapshot_json, '[]'::jsonb)
+      )
+      order by ol.id
+    ) as items_json
+    from public.order_lines ol
+    where ol.order_id = o.id
+  ) items on true
+  where o.id = v_order_id;
+
+  return v_result;
+end;
+$$;
+
+revoke all on function public.get_order_detail_v3(bigint) from public;
+grant execute on function public.get_order_detail_v3(bigint) to authenticated;
+
+create or replace function public.get_menu_item_detail_v3(
+  p_menu_item_id bigint
+)
+returns jsonb
+language sql
+stable
+security invoker
+as $$
+  select jsonb_build_object(
+    'id', mi.id,
+    'restaurant_id', mi.restaurant_id,
+    'category_id', mi.dish_category_id,
+    'item_name', mi.name,
+    'description', mi.description,
+    'image_url', mi.image_url,
+    'price', mi.base_price,
+    'rating', mi.avg_rating,
+    'status', mi.status::text,
+    'sold_count', mi.sold_count,
+    'restaurant', jsonb_build_object(
+      'restaurant_id', r.id,
+      'restaurant_name', r.name,
+      'restaurant_logo_url', r.logo_url,
+      'restaurant_cover_url', r.cover_url,
+      'rating', r.avg_rating,
+      'is_open', r.is_open
+    ),
+    'option_groups', coalesce(groups.option_groups_json, '[]'::jsonb)
+  )
+  from public.menu_items mi
+  join public.restaurants r on r.id = mi.restaurant_id
+  left join lateral (
+    select jsonb_agg(
+      jsonb_build_object(
+        'option_group_id', mog.id,
+        'name', mog.name,
+        'selection_type', mog.selection_type::text,
+        'min_select', mog.min_select,
+        'max_select', mog.max_select,
+        'is_required', mog.is_required,
+        'choices', coalesce(choices.choices_json, '[]'::jsonb)
+      )
+      order by mog.sort_order, mog.id
+    ) as option_groups_json
+    from public.menu_option_groups mog
+    left join lateral (
+      select jsonb_agg(
+        jsonb_build_object(
+          'option_choice_id', moc.id,
+          'name', moc.name,
+          'price_delta', moc.price_delta,
+          'is_available', moc.is_available
+        )
+        order by moc.sort_order, moc.id
+      ) as choices_json
+      from public.menu_option_choices moc
+      where moc.option_group_id = mog.id
+        and moc.is_available = true
+    ) choices on true
+    where mog.menu_item_id = mi.id
+  ) groups on true
+  where mi.id = p_menu_item_id
+    and mi.status = 'active'
+    and mi.deleted_at is null
+    and r.status = 'active'
+    and r.is_open = true
+    and r.deleted_at is null;
+$$;
+
+revoke all on function public.get_menu_item_detail_v3(bigint) from public;
+grant execute on function public.get_menu_item_detail_v3(bigint) to anon, authenticated;
 
 -- ============================================================
 -- 13. STORAGE: AVATARS

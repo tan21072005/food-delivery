@@ -219,6 +219,7 @@
                     android:layout_marginBottom="12dp"/>
                     
                 <EditText
+                    android:id="@+id/edNote"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Cho quán biết thêm về yêu cầu của bạn."

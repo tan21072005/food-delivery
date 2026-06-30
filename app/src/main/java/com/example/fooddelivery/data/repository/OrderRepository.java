@@ -9,7 +9,12 @@ import com.example.fooddelivery.data.model.CartSummaryV3Request;
 import com.example.fooddelivery.data.model.CartSummaryV3Response;
 import com.example.fooddelivery.data.model.CheckoutCartV3Request;
 import com.example.fooddelivery.data.model.CheckoutRequest;
+import com.example.fooddelivery.data.model.ClearCartV3Request;
 import com.example.fooddelivery.data.model.DraftCartV3Response;
+import com.example.fooddelivery.data.model.GetMyOrdersV3Request;
+import com.example.fooddelivery.data.model.MyOrderV3Response;
+import com.example.fooddelivery.data.model.RemoveCartItemV3Request;
+import com.example.fooddelivery.data.model.UpdateCartItemQuantityV3Request;
 import com.example.fooddelivery.data.remote.SupabaseClient;
 import com.example.fooddelivery.data.remote.apis.ApiService;
 
@@ -40,6 +45,22 @@ public class OrderRepository {
 
     public Call<Long> checkoutCartV3(long cartId, long deliveryAddressId, String paymentMethod, String note) {
         return apiService.checkoutCartV3(new CheckoutCartV3Request(cartId, deliveryAddressId, paymentMethod, note));
+    }
+
+    public Call<Long> updateCartItemQuantityV3(long cartItemId, int quantity) {
+        return apiService.updateCartItemQuantityV3(new UpdateCartItemQuantityV3Request(cartItemId, quantity));
+    }
+
+    public Call<Long> removeCartItemV3(long cartItemId) {
+        return apiService.removeCartItemV3(new RemoveCartItemV3Request(cartItemId));
+    }
+
+    public Call<Long> clearCartV3(long cartId) {
+        return apiService.clearCartV3(new ClearCartV3Request(cartId));
+    }
+
+    public Call<List<MyOrderV3Response>> getMyOrdersV3(String status) {
+        return apiService.getMyOrdersV3(new GetMyOrdersV3Request(status));
     }
 
     public Call<CartSummaryResponse> getCartSummary() {

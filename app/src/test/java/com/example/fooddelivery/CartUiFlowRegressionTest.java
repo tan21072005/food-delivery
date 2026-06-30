@@ -73,6 +73,89 @@ public class CartUiFlowRegressionTest {
                 "DecimalFormat(\"#,###\")");
     }
 
+    @Test
+    public void rpcCartSheetMutatesDraftCartItemsThroughServerRpc() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/data/remote/apis/ApiService.java",
+                "update_cart_item_quantity_v3",
+                "remove_cart_item_v3",
+                "clear_cart_v3");
+        assertSourceContains("src/main/java/com/example/fooddelivery/data/repository/OrderRepository.java",
+                "updateCartItemQuantityV3(long cartItemId, int quantity)",
+                "removeCartItemV3(long cartItemId)",
+                "clearCartV3(long cartId)");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/cart/CartBottomSheet.java",
+                "entry.cartItemId",
+                "updateRpcCartItemQuantity(entry, entry.quantity + 1)",
+                "updateRpcCartItemQuantity(entry, entry.quantity - 1)",
+                "removeCartItemV3(entry.cartItemId)",
+                "clearCartV3(cartId)",
+                "loadCartSummaryV3()");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/cart/CartBottomSheet.java",
+                "tvClearAll.setVisibility(isRpcCart() ? View.GONE : View.VISIBLE)");
+        assertSourceContains("src/main/java/com/example/fooddelivery/data/local/LocalCart.java",
+                "public final long cartItemId",
+                "public CartEntry(FoodItem item, int quantity, long cartItemId)");
+        assertSourceContains("docs/supabase_v3_food_delivery_schema.sql",
+                "create or replace function public.update_cart_item_quantity_v3",
+                "create or replace function public.remove_cart_item_v3",
+                "create or replace function public.clear_cart_v3",
+                "auth.uid()",
+                "update public.carts",
+                "updated_at = now()");
+    }
+
+    @Test
+    public void listPlusAndImageOpenFoodDetailInsteadOfToppingSheet() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
+                "openFoodDetail(view, item)",
+                "onAddToCartClick(FoodItem item)");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
+                "new ToppingBottomSheet",
+                "toppingSheet.show");
+
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
+                "openFoodDetail(view, item)",
+                "onAddToCartClick(FoodItem item)");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/RestaurantDetailFragment.java",
+                "new ToppingBottomSheet",
+                "toppingSheet.show");
+
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/adapters/MenuAdapter.java",
+                "holder.imgFood.setOnClickListener",
+                "listener.onFoodClick(item)");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/adapters/StorefrontAdapter.java",
+                "holder.imgFood.setOnClickListener",
+                "listener.onFoodClick(item)");
+    }
+
+    @Test
+    public void foodDetailAddsRpcCartWithQuantityNoteAndEmptyOptionIds() throws Exception {
+        assertSourceContains("src/main/res/layout/food_fragment_detail.xml",
+                "android:id=\"@+id/edNote\"");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
+                "String note = binding.edNote.getText().toString()",
+                "orderRepository.addToCartV3(item.getId(), quantity, safeNote, Collections.emptyList())",
+                "setFragmentResult(\"cart_changed\"");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
+                "addToCartV3(item.getId(), quantity, null");
+    }
+
+    @Test
+    public void cartSheetOpensExpandedWithFixedFooterAndLoadingGuard() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/cart/CartBottomSheet.java",
+                "BottomSheetBehavior.STATE_EXPANDED",
+                "setSkipCollapsed(true)",
+                "setPeekHeight",
+                "isMutating",
+                "setCartActionsEnabled(false)",
+                "setCartActionsEnabled(true)");
+        assertSourceContains("src/main/res/layout/cart_bottom_sheet.xml",
+                "android:layout_height=\"match_parent\"",
+                "android:id=\"@+id/cartSheetFooter\"",
+                "android:layout_height=\"0dp\"",
+                "android:layout_weight=\"1\"");
+    }
+
     private void assertSourceContains(String path, String... snippets) throws Exception {
         String source = readFile(projectPath(path));
         for (String snippet : snippets) {
@@ -91,6 +174,10 @@ public class CartUiFlowRegressionTest {
         Path moduleRelative = Paths.get(path);
         if (Files.exists(moduleRelative)) {
             return moduleRelative;
+        }
+        Path repoRelative = Paths.get("..").resolve(path).normalize();
+        if (Files.exists(repoRelative)) {
+            return repoRelative;
         }
         return Paths.get("app").resolve(path);
     }

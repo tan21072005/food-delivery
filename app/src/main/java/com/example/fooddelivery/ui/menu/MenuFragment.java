@@ -24,12 +24,10 @@ import com.example.fooddelivery.data.model.FoodItem;
 import com.example.fooddelivery.data.repository.OrderRepository;
 import com.example.fooddelivery.ui.cart.CartBottomSheet;
 import com.example.fooddelivery.ui.cart.RpcCartUiState;
-import com.example.fooddelivery.ui.home.ToppingBottomSheet;
 import com.example.fooddelivery.ui.menu.adapters.MenuAdapter;
 import com.example.fooddelivery.utils.MoneyFormatter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -65,11 +63,18 @@ public class MenuFragment extends Fragment {
         setupHeader(view);
         setupList(view);
         observeViewModel();
+        getParentFragmentManager().setFragmentResultListener("cart_changed", getViewLifecycleOwner(),
+                (requestKey, result) -> refreshDraftCartState(
+                        view,
+                        result.getLong("restaurant_id", -1L),
+                        result.getLong("cart_id", -1L),
+                        false
+                ));
 
         String categorySlug = getArguments() != null ? getArguments().getString("category_slug", "") : "";
         viewModel.loadFoods(categorySlug);
 
-        refreshDraftCartState(view, -1L, -1L, null, false);
+        refreshDraftCartState(view, -1L, -1L, false);
     }
 
     private void setupHeader(View view) {
@@ -88,23 +93,24 @@ public class MenuFragment extends Fragment {
         adapter.setOnItemClickListener(new MenuAdapter.OnItemClickListener() {
             @Override
             public void onFoodClick(FoodItem item) {
-                Bundle args = new Bundle();
-                args.putLong("food_id", item.getId());
-                Navigation.findNavController(requireView())
-                        .navigate(R.id.action_menu_to_foodDetail, args);
+                openFoodDetail(view, item);
             }
 
             @Override
             public void onAddToCartClick(FoodItem item) {
-                ToppingBottomSheet toppingSheet =
-                        new ToppingBottomSheet(item, (selectedItem, note, sheet) ->
-                                addItemToCartWithRestaurantGuard(selectedItem, 1, note, getView(), sheet));
-                toppingSheet.show(getParentFragmentManager(), ToppingBottomSheet.TAG);
+                openFoodDetail(view, item);
             }
         });
 
         rvMenuItems.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvMenuItems.setAdapter(adapter);
+    }
+
+    private void openFoodDetail(View view, FoodItem item) {
+        Bundle args = new Bundle();
+        args.putLong("food_id", item.getId());
+        Navigation.findNavController(view)
+                .navigate(R.id.action_menu_to_foodDetail, args);
     }
 
     private void observeViewModel() {
@@ -123,54 +129,9 @@ public class MenuFragment extends Fragment {
         });
     }
 
-    private void addItemToCartWithRestaurantGuard(FoodItem item,
-                                                  int quantity,
-                                                  String note,
-                                                  View view,
-                                                  ToppingBottomSheet sheet) {
-        addItemToCart(item, quantity, note, view, sheet);
-    }
-
-    private void addItemToCart(FoodItem item,
-                               int quantity,
-                               String note,
-                               View view,
-                               ToppingBottomSheet sheet) {
-        String safeNote = note == null || note.trim().isEmpty() ? null : note.trim();
-        long preferredRestaurantId = item.getRestaurantId();
-        orderRepository.addToCartV3(item.getId(), quantity, safeNote, Collections.emptyList())
-                .enqueue(new Callback<Long>() {
-                    @Override
-                    public void onResponse(@NonNull Call<Long> call, @NonNull Response<Long> response) {
-                        if (!isAdded()) return;
-                        if (response.isSuccessful()) {
-                            Long returnedCartId = response.body();
-                            refreshDraftCartState(
-                                    view,
-                                    preferredRestaurantId,
-                                    returnedCartId == null ? -1L : returnedCartId,
-                                    sheet,
-                                    true
-                            );
-                            return;
-                        }
-                        Toast.makeText(requireContext(),
-                                "Khong the them mon vao gio", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<Long> call, @NonNull Throwable t) {
-                        if (!isAdded()) return;
-                        Toast.makeText(requireContext(),
-                                "Khong the them mon vao gio: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
     private void refreshDraftCartState(View view,
                                        long preferredRestaurantId,
                                        long fallbackCartId,
-                                       ToppingBottomSheet sheetToDismiss,
                                        boolean showAddedToast) {
         orderRepository.getDraftCartsV3().enqueue(new Callback<List<DraftCartV3Response>>() {
             @Override
@@ -188,12 +149,12 @@ public class MenuFragment extends Fragment {
                         activeCartItemCount = RpcCartUiState.itemCount(draft);
                         activeCartTotal = RpcCartUiState.totalAmount(draft);
                         updateStickyCart(view);
-                        finishAddSuccess(sheetToDismiss, showAddedToast);
+                        finishAddSuccess(showAddedToast);
                         return;
                     }
                 }
                 if (fallbackCartId > 0) {
-                    refreshStickyFromSummary(view, preferredRestaurantId, fallbackCartId, sheetToDismiss, showAddedToast);
+                    refreshStickyFromSummary(view, preferredRestaurantId, fallbackCartId, showAddedToast);
                     return;
                 }
                 updateStickyCart(view);
@@ -203,7 +164,7 @@ public class MenuFragment extends Fragment {
             public void onFailure(@NonNull Call<List<DraftCartV3Response>> call, @NonNull Throwable t) {
                 if (!isAdded()) return;
                 if (fallbackCartId > 0) {
-                    refreshStickyFromSummary(view, preferredRestaurantId, fallbackCartId, sheetToDismiss, showAddedToast);
+                    refreshStickyFromSummary(view, preferredRestaurantId, fallbackCartId, showAddedToast);
                 } else if (showAddedToast) {
                     Toast.makeText(requireContext(), "Da them mon, nhung chua tai duoc gio", Toast.LENGTH_SHORT).show();
                 }
@@ -214,7 +175,6 @@ public class MenuFragment extends Fragment {
     private void refreshStickyFromSummary(View view,
                                           long preferredRestaurantId,
                                           long cartId,
-                                          ToppingBottomSheet sheetToDismiss,
                                           boolean showAddedToast) {
         orderRepository.getCartSummaryV3(cartId).enqueue(new Callback<CartSummaryV3Response>() {
             @Override
@@ -228,7 +188,7 @@ public class MenuFragment extends Fragment {
                     activeCartTotal = RpcCartUiState.totalAmount(response.body());
                 }
                 updateStickyCart(view);
-                finishAddSuccess(sheetToDismiss, showAddedToast);
+                finishAddSuccess(showAddedToast);
             }
 
             @Override
@@ -237,15 +197,12 @@ public class MenuFragment extends Fragment {
                 activeCartId = cartId;
                 activeCartRestaurantId = preferredRestaurantId;
                 updateStickyCart(view);
-                finishAddSuccess(sheetToDismiss, showAddedToast);
+                finishAddSuccess(showAddedToast);
             }
         });
     }
 
-    private void finishAddSuccess(ToppingBottomSheet sheetToDismiss, boolean showAddedToast) {
-        if (sheetToDismiss != null) {
-            sheetToDismiss.dismiss();
-        }
+    private void finishAddSuccess(boolean showAddedToast) {
         if (showAddedToast) {
             Toast.makeText(requireContext(), "Da them mon vao gio", Toast.LENGTH_SHORT).show();
         }

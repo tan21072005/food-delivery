@@ -32,6 +32,7 @@ public class FoodDetailFragment extends Fragment {
     private OrderRepository orderRepository;
     private long foodId;
     private int quantity = 1;
+    private boolean isAdding = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -78,24 +79,34 @@ public class FoodDetailFragment extends Fragment {
 
         binding.btnAddToCart.setOnClickListener(v -> {
             FoodItem item = viewModel.getFoodItem().getValue();
-            if (item != null) {
-                addItemToCartWithRestaurantGuard(item, quantity);
+            if (item != null && !isAdding) {
+                addItemToCart(item, quantity);
             }
         });
     }
 
-    private void addItemToCartWithRestaurantGuard(FoodItem item, int quantity) {
-        addItemToCart(item, quantity);
-    }
-
     private void addItemToCart(FoodItem item, int quantity) {
-        orderRepository.addToCartV3(item.getId(), quantity, null, Collections.emptyList())
+        isAdding = true;
+        binding.btnAddToCart.setEnabled(false);
+        binding.btnAddToCart.setText("Dang them...");
+
+        String note = binding.edNote.getText().toString();
+        String safeNote = note == null || note.trim().isEmpty() ? null : note.trim();
+        orderRepository.addToCartV3(item.getId(), quantity, safeNote, Collections.emptyList())
                 .enqueue(new Callback<Long>() {
                     @Override
                     public void onResponse(@NonNull Call<Long> call, @NonNull Response<Long> response) {
                         if (!isAdded()) return;
+                        isAdding = false;
+                        binding.btnAddToCart.setEnabled(true);
+                        binding.btnAddToCart.setText("Them vao gio");
                         if (response.isSuccessful()) {
+                            Bundle result = new Bundle();
+                            result.putLong("cart_id", response.body() == null ? -1L : response.body());
+                            result.putLong("restaurant_id", item.getRestaurantId());
+                            getParentFragmentManager().setFragmentResult("cart_changed", result);
                             Toast.makeText(requireContext(), "Da them vao gio hang", Toast.LENGTH_SHORT).show();
+                            Navigation.findNavController(requireView()).navigateUp();
                             return;
                         }
                         Toast.makeText(requireContext(), "Khong the them mon vao gio", Toast.LENGTH_SHORT).show();
@@ -104,6 +115,9 @@ public class FoodDetailFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Call<Long> call, @NonNull Throwable t) {
                         if (!isAdded()) return;
+                        isAdding = false;
+                        binding.btnAddToCart.setEnabled(true);
+                        binding.btnAddToCart.setText("Them vao gio");
                         Toast.makeText(requireContext(),
                                 "Khong the them mon vao gio: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }

@@ -79,6 +79,9 @@ public class StorefrontAdapter extends RecyclerView.Adapter<StorefrontAdapter.VH
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onFoodClick(item);
         });
+        holder.imgFood.setOnClickListener(v -> {
+            if (listener != null) listener.onFoodClick(item);
+        });
 
         holder.btnAddToCart.setOnClickListener(v -> {
             if (listener != null) listener.onAddToCartClick(item);

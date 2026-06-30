@@ -5,7 +5,12 @@ import com.example.fooddelivery.data.model.FoodItem;
 import com.example.fooddelivery.data.model.AddToCartV3Request;
 import com.example.fooddelivery.data.model.CartSummaryV3Request;
 import com.example.fooddelivery.data.model.CheckoutCartV3Request;
+import com.example.fooddelivery.data.model.ClearCartV3Request;
 import com.example.fooddelivery.data.model.CartRequest;
+import com.example.fooddelivery.data.model.GetMyOrdersV3Request;
+import com.example.fooddelivery.data.model.MyOrderV3Response;
+import com.example.fooddelivery.data.model.RemoveCartItemV3Request;
+import com.example.fooddelivery.data.model.UpdateCartItemQuantityV3Request;
 import com.example.fooddelivery.data.model.User;
 
 import java.util.List;
@@ -150,6 +155,18 @@ public interface ApiService {
 
     @POST("rest/v1/rpc/checkout_cart_v3")
     Call<Long> checkoutCartV3(@Body CheckoutCartV3Request request);
+
+    @POST("rest/v1/rpc/update_cart_item_quantity_v3")
+    Call<Long> updateCartItemQuantityV3(@Body UpdateCartItemQuantityV3Request request);
+
+    @POST("rest/v1/rpc/remove_cart_item_v3")
+    Call<Long> removeCartItemV3(@Body RemoveCartItemV3Request request);
+
+    @POST("rest/v1/rpc/clear_cart_v3")
+    Call<Long> clearCartV3(@Body ClearCartV3Request request);
+
+    @POST("rest/v1/rpc/get_my_orders_v3")
+    Call<List<MyOrderV3Response>> getMyOrdersV3(@Body GetMyOrdersV3Request request);
 
     @POST("rest/v1/rpc/get_cart_summary_v3")
     Call<com.example.fooddelivery.data.model.CartSummaryResponse> getCartSummary();
