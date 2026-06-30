@@ -121,12 +121,8 @@ public class OrderDetailFragment extends Fragment {
 
     private void renderOrderDetail(JsonObject detail) {
         String status = stringValue(detail, "status", "Trang thai don hang");
-        String restaurantName = stringValue(detail, "restaurant_name", "Nha hang");
-        String deliveryAddress = firstString(detail,
-                "delivery_address",
-                "delivery_address_text",
-                "address",
-                "address_line");
+        String restaurantName = restaurantName(detail);
+        String deliveryAddress = deliveryAddress(detail);
         String createdAt = stringValue(detail, "created_at", "");
         long totalAmount = Math.round(numberValue(detail, "total_amount", "total", "grand_total"));
 
@@ -139,12 +135,48 @@ public class OrderDetailFragment extends Fragment {
         setText(tvOrderCode, "#" + orderId);
         setText(tvOrderTimeLong, createdAt);
 
+        OrderItemLines lines = orderItemLines(detail);
+        setText(tvFoodQuantityLabel, lines.quantities);
+        setText(tvFoodNameLabel, lines.names);
+        setText(tvFoodPriceLabel, lines.prices);
+    }
+
+    public static String restaurantName(JsonObject detail) {
+        String nestedName = objectString(detail, "restaurant", "name", "restaurant_name", "title");
+        if (!isBlank(nestedName)) {
+            return nestedName;
+        }
+
+        String topLevelName = firstString(detail, "restaurant_name", "restaurant");
+        return isBlank(topLevelName) ? "Nha hang" : topLevelName;
+    }
+
+    public static String deliveryAddress(JsonObject detail) {
+        JsonElement deliveryAddress = detail == null ? null : detail.get("delivery_address");
+        if (deliveryAddress != null && !deliveryAddress.isJsonNull()) {
+            if (deliveryAddress.isJsonObject()) {
+                String formatted = formatDeliveryAddress(deliveryAddress.getAsJsonObject());
+                if (!isBlank(formatted)) {
+                    return formatted;
+                }
+            } else {
+                String primitive = elementAsString(deliveryAddress);
+                if (!isBlank(primitive)) {
+                    return primitive;
+                }
+            }
+        }
+
+        return firstString(detail,
+                "delivery_address_text",
+                "address",
+                "address_line");
+    }
+
+    public static OrderItemLines orderItemLines(JsonObject detail) {
         JsonArray items = orderItems(detail);
         if (items == null || items.size() == 0) {
-            setText(tvFoodQuantityLabel, "0x");
-            setText(tvFoodNameLabel, "Chua co du lieu mon");
-            setText(tvFoodPriceLabel, MoneyFormatter.format(0));
-            return;
+            return new OrderItemLines("0x", "Chua co du lieu mon", MoneyFormatter.format(0));
         }
 
         StringBuilder quantities = new StringBuilder();
@@ -154,58 +186,112 @@ public class OrderDetailFragment extends Fragment {
             if (itemElement == null || !itemElement.isJsonObject()) continue;
             JsonObject item = itemElement.getAsJsonObject();
             int quantity = (int) Math.max(1, Math.round(numberValue(item, "quantity", "qty")));
-            String itemName = firstString(item, "item_name", "menu_item_name", "name");
+            String itemName = firstNonBlank(
+                    firstString(item, "item_name", "menu_item_name", "name"),
+                    objectString(item, "menu_item", "name", "item_name", "menu_item_name")
+            );
             long itemPrice = Math.round(numberValue(item, "line_total", "total_price", "base_price", "unit_price"));
             appendLine(quantities, quantity + "x");
             appendLine(names, itemName == null ? "Mon an" : itemName);
             appendLine(prices, MoneyFormatter.format(itemPrice));
         }
 
-        setText(tvFoodQuantityLabel, quantities.length() == 0 ? "0x" : quantities.toString());
-        setText(tvFoodNameLabel, names.length() == 0 ? "Chua co du lieu mon" : names.toString());
-        setText(tvFoodPriceLabel, prices.length() == 0 ? MoneyFormatter.format(0) : prices.toString());
+        return new OrderItemLines(
+                quantities.length() == 0 ? "0x" : quantities.toString(),
+                names.length() == 0 ? "Chua co du lieu mon" : names.toString(),
+                prices.length() == 0 ? MoneyFormatter.format(0) : prices.toString()
+        );
     }
 
-    private JsonArray orderItems(JsonObject detail) {
+    private static String formatDeliveryAddress(JsonObject address) {
+        StringBuilder builder = new StringBuilder();
+        appendPart(builder, firstString(address, "recipient_name", "receiver_name", "name"));
+        appendPart(builder, firstString(address, "phone", "phone_number", "recipient_phone"));
+        appendPart(builder, firstString(address, "address_line", "street", "address"));
+        appendPart(builder, firstString(address, "ward"));
+        appendPart(builder, firstString(address, "district"));
+        appendPart(builder, firstString(address, "city", "province"));
+        return builder.toString();
+    }
+
+    private static void appendPart(StringBuilder builder, String value) {
+        if (isBlank(value)) {
+            return;
+        }
+        if (builder.length() > 0) {
+            builder.append(", ");
+        }
+        builder.append(value.trim());
+    }
+
+    private static JsonArray orderItems(JsonObject detail) {
         JsonArray items = arrayValue(detail, "items");
         if (items == null) items = arrayValue(detail, "order_items");
         return items;
     }
 
-    private void appendLine(StringBuilder builder, String value) {
+    private static void appendLine(StringBuilder builder, String value) {
         if (builder.length() > 0) {
             builder.append('\n');
         }
         builder.append(value);
     }
 
-    private JsonArray arrayValue(JsonObject object, String key) {
-        JsonElement value = object.get(key);
+    private static JsonArray arrayValue(JsonObject object, String key) {
+        JsonElement value = object == null ? null : object.get(key);
         return value != null && value.isJsonArray() ? value.getAsJsonArray() : null;
     }
 
-    private String stringValue(JsonObject object, String key, String fallback) {
+    private static String stringValue(JsonObject object, String key, String fallback) {
         String value = firstString(object, key);
         return value == null || value.trim().isEmpty() ? fallback : value;
     }
 
-    private String firstString(JsonObject object, String... keys) {
+    private static String firstString(JsonObject object, String... keys) {
         for (String key : keys) {
-            JsonElement value = object.get(key);
-            if (value != null && !value.isJsonNull()) {
-                return value.getAsString();
+            JsonElement value = object == null ? null : object.get(key);
+            String text = elementAsString(value);
+            if (!isBlank(text)) {
+                return text;
             }
         }
         return null;
     }
 
-    private double numberValue(JsonObject object, String... keys) {
+    private static String objectString(JsonObject object, String objectKey, String... nestedKeys) {
+        JsonElement nested = object == null ? null : object.get(objectKey);
+        if (nested == null || !nested.isJsonObject()) {
+            return null;
+        }
+        return firstString(nested.getAsJsonObject(), nestedKeys);
+    }
+
+    private static String elementAsString(JsonElement value) {
+        if (value == null || value.isJsonNull() || value.isJsonObject() || value.isJsonArray()) {
+            return null;
+        }
+        try {
+            return value.getAsString();
+        } catch (UnsupportedOperationException | IllegalStateException ignored) {
+            return null;
+        }
+    }
+
+    private static String firstNonBlank(String first, String second) {
+        return isBlank(first) ? second : first;
+    }
+
+    private static boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
+    }
+
+    private static double numberValue(JsonObject object, String... keys) {
         for (String key : keys) {
-            JsonElement value = object.get(key);
+            JsonElement value = object == null ? null : object.get(key);
             if (value != null && !value.isJsonNull()) {
                 try {
                     return value.getAsDouble();
-                } catch (NumberFormatException ignored) {
+                } catch (NumberFormatException | UnsupportedOperationException | IllegalStateException ignored) {
                     return 0;
                 }
             }
@@ -234,6 +320,18 @@ public class OrderDetailFragment extends Fragment {
     private void setText(TextView textView, String text) {
         if (textView != null) {
             textView.setText(text);
+        }
+    }
+
+    public static class OrderItemLines {
+        public final String quantities;
+        public final String names;
+        public final String prices;
+
+        public OrderItemLines(String quantities, String names, String prices) {
+            this.quantities = quantities;
+            this.names = names;
+            this.prices = prices;
         }
     }
 }
