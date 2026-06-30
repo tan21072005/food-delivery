@@ -6,8 +6,11 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import com.example.fooddelivery.data.local.LocalCart;
+import com.example.fooddelivery.data.model.CartSummaryV3Response;
 import com.example.fooddelivery.data.model.DraftCartV3Response;
 import com.example.fooddelivery.ui.cart.RpcCartUiState;
+import com.google.gson.Gson;
 
 import org.junit.Test;
 
@@ -15,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class CartUiFlowRegressionTest {
 
@@ -202,15 +206,90 @@ public class CartUiFlowRegressionTest {
     }
 
     @Test
-    public void foodDetailAddsRpcCartWithQuantityNoteAndEmptyOptionIds() throws Exception {
+    public void foodDetailRendersSupabaseOptionsInlineBeforeAddingRpcCart() throws Exception {
         assertSourceContains("src/main/res/layout/food_fragment_detail.xml",
-                "android:id=\"@+id/edNote\"");
+                "android:id=\"@+id/edNote\"",
+                "android:id=\"@+id/foodDetailOptionsContainer\"",
+                "android:id=\"@+id/tvFoodDetailNoOptionsMessage\"");
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
-                "String note = binding.edNote.getText().toString()",
-                "orderRepository.addToCartV3(item.getId(), quantity, safeNote, Collections.emptyList())",
-                "setFragmentResult(\"cart_changed\"");
+                "orderRepository.getMenuItemDetailV3(item.getId())",
+                "renderOptions(groups)",
+                "selectedOptionIds",
+                "orderRepository.addToCartV3(item.getId(), quantity, safeNote, selectedOptionIds)",
+                "setFragmentResult(\"cart_changed\"",
+                "popBackStack(R.id.homeFragment, false)");
         assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/FoodDetailFragment.java",
-                "addToCartV3(item.getId(), quantity, null");
+                "new ToppingBottomSheet",
+                "toppingSheet.show",
+                "addToCartV3(item.getId(), quantity, null",
+                "addToCartV3(item.getId(), quantity, safeNote, Collections.emptyList())");
+    }
+
+    @Test
+    public void foodDetailLayoutDoesNotRenderHardcodedOptionGroups() throws Exception {
+        assertSourceDoesNotContain("src/main/res/layout/food_fragment_detail.xml",
+                "Option Group 1",
+                "Option Group 2",
+                "Chọn size",
+                "Size vừa",
+                "Size lớn",
+                "Thêm Sốt",
+                "Tương Chua Ngọt",
+                "Tương Cà",
+                "<RadioGroup",
+                "<CheckBox");
+    }
+
+    @Test
+    public void supabaseCartAndOrderTotalsIncludeSelectedOptionPriceDeltas() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/data/repository/OrderRepository.java",
+                "addToCartV3(long menuItemId, int quantity, String note, List<Long> optionChoiceIds)",
+                "safeOptionChoiceIds");
+        assertSourceContains("docs/supabase_v3_food_delivery_schema.sql",
+                "create table if not exists public.carts",
+                "create table if not exists public.orders",
+                "create table if not exists public.cart_item_options",
+                "create table if not exists public.order_lines",
+                "price_delta_snapshot numeric(12, 2)",
+                "coalesce(sum((mi.base_price + coalesce(opt.option_total, 0)) * ci.quantity), 0)",
+                "mi.base_price + coalesce(opt.option_total, 0)",
+                "values (v_order_id, p_payment_method, v_total, 'pending')");
+        assertSourceContains("docs/live_cart_order_option_totals_patch.sql",
+                "line unit price = menu_items.base_price + sum(cart_item_options.price_delta_snapshot)",
+                "create or replace function public.get_draft_carts_v3()",
+                "create or replace function public.get_cart_summary_v3(p_cart_id bigint)",
+                "create or replace function public.checkout_cart_v3(",
+                "coalesce(ci.last_known_unit_price, mi.base_price) + coalesce(opt.option_total, 0)",
+                "insert into public.payments (order_id, provider, amount, status)");
+    }
+
+    @Test
+    public void rpcCartSummaryMapsToppingInclusiveUnitPriceForLineItems() {
+        String json = "{"
+                + "\"cart_id\":44,"
+                + "\"items\":[{"
+                + "\"cart_item_id\":301,"
+                + "\"menu_item_id\":12,"
+                + "\"item_name\":\"Pho dac biet\","
+                + "\"image_url\":\"https://example.com/pho.jpg\","
+                + "\"quantity\":2,"
+                + "\"base_price\":50000,"
+                + "\"unit_price\":65000,"
+                + "\"note\":\"it hanh\","
+                + "\"options\":[{\"name\":\"Them bo\",\"price_delta\":15000}]"
+                + "}],"
+                + "\"subtotal\":130000,"
+                + "\"delivery_fee\":0,"
+                + "\"discount_amount\":0,"
+                + "\"total_amount\":130000"
+                + "}";
+        CartSummaryV3Response summary = new Gson().fromJson(json, CartSummaryV3Response.class);
+
+        List<LocalCart.CartEntry> entries = RpcCartUiState.mapSummaryItems(summary.getItems());
+
+        assertEquals(1, entries.size());
+        assertEquals(65000, entries.get(0).item.getPrice(), 0.001);
+        assertEquals(130000, entries.get(0).subtotal(), 0.001);
     }
 
     @Test
@@ -301,6 +380,44 @@ public class CartUiFlowRegressionTest {
                 "orderRepository.getDraftCartsV3()",
                 "String rpcStatus = \"processing\".equals(tabStatus) ? null : tabStatus",
                 "orderRepository.getMyOrdersV3(rpcStatus)");
+    }
+
+    @Test
+    public void orderManagementDefaultsToDraftTabWhenNoTabRequested() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/OrderManagementFragment.java",
+                "int initialTab = 0",
+                "\"processing\".equals(requestedTab)",
+                "initialTab = 1");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/order/OrderManagementFragment.java",
+                "int initialTab = 1;");
+    }
+
+    @Test
+    public void checkoutRpcCartQuantityButtonsMutateServerCart() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/cart/Checkout.java",
+                "updateRpcCartItemQuantity(entry, entry.quantity + 1)",
+                "updateRpcCartItemQuantity(entry, entry.quantity - 1)",
+                "removeRpcCartItem(entry)",
+                "orderRepository.updateCartItemQuantityV3(entry.cartItemId, quantity)",
+                "orderRepository.removeCartItemV3(entry.cartItemId)",
+                "loadCartSummaryV3()");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/cart/Checkout.java",
+                "if (isRpcCheckout()) return;");
+    }
+
+    @Test
+    public void draftOrdersSupportLongPressClearCartConfirmation() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/adapters/OrderAdapter.java",
+                "void onOrderLongClick(Order order)",
+                "setOnLongClickListener",
+                "itemView.setAlpha(0.65f)",
+                "itemView.setAlpha(1f)");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/OrderListFragment.java",
+                "onOrderLongClick(Order order)",
+                "showDeleteDraftCartDialog(order)",
+                "order.getRpcCartId() > 0",
+                "orderRepository.clearCartV3(cartId)",
+                "loadOrders()");
     }
 
     private void assertSourceContains(String path, String... snippets) throws Exception {

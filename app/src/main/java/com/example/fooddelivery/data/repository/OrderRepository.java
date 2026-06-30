@@ -14,6 +14,7 @@ import com.example.fooddelivery.data.model.DraftCartV3Response;
 import com.example.fooddelivery.data.model.GetMenuItemDetailV3Request;
 import com.example.fooddelivery.data.model.GetOrderDetailV3Request;
 import com.example.fooddelivery.data.model.GetMyOrdersV3Request;
+import com.example.fooddelivery.data.model.MenuItemDetailV3Response;
 import com.example.fooddelivery.data.model.MyOrderV3Response;
 import com.example.fooddelivery.data.model.RemoveCartItemV3Request;
 import com.example.fooddelivery.data.model.UpdateCartItemQuantityV3Request;
@@ -70,7 +71,7 @@ public class OrderRepository {
         return apiService.getOrderDetailV3(new GetOrderDetailV3Request(orderId));
     }
 
-    public Call<JsonObject> getMenuItemDetailV3(long menuItemId) {
+    public Call<MenuItemDetailV3Response> getMenuItemDetailV3(long menuItemId) {
         return apiService.getMenuItemDetailV3(new GetMenuItemDetailV3Request(menuItemId));
     }
 

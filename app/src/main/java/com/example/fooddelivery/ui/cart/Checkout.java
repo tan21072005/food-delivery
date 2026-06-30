@@ -66,6 +66,7 @@ public class Checkout extends AppCompatActivity {
     private long deliveryAddressId = -1L;
     private CartSummaryV3Response rpcSummary;
     private boolean isSubmitting = false;
+    private boolean isCartMutating = false;
     private boolean hasDeliveryAddress = true;
     private String selectedPaymentMethod = PAYMENT_COD;
 
@@ -169,14 +170,24 @@ public class Checkout extends AppCompatActivity {
                 new CartBottomSheetAdapter.Listener() {
                     @Override
                     public void onIncrease(LocalCart.CartEntry entry) {
-                        if (isRpcCheckout()) return;
+                        if (isRpcCheckout()) {
+                            updateRpcCartItemQuantity(entry, entry.quantity + 1);
+                            return;
+                        }
                         LocalCart.getInstance().increase(restaurantId, entry.item.getId());
                         refreshCartUi();
                     }
 
                     @Override
                     public void onDecrease(LocalCart.CartEntry entry) {
-                        if (isRpcCheckout()) return;
+                        if (isRpcCheckout()) {
+                            if (entry.quantity > 1) {
+                                updateRpcCartItemQuantity(entry, entry.quantity - 1);
+                            } else {
+                                removeRpcCartItem(entry);
+                            }
+                            return;
+                        }
                         LocalCart.getInstance().decrease(restaurantId, entry.item.getId());
                         refreshCartUi();
                     }
@@ -281,6 +292,62 @@ public class Checkout extends AppCompatActivity {
                 tvEmptyCart.setVisibility(View.VISIBLE);
                 Toast.makeText(Checkout.this,
                         "Khong the tai gio hang: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                refreshRpcCartUi();
+            }
+        });
+    }
+
+    private void updateRpcCartItemQuantity(LocalCart.CartEntry entry, int quantity) {
+        if (isCartMutating || entry == null || entry.cartItemId <= 0 || quantity <= 0) return;
+        isCartMutating = true;
+        setLoadingOverlayVisible(true);
+        orderRepository.updateCartItemQuantityV3(entry.cartItemId, quantity).enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(Call<Long> call, Response<Long> response) {
+                isCartMutating = false;
+                setLoadingOverlayVisible(false);
+                if (!response.isSuccessful()) {
+                    Toast.makeText(Checkout.this, "Khong the cap nhat so luong", Toast.LENGTH_SHORT).show();
+                    refreshRpcCartUi();
+                    return;
+                }
+                loadCartSummaryV3();
+            }
+
+            @Override
+            public void onFailure(Call<Long> call, Throwable t) {
+                isCartMutating = false;
+                setLoadingOverlayVisible(false);
+                Toast.makeText(Checkout.this,
+                        "Khong the cap nhat so luong: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                refreshRpcCartUi();
+            }
+        });
+    }
+
+    private void removeRpcCartItem(LocalCart.CartEntry entry) {
+        if (isCartMutating || entry == null || entry.cartItemId <= 0) return;
+        isCartMutating = true;
+        setLoadingOverlayVisible(true);
+        orderRepository.removeCartItemV3(entry.cartItemId).enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(Call<Long> call, Response<Long> response) {
+                isCartMutating = false;
+                setLoadingOverlayVisible(false);
+                if (!response.isSuccessful()) {
+                    Toast.makeText(Checkout.this, "Khong the xoa mon", Toast.LENGTH_SHORT).show();
+                    refreshRpcCartUi();
+                    return;
+                }
+                loadCartSummaryV3();
+            }
+
+            @Override
+            public void onFailure(Call<Long> call, Throwable t) {
+                isCartMutating = false;
+                setLoadingOverlayVisible(false);
+                Toast.makeText(Checkout.this,
+                        "Khong the xoa mon: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 refreshRpcCartUi();
             }
         });

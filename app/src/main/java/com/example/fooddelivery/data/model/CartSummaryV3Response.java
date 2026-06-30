@@ -90,6 +90,9 @@ public class CartSummaryV3Response {
         @SerializedName("base_price")
         private double basePrice;
 
+        @SerializedName("unit_price")
+        private double unitPrice;
+
         @SerializedName("note")
         private String note;
 
@@ -142,6 +145,14 @@ public class CartSummaryV3Response {
 
         public void setBasePrice(double basePrice) {
             this.basePrice = basePrice;
+        }
+
+        public double getUnitPrice() {
+            return unitPrice;
+        }
+
+        public void setUnitPrice(double unitPrice) {
+            this.unitPrice = unitPrice;
         }
 
         public String getNote() {

@@ -10,6 +10,7 @@ import com.example.fooddelivery.data.model.CartRequest;
 import com.example.fooddelivery.data.model.GetMenuItemDetailV3Request;
 import com.example.fooddelivery.data.model.GetOrderDetailV3Request;
 import com.example.fooddelivery.data.model.GetMyOrdersV3Request;
+import com.example.fooddelivery.data.model.MenuItemDetailV3Response;
 import com.example.fooddelivery.data.model.MyOrderV3Response;
 import com.example.fooddelivery.data.model.RemoveCartItemV3Request;
 import com.example.fooddelivery.data.model.UpdateCartItemQuantityV3Request;
@@ -175,7 +176,7 @@ public interface ApiService {
     Call<JsonObject> getOrderDetailV3(@Body GetOrderDetailV3Request request);
 
     @POST("rest/v1/rpc/get_menu_item_detail_v3")
-    Call<JsonObject> getMenuItemDetailV3(@Body GetMenuItemDetailV3Request request);
+    Call<MenuItemDetailV3Response> getMenuItemDetailV3(@Body GetMenuItemDetailV3Request request);
 
     @POST("rest/v1/rpc/get_cart_summary_v3")
     Call<com.example.fooddelivery.data.model.CartSummaryResponse> getCartSummary();

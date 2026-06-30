@@ -76,12 +76,16 @@ public final class RpcCartUiState {
                     item.getItemName(),
                     optionSummary(item.getOptions(), item.getNote()),
                     0,
-                    item.getBasePrice(),
+                    lineItemUnitPrice(item),
                     item.getImageUrl()
             );
             entries.add(new LocalCart.CartEntry(foodItem, item.getQuantity(), item.getCartItemId()));
         }
         return entries;
+    }
+
+    private static double lineItemUnitPrice(CartSummaryV3Response.Item item) {
+        return item.getUnitPrice() > 0 ? item.getUnitPrice() : item.getBasePrice();
     }
 
     public static String optionSummary(List<CartOptionV3Response> options, String note) {

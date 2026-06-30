@@ -34,6 +34,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         void onViewDetailClick(Order order);
         void onReorderClick(Order order);   // cho completed & cancelled
         void onReviewClick(Order order);    // cho completed
+        void onOrderLongClick(Order order);
     }
 
     private final Context context;
@@ -80,6 +81,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orderList.get(position);
+        holder.itemView.setAlpha(1f);
 
         // áº¢nh mÃ³n
         if (order.getFoodImageResId() != 0)
@@ -107,6 +109,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             holder.btnViewDetail.setOnClickListener(v -> {
                 if (listener != null) listener.onViewDetailClick(order);
             });
+        }
+
+        if ("draft".equals(order.getStatus())) {
+            holder.itemView.setOnLongClickListener(v -> {
+                holder.itemView.setAlpha(0.65f);
+                if (listener != null) listener.onOrderLongClick(order);
+                return true;
+            });
+        } else {
+            holder.itemView.setOnLongClickListener(null);
         }
         
         if (holder.btnReview != null) {

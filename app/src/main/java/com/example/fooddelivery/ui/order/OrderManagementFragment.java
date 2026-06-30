@@ -107,18 +107,18 @@ public class OrderManagementFragment extends Fragment {
     }
 
     private void openRequestedTabIfAny() {
-        int initialTab = 1;
+        int initialTab = 0;
         Intent intent = requireActivity().getIntent();
         if (intent != null) {
             String requestedTab = intent.getStringExtra(EXTRA_ORDERS_TAB);
             if ("draft".equals(requestedTab)) {
                 initialTab = 0;
+            } else if ("processing".equals(requestedTab)) {
+                initialTab = 1;
             } else if ("completed".equals(requestedTab)) {
                 initialTab = 2;
             } else if ("cancelled".equals(requestedTab)) {
                 initialTab = 3;
-            } else {
-                initialTab = 1;
             }
             intent.removeExtra(EXTRA_ORDERS_TAB);
         }

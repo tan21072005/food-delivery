@@ -2,6 +2,7 @@ package com.example.fooddelivery.ui.order;
 
 import com.example.fooddelivery.R;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -313,5 +314,50 @@ public class OrderListFragment extends Fragment
             android.widget.Toast.makeText(getContext(), "Nav Error: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onOrderLongClick(Order order) {
+        if (order == null || !"draft".equals(order.getStatus())) return;
+        showDeleteDraftCartDialog(order);
+    }
+
+    private void showDeleteDraftCartDialog(Order order) {
+        AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                .setTitle("Xoa don nhap")
+                .setMessage("Ban co muon xoa don nhap nay khoi gio hang?")
+                .setNegativeButton("Huy", null)
+                .setPositiveButton("Xoa", (d, which) -> clearDraftCart(order))
+                .create();
+        dialog.setOnDismissListener(d -> {
+            if (adapter != null) adapter.notifyDataSetChanged();
+        });
+        dialog.show();
+    }
+
+    private void clearDraftCart(Order order) {
+        long cartId = order.getRpcCartId() > 0 ? order.getRpcCartId() : order.getId();
+        if (cartId <= 0) return;
+        orderRepository.clearCartV3(cartId).enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(@NonNull Call<Long> call, @NonNull Response<Long> response) {
+                if (!isAdded()) return;
+                if (!response.isSuccessful()) {
+                    Toast.makeText(requireContext(), "Khong the xoa don nhap", Toast.LENGTH_SHORT).show();
+                    loadOrders();
+                    return;
+                }
+                Toast.makeText(requireContext(), "Da xoa don nhap", Toast.LENGTH_SHORT).show();
+                loadOrders();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Long> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(),
+                        "Khong the xoa don nhap: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                loadOrders();
+            }
+        });
     }
 }

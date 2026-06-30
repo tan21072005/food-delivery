@@ -359,6 +359,53 @@ set
 -- ============================================================
 -- 6. OPTION GROUPS AND CHOICES
 -- ============================================================
+with seed_option_groups (
+  restaurant_name,
+  menu_name,
+  group_name,
+  selection_type,
+  min_select,
+  max_select,
+  is_required,
+  sort_order
+) as (
+  values
+    ('Bun Bo Hue Dong Ba', 'Bun bo dac biet', 'Kích cỡ', 'single', 1, 1, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Bun bo dac biet', 'Topping', 'multiple', 0, 3, false, 2),
+    ('Bun Bo Hue Dong Ba', 'Bun bo tai', 'Kích cỡ', 'single', 1, 1, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Bun bo tai', 'Topping', 'multiple', 0, 3, false, 2),
+    ('Bun Bo Hue Dong Ba', 'Bun bo gio heo', 'Kích cỡ', 'single', 1, 1, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Bun bo gio heo', 'Topping', 'multiple', 0, 3, false, 2),
+    ('Bun Bo Hue Dong Ba', 'Cha cua them', 'Khẩu phần', 'single', 1, 1, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Tra dao cam sa', 'Độ ngọt', 'single', 1, 1, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Tra dao cam sa', 'Đá', 'single', 1, 1, true, 2),
+    ('Bobapop CMT8', 'Tra sua tran chau duong den', 'Độ ngọt', 'single', 1, 1, true, 1),
+    ('Bobapop CMT8', 'Tra sua tran chau duong den', 'Đá', 'single', 1, 1, true, 2),
+    ('Bobapop CMT8', 'Tra sua tran chau duong den', 'Topping', 'multiple', 0, 3, false, 3),
+    ('Bobapop CMT8', 'Tra vai hoa hong', 'Độ ngọt', 'single', 1, 1, true, 1),
+    ('Bobapop CMT8', 'Tra vai hoa hong', 'Đá', 'single', 1, 1, true, 2),
+    ('Bobapop CMT8', 'Tra vai hoa hong', 'Topping', 'multiple', 0, 3, false, 3),
+    ('Bobapop CMT8', 'Tra sua oolong nuong', 'Độ ngọt', 'single', 1, 1, true, 1),
+    ('Bobapop CMT8', 'Tra sua oolong nuong', 'Đá', 'single', 1, 1, true, 2),
+    ('Bobapop CMT8', 'Tra sua oolong nuong', 'Topping', 'multiple', 0, 3, false, 3),
+    ('Bobapop CMT8', 'Tra dao cam sa', 'Độ ngọt', 'single', 1, 1, true, 1),
+    ('Bobapop CMT8', 'Tra dao cam sa', 'Đá', 'single', 1, 1, true, 2),
+    ('Bobapop CMT8', 'Tra dao cam sa', 'Topping', 'multiple', 0, 3, false, 3),
+    ('Pizza 4Ps Le Loi', 'Pizza hai san size M', 'Kích cỡ', 'single', 1, 1, true, 1),
+    ('Pizza 4Ps Le Loi', 'Pizza hai san size M', 'Viền bánh', 'single', 0, 1, false, 2),
+    ('Pizza 4Ps Le Loi', 'Pizza pepperoni size M', 'Kích cỡ', 'single', 1, 1, true, 1),
+    ('Pizza 4Ps Le Loi', 'Pizza pepperoni size M', 'Viền bánh', 'single', 0, 1, false, 2),
+    ('Pizza 4Ps Le Loi', 'Pizza margherita size M', 'Kích cỡ', 'single', 1, 1, true, 1),
+    ('Pizza 4Ps Le Loi', 'Pizza margherita size M', 'Viền bánh', 'single', 0, 1, false, 2),
+    ('Pizza 4Ps Le Loi', 'Spaghetti bo bam', 'Khẩu phần', 'single', 1, 1, true, 1),
+    ('Pizza 4Ps Le Loi', 'Spaghetti bo bam', 'Topping', 'multiple', 0, 3, false, 2),
+    ('Sushi Tei Pasteur', 'Set sushi ca hoi 8 mieng', 'Nước chấm', 'single', 1, 1, true, 1),
+    ('Sushi Tei Pasteur', 'Set sushi ca hoi 8 mieng', 'Món kèm', 'multiple', 0, 3, false, 2),
+    ('Sushi Tei Pasteur', 'Sashimi ca hoi', 'Nước chấm', 'single', 1, 1, true, 1),
+    ('Sushi Tei Pasteur', 'Sashimi ca hoi', 'Món kèm', 'multiple', 0, 3, false, 2),
+    ('Sushi Tei Pasteur', 'Set sushi tong hop 12 mieng', 'Nước chấm', 'single', 1, 1, true, 1),
+    ('Sushi Tei Pasteur', 'Set sushi tong hop 12 mieng', 'Món kèm', 'multiple', 0, 3, false, 2)
+)
 insert into public.menu_option_groups (
   menu_item_id,
   name,
@@ -368,13 +415,17 @@ insert into public.menu_option_groups (
   is_required,
   sort_order
 )
-values
-  ((select id from public.menu_items where name = 'Bun bo dac biet'), 'Size', 'single', 1, 1, true, 1),
-  ((select id from public.menu_items where name = 'Bun bo dac biet'), 'Topping', 'multiple', 0, 3, false, 2),
-  ((select id from public.menu_items where name = 'Bun bo tai'), 'Size', 'single', 1, 1, true, 1),
-  ((select id from public.menu_items where name = 'Tra sua tran chau duong den'), 'Muc duong', 'single', 1, 1, true, 1),
-  ((select id from public.menu_items where name = 'Tra sua tran chau duong den'), 'Topping', 'multiple', 0, 3, false, 2),
-  ((select id from public.menu_items where name = 'Pizza hai san size M'), 'Vien pizza', 'single', 0, 1, false, 1)
+select
+  mi.id,
+  sog.group_name,
+  sog.selection_type::public.option_selection_type,
+  sog.min_select,
+  sog.max_select,
+  sog.is_required,
+  sog.sort_order
+from seed_option_groups sog
+join public.restaurants r on r.name = sog.restaurant_name
+join public.menu_items mi on mi.restaurant_id = r.id and mi.name = sog.menu_name
 on conflict (menu_item_id, name) do update
 set
   selection_type = excluded.selection_type,
@@ -383,6 +434,91 @@ set
   is_required = excluded.is_required,
   sort_order = excluded.sort_order;
 
+with seed_option_choices (
+  restaurant_name,
+  menu_name,
+  group_name,
+  choice_name,
+  price_delta,
+  is_available,
+  sort_order
+) as (
+  values
+    ('Bun Bo Hue Dong Ba', 'Bun bo dac biet', 'Kích cỡ', 'Cỡ thường', 0, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Bun bo dac biet', 'Kích cỡ', 'Cỡ lớn', 12000, true, 2),
+    ('Bun Bo Hue Dong Ba', 'Bun bo dac biet', 'Topping', 'Thêm bò tái', 15000, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Bun bo dac biet', 'Topping', 'Thêm chả cua', 12000, true, 2),
+    ('Bun Bo Hue Dong Ba', 'Bun bo dac biet', 'Topping', 'Thêm giò heo', 18000, true, 3),
+    ('Bun Bo Hue Dong Ba', 'Bun bo tai', 'Kích cỡ', 'Cỡ thường', 0, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Bun bo tai', 'Kích cỡ', 'Cỡ lớn', 10000, true, 2),
+    ('Bun Bo Hue Dong Ba', 'Bun bo tai', 'Topping', 'Thêm bò tái', 15000, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Bun bo tai', 'Topping', 'Thêm chả cua', 12000, true, 2),
+    ('Bun Bo Hue Dong Ba', 'Bun bo tai', 'Topping', 'Thêm rau sống', 5000, true, 3),
+    ('Bun Bo Hue Dong Ba', 'Bun bo gio heo', 'Kích cỡ', 'Cỡ thường', 0, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Bun bo gio heo', 'Kích cỡ', 'Cỡ lớn', 12000, true, 2),
+    ('Bun Bo Hue Dong Ba', 'Bun bo gio heo', 'Topping', 'Thêm giò heo', 18000, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Bun bo gio heo', 'Topping', 'Thêm chả Huế', 10000, true, 2),
+    ('Bun Bo Hue Dong Ba', 'Bun bo gio heo', 'Topping', 'Thêm rau sống', 5000, true, 3),
+    ('Bun Bo Hue Dong Ba', 'Cha cua them', 'Khẩu phần', 'Một phần', 0, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Cha cua them', 'Khẩu phần', 'Hai phần', 18000, true, 2),
+    ('Bun Bo Hue Dong Ba', 'Tra dao cam sa', 'Độ ngọt', 'Ít đường', 0, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Tra dao cam sa', 'Độ ngọt', 'Vừa đường', 0, true, 2),
+    ('Bun Bo Hue Dong Ba', 'Tra dao cam sa', 'Đá', 'Ít đá', 0, true, 1),
+    ('Bun Bo Hue Dong Ba', 'Tra dao cam sa', 'Đá', 'Đá bình thường', 0, true, 2),
+    ('Bobapop CMT8', 'Tra sua tran chau duong den', 'Độ ngọt', '30% đường', 0, true, 1),
+    ('Bobapop CMT8', 'Tra sua tran chau duong den', 'Độ ngọt', '70% đường', 0, true, 2),
+    ('Bobapop CMT8', 'Tra sua tran chau duong den', 'Đá', 'Ít đá', 0, true, 1),
+    ('Bobapop CMT8', 'Tra sua tran chau duong den', 'Đá', 'Đá bình thường', 0, true, 2),
+    ('Bobapop CMT8', 'Tra sua tran chau duong den', 'Topping', 'Trân châu đen', 7000, true, 1),
+    ('Bobapop CMT8', 'Tra sua tran chau duong den', 'Topping', 'Pudding trứng', 9000, true, 2),
+    ('Bobapop CMT8', 'Tra sua tran chau duong den', 'Topping', 'Thạch cà phê', 8000, true, 3),
+    ('Bobapop CMT8', 'Tra vai hoa hong', 'Độ ngọt', 'Ít đường', 0, true, 1),
+    ('Bobapop CMT8', 'Tra vai hoa hong', 'Độ ngọt', 'Vừa đường', 0, true, 2),
+    ('Bobapop CMT8', 'Tra vai hoa hong', 'Đá', 'Ít đá', 0, true, 1),
+    ('Bobapop CMT8', 'Tra vai hoa hong', 'Đá', 'Đá bình thường', 0, true, 2),
+    ('Bobapop CMT8', 'Tra vai hoa hong', 'Topping', 'Vải thêm', 9000, true, 1),
+    ('Bobapop CMT8', 'Tra vai hoa hong', 'Topping', 'Thạch trái cây', 8000, true, 2),
+    ('Bobapop CMT8', 'Tra sua oolong nuong', 'Độ ngọt', '30% đường', 0, true, 1),
+    ('Bobapop CMT8', 'Tra sua oolong nuong', 'Độ ngọt', '70% đường', 0, true, 2),
+    ('Bobapop CMT8', 'Tra sua oolong nuong', 'Đá', 'Ít đá', 0, true, 1),
+    ('Bobapop CMT8', 'Tra sua oolong nuong', 'Đá', 'Đá bình thường', 0, true, 2),
+    ('Bobapop CMT8', 'Tra sua oolong nuong', 'Topping', 'Trân châu đen', 7000, true, 1),
+    ('Bobapop CMT8', 'Tra sua oolong nuong', 'Topping', 'Kem sữa', 10000, true, 2),
+    ('Bobapop CMT8', 'Tra dao cam sa', 'Độ ngọt', 'Ít đường', 0, true, 1),
+    ('Bobapop CMT8', 'Tra dao cam sa', 'Độ ngọt', 'Vừa đường', 0, true, 2),
+    ('Bobapop CMT8', 'Tra dao cam sa', 'Đá', 'Ít đá', 0, true, 1),
+    ('Bobapop CMT8', 'Tra dao cam sa', 'Đá', 'Đá bình thường', 0, true, 2),
+    ('Bobapop CMT8', 'Tra dao cam sa', 'Topping', 'Đào thêm', 9000, true, 1),
+    ('Bobapop CMT8', 'Tra dao cam sa', 'Topping', 'Thạch trái cây', 8000, true, 2),
+    ('Pizza 4Ps Le Loi', 'Pizza hai san size M', 'Kích cỡ', 'Size M', 0, true, 1),
+    ('Pizza 4Ps Le Loi', 'Pizza hai san size M', 'Kích cỡ', 'Size L', 45000, true, 2),
+    ('Pizza 4Ps Le Loi', 'Pizza hai san size M', 'Viền bánh', 'Không viền', 0, true, 1),
+    ('Pizza 4Ps Le Loi', 'Pizza hai san size M', 'Viền bánh', 'Thêm phô mai', 25000, true, 2),
+    ('Pizza 4Ps Le Loi', 'Pizza pepperoni size M', 'Kích cỡ', 'Size M', 0, true, 1),
+    ('Pizza 4Ps Le Loi', 'Pizza pepperoni size M', 'Kích cỡ', 'Size L', 40000, true, 2),
+    ('Pizza 4Ps Le Loi', 'Pizza pepperoni size M', 'Viền bánh', 'Không viền', 0, true, 1),
+    ('Pizza 4Ps Le Loi', 'Pizza pepperoni size M', 'Viền bánh', 'Thêm phô mai', 25000, true, 2),
+    ('Pizza 4Ps Le Loi', 'Pizza margherita size M', 'Kích cỡ', 'Size M', 0, true, 1),
+    ('Pizza 4Ps Le Loi', 'Pizza margherita size M', 'Kích cỡ', 'Size L', 35000, true, 2),
+    ('Pizza 4Ps Le Loi', 'Pizza margherita size M', 'Viền bánh', 'Không viền', 0, true, 1),
+    ('Pizza 4Ps Le Loi', 'Pizza margherita size M', 'Viền bánh', 'Thêm phô mai', 25000, true, 2),
+    ('Pizza 4Ps Le Loi', 'Spaghetti bo bam', 'Khẩu phần', 'Phần thường', 0, true, 1),
+    ('Pizza 4Ps Le Loi', 'Spaghetti bo bam', 'Khẩu phần', 'Phần lớn', 25000, true, 2),
+    ('Pizza 4Ps Le Loi', 'Spaghetti bo bam', 'Topping', 'Thêm phô mai', 15000, true, 1),
+    ('Pizza 4Ps Le Loi', 'Spaghetti bo bam', 'Topping', 'Thêm bò băm', 25000, true, 2),
+    ('Sushi Tei Pasteur', 'Set sushi ca hoi 8 mieng', 'Nước chấm', 'Nước tương', 0, true, 1),
+    ('Sushi Tei Pasteur', 'Set sushi ca hoi 8 mieng', 'Nước chấm', 'Sốt mè rang', 5000, true, 2),
+    ('Sushi Tei Pasteur', 'Set sushi ca hoi 8 mieng', 'Món kèm', 'Thêm gừng hồng', 5000, true, 1),
+    ('Sushi Tei Pasteur', 'Set sushi ca hoi 8 mieng', 'Món kèm', 'Thêm wasabi', 3000, true, 2),
+    ('Sushi Tei Pasteur', 'Sashimi ca hoi', 'Nước chấm', 'Nước tương', 0, true, 1),
+    ('Sushi Tei Pasteur', 'Sashimi ca hoi', 'Nước chấm', 'Sốt ponzu', 7000, true, 2),
+    ('Sushi Tei Pasteur', 'Sashimi ca hoi', 'Món kèm', 'Thêm củ cải bào', 5000, true, 1),
+    ('Sushi Tei Pasteur', 'Sashimi ca hoi', 'Món kèm', 'Thêm wasabi', 3000, true, 2),
+    ('Sushi Tei Pasteur', 'Set sushi tong hop 12 mieng', 'Nước chấm', 'Nước tương', 0, true, 1),
+    ('Sushi Tei Pasteur', 'Set sushi tong hop 12 mieng', 'Nước chấm', 'Sốt mè rang', 5000, true, 2),
+    ('Sushi Tei Pasteur', 'Set sushi tong hop 12 mieng', 'Món kèm', 'Thêm gừng hồng', 5000, true, 1),
+    ('Sushi Tei Pasteur', 'Set sushi tong hop 12 mieng', 'Món kèm', 'Thêm wasabi', 3000, true, 2)
+)
 insert into public.menu_option_choices (
   option_group_id,
   name,
@@ -390,19 +526,16 @@ insert into public.menu_option_choices (
   is_available,
   sort_order
 )
-values
-  ((select mog.id from public.menu_option_groups mog join public.menu_items mi on mi.id = mog.menu_item_id where mi.name = 'Bun bo dac biet' and mog.name = 'Size'), 'To thuong', 0, true, 1),
-  ((select mog.id from public.menu_option_groups mog join public.menu_items mi on mi.id = mog.menu_item_id where mi.name = 'Bun bo dac biet' and mog.name = 'Size'), 'To lon', 12000, true, 2),
-  ((select mog.id from public.menu_option_groups mog join public.menu_items mi on mi.id = mog.menu_item_id where mi.name = 'Bun bo dac biet' and mog.name = 'Topping'), 'Them bo', 15000, true, 1),
-  ((select mog.id from public.menu_option_groups mog join public.menu_items mi on mi.id = mog.menu_item_id where mi.name = 'Bun bo dac biet' and mog.name = 'Topping'), 'Them cha cua', 12000, true, 2),
-  ((select mog.id from public.menu_option_groups mog join public.menu_items mi on mi.id = mog.menu_item_id where mi.name = 'Bun bo dac biet' and mog.name = 'Topping'), 'Them gio heo', 18000, true, 3),
-  ((select mog.id from public.menu_option_groups mog join public.menu_items mi on mi.id = mog.menu_item_id where mi.name = 'Bun bo tai' and mog.name = 'Size'), 'To thuong', 0, true, 1),
-  ((select mog.id from public.menu_option_groups mog join public.menu_items mi on mi.id = mog.menu_item_id where mi.name = 'Bun bo tai' and mog.name = 'Size'), 'To lon', 10000, true, 2),
-  ((select mog.id from public.menu_option_groups mog join public.menu_items mi on mi.id = mog.menu_item_id where mi.name = 'Tra sua tran chau duong den' and mog.name = 'Muc duong'), '30% duong', 0, true, 1),
-  ((select mog.id from public.menu_option_groups mog join public.menu_items mi on mi.id = mog.menu_item_id where mi.name = 'Tra sua tran chau duong den' and mog.name = 'Muc duong'), '70% duong', 0, true, 2),
-  ((select mog.id from public.menu_option_groups mog join public.menu_items mi on mi.id = mog.menu_item_id where mi.name = 'Tra sua tran chau duong den' and mog.name = 'Topping'), 'Tran chau den', 7000, true, 1),
-  ((select mog.id from public.menu_option_groups mog join public.menu_items mi on mi.id = mog.menu_item_id where mi.name = 'Tra sua tran chau duong den' and mog.name = 'Topping'), 'Pudding trung', 9000, true, 2),
-  ((select mog.id from public.menu_option_groups mog join public.menu_items mi on mi.id = mog.menu_item_id where mi.name = 'Pizza hai san size M' and mog.name = 'Vien pizza'), 'Vien pho mai', 25000, true, 1)
+select
+  mog.id,
+  soc.choice_name,
+  soc.price_delta,
+  soc.is_available,
+  soc.sort_order
+from seed_option_choices soc
+join public.restaurants r on r.name = soc.restaurant_name
+join public.menu_items mi on mi.restaurant_id = r.id and mi.name = soc.menu_name
+join public.menu_option_groups mog on mog.menu_item_id = mi.id and mog.name = soc.group_name
 on conflict (option_group_id, name) do update
 set price_delta = excluded.price_delta, is_available = excluded.is_available, sort_order = excluded.sort_order;
 
