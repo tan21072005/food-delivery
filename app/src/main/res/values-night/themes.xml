@@ -13,9 +13,9 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@color/foodgo_surface</item>
-        <item name="android:textColorPrimary">@color/foodgo_text_primary</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorSecondary">@color/foodgo_text_secondary</item>
-        <item name="colorControlNormal">@color/foodgo_text_primary</item>
+        <item name="colorControlNormal">@color/text_primary</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>

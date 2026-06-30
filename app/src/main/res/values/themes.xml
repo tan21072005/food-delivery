@@ -16,9 +16,9 @@
         <item name="android:colorAccent">@color/foodgo_coral</item>
         <item name="android:windowBackground">@color/foodgo_surface</item>
         <item name="android:statusBarColor">@color/foodgo_brick</item>
-        <item name="android:textColorPrimary">@color/foodgo_text_primary</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorSecondary">@color/foodgo_text_secondary</item>
-        <item name="colorControlNormal">@color/foodgo_text_primary</item>
+        <item name="colorControlNormal">@color/text_primary</item>
 
     </style>
 
