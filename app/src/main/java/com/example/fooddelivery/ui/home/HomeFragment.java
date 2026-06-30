@@ -340,6 +340,9 @@ public class HomeFragment extends Fragment {
                 if (!isAdded()) return;
                 if (fallbackCartId > 0) {
                     refreshStickyFromSummary(view, preferredRestaurantId, fallbackCartId);
+                } else {
+                    clearActiveCart();
+                    updateStickyCart(view);
                 }
             }
         });
@@ -385,6 +388,7 @@ public class HomeFragment extends Fragment {
         long stickyRestaurantId = activeCartRestaurantId > 0
                 ? activeCartRestaurantId
                 : LocalCart.getInstance().getRestaurantId();
+        // TODO(cart-rpc): Remove this legacy local fallback after all entry points pass a Supabase cart_id.
         int count = activeCartId > 0
                 ? activeCartItemCount
                 : LocalCart.getInstance().getTotalCount(stickyRestaurantId);

@@ -1,7 +1,7 @@
 package com.example.fooddelivery.data.model;
 
 public class Order {
-    private int    id;
+    private long   id;
     private String restaurantId;
     private String restaurantName;
     private String foodName;
@@ -16,14 +16,14 @@ public class Order {
     private String orderDate;
     private long rpcCartId = -1L;
 
-    public Order(int id, String foodName, String tableInfo,
+    public Order(long id, String foodName, String tableInfo,
                  int quantity, long totalPrice, int timeMinutes,
                  String status, int foodImageResId) {
         this(id, "unknown", "", foodName, tableInfo, quantity, totalPrice,
                 timeMinutes, status, foodImageResId, 0L, false, "");
     }
 
-    public Order(int id, String foodName, String tableInfo,
+    public Order(long id, String foodName, String tableInfo,
                  int quantity, long totalPrice, int timeMinutes,
                  String status, int foodImageResId, boolean isReviewed,
                  String orderDate) {
@@ -31,7 +31,7 @@ public class Order {
                 timeMinutes, status, foodImageResId, 0L, isReviewed, orderDate);
     }
 
-    public Order(int id, String restaurantId, String restaurantName,
+    public Order(long id, String restaurantId, String restaurantName,
                  String foodName, String tableInfo, int quantity,
                  long totalPrice, int timeMinutes, String status,
                  int foodImageResId, long completedAt) {
@@ -40,7 +40,7 @@ public class Order {
                 false, "");
     }
 
-    public Order(int id, String restaurantId, String restaurantName,
+    public Order(long id, String restaurantId, String restaurantName,
                  String foodName, String tableInfo, int quantity,
                  long totalPrice, int timeMinutes, String status,
                  int foodImageResId, long completedAt, boolean isReviewed,
@@ -60,7 +60,7 @@ public class Order {
         this.orderDate      = orderDate;
     }
 
-    public int    getId()             { return id; }
+    public long   getId()             { return id; }
     public String getRestaurantId()   { return restaurantId; }
     public String getRestaurantName() { return restaurantName; }
     public String getFoodName()       { return foodName; }

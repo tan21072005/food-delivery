@@ -12,6 +12,7 @@ import com.example.fooddelivery.data.model.GetOrderDetailV3Request;
 import com.example.fooddelivery.data.model.GetMyOrdersV3Request;
 import com.example.fooddelivery.data.model.MyOrderV3Response;
 import com.example.fooddelivery.data.model.RemoveCartItemV3Request;
+import com.example.fooddelivery.data.model.RestaurantInfo;
 import com.example.fooddelivery.data.model.UpdateCartItemQuantityV3Request;
 import com.example.fooddelivery.data.model.User;
 import com.google.gson.JsonObject;
@@ -137,6 +138,13 @@ public interface ApiService {
     Call<List<FoodItem>> getMenuItemById(
             @Query("id") String foodIdFilter,
             @Query("select") String select
+    );
+
+    @GET("rest/v1/restaurants")
+    Call<List<RestaurantInfo>> getRestaurantInfoById(
+            @Query("id") String restaurantIdFilter,
+            @Query("select") String select,
+            @Query("deleted_at") String deletedAtFilter
     );
 
     // [RPC] Lấy dữ liệu tổng hợp cho màn hình Home

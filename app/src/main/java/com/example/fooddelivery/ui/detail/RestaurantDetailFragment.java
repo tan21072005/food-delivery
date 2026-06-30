@@ -82,9 +82,11 @@ public class RestaurantDetailFragment extends Fragment {
     private void setupHeaderActions(View view) {
         View tvRestaurantName = view.findViewById(R.id.tvRestaurantName);
         if (tvRestaurantName != null) {
-            tvRestaurantName.setOnClickListener(v ->
-                    Navigation.findNavController(v).navigate(R.id.action_restaurantDetail_to_info)
-            );
+            tvRestaurantName.setOnClickListener(v -> {
+                Bundle bundle = new Bundle();
+                bundle.putLong("restaurant_id", restaurantId);
+                Navigation.findNavController(v).navigate(R.id.action_restaurantDetail_to_info, bundle);
+            });
         }
 
         View promoSection = view.findViewById(R.id.promoSection);
@@ -170,6 +172,9 @@ public class RestaurantDetailFragment extends Fragment {
                     refreshStickyFromSummary(view, preferredRestaurantId, fallbackCartId, showAddedToast);
                 } else if (showAddedToast) {
                     Toast.makeText(requireContext(), "Da them mon, nhung chua tai duoc gio", Toast.LENGTH_SHORT).show();
+                } else {
+                    clearActiveCartState();
+                    updateStickyCart(view);
                 }
             }
         });
@@ -236,6 +241,7 @@ public class RestaurantDetailFragment extends Fragment {
         long stickyRestaurantId = activeCartRestaurantId > 0
                 ? activeCartRestaurantId
                 : (restaurantId > 0 ? restaurantId : LocalCart.getInstance().getRestaurantId());
+        // TODO(cart-rpc): Remove this legacy local fallback after all restaurant detail callers pass a Supabase cart_id.
         int count = activeCartId > 0
                 ? activeCartItemCount
                 : LocalCart.getInstance().getTotalCount(stickyRestaurantId);
@@ -259,7 +265,9 @@ public class RestaurantDetailFragment extends Fragment {
         }
 
         stickyCart.setOnClickListener(v -> {
-            LocalCart.getInstance().setActiveRestaurantId(stickyRestaurantId);
+            if (activeCartId <= 0) {
+                LocalCart.getInstance().setActiveRestaurantId(stickyRestaurantId);
+            }
             CartBottomSheet sheet = new CartBottomSheet(() ->
                     refreshDraftCartState(view, stickyRestaurantId, activeCartId, false));
             if (activeCartId > 0) {

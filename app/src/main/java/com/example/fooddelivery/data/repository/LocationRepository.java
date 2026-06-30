@@ -25,23 +25,11 @@ public class LocationRepository {
         MutableLiveData<Location> locationData = new MutableLiveData<>();
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
-                if (location != null) {
-                    locationData.setValue(location);
-                } else {
-                    // Fallback to mock coordinates for demo purposes if null
-                    Location mockLocation = new Location("dummy");
-                    mockLocation.setLatitude(21.0028); // e.g. NEU, Hanoi
-                    mockLocation.setLongitude(105.8427);
-                    locationData.setValue(mockLocation);
-                }
-            });
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(locationData::setValue)
+                    .addOnFailureListener(exception -> locationData.setValue(null));
         } else {
-            // Permission not granted, provide mock/fallback location
-            Location mockLocation = new Location("dummy");
-            mockLocation.setLatitude(21.0028);
-            mockLocation.setLongitude(105.8427);
-            locationData.setValue(mockLocation);
+            locationData.setValue(null);
         }
 
         return locationData;

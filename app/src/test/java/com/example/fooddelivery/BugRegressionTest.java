@@ -91,6 +91,34 @@ public class BugRegressionTest {
     }
 
     @Test
+    public void restaurantInfoLoadsSelectedRestaurantFromSupabase() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/data/model/RestaurantInfo.java",
+                "@SerializedName(\"name\")",
+                "@SerializedName(\"cover_url\")",
+                "@SerializedName(\"avg_rating\")",
+                "@SerializedName(\"total_reviews\")");
+        assertSourceContains("src/main/java/com/example/fooddelivery/data/remote/apis/ApiService.java",
+                "getRestaurantInfoById",
+                "@GET(\"rest/v1/restaurants\")",
+                "@Query(\"id\")");
+        assertSourceContains("src/main/java/com/example/fooddelivery/data/repository/RestaurantRepository.java",
+                "getRestaurantInfo(long restaurantId)",
+                "\"eq.\" + restaurantId");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/detail/RestaurantInfoFragment.java",
+                "getArguments().getLong(\"restaurant_id\", -1L)",
+                "restaurantRepository.getRestaurantInfo(restaurantId)",
+                "renderRestaurantInfo");
+        assertSourceContains("src/main/res/layout/fragment_restaurant_info.xml",
+                "android:id=\"@+id/ivRestaurantCover\"",
+                "android:id=\"@+id/tvInfoDescription\"",
+                "android:id=\"@+id/tvInfoOpenStatus\"");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/detail/RestaurantInfoFragment.java",
+                "TODO",
+                "mock",
+                "hard-code");
+    }
+
+    @Test
     public void orderSurfacesUseDeliveryAddressCopyInsteadOfTableServiceCopy() throws Exception {
         assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/data/local/LocalOrderStore.java",
                 "Bàn",

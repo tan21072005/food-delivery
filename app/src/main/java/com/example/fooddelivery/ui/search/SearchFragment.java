@@ -119,7 +119,16 @@ public class SearchFragment extends Fragment {
 
         viewModel.getCartAddedEvent().observe(getViewLifecycleOwner(), added -> {
             if (Boolean.TRUE.equals(added)) {
-                startActivity(new Intent(requireContext(), Checkout.class));
+                Intent intent = new Intent(requireContext(), Checkout.class);
+                Long cartId = viewModel.getAddedCartId().getValue();
+                Long restaurantId = viewModel.getAddedRestaurantId().getValue();
+                if (cartId != null && cartId > 0) {
+                    intent.putExtra("cart_id", cartId);
+                }
+                if (restaurantId != null && restaurantId > 0) {
+                    intent.putExtra("restaurant_id", restaurantId);
+                }
+                startActivity(intent);
                 viewModel.consumeCartAddedEvent();
             }
         });
