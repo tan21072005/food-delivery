@@ -71,6 +71,7 @@ public class FoodVerticalAdapter extends RecyclerView.Adapter<FoodVerticalAdapte
                 .into(h.imgFood);
 
         h.itemView.setOnClickListener(v -> onItemClick.onClick(item));
+        h.imgFood.setOnClickListener(v -> onItemClick.onClick(item));
         h.btnAdd.setVisibility(showAddButton ? View.VISIBLE : View.GONE);
         h.btnAdd.setOnClickListener(showAddButton ? v -> {
             if (onAddCart != null) {

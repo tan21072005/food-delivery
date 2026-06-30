@@ -181,9 +181,9 @@ public class HomeFragment extends Fragment {
     private void setupTopSelling() {
         topSellingAdapter = new TopSellingAdapter(
                 requireContext(),
-                this::navigateToRestaurantDetail,
-                null,
-                false // showAddButton: Home is discovery only.
+                this::navigateToFoodDetail,
+                this::navigateToFoodDetail,
+                true
         );
 
         binding.rvTopSelling.setAdapter(topSellingAdapter);
@@ -195,9 +195,9 @@ public class HomeFragment extends Fragment {
     private void setupAllFoods() {
         foodVerticalAdapter = new FoodVerticalAdapter(
                 requireContext(),
-                this::navigateToRestaurantDetail,
-                null,
-                false // showAddButton: add-to-cart starts from Restaurant/Menu.
+                this::navigateToFoodDetail,
+                this::navigateToFoodDetail,
+                true
         );
 
         binding.rvAllFoods.setAdapter(foodVerticalAdapter);
@@ -274,6 +274,12 @@ public class HomeFragment extends Fragment {
         Bundle args = new Bundle();
         args.putLong("restaurant_id", item.getRestaurantId());
         Navigation.findNavController(requireView()).navigate(R.id.action_home_to_restaurantDetail, args);
+    }
+
+    private void navigateToFoodDetail(FoodItem item) {
+        Bundle args = new Bundle();
+        args.putLong("food_id", item.getId());
+        Navigation.findNavController(requireView()).navigate(R.id.action_home_to_foodDetail, args);
     }
 
     @Override

@@ -103,12 +103,12 @@ public class BugRegressionTest {
     }
 
     @Test
-    public void homeDiscoveryDoesNotAddDirectlyToCart() throws Exception {
+    public void homeFoodCardsOpenFoodDetailWithoutDirectCartMutation() throws Exception {
         String homeFragment = readFile(projectPath("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java"));
         String homeViewModel = readFile(projectPath("src/main/java/com/example/fooddelivery/ui/home/HomeViewModel.java"));
         String homeLayout = readFile(projectPath("src/main/res/layout/home_fragment.xml"));
 
-        assertFalse("HomeFragment must browse to Restaurant detail instead of opening a topping/cart flow",
+        assertFalse("HomeFragment must not open a topping/cart shortcut flow",
                 homeFragment.contains("ToppingBottomSheet"));
         assertFalse("HomeFragment must not mutate the local Cart",
                 homeFragment.contains("LocalCart.getInstance().add"));
@@ -119,9 +119,11 @@ public class BugRegressionTest {
         assertFalse("Home must not show a sticky Cart; Cart belongs on Restaurant/Menu surfaces",
                 homeLayout.contains("layoutStickyCart"));
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java",
-                "navigateToRestaurantDetail",
-                "showAddButton",
-                "false");
+                "navigateToFoodDetail",
+                "action_home_to_foodDetail",
+                "args.putLong(\"food_id\", item.getId())",
+                "this::navigateToFoodDetail",
+                "true");
     }
 
     @Test

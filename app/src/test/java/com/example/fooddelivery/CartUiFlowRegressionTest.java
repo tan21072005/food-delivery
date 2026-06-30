@@ -106,6 +106,19 @@ public class CartUiFlowRegressionTest {
 
     @Test
     public void listPlusAndImageOpenFoodDetailInsteadOfToppingSheet() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/HomeFragment.java",
+                "navigateToFoodDetail",
+                "action_home_to_foodDetail",
+                "args.putLong(\"food_id\", item.getId())");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/adapters/TopSellingAdapter.java",
+                "h.itemView.setOnClickListener",
+                "h.imgFood.setOnClickListener",
+                "onAddCart.onAdd(item)");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/home/adapters/FoodVerticalAdapter.java",
+                "h.itemView.setOnClickListener",
+                "h.imgFood.setOnClickListener",
+                "onAddCart.onAdd(item)");
+
         assertSourceContains("src/main/java/com/example/fooddelivery/ui/menu/MenuFragment.java",
                 "openFoodDetail(view, item)",
                 "onAddToCartClick(FoodItem item)");

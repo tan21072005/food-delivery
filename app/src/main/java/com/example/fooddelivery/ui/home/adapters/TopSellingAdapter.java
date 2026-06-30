@@ -70,6 +70,7 @@ public class TopSellingAdapter extends RecyclerView.Adapter<TopSellingAdapter.VH
 
         // Click vào item → mở chi tiết
         h.itemView.setOnClickListener(v -> onItemClick.onClick(item));
+        h.imgFood.setOnClickListener(v -> onItemClick.onClick(item));
 
         // Click nút + → thêm giỏ hàng
         h.btnAdd.setVisibility(showAddButton ? View.VISIBLE : View.GONE);
