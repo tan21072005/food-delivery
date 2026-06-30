@@ -279,6 +279,7 @@
         <string name="cd_btn_add_to_cart">Add to cart</string>
         <string name="cd_btn_toggle_password">Show / hide password</string>
         <string name="cd_btn_edit">Edit</string>
+        <string name="cd_more">More</string>
         <string name="cd_icon_facebook">Facebook</string>
         <string name="cd_icon_google">Google</string>
         <string name="cd_icon_linkedin">LinkedIn</string>
@@ -301,6 +302,10 @@
     <string name="recovery_password_rules">• 8–20 characters\n• Include a letter, number, and special character</string>
     <string name="app_name">FoodGo</string>
     <string name="profile_preferences">Preferences</string>
+    <string name="profile_member_badge">● Member</string>
+    <string name="profile_item_delivery_address">Delivery address</string>
+    <string name="profile_action_login">Login</string>
+    <string name="profile_item_switch_account">Switch account</string>
     <string name="foodgo_login_tagline">Good food, closer to you</string>
     <string name="profile_language">Language</string>
     <string name="language_vietnamese">Vietnamese</string>

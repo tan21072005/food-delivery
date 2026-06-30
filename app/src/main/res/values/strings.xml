@@ -263,6 +263,7 @@
     <string name="cd_btn_add_to_cart">Thêm vào giỏ</string>
     <string name="cd_btn_toggle_password">Hiện / ẩn mật khẩu</string>
     <string name="cd_btn_edit">Chỉnh sửa</string>
+    <string name="cd_more">Thêm</string>
     <string name="cd_icon_facebook">Facebook</string>
     <string name="cd_icon_google">Google</string>
     <string name="cd_icon_linkedin">LinkedIn</string>
@@ -333,6 +334,10 @@
     <string name="recovery_email_note">Nếu email khớp với tài khoản hiện có, chúng tôi sẽ gửi mã xác minh.</string>
     <string name="recovery_password_rules">• 8–20 ký tự\n• Có chữ cái, chữ số và ký tự đặc biệt</string>
     <string name="profile_preferences">Tùy chọn</string>
+    <string name="profile_member_badge">● Thành viên</string>
+    <string name="profile_item_delivery_address">Địa chỉ giao hàng</string>
+    <string name="profile_action_login">Đăng nhập</string>
+    <string name="profile_item_switch_account">Chuyển đổi tài khoản</string>
     <string name="foodgo_login_tagline">Món ngon đến gần bạn hơn</string>
     <string name="profile_language">Ngôn ngữ</string>
     <string name="language_vietnamese">Tiếng Việt</string>

@@ -191,6 +191,35 @@ public class BugRegressionTest {
     }
 
     @Test
+    public void profileVisibleCopyUsesResourcesSoLocaleSwitchCanTranslate() throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        Document document = factory.newDocumentBuilder().parse(Files.newInputStream(profileLayoutPath()));
+
+        NodeList textViews = document.getElementsByTagName("TextView");
+        for (int i = 0; i < textViews.getLength(); i++) {
+            org.w3c.dom.Element element = (org.w3c.dom.Element) textViews.item(i);
+            String text = element.getAttributeNS("http://schemas.android.com/apk/res/android", "text");
+            if (text == null || text.isEmpty()) {
+                continue;
+            }
+            assertTrue("Profile text must use @string for locale switching: " + text,
+                    text.startsWith("@string/") || text.startsWith("@{"));
+        }
+
+        String englishStrings = readFile(projectPath("src/main/res/values-en/strings.xml"));
+        assertSourceContains("src/main/res/values-en/strings.xml",
+                "profile_item_delivery_address",
+                "profile_action_login",
+                "profile_item_switch_account",
+                "btn_logout");
+        assertFalse("English locale must not render Vietnamese profile menu copy",
+                englishStrings.contains(">Tài khoản<")
+                        || englishStrings.contains(">Khuyến mãi<")
+                        || englishStrings.contains(">Đăng xuất<"));
+    }
+
+    @Test
     public void mainNavigationGraphInflatesAuthBeforeGraphsThatReferenceIt() throws Exception {
         String navMain = readFile(projectPath("src/main/res/navigation/nav_main.xml"));
         int authInclude = navMain.indexOf("@navigation/nav_auth");
