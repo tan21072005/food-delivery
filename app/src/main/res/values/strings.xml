@@ -268,6 +268,21 @@
     <string name="cd_icon_google">Google</string>
     <string name="cd_icon_linkedin">LinkedIn</string>
 
+    <string name="restaurant_info_title">Th&#244;ng tin qu&#225;n</string>
+    <string name="restaurant_info_loading">&#272;ang t&#7843;i...</string>
+    <string name="restaurant_info_no_address">Ch&#432;a c&#243; &#273;&#7883;a ch&#7881;</string>
+    <string name="restaurant_info_ride_action">&#128663; &#272;&#7863;t xe</string>
+    <string name="restaurant_info_rating_zero" translatable="false">0.0</string>
+    <string name="restaurant_info_review_count_zero">0 &#273;&#225;nh gi&#225;</string>
+    <string name="restaurant_info_count_zero" translatable="false">0</string>
+    <string name="restaurant_info_star_1" translatable="false">1</string>
+    <string name="restaurant_info_star_2" translatable="false">2</string>
+    <string name="restaurant_info_star_3" translatable="false">3</string>
+    <string name="restaurant_info_star_4" translatable="false">4</string>
+    <string name="restaurant_info_star_5" translatable="false">5</string>
+    <string name="restaurant_info_opening_hours_title">Gi&#7901; ho&#7841;t &#273;&#7897;ng</string>
+    <string name="restaurant_info_no_opening_hours">Ch&#432;a c&#243; gi&#7901; ho&#7841;t &#273;&#7897;ng</string>
+
     <!-- Thêm dòng này vào strings.xml -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 

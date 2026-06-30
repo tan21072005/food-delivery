@@ -314,6 +314,13 @@
         <item>Vietnamese</item>
         <item>English</item>
     </string-array>
+    <string name="restaurant_info_title">Restaurant info</string>
+    <string name="restaurant_info_loading">Loading...</string>
+    <string name="restaurant_info_no_address">No address available</string>
+    <string name="restaurant_info_ride_action">&#128663; Book a ride</string>
+    <string name="restaurant_info_review_count_zero">0 reviews</string>
+    <string name="restaurant_info_opening_hours_title">Opening hours</string>
+    <string name="restaurant_info_no_opening_hours">No opening hours available</string>
     <!-- AUTO UI STRINGS START -->
     <string name="auto_ui_14_a_ban_19ij6c">14 sold</string>
     <string name="auto_ui_1_9k_a_ban_2ydp64">1.9k+ sold</string>
