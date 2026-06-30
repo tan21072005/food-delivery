@@ -96,10 +96,13 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
         tvCartCount = view.findViewById(R.id.tvCartCount);
         orderRepository = new OrderRepository(requireContext());
 
-        restaurantId = LocalCart.getInstance().getRestaurantId();
+        restaurantId = -1L;
         if (getArguments() != null) {
             cartId = getArguments().getLong("cart_id", -1L);
             restaurantId = getArguments().getLong("restaurant_id", restaurantId);
+        }
+        if (!isRpcCart() && restaurantId <= 0) {
+            restaurantId = LocalCart.getInstance().getRestaurantId();
         }
 
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -190,6 +193,7 @@ public class CartBottomSheet extends BottomSheetDialogFragment {
             return;
         }
 
+        // TODO(cart-rpc): Keep only for legacy callers that still open the sheet without a Supabase cart_id.
         LocalCart cart = LocalCart.getInstance();
         int count = cart.getTotalCount(restaurantId);
         if (adapter != null) {

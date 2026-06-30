@@ -79,6 +79,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvOrderStatusTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/auto_ui_ang_giao_1yxwve"
@@ -87,6 +88,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvOrderStatusSubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/auto_ui_tai_xe_ang_giao_on_en_ban_lthm6d"
@@ -230,6 +232,7 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tvDeliveryAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
@@ -274,6 +277,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tvFoodQuantityLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
@@ -350,6 +354,7 @@
                         android:textColor="#666666" />
 
                     <TextView
+                        android:id="@+id/tvOrderCode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/auto_ui_2405h2492k2_vc25r0"

@@ -303,6 +303,30 @@ public class CartUiFlowRegressionTest {
                 "orderRepository.getMyOrdersV3(rpcStatus)");
     }
 
+    @Test
+    public void orderRpcIdsStayLongAndDetailRendersEveryReturnedItem() throws Exception {
+        assertSourceContains("src/main/java/com/example/fooddelivery/data/model/Order.java",
+                "private long   id;",
+                "public long   getId()");
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/OrderListFragment.java",
+                "draftCart.getCartId()",
+                "response.getOrderId()",
+                "bundle.putLong(\"order_id\", order.getId())");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/order/OrderListFragment.java",
+                "safeIntId(",
+                "(int) response.getOrderId()");
+
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/order/OrderDetailFragment.java",
+                "JsonArray items = orderItems(detail)",
+                "for (JsonElement itemElement : items)",
+                "appendLine(quantities",
+                "appendLine(names",
+                "appendLine(prices");
+        assertSourceDoesNotContain("src/main/java/com/example/fooddelivery/ui/order/OrderDetailFragment.java",
+                "firstOrderItem",
+                "items.get(0)");
+    }
+
     private void assertSourceContains(String path, String... snippets) throws Exception {
         String source = readFile(projectPath(path));
         for (String snippet : snippets) {
