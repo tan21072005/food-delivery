@@ -243,6 +243,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupDiscoveryActions() {
+        binding.etSearch.setFocusable(false);
+        binding.etSearch.setFocusableInTouchMode(false);
         binding.etSearch.setOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigate(R.id.action_home_to_search)
         );

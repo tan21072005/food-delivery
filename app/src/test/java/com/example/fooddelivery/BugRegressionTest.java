@@ -158,6 +158,30 @@ public class BugRegressionTest {
     }
 
     @Test
+    public void searchScreenRoutesMenuResultsToRestaurantDetail() throws Exception {
+        String searchFragment = readFile(projectPath("src/main/java/com/example/fooddelivery/ui/search/SearchFragment.java"));
+        String searchLayout = readFile(projectPath("src/main/res/layout/search_fragment.xml"));
+        String navHome = readFile(projectPath("src/main/res/navigation/nav_home.xml"));
+
+        assertSourceContains("src/main/java/com/example/fooddelivery/ui/search/SearchFragment.java",
+                "MenuItemSearchFilter.filterByName",
+                "args.putLong(\"restaurant_id\", item.getRestaurantId())",
+                "R.id.action_search_to_restaurantDetail",
+                "InputMethodManager",
+                "SHOW_IMPLICIT",
+                "\"khong co ket qua\"");
+        assertFalse("Search result clicks must not open Food detail",
+                searchFragment.contains("R.id.action_search_to_foodDetail"));
+        assertFalse("Search screen should be only search bar plus whitespace/results",
+                searchLayout.contains("@string/auto_ui_loc_b9y3")
+                        || searchLayout.contains("@string/auto_ui_gan_toi_1nsgdq")
+                        || searchLayout.contains("@string/auto_ui_ban_chay_4z7j91"));
+        assertTrue(navHome.contains("android:id=\"@+id/action_search_to_restaurantDetail\""));
+        assertTrue(navHome.contains("app:destination=\"@id/restaurantDetailFragment\""));
+        assertFalse(navHome.contains("android:id=\"@+id/action_search_to_foodDetail\""));
+    }
+
+    @Test
     public void profileMenuTextAndIconsUseStableVisibleThemeColors() throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);

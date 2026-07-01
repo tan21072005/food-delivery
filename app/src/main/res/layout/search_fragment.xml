@@ -1,121 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:background="#FAFAFA">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:orientation="vertical">
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="56dp"
-        android:orientation="horizontal" android:gravity="center_vertical"
-        android:paddingStart="8dp" android:paddingEnd="12dp"
-        android:background="#FFFFFF">
-        <ImageButton android:id="@+id/btnBack"
-            android:layout_width="40dp" android:layout_height="40dp"
-            android:src="@drawable/ic_arrow_back"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#FFFFFF"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="12dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back" />
+
         <androidx.cardview.widget.CardView
-            android:layout_width="0dp" android:layout_height="40dp"
-            android:layout_weight="1" android:layout_marginStart="8dp"
-            app:cardCornerRadius="20dp" app:cardElevation="0dp"
-            app:cardBackgroundColor="#F5F5F5">
-            <EditText android:id="@+id/etSearch"
-                android:layout_width="match_parent" android:layout_height="match_parent"
-                android:hint="@string/auto_ui_tim_kiem_mon_an_fds6zt" android:textSize="14sp"
-                android:paddingStart="14dp" android:paddingEnd="14dp"
-                android:background="@null" android:inputType="text"
-                android:imeOptions="actionSearch" android:singleLine="true" />
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="#F5F5F5"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp">
+
+            <EditText
+                android:id="@+id/etSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="@string/auto_ui_tim_kiem_mon_an_fds6zt"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:singleLine="true"
+                android:textSize="14sp" />
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 
-    <HorizontalScrollView
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvEmpty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:background="#FFFFFF"
-        android:paddingBottom="8dp"
-        android:paddingHorizontal="8dp">
-        
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingHorizontal="4dp">
-            
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/auto_ui_loc_b9y3"
-                android:textSize="13sp"
-                android:textColor="#1A1A1A"
-                android:background="@drawable/bg_rounded_border"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:drawableEnd="@drawable/ic_filter"
-                android:drawablePadding="4dp"
-                android:layout_marginEnd="8dp"/>
-                
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/auto_ui_gan_toi_1nsgdq"
-                android:textSize="13sp"
-                android:textColor="#1A1A1A"
-                android:background="@drawable/bg_rounded_border"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:layout_marginEnd="8dp"/>
-                
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/auto_ui_ban_chay_4z7j91"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textColor="#F5A623"
-                android:background="@drawable/bg_rounded_orange_light"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:layout_marginEnd="8dp"/>
-                
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/auto_ui_anh_gia_1bzpur"
-                android:textSize="13sp"
-                android:textColor="#1A1A1A"
-                android:background="@drawable/bg_rounded_border"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:layout_marginEnd="8dp"/>
-                
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/auto_ui_gia_608o"
-                android:textSize="13sp"
-                android:textColor="#1A1A1A"
-                android:background="@drawable/bg_rounded_border"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:layout_marginEnd="8dp"/>
-                
-        </LinearLayout>
-    </HorizontalScrollView>
-    
-    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
-    <ProgressBar android:id="@+id/progressBar"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_gravity="center" android:visibility="gone"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:textColor="#AAAAAA"
+        android:textSize="14sp"
+        android:visibility="gone" />
 
-    <TextView android:id="@+id/tvEmpty"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="@string/auto_ui_nhap_ten_mon_ban_muon_tim_1pixhd" android:gravity="center"
-        android:textSize="14sp" android:textColor="#AAAAAA"
-        android:layout_marginTop="60dp" />
-
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvSearchResults"
-        android:layout_width="match_parent" android:layout_height="0dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSearchResults"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingStart="16dp" android:paddingEnd="16dp"
-        android:paddingTop="8dp" android:clipToPadding="false" />
+        android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp" />
 </LinearLayout>

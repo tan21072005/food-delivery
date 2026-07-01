@@ -153,8 +153,8 @@
         android:name="com.example.fooddelivery.ui.search.SearchFragment">
 
         <action
-            android:id="@+id/action_search_to_foodDetail"
-            app:destination="@id/foodDetailFragment" />
+            android:id="@+id/action_search_to_restaurantDetail"
+            app:destination="@id/restaurantDetailFragment" />
     </fragment>
 
     <fragment
